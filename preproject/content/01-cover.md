@@ -6,7 +6,13 @@ bibliography: "bibliography.bib"
 link-citations: true
 urlcolor: "blue"
 toc: "true"
-include-before: \pagebreak
+include-before: |
+  \begin{center}
+  Department of Computer Science\\
+  Norwegian University of Science and Technology\\
+  Trondheim, Norway\\
+  \end{center}
+  \pagebreak
 ---
 
 \pagebreak
