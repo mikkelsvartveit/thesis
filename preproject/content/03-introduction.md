@@ -1,1 +1,5 @@
 # Introduction
+
+## Rationale
+
+## Objectives
