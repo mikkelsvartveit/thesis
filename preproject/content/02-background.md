@@ -15,15 +15,3 @@ CNN provides several significant advantages over fully-connected neural networks
 3. **Automatic feature extraction**: In contrast to most machine learning techniques, CNN does not require manual extraction of features [@cnn-survey]. Eliminating the need for feature engineering can save significantly on time and resources. In addition, this characteristic makes CNN suitable for machine learning applications where humans are not able to discover patterns in the input data themselves.
 
 TODO: Explain the typical layers in a CNN
-
-## Malware datasets
-
-TODO
-
-### Microsoft Malware Classification Challenge
-
-TODO
-
-### MalImg dataset
-
-TODO
