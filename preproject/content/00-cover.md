@@ -34,6 +34,9 @@ abstract: |
 
 include-before: |
   \pagebreak
+
+header-includes:
+  - \usepackage{array}
 ---
 
 \pagebreak
