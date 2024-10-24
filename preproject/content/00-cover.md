@@ -1,6 +1,12 @@
 ---
 title: "[Title undecided]"
-subtitle: "Specialization Project"
+subtitle: |
+  Specialization Project\
+  \
+  \small
+  Department of Computer Science\
+  Norwegian University of Science and Technology\
+  Trondheim, Norway
 date: \today
 author:
   - Stian Sulebak
