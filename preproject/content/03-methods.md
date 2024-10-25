@@ -29,12 +29,36 @@ CNN
 
 ## Inclusion criteria and quality assessment
 
-All 160 identified research papers across ML-ISA and CNN were assessed using inclusion and quality criteria, and excluded from the review if the paper is not deemed relevant. This leaves us with a selection of high quality and highly relevant primary studes to be used in the review. The inclusion criteria (IC) and quality assesment (QA) were selected based on our research questions for each topic, and applied through three phases:
+All 160 identified research papers across ML-ISA and CNN were assessed using inclusion and quality criteria, and excluded from the review if the paper is not deemed relevant. This leaves us with a selection of high quality and highly relevant primary studes to be used in the review. The inclusion criteria (IC) and quality assesment (QA) were selected based on our research questions for each topic, and applied through three steps:
 
-- Exclusion of papers after applying IC on abstract
+- Exclusion of papers after applying IC on the abstract
 - Exclusion of papers after applying IC on full-text
 - Exclusion of papers after QA on full-text
 
-ML-ISA inclusion critera focuses on filtering out papers that does not apply machine learning to binary code of unknown ISA, i.e. without disassembly. In addition for the paper to be relevant in the field, we require that the proposed method attempts to aid software reverse engineering. CNN inclusion criteria are a bit less strict, and does not require the paper to focus on reverse engineering specifically. We want to discover ways of applying CNN's on binary code directly, which means the main inclusion criteria is requireng the input-layer be on
+ML-ISA inclusion critera focuses on filtering out papers that does not apply machine learning to binary code of unknown ISA, i.e. without disassembly. In addition for the paper to be relevant in the field, we require that the proposed method attempts to aid software reverse engineering. CNN inclusion criteria are a bit less strict, and does not require the paper to focus on reverse engineering specifically. We want to discover ways of applying CNN's on binary code directly, which means mainly excluding papers that require disassembled input. 
+
+(Some mention of quality assesment would be nice ? )
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ |c|c|c|c| }
+\hline
+Topic & DB query result & IC on abstract & IC on full-text \\
+\hline
+ML-ISA
+& 74 
+& 31 (-43)
+& 8 (-23) \\
+\hline
+CNN
+& 86 
+& 41 (-45)
+& 22 (-19) \\
+\hline
+\end{tabular}
+\caption{Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre}
+\label{table:paper-exclusion-results}
+\end{table}
 
 ## Data extraction process
