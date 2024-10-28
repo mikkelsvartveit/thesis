@@ -2,7 +2,7 @@
 
 This section defines the review protocol used for this structured literature review, and provides justification for the strategies used with regards to answering our research questions. This outlines methods for identification of relevant studies to be considered included our review, describing selected inclusion crieria and quality assessment for primary sources and the data extraction process for acquiering results. The overall review protocol is identical for literature regarding ML for ISA identification and CNN's applied to binary programs, where any differences in inclusion criteria and data extraction are explained. The review protocol is split into 3 phases: research identification through database selection and querying, filtering and selection of primary studies based on inclusion criteria, and data extraction and synthesis.
 
-## Database and Search queries
+## Database and search queries
 
 Multiple research databases were considered, with our primary concern being including papers from peer-reviewed sources. Our research database of choice is Scopus (SOURCE?), as it from our experience includes results from a comprehensive list of peer reviewed journals, workshops and conferences. We recognize that the lack of diversity in research databases can result in missing out relevant work. However, preliminary work quering databases like IEEE and ACM compared to Scopus in our experiences only included duplicate results. We deem Scopus as sufficient for the purpose of this review, given similar results from quering IEEE and ACM directly and ease of consistent data extraction.
 
@@ -35,10 +35,20 @@ All 160 identified research papers across ML-ISA and CNN were assessed using inc
 - Exclusion of papers after applying IC on full-text
 - Exclusion of papers after QA on full-text
 
-ML-ISA inclusion critera focuses on filtering out papers that does not apply machine learning to binary code of unknown ISA, i.e. without disassembly. In addition for the paper to be relevant in the field, we require that the proposed method attempts to aid software reverse engineering. CNN inclusion criteria are a bit less strict, and does not require the paper to focus on reverse engineering specifically. We want to discover ways of applying CNN's on binary code directly, which means mainly excluding papers that require disassembled input. 
-
+ML-ISA inclusion critera focuses on filtering out papers that does not apply machine learning to binary code of unknown ISA, i.e. without disassembly. In addition for the paper to be relevant in the field, we require that the proposed method attempts to aid software reverse engineering. CNN inclusion criteria are a bit less strict, and does not require the paper to focus on reverse engineering specifically. We want to discover ways of applying CNN's on binary code directly, which means mainly excluding papers that require disassembled input. The specific IC's and QA's for both topics are:
 (Some mention of quality assesment would be nice ? )
 
+ML-ISA:
+
+- The paper attempts to reverse engineer or aid in reverse engineering of raw binaries
+- The paper applies machine learning techniques on binary programs
+- The method does not require disassembly, i.e. knowledge of all ISA information on the binary
+
+CNN:
+
+- The paper applies CNN to binary code of some sort
+- The method does not require reverse engineering the binary first
+- The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
 
 \begin{table}[h!]
 \centering
@@ -47,12 +57,12 @@ ML-ISA inclusion critera focuses on filtering out papers that does not apply mac
 Topic & DB query result & IC on abstract & IC on full-text \\
 \hline
 ML-ISA
-& 74 
+& 74
 & 31 (-43)
 & 8 (-23) \\
 \hline
 CNN
-& 86 
+& 86
 & 41 (-45)
 & 22 (-19) \\
 \hline
