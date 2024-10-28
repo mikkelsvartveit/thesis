@@ -1,5 +1,6 @@
 pdf:
 	mkdir -p ../output
+	@echo "Compiling PDF..."
 	pandoc content/*.md \
 		--resource-path=content \
 		--citeproc \
@@ -9,11 +10,15 @@ pdf:
 		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
 		--to=latex \
 		--output=../output/preproject.pdf
-	echo "done"
+	@echo "Finished compiling PDF."
+
 watch:
-	fswatch -o ./content/ | xargs -n1 -I{} make pdf
+	@make -s pdf
+	@echo "Watching for changes..."
+	@fswatch -o ./content/ | xargs -n1 -I{} make -s pdf
 
 latex:
+	@echo "Compiling LaTeX file..."
 	mkdir -p ../output
 	pandoc content/*.md \
 		--resource-path=content \
@@ -24,3 +29,4 @@ latex:
 		--to=latex \
 		--standalone \
 		--output=../output/preproject.tex \
+	@echo "Finished compiling LaTeX file."
