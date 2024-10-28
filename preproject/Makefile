@@ -1,6 +1,6 @@
 pdf:
+	@echo "\nCompiling PDF..."
 	mkdir -p ../output
-	@echo "Compiling PDF..."
 	pandoc content/*.md \
 		--resource-path=content \
 		--citeproc \
@@ -18,7 +18,7 @@ watch:
 	@fswatch -o ./content/ | xargs -n1 -I{} make -s pdf
 
 latex:
-	@echo "Compiling LaTeX file..."
+	@echo "\nCompiling LaTeX file..."
 	mkdir -p ../output
 	pandoc content/*.md \
 		--resource-path=content \
