@@ -25,16 +25,16 @@ Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
 \label{table:microsoft-results}
 \end{table} -->
 
-| Paper          | Accuracy | Precision | Recall | F1-score |
-| -------------- | -------- | --------- | ------ | -------- |
-| [@Rahul2017]   | 0.9491   | NA        | NA     | NA       |
-| [@Yang2018]    | 0.987    | NA        | NA     | NA       |
-| [@Kumari2017]  | 0.9707   | NA        | NA     | NA       |
-| [@Khan2020]    | 0.9780   | 0.98      | 0.97   | 0.97     |
-| [@Sartoli2020] | 0.9680   | 0.9624    | 0.9616 | 0.9618   |
-| [@Prima2021]   | 0.98     | 0.98      | 0.98   | 0.98     |
-| [@Liang2021]   | 0.9592   | NA        | NA     | NA       |
-| [@Alam2024]    | 0.9972   | NA        | NA     | 0.9988   |
+| Paper                         | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------- | --------- | ------ | -------- |
+| Rahul et al. [@Rahul2017]     | 0.9491   | NA        | NA     | NA       |
+| Yang et al. [@Yang2018]       | 0.987    | NA        | NA     | NA       |
+| Kumari et al. [@Kumari2017]   | 0.9707   | NA        | NA     | NA       |
+| Khan et al. [@Khan2020]       | 0.9780   | 0.98      | 0.97   | 0.97     |
+| Sartoli et al. [@Sartoli2020] | 0.9680   | 0.9624    | 0.9616 | 0.9618   |
+| Bouchaib et al. [@Prima2021]  | 0.98     | 0.98      | 0.98   | 0.98     |
+| Liang et al. [@Liang2021]     | 0.9592   | NA        | NA     | NA       |
+| SREMIC [@Alam2024]            | 0.9972   | NA        | NA     | 0.9988   |
 
 ##### Mallmg dataset
 
@@ -49,16 +49,16 @@ Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
 \label{table:malimg-results}
 \end{table} -->
 
-| Paper            | Accuracy | Precision | Recall | F1-score |
-| ---------------- | -------- | --------- | ------ | -------- |
-| [@Garcia2019]    | 0.9815   | NA        | NA     | NA       |
-| [@El-Shafai2021] | 0.9997   | 0.9904    | 0.9901 | 0.9902   |
-| [@Li2021]        | 0.97     | NA        | NA     | NA       |
-| [@Son2022]       | 0.97     | NA        | NA     | NA       |
-| [@Hammad2022]    | 0.9684   | NA        | NA     | NA       |
-| [@Parihar2022]   | 0.9943   | 0.9944    | 0.9943 | 0.9943   |
-| [@Alam2024]      | 0.9993   | NA        | NA     | 0.9987   |
-| [@Al-Masri2024]  | 0.9989   | 0.9971    | 0.9984 | 0.9977   |
+| Paper                             | Accuracy | Precision | Recall | F1-score |
+| --------------------------------- | -------- | --------- | ------ | -------- |
+| Cervantes et al. [@Garcia2019]    | 0.9815   | NA        | NA     | NA       |
+| El-Shafai et al. [@El-Shafai2021] | 0.9997   | 0.9904    | 0.9901 | 0.9902   |
+| Li et al. [@Li2021]               | 0.97     | NA        | NA     | NA       |
+| Son et al. [@Son2022]             | 0.97     | NA        | NA     | NA       |
+| Hammad et al. [@Hammad2022]       | 0.9684   | NA        | NA     | NA       |
+| S-DCNN [@Parihar2022]             | 0.9943   | 0.9944    | 0.9943 | 0.9943   |
+| SREMIC [@Alam2024]                | 0.9993   | NA        | NA     | 0.9987   |
+| Al-Masri et al. [@Al-Masri2024]   | 0.9989   | 0.9971    | 0.9984 | 0.9977   |
 
 ##### Other datasets
 
