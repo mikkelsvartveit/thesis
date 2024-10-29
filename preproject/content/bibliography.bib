@@ -63,6 +63,37 @@
   abstract = {The number of publicly exposed Internet of Things (IoT) devices has been increasing, as more number of these devices connected to the internet with default settings. The devices accessed with default credentials are getting compromised with brute force attempts or the vulnerable devices are compromised with exploits to install the malware and perform malicious activity like initiating denial of service (DoS) attacks. The malware detection and classification in IoT paradigm is still considered a problem, as the adversary consistently create new variants of IoT malware and actively look for compromising the victim devices. In this paper, we proposed a Deep Learning (DL) based Bidirectional-Gated Recurrent Unit-Convolutional Neural Network (Bi-GRU-CNN) model to detect the IoT malware and classify the IoT malware families using Executable and Linkable Format (ELF, formerly named Extensible Linking Format) binary file byte sequences as an input feature. In addition, Recurrent Neural Network (RNN) based DL model combinations are considered to evaluate the performances of the IoT malware detection and family classification and also those models performance is compared with the proposed method. Our performance evaluation shows that our proposed approach obtained 100% accuracy for IoT malware detection case and 98% for IoT malware family classification. Further evaluation of our proposed model with only byte sequence as an input feature exhibit similar performance as the byte sequence and CPU types as an input features and showed that our model is robust and platform independent to detect and classify the IoT malware.}
 }
 
+@inproceedings{Yang2019,
+  author    = {Yang, Shouguo and Shi, Zhiqiang and Zhang, Guodong and Li, Mingxuan and Ma, Yuan and Sun, Limin},
+  booktitle = {ICC 2019 - 2019 IEEE International Conference on Communications (ICC)},
+  title     = {Understand Code Style: Efficient CNN-Based Compiler Optimization Recognition System},
+  year      = {2019},
+  volume    = {},
+  number    = {},
+  pages     = {1-6},
+  abstract  = {Compiler optimization level recognition can be applied to vulnerability discovery and binary analysis. Due to the exists of many different compilation optimization options, the difference in the contents of the binary file is very complicated. There are thousands of compiler optimization algorithms and multiple different processor architectures, so it is very difficult to manually analyze binary files and recognize its compiler optimization level with rules. This paper first proposes a CNN-based compiler optimization level recognition model: BinEye. The system extracts semantic and structural differences and automatically recognize the compiler optimization levels. The model is designed to be very suitable for binary file processing and is easy to understand. We built a dataset containing 80028 binary files for the model training and testing. Our proposed model achieves an accuracy of over 97%. At the same time, BinEye is a fully CNN-based system and it has a faster forward calculation speed, at least 8 times faster than the normal RNN-based model. Through our analysis of the model output, we successfully found the difference in assembly codes caused by the different compiler optimization level. This means that the model we proposed is interpretable. Based on our model, we propose a method to analyze the code differences caused by different compiler optimization levels, which has great guiding significance for analyzing closed source compilers and binary security analysis.},
+  keywords  = {Optimization;Security;Convolution;Analytical models;Task analysis;Software;Semantics},
+  doi       = {10.1109/ICC.2019.8761073},
+  issn      = {1938-1883},
+  month     = {May}
+}
+
+
+@article{Pizzolotto2021,
+  author   = {Pizzolotto, Davide and Inoue, Katsuro},
+  journal  = {IEEE Access},
+  title    = {Identifying Compiler and Optimization Level in Binary Code From Multiple Architectures},
+  year     = {2021},
+  volume   = {9},
+  number   = {},
+  pages    = {163461-163475},
+  abstract = {While compiling a native application, different compiler flags or optimization levels can be configured. This choice depends on the different requirements. For example, if the application binary is intended for final release, the flags and optimization settings should be set for execution speed and efficiency. Alternatively, if the application is to be used for debugging purposes, debug flags should be configured accordingly, usually involving minor or no code optimization. However, this information cannot be easily extracted from a compiled binary. Nonetheless, ensuring the same compiler and compilation flags is particularly important when comparing different binary files, to avoid inaccurate or unreliable analyses. Unfortunately, to understand which flags and optimizations have been used, a deep knowledge of the target architecture and the compiler used is required. In this study, we present two deep learning models used to detect both compiler and optimization level in a compiled binary. The optimization levels we study are O0, O1, O2, O3, and Os in the x86_64, AArch64, RISC-V, SPARC, PowerPC, MIPS, and ARM architectures. In addition, for the x86_64 and AArch64 architectures, we also determine whether the compiler is GCC or Clang. We created a dataset of more than 76000 binaries and used it for training. Our experiments showed over 99.95% accuracy in detecting the compiler and between 92% to 98%, depending on the architecture, in detecting the optimization level. Furthermore, we analyzed the change in accuracy when the amount of data was extremely limited. Our study shows that it is possible to accurately detect both compiler flag settings and optimization levels with function-level granularity.},
+  keywords = {Optimization;Codes;Convolutional neural networks;Binary codes;Libraries;Computer architecture;Training;Compilers;deep learning;static code analysis;reverse engineering},
+  doi      = {10.1109/ACCESS.2021.3132950},
+  issn     = {2169-3536},
+  month    = {}
+}
+
 @inproceedings{Kumari2017,
   author    = {Kumari, Mamta and Hsieh, George and Okonkwo, Christopher A.},
   booktitle = {2017 International Conference on Computational Science and Computational Intelligence (CSCI)},
@@ -197,4 +228,54 @@
   author   = {Tran The Son and Chando Lee and Hoa Le-Minh and Nauman Aslam and Vuong Cong Dat},
   keywords = {Image-based Malware Classification, -NN, SVM, CNN, GIST descriptor},
   abstract = {This paper proposes a simple and effective model applied for image-based malware classification using machine learning in which malware images (converted from malware binary files) are directly fed into the classifiers, i.e. k nearest neighbour (k-NN), support vector machine (SVM) and convolution neural networks (CNN). The proposed model does not use the normalized fixed-size square images (e.g. 64 × 64 pixels) or features extracted by image descriptor (e.g. GIST) for training classifiers as existing models do in the literature. Instead, the input images are normalized and horizontally sized down (the width of the image) to a lower dimension of 32 × 64, 16 × 64 or even 8 × 64 than square ones (e.g. 64 × 64 pixels) to reduce the complexity and training time of the model. It is based on the fact that the texture of the malware image is mainly vertically distributed as analysed in this paper. This finding is significant for training those devices which have limited computational resources such as IoT devices. The experiment was conducted on the Malimg, Malheur datasets which contains 9339 (25 malware families) and 3133 variant samples (24 malware families) using k-NN, SVM and CNN classifiers. The achieved results show that it is possible to reduce the dimension of the input images (i.e. 32 × 64, 16 × 64 or even 8 × 64) while still retaining the accuracy of classification as the same as the accuracy obtained by classifier feeding by the fixed-size square image (i.e. 64 × 64 pixels). As a result, training time of the propose model reduces by a half, a quarter, and one-eighth compared to training time taken by the same machine learning-based classifier (i.e. k-NN, SVM and CNN) feeding by fixed-sized square images, i.e. 64 × 64, respectively.}
+}
+
+@inproceedings{Alam2024,
+  author    = {Alam, Inzamamul and Samiullah, Md and Kabir, Upama and Woo, Simon and Leung, Carson K. and Nguyen, Hoang Hai},
+  booktitle = {2024 18th International Conference on Ubiquitous Information Management and Communication (IMCOM)},
+  title     = {SREMIC: Spatial Relation Extraction-based Malware Image Classification},
+  year      = {2024},
+  volume    = {},
+  number    = {},
+  pages     = {1-8},
+  abstract  = {Around 800,000 people fall prey to cyberattacks annually, most often by “malware”. Malware has the potential to become a destructive weapon in Cyber-world. It is a difficult task to manually thwart an assault by malware. It is crucial to properly categorize malware binaries in order to identify their origins. Furthermore, malware structure discovery through basic feature extraction approaches are time-consuming and challenging. Malware classification was previously solved using naive machine learning approaches like support vector machine (SVM) and extreme gradient boosting (XGBoost). Recently, deep learning (DL) has shown to be impactful in finding malicious patterns. Without DL, analysis of the vast amounts of available data tends to impossible. Existing methods (e.g., transfer learning, fusion methodology, ensemble learning) may not be effective on actual malware binary files. Moreover, some single image-based malware classification used rudimentary convolutional neural network (CNN) that does not perform well. Faced with these challenges, we propose in this paper a novel model with of a spatial CNN with sufficient regularization and data augmentation that can identify and classify malware in images effectively and efficiently. Our model is evaluated using datasets like MalImg and Microfsoft-Big. The proposed model achieves validation score of 99.93% for MalImg and 99.72% for Microsoft-Big datasets. Our approach outperforms VGG16, VGG19, ResNet50, EfficientNetB1, and Google's Inception v3, including state-of-the-art (SOTA) techniques.},
+  keywords  = {Support vector machines;Deep learning;Feature extraction;Malware;Convolutional neural networks;Data mining;Task analysis;Malware classification;Deep learning;Convolutional neural network (CNN);Spatial relation},
+  doi       = {10.1109/IMCOM60618.2024.10418339},
+  issn      = {},
+  month     = {Jan}
+}
+
+@inproceedings{Sartoli2020,
+  author    = {Sartoli, Sara and Wei, Yong and Hampton, Shane},
+  booktitle = {2020 19th IEEE International Conference on Machine Learning and Applications (ICMLA)},
+  title     = {Malware Classification using Recurrence Plots and Deep Neural Network},
+  year      = {2020},
+  volume    = {},
+  number    = {},
+  pages     = {901-906},
+  abstract  = {In this paper, we introduce a method for visualizing and classifying malware binaries. A malware binary consists of a series of data points of compiled machine codes that represent programming components. The occurrence and recurrence behavior of these components is determined by the common tasks malware samples in a particular family carry out. Thus, we view a malware binary as a series of emissions generated by an underlying stochastic process and use recurrence plots to transform malware binaries into two-dimensional texture images. We observe that recurrence plot-based malware images have significant visual similarities within the same family and are different from samples in other families. We apply deep CNN classifiers to classify malware samples. The proposed approach does not require creating malware signature or manual feature engineering. Our preliminary experimental results show that the proposed malware representation leads to a higher and more stable accuracy in comparison to directly transforming malware binaries to gray-scale images.},
+  keywords  = {Visualization;Transfer learning;Transforms;Programming;Malware;Convolutional neural networks;Task analysis;Malware Classification;Deep Learning;Recurrence Plots;Visualization;Static Analysis},
+  doi       = {10.1109/ICMLA51294.2020.00147},
+  issn      = {},
+  month     = {Dec}
+}
+
+@article{Lachtar2023,
+  author     = {Lachtar, Nada and Ibdah, Duha and Khan, Hamza and Bacha, Anys},
+  title      = {RansomShield: A Visualization Approach to Defending Mobile Systems Against Ransomware},
+  year       = {2023},
+  issue_date = {August 2023},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {26},
+  number     = {3},
+  issn       = {2471-2566},
+  url        = {https://doi.org/10.1145/3579822},
+  doi        = {10.1145/3579822},
+  abstract   = {The unprecedented growth in mobile systems has transformed the way we approach everyday computing. Unfortunately, the emergence of a sophisticated type of malware known as ransomware poses a great threat to consumers of this technology. Traditional research on mobile malware detection has focused on approaches that rely on analyzing bytecode for uncovering malicious apps. However, cybercriminals can bypass such methods by embedding malware directly in native machine code, making traditional methods inadequate. Another challenge that detection solutions face is scalability. The sheer number of malware variants released every year makes it difficult for solutions to efficiently scale their coverage. To address these concerns, this work presents RansomShield, an energy-efficient solution that leverages CNNs to detect ransomware. We evaluate CNN architectures that have been known to perform well on computer vision tasks and examine their suitability for ransomware detection. We show that systematically converting native instructions from Android apps into images using space-filling curve visualization techniques enable CNNs to reliably detect ransomware with high accuracy. We characterize the robustness of this approach across ARM and x86 architectures and demonstrate the effectiveness of this solution across heterogeneous platforms including smartphones and chromebooks. We evaluate the suitability of different models for mobile systems by comparing their energy demands using different platforms. In addition, we present a CNN introspection framework that determines the important features that are needed for ransomware detection. Finally, we evaluate the robustness of this solution against adversarial machine learning (AML) attacks using state-of-the-art Android malware dataset.},
+  journal    = {ACM Trans. Priv. Secur.},
+  month      = mar,
+  articleno  = {27},
+  numpages   = {30},
+  keywords   = {Ransomware, malware, machine learning, convolutional neural networks, visualization, Hilbert, entropy, mobile security, Android, intrusion detection system, instruction set architecture, energy efficiency}
 }

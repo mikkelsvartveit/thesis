@@ -2,6 +2,18 @@
 
 ## Machine learning techniques for ISA detection
 
+### Applications
+
+#### Malware classification
+
+TODO: Introduce datasets
+
+TODO: Summary table
+
+#### Compiler detection
+
+TODO
+
 ## CNN applied to binary code
 
 Using CNN for analyzing binary machine code is not a novel idea. In this section, we will review the applications, datasets, and methods that have been previously explored within this domain.
@@ -18,6 +30,8 @@ Li et al. [@Li2021] also took a 1D encoding approach by converting each byte int
 
 Chaganti et al. [@Chaganti2022] used the ELF header to locate the entry point of each binary program. From this entry point, 2000 bytes were extracted. If there were less than 2000 bytes present after the entry point, the remaining bytes were padded with zero values. They then ran the bytes through an encryption cipher, performed base64 encoding of the encrypted bytes, and then used a word embedding layer before reaching the CNN.
 
+Yang et al. [@Yang2019] and Pizzolotto et al. [@Pizzolotto2021] used CNN for detecting compiler optimization levels. Both converted the raw bytes into a vector of integers, and also included a word embedding layer before reaching the one-dimensional convolution blocks.
+
 #### Two-dimensional grayscale image
 
 The most common way to convert a binary file into a format interpretable by a CNN is to encode it as an image.
@@ -26,11 +40,17 @@ Kumari et al. [@Kumari2017] extracted each byte from the file and represented th
 
 A variation of the square image is to use images of a fixed width, but variable length. Yang et al. [@Yang2018] fixed the image width to 512 pixels and let the height depend on the file size. El-Shafai et al. [@El-Shafai2021] took this a step further by defining a table of different width values based on the file size. Files over 1000 KB would get a width of 1024 pixels, files between 500 and 1000 KB would get a width of 768 pixels, and so on, with smaller files getting proportionally smaller widths. The latter approach was also used by Alvee et al. [@Alvee2021], Liang et al. [@Liang2021], and Son et al. [@Son2022].
 
-TODO:
+#### Two-dimensional RGB image
 
-- 2D RGB image
-- Recurrence plots
-- Space-filling curves
+SREMIC [@Alam2024] used RGB images for parts of their network. Similarly to the grayscale approaches discussed earlier, the bytes from the binary files were first converted to a set of vectors that form a 2D matrix. Then, they converted this matrix into a three-channel RGB image. Unfortunately, the paper does not explain how this conversion process was conducted.
+
+#### Other approaches
+
+While most existing literature uses a fairly straightforward image conversion pipeline, more sophisticated encoding approaches have been attempted.
+
+Sartoli et al [@Sartoli2020] used an image conversion process based on recurrence plots. They viewed the binaries as a series of emissions from a stochastic process. From this, they generated 4092x4092 grayscale images using recurrence patterns. The images were resized to 64x64 pixels before training the CNN. They compared this to a direct image conversion approach, and found that the recurrence plots approach performed more consistently across classes, while also achieving a higher mean accuracy.
+
+RansomShield [@Lachtar2023] utilized a Hilbert space-filling curve visualization of the binary file. They evaluated multiple CNN architectures, and found that the small and efficient LeNet model achieved a 99.7% accuracy on detecting Android ransomware from native machine instructions. LeNet outperformed deeper networks like VGG-16 while being up to 47 times more energy efficient.
 
 ### Transfer learning
 
@@ -52,13 +72,3 @@ TODO:
 - Spatial CNN
 - Bi-GRU-CNN
 - Dual CNN
-
-### Applications
-
-#### Malware classification
-
-TODO: Introduce datasets
-
-TODO: Insert summary table
-
-#### Compiler detection

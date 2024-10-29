@@ -22,3 +22,5 @@ TODO: Explain the typical layers in a CNN:
 - Convolutional block
 
 TODO: Explain fine-tuning
+
+TODO: Related work (CNN survey)
