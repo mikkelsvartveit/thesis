@@ -2,21 +2,21 @@
 
 ## Machine learning techniques for ISA detection
 
+## CNN applied to binary code
+
+Using CNN for analyzing binary machine code is not a novel idea. In this section, we will review the applications, datasets, and methods that have been previously explored within this domain.
+
 ### Applications
 
 #### Malware classification
 
-TODO: Introduce datasets
+- TODO: Introduce datasets
 
-TODO: Summary table
+- TODO: Summary table
 
 #### Compiler detection
 
 TODO
-
-## CNN applied to binary code
-
-Using CNN for analyzing binary machine code is not a novel idea. In this section, we will review the applications, datasets, and methods that have been previously explored within this domain.
 
 ### Encoding binary data
 
