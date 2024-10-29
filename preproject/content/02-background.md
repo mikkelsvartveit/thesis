@@ -14,4 +14,11 @@ CNN provides several significant advantages over fully-connected neural networks
 2. **Preservation of spatial relationships**: In fully-connected neural networks, there is no mechanism that preserves information about the ordering of the input features. This means that spatial relationships between the input features are not taken into account when training the model. Through the convolution layers and pooling layers, CNN are able to learn spatial features, and even discover them independently of their position in the input.
 3. **Automatic feature extraction**: In contrast to most machine learning techniques, CNN does not require manual extraction of features [@cnn-survey]. Eliminating the need for feature engineering can save significantly on time and resources. In addition, this characteristic makes CNN suitable for machine learning applications where humans are not able to discover patterns in the input data themselves.
 
-TODO: Explain the typical layers in a CNN
+TODO: Explain the typical layers in a CNN:
+
+- Convolution layer
+- Pooling layer
+- Dropout
+- Convolutional block
+
+TODO: Explain fine-tuning
