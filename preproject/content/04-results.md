@@ -1,6 +1,6 @@
 # Results
 
-## Machine learning techniques for ISA detection
+<!-- ## Machine learning techniques for ISA detection -->
 
 ## CNN applied to binary code
 
@@ -10,9 +10,57 @@ Using CNN for analyzing binary machine code is not a novel idea. In this section
 
 #### Malware classification
 
-- TODO: Introduce datasets
+##### Microsoft dataset
 
-- TODO: Summary table
+TODO: Insert summary table
+
+<!-- \begin{table}[h!]
+\centering
+\begin{tabular}{ |c|c|c||c|c|c| }
+\hline
+Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
+\hline
+\end{tabular}
+\caption{Papers an their results when classifying malware from the microsoft dataset}
+\label{table:microsoft-results}
+\end{table} -->
+
+| Paper          | Accuracy | Precision | Recall | F1-score |
+| -------------- | -------- | --------- | ------ | -------- |
+| [@Rahul2017]   | 0.9491   | NA        | NA     | NA       |
+| [@Yang2018]    | 0.987    | NA        | NA     | NA       |
+| [@Kumari2017]  | 0.9707   | NA        | NA     | NA       |
+| [@Khan2020]    | 0.9780   | 0.98      | 0.97   | 0.97     |
+| [@Sartoli2020] | 0.9680   | 0.9624    | 0.9616 | 0.9618   |
+| [@Prima2021]   | 0.98     | 0.98      | 0.98   | 0.98     |
+| [@Liang2021]   | 0.9592   | NA        | NA     | NA       |
+| [@Alam2024]    | 0.9972   | NA        | NA     | 0.9988   |
+
+##### Mallmg dataset
+
+<!-- \begin{table}[h!]
+\centering
+\begin{tabular}{ |c|c|c||c|c|c| }
+\hline
+Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
+\hline
+\end{tabular}
+\caption{Papers an their results when classifying malware from the malimg dataset}
+\label{table:malimg-results}
+\end{table} -->
+
+| Paper            | Accuracy | Precision | Recall | F1-score |
+| ---------------- | -------- | --------- | ------ | -------- |
+| [@Garcia2019]    | 0.9815   | NA        | NA     | NA       |
+| [@El-Shafai2021] | 0.9997   | 0.9904    | 0.9901 | 0.9902   |
+| [@Li2021]        | 0.97     | NA        | NA     | NA       |
+| [@Son2022]       | 0.97     | NA        | NA     | NA       |
+| [@Hammad2022]    | 0.9684   | NA        | NA     | NA       |
+| [@Parihar2022]   | 0.9943   | 0.9944    | 0.9943 | 0.9943   |
+| [@Alam2024]      | 0.9993   | NA        | NA     | 0.9987   |
+| [@Al-Masri2024]  | 0.9989   | 0.9971    | 0.9984 | 0.9977   |
+
+##### Other datasets
 
 #### Compiler detection
 
