@@ -8,59 +8,41 @@ Using CNN for analyzing binary machine code is not a novel idea. In this section
 
 ### Applications
 
-#### Malware classification
+### Malware classification
 
-##### Microsoft dataset
+Of the 21 included papers in the review, a total of 18 of them were papers on malware classification. These papers used CNN's to classify malware families from input malware binaries. Seeing as this is a comparetively commonly researched problem with regards to our research question **(RQ1?)**, we provide a comparison on different papers ability to classify malware from the two most commonly used datasets: Microsoft Malware Classification Challenge (MMCC) [@microsoftkaggle] and Malimg [@malimgpaper].
 
-TODO: Insert summary table
+MMCC contains malware binaries from 9 different malware families, while the malimg dataset contains malware from 25 different families, at 21,741 and 9,339 malware samples respectivly [@microsoftkaggle] [@malimgpaper]. Across both datasets, 8 included papers used them in their research, where we generally see great results across all of the papers as seen in Tables \ref{table:microsoft-results} and \ref{table:malimg-results}. The SREMIC model having the overall best results with 99.72% classification accuracy on the MMCC dataset and 99.93% on Malimg [@Alam2024], while the El-Shafai et al. paper from 2021 reports a 99.97% accuracy on the malimg dataset [@El-Shafai2021].
 
-<!-- \begin{table}[h!]
-\centering
-\begin{tabular}{ |c|c|c||c|c|c| }
-\hline
-Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
-\hline
-\end{tabular}
-\caption{Papers an their results when classifying malware from the microsoft dataset}
-\label{table:microsoft-results}
-\end{table} -->
+From our research we have found that both datasets have large imbalances and the different papers adress that to verying degree. In addition, there is a large variation in metric reporting quality. Who addresses imbalance, which papers appears to be comperativly similar in this regard, and why malimg better results.
 
-| Paper                         | Accuracy | Precision | Recall | F1-score |
-| ----------------------------- | -------- | --------- | ------ | -------- |
-| Rahul et al. [@Rahul2017]     | 0.9491   | NA        | NA     | NA       |
-| Yang et al. [@Yang2018]       | 0.987    | NA        | NA     | NA       |
-| Kumari et al. [@Kumari2017]   | 0.9707   | NA        | NA     | NA       |
-| Khan et al. [@Khan2020]       | 0.9780   | 0.98      | 0.97   | 0.97     |
-| Sartoli et al. [@Sartoli2020] | 0.9680   | 0.9624    | 0.9616 | 0.9618   |
-| Bouchaib et al. [@Prima2021]  | 0.98     | 0.98      | 0.98   | 0.98     |
-| Liang et al. [@Liang2021]     | 0.9592   | NA        | NA     | NA       |
-| SREMIC [@Alam2024]            | 0.9972   | NA        | NA     | 0.9988   |
+| Paper                                | Accuracy   | Precision | Recall | F1-score   |
+| ------------------------------------ | ---------- | --------- | ------ | ---------- |
+| Rahul et al. [@Rahul2017] (2017)     | 0.9491     | -         | -      | -          |
+| Kumari et al. [@Kumari2017] (2017)   | 0.9707     | -         | -      | -          |
+| Yang et al. [@Yang2018] (2018)       | 0.987      | -         | -      | -          |
+| Khan et al. [@Khan2020] (2020)       | 0.9780     | 0.98      | 0.97   | 0.97       |
+| Sartoli et al. [@Sartoli2020] (2020) | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
+| Bouchaib et al. [@Prima2021] (2021)  | 0.98       | 0.98      | 0.98   | 0.98       |
+| Liang et al. [@Liang2021] (2021)     | 0.9592     | -         | -      | -          |
+| SREMIC [@Alam2024] (2024)            | **0.9972** | -         | -      | **0.9988** |
 
-##### Mallmg dataset
+Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
-<!-- \begin{table}[h!]
-\centering
-\begin{tabular}{ |c|c|c||c|c|c| }
-\hline
-Paper & Architecture & Accuracy & Precision & Recall & F1-score \\
-\hline
-\end{tabular}
-\caption{Papers an their results when classifying malware from the malimg dataset}
-\label{table:malimg-results}
-\end{table} -->
+| Paper (year)                             | Accuracy   | Precision | Recall | F1-score   |
+| ---------------------------------------- | ---------- | --------- | ------ | ---------- |
+| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -         | -      | -          |
+| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904    | 0.9901 | 0.9902     |
+| Li et al. [@Li2021] (2021)               | 0.97       | -         | -      | -          |
+| Son et al. [@Son2022] (2022)             | 0.97       | -         | -      | -          |
+| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -         | -      | -          |
+| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944    | 0.9943 | 0.9943     |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | -         | -      | **0.9987** |
+| Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
 
-| Paper                             | Accuracy | Precision | Recall | F1-score |
-| --------------------------------- | -------- | --------- | ------ | -------- |
-| Cervantes et al. [@Garcia2019]    | 0.9815   | NA        | NA     | NA       |
-| El-Shafai et al. [@El-Shafai2021] | 0.9997   | 0.9904    | 0.9901 | 0.9902   |
-| Li et al. [@Li2021]               | 0.97     | NA        | NA     | NA       |
-| Son et al. [@Son2022]             | 0.97     | NA        | NA     | NA       |
-| Hammad et al. [@Hammad2022]       | 0.9684   | NA        | NA     | NA       |
-| S-DCNN [@Parihar2022]             | 0.9943   | 0.9944    | 0.9943 | 0.9943   |
-| SREMIC [@Alam2024]                | 0.9993   | NA        | NA     | 0.9987   |
-| Al-Masri et al. [@Al-Masri2024]   | 0.9989   | 0.9971    | 0.9984 | 0.9977   |
+Table: Malimg dataset classification performance. \label{table:malimg-results}
 
-##### Other datasets
+#### Other datasets
 
 #### Compiler detection
 

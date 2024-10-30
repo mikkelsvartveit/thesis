@@ -28,5 +28,5 @@ latex:
 		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
 		--to=latex \
 		--standalone \
-		--output=../output/preproject.tex \
+		--output=../output/preproject.tex
 	@echo "Finished compiling LaTeX file."
