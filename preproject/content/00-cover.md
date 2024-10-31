@@ -18,7 +18,15 @@ documentclass: extarticle
 papersize: a4
 geometry:
   - margin=2.5cm
-fontsize: 12pt
+fontsize: 11pt
+mainfont: "SourceSerif4"
+mainfontoptions:
+  - Path=./assets/fonts/
+  - Extension=.ttf
+  - UprightFont=*-Regular
+  - BoldFont=*-SemiBold
+  - ItalicFont=*-Italic
+  - BoldItalicFont=*-SemiBoldItalic
 linestretch: 1.25
 numbersections: true
 link-citations: true
