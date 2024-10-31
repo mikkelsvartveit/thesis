@@ -17,7 +17,7 @@ MMCC dataset contains malware binaries from 9 different malware families, while 
 However from what we have found, both datasets have large imbalances in the data amount types of malware and the different papers address this to verying degree. Rahul et al. [@Rahul2017], Kumari et al. [@Kumari2017], Khan et al. [@Khan2020], Sartoli et al. [@Sartoli2020], Son et al. [@Son2022] and Hammad et al. [@Hammad2022] all ignore the datasets imbalances, which could be taking into account when evaluating their performance. Yang et al. [@Yang2018] only classify between the two most represented malware families, while Liang et al. [@Liang2021], Cervantes et al. [@Garcia2019] and Al-Masri et al. [@Al-Masri2024] all use over- and/or undersampling. Li et al. [@Li2021] augmented their CNN with a XGBoost classifier, as a way of tackling the imbalance. We will touch more on this CNN variation. SREMIC [@Alam2024] and Bouchaib & Bouhorma [@Prima2021] generated aditional synthetic samples, where Bouchaib & Bouhorma used Synthetic Minority Oversampling Technique. SREMIC used a CycleGAN which in some cases generated 5 new images per malware file for the less represented malware families. Both SREMIC and Bouchaib & Bouhorma reports great results, but does not address how well their model would have performed without additional dataset generation. 
 
 
-| Paper                                   | Accuracy   | Precision | Recall | F1-score   |
+| Paper (year published)                  | Accuracy   | Precision | Recall | F1-score   |
 | --------------------------------------- | ---------- | --------- | ------ | ---------- |
 | Rahul et al. [@Rahul2017] (2017)        | 0.9491     | -         | -      | -          |
 | Kumari et al. [@Kumari2017] (2017)      | 0.9707     | -         | -      | -          |
@@ -30,7 +30,7 @@ However from what we have found, both datasets have large imbalances in the data
 
 Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
-| Paper (year)                             | Accuracy   | Precision | Recall | F1-score   |
+| Paper (year published)                   | Accuracy   | Precision | Recall | F1-score   |
 | ---------------------------------------- | ---------- | --------- | ------ | ---------- |
 | Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -         | -      | -          |
 | El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904    | 0.9901 | 0.9902     |
