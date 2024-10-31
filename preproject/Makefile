@@ -17,6 +17,14 @@ watch:
 	@echo "Watching for changes..."
 	@fswatch -o ./content/ | xargs -n1 -I{} make -s pdf
 
+watchwsl:
+	@make -s pdf
+	@echo "Watching for changes..."
+	inotifywait -r -m -e modify ./content/ | \
+   while read file_path file_event file_name; do  \
+      make -s pdf; \
+   done 
+
 latex:
 	@echo "\nCompiling LaTeX file..."
 	mkdir -p ../output

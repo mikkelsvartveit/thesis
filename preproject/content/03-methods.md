@@ -8,7 +8,7 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two seperate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
-\begin{table}[h!]
+\begin{table}
 \centering
 \begin{tabular}{ |c|m{0.7\textwidth}|c| }
 \hline
@@ -36,7 +36,7 @@ All 160 identified research papers across ML-ISA and CNN were assessed using inc
 - Exclusion of papers after QA on full-text
 
 ML-ISA inclusion critera focuses on filtering out papers that does not apply machine learning to binary code of unknown ISA, i.e. without disassembly. In addition for the paper to be relevant in the field, we require that the proposed method attempts to aid software reverse engineering. CNN inclusion criteria are a bit less strict, and does not require the paper to focus on reverse engineering specifically. We want to discover ways of applying CNN's on binary code directly, which means mainly excluding papers that require disassembled input. The specific IC's and QA's for both topics are:
-(Some mention of quality assesment would be nice ? )
+**(Some mention of quality assesment would be nice ? )**
 
 ML-ISA:
 
@@ -50,7 +50,7 @@ CNN:
 - The method does not require reverse engineering the binary first
 - The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
 
-\begin{table}[h!]
+\begin{table}
 \centering
 \begin{tabular}{ |c|c|c|c| }
 \hline
@@ -72,3 +72,6 @@ CNN
 \end{table}
 
 ## Data extraction process
+
+<!-- their apperent generelizability for other analysis tasks kan kanskje være et IC?-->
+In this subsection we provide a short descripton of how the resulting 22 primary studies were processed and studied. Each paper was read through in it's entirety, and labeled with labels for each of the categories presented by **RQ1**. These labeling categories include Dataset, CNN architecture, type of encoding of the binary file, targeted features and patterns and their apparent generelizability for other analysis tasks. As a way of comparing different CNN architectures and their variations, we grouped and listed performance metrics for papers that target the same feature given a comparatively similar targeted domain. We chose to gather and report accuracy, precision, recall and F1-score of all papers where a performance comparison made sense, i.e. given similar datasets and targeted features.
