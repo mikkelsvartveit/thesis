@@ -1,8 +1,8 @@
 # Background
 
-## Reverse Engineering
+<!-- ## Reverse Engineering -->
 
-TODO
+<!-- TODO -->
 
 ## Convolutional Neural Networks
 
@@ -22,5 +22,3 @@ TODO: Explain the typical layers in a CNN:
 - Convolutional block
 
 TODO: Explain fine-tuning
-
-TODO: Related work (CNN survey)

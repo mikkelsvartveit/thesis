@@ -1,4 +1,4 @@
-# Methododlology
+# Methodology
 
 This section defines the review protocol used for this structured literature review, and provides justification for the strategies used with regards to answering our research questions. This outlines methods for identification of relevant studies to be considered included our review, describing selected inclusion crieria and quality assessment for primary sources and the data extraction process for acquiering results. The overall review protocol is identical for literature regarding ML for ISA identification and CNN's applied to binary programs, where any differences in inclusion criteria and data extraction are explained. The review protocol is split into 3 phases: research identification through database selection and querying, filtering and selection of primary studies based on inclusion criteria, and data extraction and synthesis.
 
@@ -74,4 +74,5 @@ CNN
 ## Data extraction process
 
 <!-- their apperent generelizability for other analysis tasks kan kanskje være et IC?-->
+
 In this subsection we provide a short descripton of how the resulting 22 primary studies were processed and studied. Each paper was read through in it's entirety, and labeled with labels for each of the categories presented by **RQ1**. These labeling categories include Dataset, CNN architecture, type of encoding of the binary file, targeted features and patterns and their apparent generelizability for other analysis tasks. As a way of comparing different CNN architectures and their variations, we grouped and listed performance metrics for papers that target the same feature given a comparatively similar targeted domain. We chose to gather and report accuracy, precision, recall and F1-score of all papers where a performance comparison made sense, i.e. given similar datasets and targeted features.
