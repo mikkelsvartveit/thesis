@@ -8,7 +8,7 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two seperate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
-\begin{table}[h!]
+\begin{table}
 \centering
 \begin{tabular}{ |c|m{0.7\textwidth}|c| }
 \hline
@@ -50,7 +50,7 @@ CNN:
 - The method does not require reverse engineering the binary first
 - The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
 
-\begin{table}[h!]
+\begin{table}
 \centering
 \begin{tabular}{ |c|c|c|c| }
 \hline

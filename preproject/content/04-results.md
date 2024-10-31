@@ -12,20 +12,21 @@ Using CNN for analyzing binary machine code is not a novel idea. In this section
 
 Of the 21 included papers in the review, a total of 18 of them were papers on malware classification. These papers used CNN's to classify malware families from input malware binaries. Seeing as this is a comparetively commonly researched problem with regards to our research question **(RQ1?)**, we provide a comparison on different papers ability to classify malware from the two most commonly used datasets: Microsoft Malware Classification Challenge (MMCC) [@microsoftkaggle] and Malimg [@malimgpaper].
 
-MMCC contains malware binaries from 9 different malware families, while the malimg dataset contains malware from 25 different families, at 21,741 and 9,339 malware samples respectivly [@microsoftkaggle] [@malimgpaper]. Across both datasets, 8 included papers used them in their research, where we generally see great results across all of the papers as seen in Tables \ref{table:microsoft-results} and \ref{table:malimg-results}. The SREMIC model having the overall best results with 99.72% classification accuracy on the MMCC dataset and 99.93% on Malimg [@Alam2024], while the El-Shafai et al. paper from 2021 reports a 99.97% accuracy on the malimg dataset [@El-Shafai2021].
+MMCC dataset contains malware binaries from 9 different malware families, while the Malimg dataset contains malware from 25 different families, at 21,741 and 9,339 malware samples respectivly [@microsoftkaggle] [@malimgpaper]. Across both datasets, 8 included papers used them in their research, where we generally see great results across all of the papers as seen in Tables \ref{table:microsoft-results} and \ref{table:malimg-results}. All papers used a one vs. all comparison when evaluating their models ability to classify malware families, and a macro average precision, recall and F1-scores for those that reported those metrics. The SREMIC model has the overall best results with 99.72% classification accuracy on the MMCC dataset and 99.93% on Malimg [@Alam2024], while the El-Shafai et al. paper from 2021 reports a 99.97% accuracy on the Malimg dataset at an apparent cost of a slightly worse f1-score [@El-Shafai2021].
 
-From our research we have found that both datasets have large imbalances and the different papers adress that to verying degree. In addition, there is a large variation in metric reporting quality. Who addresses imbalance, which papers appears to be comperativly similar in this regard, and why malimg better results.
+However from what we have found, both datasets have large imbalances in the data amount types of malware and the different papers address this to verying degree. Rahul et al. [@Rahul2017], Kumari et al. [@Kumari2017], Khan et al. [@Khan2020], Sartoli et al. [@Sartoli2020], Son et al. [@Son2022] and Hammad et al. [@Hammad2022] all ignore the datasets imbalances, which could be taking into account when evaluating their performance. Yang et al. [@Yang2018] only classify between the two most represented malware families, while Liang et al. [@Liang2021], Cervantes et al. [@Garcia2019] and Al-Masri et al. [@Al-Masri2024] all use over- and/or undersampling. Li et al. [@Li2021] augmented their CNN with a XGBoost classifier, as a way of tackling the imbalance. We will touch more on this CNN variation. SREMIC [@Alam2024] and Bouchaib & Bouhorma [@Prima2021] generated aditional synthetic samples, where Bouchaib & Bouhorma used Synthetic Minority Oversampling Technique. SREMIC used a CycleGAN which in some cases generated 5 new images per malware file for the less represented malware families. Both SREMIC and Bouchaib & Bouhorma reports great results, but does not address how well their model would have performed without additional dataset generation. 
 
-| Paper                                | Accuracy   | Precision | Recall | F1-score   |
-| ------------------------------------ | ---------- | --------- | ------ | ---------- |
-| Rahul et al. [@Rahul2017] (2017)     | 0.9491     | -         | -      | -          |
-| Kumari et al. [@Kumari2017] (2017)   | 0.9707     | -         | -      | -          |
-| Yang et al. [@Yang2018] (2018)       | 0.987      | -         | -      | -          |
-| Khan et al. [@Khan2020] (2020)       | 0.9780     | 0.98      | 0.97   | 0.97       |
-| Sartoli et al. [@Sartoli2020] (2020) | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
-| Bouchaib et al. [@Prima2021] (2021)  | 0.98       | 0.98      | 0.98   | 0.98       |
-| Liang et al. [@Liang2021] (2021)     | 0.9592     | -         | -      | -          |
-| SREMIC [@Alam2024] (2024)            | **0.9972** | -         | -      | **0.9988** |
+
+| Paper                                   | Accuracy   | Precision | Recall | F1-score   |
+| --------------------------------------- | ---------- | --------- | ------ | ---------- |
+| Rahul et al. [@Rahul2017] (2017)        | 0.9491     | -         | -      | -          |
+| Kumari et al. [@Kumari2017] (2017)      | 0.9707     | -         | -      | -          |
+| Yang et al. [@Yang2018] (2018)          | 0.987      | -         | -      | -          |
+| Khan et al. [@Khan2020] (2020)          | 0.9780     | 0.98      | 0.97   | 0.97       |
+| Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
+| Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98      | 0.98   | 0.98       |
+| Liang et al. [@Liang2021] (2021)        | 0.9592     | -         | -      | -          |
+| SREMIC [@Alam2024] (2024)               | **0.9972** | -         | -      | **0.9988** |
 
 Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
