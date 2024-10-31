@@ -14,11 +14,13 @@ author:
 bibliography: "bibliography.bib"
 
 # Formatting options
+documentclass: extarticle
 papersize: a4
-numbersections: true
 geometry:
-  - margin=3cm
-linestretch: 1.5
+  - margin=2.5cm
+fontsize: 12pt
+linestretch: 1.25
+numbersections: true
 link-citations: true
 urlcolor: "blue"
 toc: "true"
