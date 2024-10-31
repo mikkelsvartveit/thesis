@@ -94,10 +94,14 @@ Hammad et al. [@Hammad2022] used a pre-trained GoogLeNet model, which is designe
 
 ### CNN variations
 
+The conventional architecture for CNN includes convolution layers, pooling layers, activation layers, and fully-connected layers. However, prior research has also explored alternative or augmented CNN architectures for these applications.
+
+Li et al. [@Li2021] evaluated the use of an **XGBoost** (eXtreme Gradient Boosting) classifier on top of the CNN. They essentially replaced the Softmax activation layer at the end with an XGBoost classifier, using the CNN as a feature extractor and XGBoost for the final classification. The authors claimed that by using XGBoost, they could combat overfitting and low accuracy in cases of unbalanced data. Their evaluation showed that this was indeed the case. Overall accuracy increased from 95% to 97%. More importantly, the accuracy and F1-scores for particular underrepresented classes saw a dramatic improvement.
+
+Liang et al. [@Liang2021] invented a custom architecture dubbed **MFF-CNN** (Multi-resolution Feature Fusion Convolutional Neural Network). Here, they begin with creating three different resolutions of each image. They started with 112x112 images, and then created downscaled 56x56 and 28x28 version using max-pooling. These three versions went through parallel CNNs with a Spatial Pyramid Pooling (SPP) layer at the end. SPP ensures that the output of the CNN is of a fixed size, even if the input size varies. The result of this was three feature vectors of size 1050x1, one from each resolution. The authors then used a feature fusion step where a weighted average method combined the three vectors. The evaluation showed that this approach was particularly effective for distinguishing similar malware families in the dataset, which was an improvement over previous literature.
+
 TODO:
 
-- XGBoost
-- MFF-CNN
 - S-DCNN
 - Spatial CNN
 - Bi-GRU-CNN
