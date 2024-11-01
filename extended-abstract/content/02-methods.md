@@ -6,9 +6,9 @@ The review methodology followed a three-step protocol: research identification, 
 
 This query yielded 86 results, which were then filtered based on these inclusion criteria (IC):
 
-1. The research applies CNN to binary code of some sort
-2. The method does not require reverse engineering the binary before analysis
-3. The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
+1. The research applies CNN to binary code of some sort.
+2. The method does not require reverse engineering of the binary prior to analysis.
+3. The method is not overly specialized for a specific task that would prevent its transfer to other target features.
 
 Table \ref{table:paper-exclusion-results} shows the remaining papers after each step of the filtering process.
 
@@ -20,10 +20,10 @@ Table \ref{table:paper-exclusion-results} shows the remaining papers after each 
 
 Table: Articles remaining after applying inclusion criteria. \label{table:paper-exclusion-results}
 
-The remaining 20 papers were then subjected to a systematic review of their methodology, results, and limitations. We read through each article in its entirety, and labeled each study with the following categories:
+The remaining 20 papers were then subjected to a systematic review of their methodology, results, and limitations. We read through each article in its entirety, and labeled each study with the following primary categories:
 
 - Application and targeted features
 - Dataset used
-- Type of encoding of the binary file
+- Binary encoding method
 - Transfer learning approach (if any)
 - CNN architecture
