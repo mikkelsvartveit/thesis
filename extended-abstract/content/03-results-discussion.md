@@ -15,7 +15,7 @@ Out of our 20 reviewed articles, 18 apply CNN to binary code for the purpose of 
 | Liang et al. [@Liang2021] (2021)     | 0.9592     | -         | -      | -          |
 | SREMIC [@Alam2024] (2024)            | **0.9972** | 0.9993    | 0.9971 | **0.9988** |
 
-Table: Microsoft Malware dataset classification performance. Bolded values indicate state-of-the-art performance. \label{table:microsoft-results}
+Table: Microsoft Malware dataset classification performance. Bolded values indicate state-of-the-art performance.\label{table:microsoft-results}
 
 | Article (year published)                 | Accuracy   | Precision | Recall | F1-score   |
 | ---------------------------------------- | ---------- | --------- | ------ | ---------- |
@@ -28,7 +28,7 @@ Table: Microsoft Malware dataset classification performance. Bolded values indic
 | SREMIC [@Alam2024] (2024)                | 0.9993     | 0.9992    | 0.9987 | **0.9987** |
 | Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
 
-Table: Malimg dataset classification performance. Bolded values indicate state-of-the-art performance. \label{table:malimg-results}
+Table: Malimg dataset classification performance. Bolded values indicate state-of-the-art performance.\label{table:malimg-results}
 
 Two articles in our review used CNN for detecting compiler optimization levels from a compiled binary file. Knowledge of the compiler optimization level can be useful in areas such as vulnerability discovery. Yang et al. [@Yang2019] created a dataset of ARM binaries compiled with GCC with four different optimization levels, and achieved an overall accuracy of 97.24% on their custom dataset, with precision for each class ranging from 96% to 98%. This was a significant improvement compared to previous non-CNN approaches regarding compiler analysis. Pizzolotto & Inoue [@Pizzolotto2021] elaborated on this work by using binaries compiled across 7 different CPU architectures, as well as compiling with both GCC and Clang for the x86-64 and AArch64 architectures. They showed a 99.95% accuracy in distinguishing between GCC and Clang, while the optimization level accuracy varies from 92% to 98% depending on the CPU architecture.
 
