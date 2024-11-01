@@ -31,8 +31,11 @@ jobs:
           apt-get update
           apt-get install -y pandoc make
 
-      - name: Build PDFs
+      - name: Build preproject PDF
         run: cd preproject && make pdf && cd ..
+
+      - name: Build extended abstract PDF
+        run: cd extended-abstract && make pdf && cd ..
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
