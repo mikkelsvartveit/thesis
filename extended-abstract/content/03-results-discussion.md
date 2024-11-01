@@ -13,7 +13,7 @@
 | Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
 | Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98      | 0.98   | 0.98       |
 | Liang et al. [@Liang2021] (2021)        | 0.9592     | -         | -      | -          |
-| SREMIC [@Alam2024] (2024)               | **0.9972** | -         | -      | **0.9988** |
+| SREMIC [@Alam2024] (2024)               | **0.9972** | 0.9993    | 0.9971 | **0.9988** |
 
 Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
@@ -25,12 +25,14 @@ Table: Microsoft Malware dataset classification performance. \label{table:micros
 | Son et al. [@Son2022] (2022)             | 0.97       | -         | -      | -          |
 | Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -         | -      | -          |
 | S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944    | 0.9943 | 0.9943     |
-| SREMIC [@Alam2024] (2024)                | 0.9993     | -         | -      | **0.9987** |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | 0.9992    | 0.9987 | **0.9987** |
 | Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
 
 Table: Malimg dataset classification performance. \label{table:malimg-results}
 
-Two papers in our review used CNN for detecting compiler optimization levels from a compiled binary file. Knowledge of the compiler optimization level can be useful in areas such as vulnerability discovery. Yang et al. [SOURCE] created a dataset of ARM binaries compiled with GCC with four different optimization levels, and achieved an overall accuracy of 97.24% on their custom dataset, with precision for each class ranging from 96% to 98%. This was a significant improvement compared to previous non-CNN approaches regarding compiler analysis. Pizzolotto & Inoue [SOURCE] elaborated on this work by using binaries compiled across 7 different CPU architectures, as well as compiling with both GCC and Clang for the x86-64 and AArch64 architectures. They showed a 99.95% accuracy in distinguishing between GCC and Clang, while the optimization level accuracy varies from 92% to 98% depending on the CPU architecture.
+Two papers in our review used CNN for detecting compiler optimization levels from a compiled binary file. Knowledge of the compiler optimization level can be useful in areas such as vulnerability discovery. Yang et al. [@Yang2019] created a dataset of ARM binaries compiled with GCC with four different optimization levels, and achieved an overall accuracy of 97.24% on their custom dataset, with precision for each class ranging from 96% to 98%. This was a significant improvement compared to previous non-CNN approaches regarding compiler analysis. Pizzolotto & Inoue [SOURCE] elaborated on this work by using binaries compiled across 7 different CPU architectures, as well as compiling with both GCC and Clang for the x86-64 and AArch64 architectures. They showed a 99.95% accuracy in distinguishing between GCC and Clang, while the optimization level accuracy varies from 92% to 98% depending on the CPU architecture.
+
+Based on these performance metrics in both cases, CNN's show great potential for binary code analysis. The consistently high accuracies across different CNN architectures shows promise in future applications and other usecases. However, several limitations should be noted. Both malware datasets are quite imbalanced, which casts doubts on effectiveness in real world applications. The exceptionally high accuracies and F1-scores on the malimg dataset also raises questions about the quality of the dataset, and a potentail need for further evaluation benchmarks. There is also large inconsistencies in the quality of performance metrics reports from the papers, making in depth comparisons difficult Nevertheless, recent advances in addressing data imbalance through augmentation techniques, as demonstrated by SREMIC [@Alam2024], combined with successful applications in both malware classification and compiler optimization detection, provide strong evidence for CNNs' versatility in binary code analysis.
 
 ## Encoding binary data
 
