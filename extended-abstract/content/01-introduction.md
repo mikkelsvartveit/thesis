@@ -2,12 +2,12 @@
 
 The analysis of binary code has become critical in reverse engineering and cybersecurity domains. As the diversity of binary programs continues to expand across embedded systems, IoT devices, and various digital platforms, traditional analysis methods face scalability challenges and often lack transferability across domains. While existing approaches typically rely on disassembly or decompilation as preprocessing steps, recent advances in deep learning, particularly Convolutional Neural Networks (CNN), have opened new possibilities for direct binary analysis.
 
-We present a structured literature review examining the application of CNN to binary code analysis, with an emphasis on approaches that operate directly on raw binaries. We focus on methods that bypass the need for reverse engineering or disassembly, as such preprocessing can be computationally expensive and sometimes unreliable, especially for obfuscated binaries. These analysis techniques could potentially be applied to binaries where the instruction set is unknown or undocumented, where reverse engineering is not feasible. Through our work, we aim to answer the following research question:
+We present a structured literature review examining the application of CNN to binary code analysis, with an emphasis on approaches that operate directly on raw binaries. We focus on methods that bypass the need for reverse engineering or disassembly, as such preprocessing can be computationally expensive and sometimes unreliable, especially for obfuscated binaries. These analysis techniques could potentially be applied to binaries where the instruction set is unknown or undocumented, where reverse engineering is not feasible.
+
+Through a systematic review of 20 primary studies from the Scopus database, we aim to answer the following research question:
 
 > **RQ:** What approaches for applying CNN to raw binary code analysis have been explored in existing literature? How do the identified CNN approaches compare with respect to:
 >
 > - the applications and types of features they aim to detect?
 > - their binary code representation methods?
 > - the network architectures and design choices used?
-
-Through a systematic review of 20 primary studies from the Scopus database, we examine various approaches based on their binary representation techniques, CNN architectures, and target applications.
