@@ -44,5 +44,3 @@ abstract: |
 header-includes:
   - \usepackage{array}
 ---
-
-\pagebreak
