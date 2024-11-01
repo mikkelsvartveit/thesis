@@ -50,29 +50,15 @@ CNN:
 - The method does not require reverse engineering the binary first
 - The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
 
-\begin{table}
-\centering
-\begin{tabular}{ |c|c|c|c| }
-\hline
-Topic & DB query result & IC on abstract & IC on full-text \\
-\hline
-ML-ISA
-& 74
-& 31 (-43)
-& 8 (-23) \\
-\hline
-CNN
-& 86
-& 41 (-45)
-& 22 (-19) \\
-\hline
-\end{tabular}
-\caption{Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre}
-\label{table:paper-exclusion-results}
-\end{table}
+| Topic  | DB query result | IC on abstract | IC on full-text |
+| ------ | --------------- | -------------- | --------------- |
+| ML-ISA | 74              | 31 (-43)       | 8 (-23)         |
+| CNN    | 86              | 40 (-46)       | 20 (-18)        |
+
+Table: Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre {#tbl:paper-exclusion-results}
 
 ## Data extraction process
 
 <!-- their apperent generelizability for other analysis tasks kan kanskje være et IC?-->
 
-In this subsection we provide a short descripton of how the resulting 22 primary studies were processed and studied. Each paper was read through in it's entirety, and labeled with labels for each of the categories presented by **RQ2**. These labeling categories include dataset used, CNN architecture, type of encoding of the binary file, targeted features and patterns and their apparent generelizability for other analysis tasks. To compare different CNN architectures and their variations, we grouped and listed performance metrics for papers that target the same feature given a comparatively similar targeted domain. We chose to gather and report accuracy, precision, recall and F1-score of all papers where a performance comparison made sense, i.e. given similar datasets and targeted features.
+In this subsection we provide a short descripton of how the resulting 20 primary studies were processed and studied. Each paper was read through in it's entirety, and labeled with labels for each of the categories presented by **RQ2**. These labeling categories include dataset used, CNN architecture, type of encoding of the binary file, targeted features and patterns and their apparent generelizability for other analysis tasks. To compare different CNN architectures and their variations, we grouped and listed performance metrics for papers that target the same feature given a comparatively similar targeted domain. We chose to gather and report accuracy, precision, recall and F1-score of all papers where a performance comparison made sense, i.e. given similar datasets and targeted features.
