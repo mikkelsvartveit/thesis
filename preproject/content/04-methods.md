@@ -9,6 +9,8 @@ Multiple research databases were considered, with our primary concern being incl
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two seperate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
 \begin{table}
+\caption{Scopus search queries for each topic and result count}
+\label{table:search-queries}\tabularnewline
 \centering
 \begin{tabular}{ |c|m{0.7\textwidth}|c| }
 \hline
@@ -23,8 +25,6 @@ CNN
 & 86 \\
 \hline
 \end{tabular}
-\caption{Scopus search queries for each topic and result count}
-\label{table:search-queries}
 \end{table}
 
 ## Inclusion criteria and quality assessment
@@ -53,9 +53,9 @@ CNN:
 | Topic  | DB query result | IC on abstract | IC on full-text |
 | ------ | --------------- | -------------- | --------------- |
 | ML-ISA | 74              | 31 (-43)       | 8 (-23)         |
-| CNN    | 86              | 40 (-46)       | 20 (-18)        |
+| CNN    | 86              | 40 (-46)       | 20 (-20)        |
 
-Table: Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre {#tbl:paper-exclusion-results}
+Table: Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre \label{table:paper-exclusion-results}
 
 ## Data extraction process
 
