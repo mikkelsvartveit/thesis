@@ -25,7 +25,7 @@ However, from what we have found, both datasets have large imbalances in the dat
 | Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
 | Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98      | 0.98   | 0.98       |
 | Liang et al. [@Liang2021] (2021)        | 0.9592     | -         | -      | -          |
-| SREMIC [@Alam2024] (2024)               | **0.9972** | -         | -      | **0.9988** |
+| SREMIC [@Alam2024] (2024)               | **0.9972** | 0.9993    | 0.9971 | **0.9988** |
 
 Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
@@ -37,7 +37,7 @@ Table: Microsoft Malware dataset classification performance. \label{table:micros
 | Son et al. [@Son2022] (2022)             | 0.97       | -         | -      | -          |
 | Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -         | -      | -          |
 | S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944    | 0.9943 | 0.9943     |
-| SREMIC [@Alam2024] (2024)                | 0.9993     | -         | -      | **0.9987** |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | 0.9992    | 0.9987 | **0.9987** |
 | Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
 
 Table: Malimg dataset classification performance. \label{table:malimg-results}
