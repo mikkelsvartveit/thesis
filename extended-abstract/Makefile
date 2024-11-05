@@ -15,7 +15,7 @@ pdf:
 watch:
 	@make -s pdf
 	@echo "Watching for changes..."
-	@fswatch -o ./content/ | xargs -n1 -I{} make -s pdf
+	@fswatch -0 ./content/ | xargs -0 -n 1 -I {} make -s pdf
 
 watchwsl:
 	@make -s pdf
@@ -38,3 +38,6 @@ latex:
 		--standalone \
 		--output=../output/extended-abstract.tex
 	@echo "Finished compiling LaTeX file."
+
+wordcount:
+	@cd content && find . -name "*.md" | grep -v -E "(00|9[0-9])-" | sort | xargs wc -w
