@@ -1,3 +1,5 @@
+UNAME := $(shell uname -s)
+
 pdf:
 	@echo "\nCompiling PDF..."
 	mkdir -p ../output
@@ -15,7 +17,14 @@ pdf:
 watch:
 	@make -s pdf
 	@echo "Watching for changes..."
+ifeq ($(shell uname -s),Linux)
+	@inotifywait -r -m -e modify ./content/ | \
+	while read file_path file_event file_name; do  \
+		make -s pdf; \
+	done
+else
 	@fswatch -0 ./content/ | xargs -0 -n 1 -I {} make -s pdf
+endif
 
 watchwsl:
 	@make -s pdf
