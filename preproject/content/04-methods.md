@@ -40,22 +40,31 @@ ML-ISA inclusion critera focuses on filtering out papers that does not apply mac
 
 ML-ISA:
 
-- The paper attempts to reverse engineer or aid in reverse engineering of raw binaries
-- The paper applies machine learning techniques on binary programs
-- The method does not require disassembly, i.e. knowledge of all ISA information on the binary
+1. The research attempts to reverse engineer or aid in reverse engineering of raw binaries.
+2. The method involves application of machine learning techniques on binary programs.
+3. The method does not require disassembly, i.e. full knowledge of ISA information for the binary.
 
 CNN:
 
-- The paper applies CNN to binary code of some sort
-- The method does not require reverse engineering the binary first
-- The method is not highly optimised for a specific task to the degree that it would be non-transferrable to other target features
+1. The research applies CNN to binary code of some sort.
+2. The method does not require reverse engineering of the binary prior to analysis.
+3. The method is not overly specialized for a specific task that would prevent its transfer to other target features.
 
-| Topic  | DB query result | IC on abstract | IC on full-text |
-| ------ | --------------- | -------------- | --------------- |
-| ML-ISA | 74              | 31 (-43)       | 8 (-23)         |
-| CNN    | 86              | 40 (-46)       | 20 (-20)        |
+| Screening step     | Articles reviewed | Articles excluded |
+| ------------------ | ----------------: | ----------------: |
+| IC (Abstract)      |                74 |                43 |
+| IC (Full-text)     |                31 |                23 |
+| Included in review |             **8** |                 – |
 
-Table: Papers left after applying inclusion criteria. tabellen ble litt shit, finne hvordan visualisere bedre \label{table:paper-exclusion-results}
+Table: Articles remaining after applying inclusion criteria for ML-ISA studies. \label{table:ml-isa-exclusion-results}
+
+| Screening step     | Articles reviewed | Articles excluded |
+| ------------------ | ----------------: | ----------------: |
+| IC (Abstract)      |                86 |                46 |
+| IC (Full-text)     |                40 |                20 |
+| Included in review |            **20** |                 – |
+
+Table: Articles remaining after applying inclusion criteria for CNN studies. \label{table:cnn-exclusion-results}
 
 ## Data extraction process
 
