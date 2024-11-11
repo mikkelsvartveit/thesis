@@ -368,3 +368,99 @@
   location  = {Pittsburgh, Pennsylvania, USA},
   series    = {VizSec '11}
 }
+
+@CONFERENCE{Clemens2015,
+	author = {Clemens, John},
+	title = {Automatic classification of object code using machine learning},
+	year = {2015},
+	journal = {Proceedings of the Digital Forensic Research Conference, DFRWS 2015 USA},
+	pages = {S156 - S162},
+	doi = {10.1016/j.diin.2015.05.007},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85054073102&doi=10.1016%2fj.diin.2015.05.007&partnerID=40&md5=0ef7b775f4964200f8dc48479ac27cad},
+	abstract = {Recent research has repeatedly shown that machine learning techniques can be applied to either whole files or file fragments to classify them for analysis. We build upon these techniques to show that for samples of un-labeled compiled computer object code, one can apply the same type of analysis to classify important aspects of the code, such as its target architecture and endianess. We show that using simple byte-value histograms we retain enough information about the opcodes within a sample to classify the target architecture with high accuracy, and then discuss heuristic-based features that exploit information within the operands to determine endianess. We introduce a dataset with over 16000 code samples from 20 architectures and experimentally show that by using our features, classifiers can achieve very high accuracy with relatively small sample sizes. © 2015 The Authors. Published by Elsevier Ltd on behalf of DFRWS.},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 2; All Open Access, Green Open Access, Hybrid Gold Open Access}
+}
+
+@ARTICLE{Nicolao2018,
+	author = {De Nicolao, Pietro and Pogliani, Marcello and Polino, Mario and Carminati, Michele and Quarta, Davide and Zanero, Stefano},
+	title = {ELISA: ELiciting ISA of raw binaries for fine-grained code and data separation},
+	year = {2018},
+	journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+	volume = {10885 LNCS},
+	pages = {351 - 371},
+	doi = {10.1007/978-3-319-93411-2_16},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85049313640&doi=10.1007%2f978-3-319-93411-2_16&partnerID=40&md5=82ff352427ff57da78df485e9db70903},
+	abstract = {Static binary analysis techniques are widely used to reconstruct the behavior and discover vulnerabilities in software when source code is not available. To avoid errors due to mis-interpreting data as machine instructions (or vice-versa), disassemblers and static analysis tools must precisely infer the boundaries between code and data. However, this information is often not readily available. Worse, compilers may embed small chunks of data inside the code section. Most state of the art approaches to separate code and data are rooted on recursive traversal disassembly, with severe limitations when dealing with indirect control instructions. We propose ELISA, a technique to separate code from data and ease the static analysis of executable files. ELISA leverages supervised sequential learning techniques to locate the code section(s) boundaries of header-less binary files, and to predict the instruction boundaries inside the identified code section. As a preliminary step, if the Instruction Set Architecture (ISA) of the binary is unknown, ELISA leverages a logistic regression model to identify the correct ISA from the file content. We provide a comprehensive evaluation on a dataset of executables compiled for different ISAs, and we show that our method is capable to identify code sections with a byte-level accuracy (F1 score) ranging from 98.13% to over 99.9% depending on the ISA. Fine-grained separation of code from embedded data on x86, x86-64 and ARM executables is accomplished with an accuracy of over 99.9%. © Springer International Publishing AG, part of Springer Nature 2018.},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 9}
+}
+
+@CONFERENCE{Ma2019,
+	author = {Ma, Yuan and Han, Lifang and Ying, Huan and Yang, Shouguo and Zhao, Weiwei and Shi, Zhiqiang},
+	title = {SVM-based instruction set identification for grid device firmware},
+	year = {2019},
+	journal = {Proceedings of 2019 IEEE 8th Joint International Information Technology and Artificial Intelligence Conference, ITAIC 2019},
+	pages = {214 - 218},
+	doi = {10.1109/ITAIC.2019.8785564},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85071117472&doi=10.1109%2fITAIC.2019.8785564&partnerID=40&md5=30005f8b19a134fcea0a615531a5f6a2},
+	abstract = {Identifying the binary program instruction set is an important prerequisite for reverse analysis of firmware, but grid device firmware usually lacks a program description header, which poses a serious challenge to instruction set identification. This paper proposes an SVM-based instruction set recognition method(SVM-IBPS). First, the optimal feature list is obtained by the instruction set feature selection method of information gain, and then the SVM-IBPS model is trained by Support Vector Machine and tested in the dataset of 111,918 executable files, which is decompressed and extracted from the embedded device firmware. Finally, a comparative experiment was conducted with Binwalk and SVM-IBPS. The experimental results show that the accuracy of SVM-IBPS on the test dataset is 98.97%, which is 20.7% higher than that of Binwalk, and the time cost is only about one-ninth of it. © 2019 IEEE.},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 2}
+}
+
+Scopus
+EXPORT DATE: 11 November 2024
+
+@ARTICLE{Sahabandu2023,
+	author = {Sahabandu, Dinuka and Mertoguno, J. Sukarno and Poovendran, Radha},
+	title = {A Natural Language Processing Approach for Instruction Set Architecture Identification},
+	year = {2023},
+	journal = {IEEE Transactions on Information Forensics and Security},
+	volume = {18},
+	pages = {4086 – 4099},
+	doi = {10.1109/TIFS.2023.3288456},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85162875813&doi=10.1109%2fTIFS.2023.3288456&partnerID=40&md5=5c848dae3bbf9d2c6e420ce6b9e236f6},
+	abstract = {Binary analysis of software is a critical step in cyber forensics applications such as program vulnerability assessment and malware detection. This involves interpreting instructions executed by software and often necessitates converting the software's binary file data to assembly language. The conversion process requires information about the binary file's target instruction set architecture (ISA). However, ISA information might not be included in binary files due to compilation errors, partial downloads, or adversarial corruption of file metadata. Machine learning (ML) is a promising methodology that can be used to identify the target ISA using binary data in the object code section of binary files. In this paper we propose a binary code feature extraction model to improve the accuracy and scalability of ML-based ISA identification methods. Our feature extraction model can be used in the absence of domain knowledge about the ISAs. Specifically, we adapt models from natural language processing (NLP) to i) identify successive byte patterns commonly observed in binary codes, ii) estimate the significance of each byte pattern to a binary file, and iii) estimate the relevance of each byte pattern in distinguishing between ISAs. We introduce character-level features of encoded binaries to identify fine-grained bit patterns inherent to each ISA. We evaluate our approach using two different datasets: binaries from 12 ISAs and 23 ISAs. Empirical evaluations show that using our byte-level features in ML-based ISA identification results in 98% accuracy compared to the 91% accuracy of state-of-the-art features based on byte-histograms and byte pattern signatures. We observe that character-level features allow reducing the size of the feature set by up to 16x while maintaining accuracy of ISA identification above 97%.  © 2005-2012 IEEE.},
+	type = {Article},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 2; All Open Access, Green Open Access}
+}
+
+@CONFERENCE{Beckman2020,
+	author = {Beckman, Bryan and Haile, Jed},
+	title = {Binary analysis with architecture and code section detection using supervised machine learning},
+	year = {2020},
+	journal = {Proceedings - 2020 IEEE Symposium on Security and Privacy Workshops, SPW 2020},
+	pages = {152 – 156},
+	doi = {10.1109/SPW50608.2020.00041},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85099728331&doi=10.1109%2fSPW50608.2020.00041&partnerID=40&md5=8ebd71ce5468e9fdb064a4fce4d84667},
+	abstract = {When presented with an unknown binary, which may or may not be complete, having the ability to determine information about it is critical to future reverse engineering, particularly in discovering the binary's intended use and potential malicious nature. This paper details techniques to both identify the machine architecture of the binary, as well as to locate the important code segments within the file. This identification of unknown binaries makes use of a technique called byte histogram in addition to various machine learning (ML) techniques, which we call 'What is it Binary' or WiiBin. Benefits of byte histograms reflect the simplicity of calculation and do not rely on file headers or metadata, allowing for acceptable results when only a small portion of the original file is available; e.g., when encrypted and/or compressed sections are present in a binary. Utilizing WiiBin, we were able to accurately (>80%) determine the architecture of test binaries with as little as a 20% contagious portion of the file present. We were also able to determine the location of code sections within a binary by utilizing the WiiBin framework. Ultimately, the more information that can be gleaned from a binary file, the easier it is to successfully reverse engineer.  © 2020 IEEE.},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 4; All Open Access, Bronze Open Access, Green Open Access}
+}
+
+
+@CONFERENCE{Kairajarvi2020,
+	author = {Kairajärvi, Sami and Costin, Andrei and Hämäläinen, Timo},
+	title = {ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code},
+	year = {2020},
+	journal = {CODASPY 2020 - Proceedings of the 10th ACM Conference on Data and Application Security and Privacy},
+	pages = {376 – 380},
+	doi = {10.1145/3374664.3375742},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85083380553&doi=10.1145%2f3374664.3375742&partnerID=40&md5=f0a84cc85f235cc9aa787e3fe10abee2},
+	abstract = {Static and dynamic binary analysis techniques are actively used to reverse engineer software's behavior and to detect its vulnerabilities, even when only the binary code is available for analysis. To avoid analysis errors due to misreading op-codes for a wrong CPU architecture, these analysis tools must precisely identify the Instruction Set Architecture (ISA) of the object code under analysis. The variety of CPU architectures that modern security and reverse engineering tools must support is ever increasing due to massive proliferation of IoT devices and the diversity of firmware and malware targeting those devices. Recent studies concluded that falsely identifying the binary code's ISA caused alone about 10% of failures of IoT firmware analysis. The state of the art approaches detecting ISA for executable object code look promising, and their results demonstrate effectiveness and high-performance. However, they lack the support of publicly available datasets and toolsets, which makes the evaluation, comparison, and improvement of those techniques, datasets, and machine learning models quite challenging (if not impossible). This paper bridges multiple gaps in the field of automated and precise identification of architecture and endianness of binary files and object code. We develop from scratch the toolset and datasets that are lacking in this research space. As such, we contribute a comprehensive collection of open data, open source, and open API web-services. We also attempt experiment reconstruction and cross-validation of effectiveness, efficiency, and results of the state of the art methods. When training and testing classifiers using solely code-sections from executable binary files, all our classifiers performed equally well achieving over 98% accuracy. The results are consistent and comparable with the current state of the art, hence supports the general validity of the algorithms, features, and approaches suggested in those works. © 2020 ACM.},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 4; All Open Access, Green Open Access}
+}
