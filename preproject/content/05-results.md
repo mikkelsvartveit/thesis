@@ -1,6 +1,62 @@
 # Results
 
-<!-- ## Machine learning techniques for ISA detection -->
+## Machine learning techniques for ISA detection
+
+The six included and reviewed papers provide insight into how machine learning can be applied to instruction set architecture identification, along with recovery of other relevant information from binary programs. In this section we provide an overview of our findings on previously researched techniques for feature engineering/feature extraction, employed machine learning architectures, and what ISA features the papers attempts to discover.
+
+### Feature engineering and feature extraction
+
+Most of the feature engineering and feature extraction approaches identified are based on byte level statistical features. The most notable approach used in the reviewed littereture was Byte Frequency Distribution (BFD), first used by Clemens [@Clemens2015]. Also refered to as Byte Histograms, t the same feature is used in ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] to apparent great effect. In the original paper by Clemens, (nevn noen performance tall)
+
+<!--
+Andre byte level
+
+- BFD with Normalized frequenzy counts to handle binary sizes (tror alle 6 gjør det?)
+- N-gram analysis from NLP, (1,2,3-grams) [@Sahabandu2023]
+
+Endian features (0x0001), common immediate values
+
+Architecture specific features
+
+- Function epilogue/prologue [@Nicolao2018] [@Kairajarvi2020]
+- Instruction alignment boundaries [@Nicolao2018]. Quote: "For example, in case of fixed-length instruction architecture, such as ARM, we can leverage the fact that every instruction and data block starts an address multiple of 4 bytes. In this case, the problem of code discovery can be stated as follows: classify each 4-byte word of each code section as a machine code word or data." (men vet ikke om det er verdt å nevne) -->
+
+### Machine Learning Architectures
+
+<!--
+Traditional ML approaches:
+
+- SVM (5 av 6 papers, med strong performance)
+- Random Forests
+- Logistic Regression
+- K-Nearest Neighbors (KNN)
+- Decision Trees
+- Neural Nets, simple feed forward
+
+Sequential Learning
+
+- Conditional Random Fields (for code sections
+- Markov models for opcode pattern detection) -->
+
+### Targeted ISA features
+
+<!--
+Basic isa classification
+
+- Core isa family (ARM, x86, Mips etc)
+- Word size, RISC vs CISC (variable vs fixed instruction width)
+
+Endianness
+
+- Mips vs mipsel
+- 0x0001 heuristic most common. Huge boost in classification accuracy (clemens, kanskje obvious men idk)
+- Endiannes agnostic approches?
+
+Code section identification:
+
+- Føler det har stor nok sannsynlighet for å være relevant for fremtiden, at vi ikke kun gjør greiene våre på .data seksjon liksom. -->
+
+<!-- ### Datasets -->
 
 ## CNN applied to binary code
 
@@ -16,29 +72,29 @@ The MMCC dataset contains malware binaries from 9 different malware families, wh
 
 However, from what we have found, both datasets have large imbalances in the data amount types of malware and the different papers address this to varying degree. Rahul et al. [@Rahul2017], Kumari et al. [@Kumari2017], Khan et al. [@Khan2020], Sartoli et al. [@Sartoli2020], Son et al. [@Son2022] and Hammad et al. [@Hammad2022] all ignore the datasets imbalances, which could be taking into account when evaluating their performance. Yang et al. [@Yang2018] only classify between the two most represented malware families, while Liang et al. [@Liang2021], Cervantes et al. [@Garcia2019] and Al-Masri et al. [@Al-Masri2024] all use over- and/or undersampling. Li et al. [@Li2021] augmented their CNN with a XGBoost classifier as a way of tackling the imbalance. We will touch more on this CNN variation in a later subsection. SREMIC [@Alam2024] and Bouchaib & Bouhorma [@Prima2021] generated additional synthetic samples, and the latter also used the Synthetic Minority Oversampling Technique (SMOTE). SREMIC used a CycleGAN which in some cases generated 5 new images per malware file for the less represented malware families. Both SREMIC and Bouchaib & Bouhorma report great results, but does not address how well their model would have performed without additional dataset generation.
 
-| Paper (year published)                  | Accuracy   | Precision | Recall | F1-score   |
-| --------------------------------------- | ---------- | --------- | ------ | ---------- |
-| Rahul et al. [@Rahul2017] (2017)        | 0.9491     | -         | -      | -          |
-| Kumari et al. [@Kumari2017] (2017)      | 0.9707     | -         | -      | -          |
-| Yang et al. [@Yang2018] (2018)          | 0.987      | -         | -      | -          |
-| Khan et al. [@Khan2020] (2020)          | 0.9780     | 0.98      | 0.97   | 0.97       |
-| Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
-| Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98      | 0.98   | 0.98       |
-| Liang et al. [@Liang2021] (2021)        | 0.9592     | -         | -      | -          |
-| SREMIC [@Alam2024] (2024)               | **0.9972** | 0.9993    | 0.9971 | **0.9988** |
+| Paper (year published)                  | Accuracy   | Precision  | Recall     | F1-score   |
+| --------------------------------------- | ---------- | ---------- | ---------- | ---------- |
+| Rahul et al. [@Rahul2017] (2017)        | 0.9491     | -          | -          | -          |
+| Kumari et al. [@Kumari2017] (2017)      | 0.9707     | -          | -          | -          |
+| Yang et al. [@Yang2018] (2018)          | 0.987      | -          | -          | -          |
+| Khan et al. [@Khan2020] (2020)          | 0.9780     | 0.98       | 0.97       | 0.97       |
+| Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624     | 0.9616     | 0.9618     |
+| Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98       | 0.98       | 0.98       |
+| Liang et al. [@Liang2021] (2021)        | 0.9592     | -          | -          | -          |
+| SREMIC [@Alam2024] (2024)               | **0.9972** | **0.9993** | **0.9971** | **0.9988** |
 
 Table: Microsoft Malware dataset classification performance. \label{table:microsoft-results}
 
-| Paper (year published)                   | Accuracy   | Precision | Recall | F1-score   |
-| ---------------------------------------- | ---------- | --------- | ------ | ---------- |
-| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -         | -      | -          |
-| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904    | 0.9901 | 0.9902     |
-| Li et al. [@Li2021] (2021)               | 0.97       | -         | -      | -          |
-| Son et al. [@Son2022] (2022)             | 0.97       | -         | -      | -          |
-| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -         | -      | -          |
-| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944    | 0.9943 | 0.9943     |
-| SREMIC [@Alam2024] (2024)                | 0.9993     | 0.9992    | 0.9987 | **0.9987** |
-| DCMN [@Al-Masri2024] (2024)              | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
+| Paper (year published)                   | Accuracy   | Precision  | Recall     | F1-score   |
+| ---------------------------------------- | ---------- | ---------- | ---------- | ---------- |
+| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -          | -          | -          |
+| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904     | 0.9901     | 0.9902     |
+| Li et al. [@Li2021] (2021)               | 0.97       | -          | -          | -          |
+| Son et al. [@Son2022] (2022)             | 0.97       | -          | -          | -          |
+| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -          | -          | -          |
+| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944     | 0.9943     | 0.9943     |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | **0.9992** | **0.9987** | **0.9987** |
+| DCMN [@Al-Masri2024] (2024)              | 0.9989     | 0.9971     | 0.9984     | 0.9977     |
 
 Table: Malimg dataset classification performance. \label{table:malimg-results}
 
