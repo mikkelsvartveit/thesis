@@ -14,19 +14,19 @@ In this paper, we have documented and conducted a structured litterature review 
 
 The specific objectives of this study is as follows:
 
-- **RQ1**: What machine learning approaches have been proposed for discovering ISA information from binary programs? How do the identified approaches compare with respect to:
+> **RQ1**: What machine learning approaches have been proposed for discovering ISA information from binary programs? How do the identified approaches compare with respect to:
+>
+> > **RQ1.1**: the machine learning techniques and architectures employed? \newline
+> > **RQ1.2**: their prerequisites, preprocessing, and assumptions about the binary programs? \newline
+> > **RQ1.3**: the types of ISA features they can identify? \newline
+> > **RQ1.4**: the methods performance metrics for discovered ISA features? \newline
 
-  - The machine learning techniques and architectures employed
-  - Their prerequisites, preprosseing and assumptions about the binary programs
-  - The types of ISA features they can identify
-  - The methods performance metrics for discovered ISA features
-
-- **RQ2**: What approaches for applying CNNs to raw binary code analysis have been explored in existing literature? How do the identified CNN approaches compare with respect to:
-  - Their binary code representation methods (e.g., how binaries are converted to CNN-suitable input)
-  - The network architectures and design choices used
-  - The types of features or patterns they aim to detect
-  - Their ability to work directly on raw binaries without preprocessing
-  - Their generalizability across different analysis tasks
+> **RQ2:** What approaches for applying CNN to raw binary code analysis have been explored in existing literature? How do the identified CNN approaches compare with respect to:
+>
+> > **RQ2.1**: the applications and types of features they aim to detect? \newline
+> > **RQ2.2**: their binary code representation methods? \newline
+> > **RQ2.3**: the network architectures and design choices used? \newline
+> > **RQ2.4**: their evalution and reported performance? \newline
 
 (evaluate research questions a bit)
 
