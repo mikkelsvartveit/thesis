@@ -6,7 +6,7 @@ The six included and reviewed papers provide insight into how machine learning c
 
 ### Feature engineering and feature extraction
 
-Most of the feature engineering and feature extraction approaches identified are based on byte level statistical features. The most notable approach used in the reviewed littereture was Byte Frequency Distribution (BFD), first used by Clemens [@Clemens2015]. Also refered to as Byte Histograms, t the same feature is used in ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] to apparent great effect. In the original paper by Clemens, (nevn noen performance tall)
+Most of the feature engineering and feature extraction approaches identified are based on statistical features on the individual byte level. The most notable approach in the reviewed littereture was Byte Frequency Distribution (BFD), first used by Clemens [@Clemens2015]. With BFD all 256 different possible byte values are counted up into a feature vector, and fed into a neural network for classification. Also refered to as Byte-value Histograms, the same feature is used in ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] to apparent great effect. In the original paper by Clemens some ML models reached a 10-fold cross validation accuracy as high as 94.02%, when classifiying ISA of binaries among a list of known ISA's using only BFD histogram. This shows that BFD is an efficient way of processing input binaries while still preserving information about targeted ISA, (isadetect reproduced clemens results, nevn det også for å bygge oppunder)
 
 <!--
 Andre byte level
