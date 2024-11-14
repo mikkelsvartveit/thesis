@@ -10,14 +10,14 @@ Most of the feature engineering and feature extraction approaches identified are
 
 In order to tackle BFD's inability to differentiate architectures with different endianness, Clemens introduces a heuristical approach based on common immediate values. Increment and decrement by one is commonly seen operation, where the immediate values 1 and -1 are encoded 0x0001 and 0xfffe on big endian and 0x01000 and 0xfeff on on little endian. The counts of these patterns are apended on the 256 wide BFD vector resulting in a 256 dimention feature vector. With this addition overall accuracy on the best performing classifiers goes up from ~93% to ~98%, thanks to the improvement in correctly classifying MIPS and MIPSEL. ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] all use BFD + the endianess heurisic as the basis for their approaches.
 
-Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequenzy (TF-IDF) for ISA identification, where the product of term frequency (TF) and inverse document frequencies (IDF) for all 1, 2, and 3 grams is computed. The author motivates their approach by stating that N-grams that appear often in a smaller subset of input binaries has a high chance of capturing defining patterns for each architecture. By preserving information across consecutive bytes, they found that TF-IDF is able to distinguish between endianness aswell. Sahabundu et al. used all 1 and 2 gram bytes for input and a top 5000 list for 3 grams, resulting in a $256+256^2+5000 = 70792$ long feature vector. They were able to achieve 99% and 98% classification accuracy on the Preatorian and Clemens datasets respectivly. The authors also experimented with different base-encoding of binaries to reduce this feature count, decreasing it by a factor of $1/16$ while maintaining high accuracy [@Sahabandu2023].
+ELISA [@Nicolao2018] and ISAdetect [@Kairajarvi2020] uses architecture specific features to help classifiy ISA's. They bot use known function prologues and epilogue signatures for all architectures documented by the binary analysis platform angr <!-- source? -->. The authors of ELISA note that these architecture specific features does improve accuracy at the cost of adding function signatures for all ISA's the models would be designed to classify. These features are deemed as optional, due to already great F1-scores without these function pro- and epilogues. ISAdetect includes specific signatures for the powerpcspe architecture, however the authors does not provide rationale for this inclusion nor do the result reflect any significant improvements based on this<!-- Åpenbart at det er en issue med powerpc vs powerpcspe, men står ikke noe sted (står i preprint artikkelen, men den er jo ikke inkludert) -->.
 
-In some cases architecture specific features were used to help ML-models to distinguish between certain architectures. 
+Ma et al. (SVM-IBPS) [@Ma2019] targets typical Grid Device Firmware architectures for ISA classification. The authors argue that most Grid Device Firmware run on RISC instruction sets like ARM, Alpha, PowerPC, MIPS, and SPARC, which typically has 4 byte wide instructions. Using this SVM-IBPS divides the binary programs into 4 byte chunk and processes each chunk with a text classification technique called information gain. The model achieves impressive results on their dataset of ARM, MIPS and PowerPC instruction sets, with a perfect classification accuracy on their self-compiled dataset. The authors does not comment on the models applicability to classification of a wider range of ISA's, as their dataset only include three 4-byte instruction width architectures. 
+
+Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequenzy (TF-IDF) for ISA identification, where the product of term frequency (TF) and inverse document frequencies (IDF) for all 1, 2, and 3 grams is computed. The author motivates their approach by stating that N-grams that appear often in a smaller subset of input binaries has a high chance of capturing defining patterns for each architecture. 2 and 3 grams preserve information across consecutive bytes, and they found that TF-IDF is able to distinguish between architectures with different endianness aswell. Sahabundu et al. used all 1 and 2 gram bytes for input and a top 5000 list for 3 grams, resulting in a $256+256^2+5000 = 70792$ long feature vector. They were able to achieve 99% and 98% classification accuracy on the Preatorian and Clemens datasets respectivly. The authors also experimented with different base-encoding of binaries to reduce this feature count, decreasing it by a factor of $1/16$ while maintaining high accuracy [@Sahabandu2023].
 
 
-
-<!--
-Andre byte level
+<!-- Andre byte level
 
 - BFD with Normalized frequenzy counts to handle binary sizes (tror alle 6 gjør det?)
 - N-gram analysis from NLP, (1,2,3-grams) [@Sahabandu2023]
@@ -53,6 +53,7 @@ Basic isa classification
 
 - Core isa family (ARM, x86, Mips etc)
 - Word size, RISC vs CISC (variable vs fixed instruction width)
+- Which papers uses elf header to find code section?
 
 Endianness
 
