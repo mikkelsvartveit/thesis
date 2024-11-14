@@ -1,5 +1,5 @@
 UNAME := $(shell uname -s)
-
+.PHONY: wordcount watch worddiff
 pdf:
 	@echo "\nCompiling PDF..."
 	mkdir -p ../output
@@ -50,3 +50,10 @@ latex:
 
 wordcount:
 	@cd content && find . -name "*.md" | grep -v -E "(00|9[0-9])-" | sort | xargs wc -w
+
+worddiff:
+	@./wordcount-diff.sh
+
+# make wordiff-3 for 3 commits back
+worddiff-%:
+	@./wordcount-diff.sh $*
