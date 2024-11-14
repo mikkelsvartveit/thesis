@@ -10,7 +10,11 @@ Most of the feature engineering and feature extraction approaches identified are
 
 In order to tackle BFD's inability to differentiate architectures with different endianness, Clemens introduces a heuristical approach based on common immediate values. Increment and decrement by one is commonly seen operation, where the immediate values 1 and -1 are encoded 0x0001 and 0xfffe on big endian and 0x01000 and 0xfeff on on little endian. The counts of these patterns are apended on the 256 wide BFD vector resulting in a 256 dimention feature vector. With this addition overall accuracy on the best performing classifiers goes up from ~93% to ~98%, thanks to the improvement in correctly classifying MIPS and MIPSEL. ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] all use BFD + the endianess heurisic as the basis for their approaches.
 
-Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequenzy (TF-IDF) for ISA identification.
+Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequenzy (TF-IDF) for ISA identification, where the product of term frequency (TF) and inverse document frequencies (IDF) for all 1, 2, and 3 grams is computed. The author motivates their approach by stating that N-grams that appear often in a smaller subset of input binaries has a high chance of capturing defining patterns for each architecture. By preserving information across consecutive bytes, they found that TF-IDF is able to distinguish between endianness aswell. Sahabundu et al. used all 1 and 2 gram bytes for input and a top 5000 list for 3 grams, resulting in a $256+256^2+5000 = 70792$ long feature vector. They were able to achieve 99% and 98% classification accuracy on the Preatorian and Clemens datasets respectivly. The authors also experimented with different base-encoding of binaries to reduce this feature count, decreasing it by a factor of $1/16$ while maintaining high accuracy [@Sahabandu2023].
+
+In some cases architecture specific features were used to help ML-models to distinguish between certain architectures. 
+
+
 
 <!--
 Andre byte level
