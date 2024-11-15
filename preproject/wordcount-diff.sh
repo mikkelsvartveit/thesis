@@ -9,7 +9,8 @@
 # Function to get word count for a file
 get_word_count() {
     local file="$1"
-    wc -w "$file" | awk '{print $1}'
+    #wc -w "$file" | awk '{print $1}'
+    python3 -c "import re; print(len(re.sub(r'<!--[\s\S]*?-->', '', open('$file').read()).split()))"
 }
 
 # Go to content directory
@@ -18,6 +19,7 @@ cd content || exit 1
 # Find all markdown files excluding those starting with 00 or 9
 files=$(find . -name "*.md" | grep -v -E "(00|9[0-9])-" | sort)
 
+total=0
 total_diff=0
 changes_found=false
 
@@ -28,29 +30,30 @@ if [ "$commits_back" -gt 0 ]; then
     comparison_commit="HEAD~$commits_back"
 fi
 
-echo "Word count changes in this session:"
-echo "--------------------------------"
-
 for file in $files; do
     # Check if file is tracked by git
     if git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
         # Get current word count
-        current_count=$(get_word_count "$file")
+        current_count=$(get_word_count "$file" )
         
         # Get word count from last commit
-        last_committed_count=$(git show "$comparison_commit":"$file" 2>/dev/null | wc -w)
+        last_committed_count=$(get_word_count <(git show "$comparison_commit":"$file" 2>/dev/null))
         
         # Calculate difference
         diff=$((current_count - last_committed_count))
+        total=$(($total + $current_count))
         
+        printf "%7d %-20s" "$current_count" "$file"
         if [ $diff -ne 0 ]; then
             changes_found=true
             total_diff=$((total_diff + diff))
             if [ $diff -gt 0 ]; then
-                echo -e "$file: \033[32m+$diff\033[0m words"
+                echo -e " (\033[32m+$diff\033[0m)"
             else
-                echo -e "$file: \033[31m$diff\033[0m words"
+                echo -e " (\033[31m$diff\033[0m)"
             fi
+        else
+            echo
         fi
     else
         # New file
@@ -61,9 +64,7 @@ for file in $files; do
     fi
 done
 
-if [ "$changes_found" = true ]; then
-    echo "--------------------------------"
-    echo "Total changes: $total_diff words"
-else
-    echo "No changes found in tracked markdown files."
-fi
+echo "--------------------------------"
+printf "%7d total\n" "$total"
+printf "%7d diff\n" "$total_diff"
+

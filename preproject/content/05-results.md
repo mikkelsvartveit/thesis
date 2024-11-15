@@ -8,28 +8,30 @@ The six included and reviewed papers provide insight into how machine learning c
 
 Most of the feature engineering and feature extraction approaches identified are based on statistical features on the individual byte level. The most notable approach in the reviewed littereture was Byte Frequency Distribution (BFD), first used by Clemens [@Clemens2015]. BFD strategy involves counting up all 256 different possible byte into a feature vector, which is then fed into a neural network for classification. In order to account for different program sizes in the dataset, the byte-counts are normalized by the input binary size. This strategy is used in other works such as ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] to apparent great effect. In the original paper by Clemens some ML models reached a 10-fold cross validation accuracy as high as 94.02% when classifiying ISA of binaries among a list of known ISA's using only BFD histogram. This evidence suggests that BFD is an efficient way of processing input binaries while still preserving information about targeted ISA. There is even further evidence of this as the ISAdetect paper reproduced Clemens' experiment on a different dataset and achieved similar results [@Clemens2015] [@Kairajarvi2020]. However, the BFD strategy itself has some limitations as noted by the different authors included in our review. Clemens, De Nicolao et al. and Beckman & Haile all explicitly state that byte histograms alone perform poorly on similar architectures, especially those that only differ in endiannes such as MIPS and MIPSEL. While classification of all other representative architectures achieve F1-scores above 0.98 in Clemens' results, MIPS and MIPSEl only achieves ~0.47. BFD's require additional heuristics or feature extraction to deal with cases where the opcodes are the same or architecture recognition needs information to be presereved across bytes [@Clemens2015] [@Nicolao2018] [@Beckman2020].
 
-In order to tackle BFD's inability to differentiate architectures with different endianness, Clemens introduces a heuristical approach based on common immediate values. Increment and decrement by one is commonly seen operation, where the immediate values 1 and -1 are encoded 0x0001 and 0xfffe on big endian and 0x01000 and 0xfeff on on little endian. The counts of these patterns are apended on the 256 wide BFD vector resulting in a 256 dimention feature vector. With this addition overall accuracy on the best performing classifiers goes up from ~93% to ~98%, thanks to the improvement in correctly classifying MIPS and MIPSEL. ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] all use BFD + the endianess heurisic as the basis for their approaches.
+In order to tackle BFD's inability to differentiate architectures with different endianness, Clemens introduces a heuristical approach based on common immediate values. Increment and decrement by one is commonly seen operation, where the immediate values 1 and -1 are encoded 0x0001 and 0xfffe on big endian and 0x01000 and 0xfeff on on little endian. The counts of these patterns are apended on the 256 wide BFD vector resulting in a 256 dimention feature vector. With this addition overall accuracy on the best performing classifiers goes up from ~93% to ~98%, thanks to the improvement in correctly classifying MIPS and MIPSEL [@Clemens2015]. ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] all use BFD + the endianess heurisic as the basis for their approaches.
 
 ELISA [@Nicolao2018] and ISAdetect [@Kairajarvi2020] uses architecture specific features to help classifiy ISA's. They bot use known function prologues and epilogue signatures for all architectures documented by the binary analysis platform angr <!-- source? -->. The authors of ELISA note that these architecture specific features does improve accuracy at the cost of adding function signatures for all ISA's the models would be designed to classify. These features are deemed as optional, due to already great F1-scores without these function pro- and epilogues. ISAdetect includes specific signatures for the powerpcspe architecture, however the authors does not provide rationale for this inclusion nor do the result reflect any significant improvements based on this<!-- Åpenbart at det er en issue med powerpc vs powerpcspe, men står ikke noe sted (står i preprint artikkelen, men den er jo ikke inkludert) -->.
 
-Ma et al. (SVM-IBPS) [@Ma2019] targets typical Grid Device Firmware architectures for ISA classification. The authors argue that most Grid Device Firmware run on RISC instruction sets like ARM, Alpha, PowerPC, MIPS, and SPARC, which typically has 4 byte wide instructions. Using this SVM-IBPS divides the binary programs into 4 byte chunk and processes each chunk with a text classification technique called information gain. The model achieves impressive results on their dataset of ARM, MIPS and PowerPC instruction sets, with a perfect classification accuracy on their self-compiled dataset. The authors does not comment on the models applicability to classification of a wider range of ISA's, as their dataset only include three 4-byte instruction width architectures. 
+Ma et al. (SVM-IBPS) [@Ma2019] targets typical Grid Device Firmware architectures for ISA classification. The authors note that most Grid Device Firmware run on RISC instruction sets like ARM, Alpha, PowerPC, MIPS, and SPARC, which typically has 4 byte wide instructions. Using this, SVM-IBPS divides the binary programs into 4 byte chunk and processes each chunk with a text classification technique called information gain. The model achieves impressive results on their dataset of ARM, MIPS and PowerPC instruction sets, with a perfect classification accuracy on their self-compiled dataset. The authors does not comment on the models applicability to classification of a wider range of ISA's, as their dataset only include three 4-byte instruction width architectures.
 
 Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequenzy (TF-IDF) for ISA identification, where the product of term frequency (TF) and inverse document frequencies (IDF) for all 1, 2, and 3 grams is computed. The author motivates their approach by stating that N-grams that appear often in a smaller subset of input binaries has a high chance of capturing defining patterns for each architecture. 2 and 3 grams preserve information across consecutive bytes, and they found that TF-IDF is able to distinguish between architectures with different endianness aswell. Sahabundu et al. used all 1 and 2 gram bytes for input and a top 5000 list for 3 grams, resulting in a $256+256^2+5000 = 70792$ long feature vector. They were able to achieve 99% and 98% classification accuracy on the Preatorian and Clemens datasets respectivly. The authors also experimented with different base-encoding of binaries to reduce this feature count, decreasing it by a factor of $1/16$ while maintaining high accuracy [@Sahabandu2023].
 
-
-<!-- Andre byte level
-
-- BFD with Normalized frequenzy counts to handle binary sizes (tror alle 6 gjør det?)
-- N-gram analysis from NLP, (1,2,3-grams) [@Sahabandu2023]
-
-Endian features (0x0001), common immediate values
-
-Architecture specific features
-
-- Function epilogue/prologue [@Nicolao2018] [@Kairajarvi2020]
-- Instruction alignment boundaries [@Nicolao2018]. Quote: "For example, in case of fixed-length instruction architecture, such as ARM, we can leverage the fact that every instruction and data block starts an address multiple of 4 bytes. In this case, the problem of code discovery can be stated as follows: classify each 4-byte word of each code section as a machine code word or data." (men vet ikke om det er verdt å nevne) -->
-
 ### Machine Learning Architectures
+
+Clemens [@Clemens2015], Ma et al. [@Ma2019], ISAdetect [@Kairajarvi2020], Beckman & Haile [@Beckman2020], and Sahabundu et al. [@Sahabandu2023] all employ and evaluate many different machine learning architectures for classification of ISA's. These ml models are to our knowledge considered well tested and industry standards, and the research included in the review spend little to no time arguing for the choice of ml models. The most used classifiers are SVM (6/6),
+
+| ML_model                          | paper count | result clemens dataset | which papers |
+| --------------------------------- | ----------- | ---------------------- | ------------ |
+| SVM                               |             |                        |              |
+| Decision Tree                     |             |                        |              |
+| Random Tree                       |             |                        |              |
+| Random Forest                     |             |                        |              |
+| Naive Bayes (incl. GNB, MNB, CNB) |             |                        |              |
+| BayesNet                          |             |                        |              |
+| Logistic Regression               |             |                        |              |
+| Neural Network (feed forward)     |             |                        |              |
+| K-Nearest Neighbors               |             |                        |              |
+| AdaBoost                          |             |                        |              |
 
 <!--
 Traditional ML approaches:
@@ -39,7 +41,7 @@ Traditional ML approaches:
 - Logistic Regression
 - K-Nearest Neighbors (KNN)
 - Decision Trees
-- Neural Nets, simple feed forward
+- Neural Nets, simple feed forward. (some papers comment on overfitting)
 
 Sequential Learning
 
