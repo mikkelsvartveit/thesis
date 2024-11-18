@@ -9,7 +9,7 @@ subtitle: |
   Trondheim, Norway
 date: \today
 author:
-  - Stian Sulebak
+  - Stian J. Sulebak
   - Mikkel Svartveit
 bibliography: "bibliography.bib"
 
