@@ -16,6 +16,8 @@
 
 ## Research gaps
 
+<!-- Isa features in general, instruction width, other than endianness etc., unknown isas. -->
+
 ## Implications (future work, future use)
 
 Practical and thoretical applications of what we have found

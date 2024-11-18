@@ -22,7 +22,7 @@ Sahabundu et al. [@Sahabandu2023] proposes another byte level feature extraction
 
 Clemens [@Clemens2015], Ma et al. [@Ma2019], ISAdetect [@Kairajarvi2020], Beckman & Haile [@Beckman2020], and Sahabundu et al. [@Sahabandu2023] all employ and evaluate many different machine learning architectures for classification of ISA's. These ML models are to our knowledge considered well tested and with built in support and packages in popular used ML frameworks. The research included in the review spend little to no time arguing for the choice of methods. The most notable classifier is Support Vector Machines (SVM) which was tested in 5/6 of the included papers, and overall performed best or tied best compared to other architectures. In Clemens paper, SVM achieved 98.35% accuracy, closely followed by Decision Tree and Logistic Regression. Although all trained models performed well, the author notes that linear classifiers like SVM stood out in their testing. ISADetect obtains similar results for each classifier compared to Clemens, where SVM performed the best on their own dataset. In this case, Random Tree is slightly more accurate on Clemens dataset with their expanded feature set [@Kairajarvi2020]. Ma et al. argues SVM performs well due to the models ability to seperate complex non-linear boundaries in an effiecient way, while still being less prone to overfitting [@Ma2019]. Sahabundu et al. takes note of SVM and Logistic Regression performance, where SVM is able to achieve a high accuracy with a lot less training data compared to other models [@Sahabandu2023]. SVM's ability to reach high accuracy with little training data is also noted by Clemens and ISAdetect [@Clemens2015] [@Kairajarvi2020]. The authors of ELISA chose to only perform architecture detection using Logistic Regression, but does not go into detail of why this was chosen [@Nicolao2018].
 
-Even though SVM, Logistic Regression and Tree based models performes the best, the authors of the papers do not focus much on details surrounding chosen architectures. Overall results for all classifiers are similiar and all around great across all papers. It is clear that the main focus is feature engineering, where SVM happens to be most proficcient in capturing ISA information from the commonly used byte-level N-gram like features.
+Even though SVM, Logistic Regression and Tree based models performes the best, the authors of the papers do not focus much on details surrounding chosen architectures. Overall results for all classifiers are similiar and all around great across all papers. It is clear that the main focus is feature engineering, where SVM happens to be most proficcient in capturing ISA information from the previously presented byte-level N-gram like features.
 
 <!--
 | ML_model                          | paper count | result clemens dataset | which papers |
@@ -54,7 +54,13 @@ Sequential Learning
 - Conditional Random Fields (for code sections
 - Markov models for opcode pattern detection) -->
 
-### Targeted ISA features
+### Targeted ISA features <!-- Bedre tittel. Vil diskutere hva er det papersene prøver å classifie (bare at alle gjorde det samme (isa classification)) -->
+
+All six papers included in the review attempted to classify Instruction Set Architecture of binary programs from a list of known ISA's. The general objective of the papers was ISA detection through multiclass classification on datasets ranging from 3 to 23 architectures, rather than detecting specific ISA features from the binaries. The most commonly included architectures were RISC based ISAs- ARM, MIPS, and PowerPC and the most notable CISC based ISA was X86_amd64. ARM-based architectures arm32/64, MIPS, and PowerPC were represented in all papers. Based on the reported results of Clemens, ELISA, Beckamn & Haile, ISAdetect, and Sahabundu et al. [@Sahabandu2023] where the widest ranges of architectures was compared, which there were no significant difference in accuracy when comparing different architecture types such as 32-bit vs 64-bit word size, RISC vs CISC instruction sets. Most of the differences in classification accuracy came from similar opcodes with different endianness, or lack of training data for architectures like CUDA in Clemens' dataset.
+
+In terms of targeted ISA features, a key differentiator between the approaches was their handling of endianness detection. Clemens [@Clemens2015] first introduced specific endianness features by analyzing byte patterns like 0x0001 vs 0x0100. ELISA [@Nicolao2018] and Beckman & Haile [@Beckman2020] adopted and simplified Clemens' endianness features, while Sahabandu et al. [@Sahabandu2023] developed character-level features that could inherently capture endianness information. Endianness detection was motivated by augmenting the existing feature-sets to help distinguish between simillar architectures, like MIPS and MIPSEL. However, none of the authors comments on evaluating endianness detection in isolation or across architectures that support multiple endiannes configurations like ARM and PowerPC. <!-- https://developer.arm.com/documentation/den0013/d/Porting/Endianness?lang=en -->
+
+Most papers focused on analyzing known code sections extracted from ELF binaries <!-- Specific numbers/ more details on who needed what from table below -->, with the exception of ELISA and Beckman & Haile which also addressed the challenge of identifying code sections within binaries. ELISA introduced a two-phase approach using Conditional Random Fields (CRFs) to first identify code sections and then perform fine-grained code discovery within those sections. Beckman & Haile introduced "architectural agreement" to identify code sections within binaries. Their method divided binaries into overlapping chunks using a rolling window technique and analyzed each chunk with their ML model. Areas where the model consistently predicted the same architecture across multiple windows were likely to contain executable code, since data sections would give more random results due to lacking architectural patterns. Although binary file formats are not directly tied to ISA or ISA features, the ability to analyze arbitrary binaries without relying on headers or known code sections has significant practical value. This capability enables analysis of partial binaries, firmware images, and other real-world scenarios where section information may be missing or unreliable.
 
 <!--
 Basic isa classification
@@ -63,6 +69,8 @@ Basic isa classification
 - Word size, RISC vs CISC (variable vs fixed instruction width)
 - Which papers uses elf header to find code section?
 
+Datasets - Clemens, ISadetect, Ma2019, Praetorian
+
 Endianness
 
 - Mips vs mipsel
@@ -70,8 +78,22 @@ Endianness
 - Endiannes agnostic approches?
 
 Code section identification:
+- Føler det har stor nok sannsynlighet for å være relevant for fremtiden, at vi ikke kun gjør greiene våre på .data seksjon liksom.
 
-- Føler det har stor nok sannsynlighet for å være relevant for fremtiden, at vi ikke kun gjør greiene våre på .data seksjon liksom. -->
+Beckman & haile untrained architecture.
+
+
+| paper         | Training with code secion | Evaluate on code section | Evaluate on whole binaries |
+| ------------- | ------------------------- | ------------------------ | -------------------------- |
+| Clemens       |                           |                          |                            |
+| Elisa         |                           |                          |                            |
+| Ma2019        |                           |                          |                            |
+| beckman       |                           |                          |                            |
+| NLP sahabandu |                           |                          |                            |
+| ISAdetect     |                           |                          |                            |
+
+
+-->
 
 <!-- ### Datasets -->
 
