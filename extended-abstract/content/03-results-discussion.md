@@ -4,29 +4,29 @@
 
 Out of our 20 reviewed articles, 18 apply CNN to binary code for the purpose of classifying malware. Two popular datasets are commonly used in this literature: Microsoft Malware Classification Challenge (MMCC) [@microsoftkaggle] and Malimg [@malimgpaper]. Table \ref{table:microsoft-results} and \ref{table:malimg-results} compare performance on these two datasets across the reviewed literature. The state-of-the-art performance is very high for both malware classification datasets. However, from what we have found, both datasets have large imbalances in the data amount across types of malware, which causes model performance to fluctuate across classes. The different articles address this issue to varying degrees, and we consider this a limitation of the existing literature.
 
-| Article (year published)             | Accuracy   | Precision | Recall | F1-score   |
-| ------------------------------------ | ---------- | --------- | ------ | ---------- |
-| Rahul et al. [@Rahul2017] (2017)     | 0.9491     | -         | -      | -          |
-| Kumari et al. [@Kumari2017] (2017)   | 0.9707     | -         | -      | -          |
-| Yang et al. [@Yang2018] (2018)       | 0.987      | -         | -      | -          |
-| Khan et al. [@Khan2020] (2020)       | 0.9780     | 0.98      | 0.97   | 0.97       |
-| Sartoli et al. [@Sartoli2020] (2020) | 0.9680     | 0.9624    | 0.9616 | 0.9618     |
-| Prima & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98      | 0.98   | 0.98       |
-| Liang et al. [@Liang2021] (2021)     | 0.9592     | -         | -      | -          |
-| SREMIC [@Alam2024] (2024)            | **0.9972** | 0.9993    | 0.9971 | **0.9988** |
+| Article (year published)             | Accuracy   | Precision  | Recall     | F1-score   |
+| ------------------------------------ | ---------- | ---------- | ---------- | ---------- |
+| Rahul et al. [@Rahul2017] (2017)     | 0.9491     | -          | -          | -          |
+| Kumari et al. [@Kumari2017] (2017)   | 0.9707     | -          | -          | -          |
+| Yang et al. [@Yang2018] (2018)       | 0.987      | -          | -          | -          |
+| Khan et al. [@Khan2020] (2020)       | 0.9780     | 0.98       | 0.97       | 0.97       |
+| Sartoli et al. [@Sartoli2020] (2020) | 0.9680     | 0.9624     | 0.9616     | 0.9618     |
+| Prima & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98       | 0.98       | 0.98       |
+| Liang et al. [@Liang2021] (2021)     | 0.9592     | -          | -          | -          |
+| SREMIC [@Alam2024] (2024)            | **0.9972** | **0.9993** | **0.9971** | **0.9988** |
 
 Table: Microsoft Malware dataset classification performance. Bolded values indicate state-of-the-art performance.\label{table:microsoft-results}
 
-| Article (year published)                 | Accuracy   | Precision | Recall | F1-score   |
-| ---------------------------------------- | ---------- | --------- | ------ | ---------- |
-| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -         | -      | -          |
-| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904    | 0.9901 | 0.9902     |
-| Li et al. [@Li2021] (2021)               | 0.97       | -         | -      | -          |
-| Son et al. [@Son2022] (2022)             | 0.97       | -         | -      | -          |
-| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -         | -      | -          |
-| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944    | 0.9943 | 0.9943     |
-| SREMIC [@Alam2024] (2024)                | 0.9993     | 0.9992    | 0.9987 | **0.9987** |
-| Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971    | 0.9984 | 0.9977     |
+| Article (year published)                 | Accuracy   | Precision  | Recall     | F1-score   |
+| ---------------------------------------- | ---------- | ---------- | ---------- | ---------- |
+| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -          | -          | -          |
+| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904     | 0.9901     | 0.9902     |
+| Li et al. [@Li2021] (2021)               | 0.97       | -          | -          | -          |
+| Son et al. [@Son2022] (2022)             | 0.97       | -          | -          | -          |
+| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -          | -          | -          |
+| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944     | 0.9943     | 0.9943     |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | **0.9992** | **0.9987** | **0.9987** |
+| Al-Masri et al. [@Al-Masri2024] (2024)   | 0.9989     | 0.9971     | 0.9984     | 0.9977     |
 
 Table: Malimg dataset classification performance. Bolded values indicate state-of-the-art performance.\label{table:malimg-results}
 

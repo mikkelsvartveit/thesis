@@ -1,6 +1,8 @@
 # Introduction
 
-The analysis of binary code has become critical in reverse engineering and cybersecurity domains. As the diversity of binary programs continues to expand across embedded systems, IoT devices, and various digital platforms, traditional analysis methods face scalability challenges and often lack transferability across domains. While existing approaches typically rely on disassembly or decompilation as preprocessing steps, recent advances in deep learning, particularly Convolutional Neural Networks (CNN), have opened new possibilities for direct binary analysis.
+Reverse engineering is the process of analyzing and understanding how existing software works by examining its compiled form, with the goal of discovering features and functionality from it. Reverse engineering is frequently used for uncovering security vulnerabilities, quality assurance and verification of programs, and analyzing systems for compatibility or interoperability.
+
+Binary analysis and classification is a crucial step in the reverse engineering pipeline. While existing approaches typically rely on disassembly or decompilation as preprocessing steps, recent advances in deep learning have opened new possibilities for direct binary analysis. Convolutional Neural Networks (CNN) are particularly promising thanks to their ability to automatically discover relevant features, eliminating the need for manual feature engineering.
 
 We present a structured literature review examining the application of CNN to binary code analysis, with an emphasis on approaches that operate directly on raw binaries. We focus on methods that bypass the need for reverse engineering or disassembly, as such preprocessing can be computationally expensive and sometimes unreliable, especially for obfuscated binaries. These analysis techniques could potentially be applied to binaries where the instruction set is unknown or undocumented, where reverse engineering is not feasible.
 

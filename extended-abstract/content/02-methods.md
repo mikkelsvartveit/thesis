@@ -10,7 +10,7 @@ This query yielded 86 results, which were then filtered based on these inclusion
 2. The method does not require reverse engineering of the binary prior to analysis.
 3. The method is not overly specialized for a specific task that would prevent its transfer to other target features.
 
-Table \ref{table:paper-exclusion-results} shows the remaining papers after each step of the filtering process.
+Table \ref{table:paper-exclusion-results} shows the remaining articles after each step of the filtering process. We note that during the screening process, particularly at the full-text review stage, articles were predominantly excluded for not meeting inclusion criterion 2.
 
 | IC screening step  | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
