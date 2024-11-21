@@ -1,12 +1,14 @@
 ---
-title: "[Title undecided]"
+title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Structured Literature Review"
 subtitle: |
   Specialization Project\
-  \
+  \vspace{1cm}
+  ![NTNU Logo](./images/ntnu.png){ width=12% }\
+  \vspace{0.5cm}
   \small
   Department of Computer Science\
   Norwegian University of Science and Technology\
-  Trondheim, Norway
+  Trondheim, Norway\
 date: \today
 author:
   - Stian J. Sulebak
