@@ -1,6 +1,13 @@
 # Introduction
 
 ## Rationale
+<!-- 
+  - Why reverse engineering is important, usecases, embedded systems, Binary analysis is first step of RE
+  - IoT and embedded diverse architectures, hard to develop one fits all. ML aids in this field, features.
+      - Finding out what architecture something is lets us start reverse engineering
+  - "Trational" ML requires feature engineering, Deep learning. CNN can automatically detect features/motivate CNN conceptually for this taks
+  - No literature reviews exist for ML architecture/ISA detection. Preliminary searches reviealed that CNN have been applied to binary code before. One No high quality revires on techniques for CNNs applied to binary code
+ -->
 
 Binary code analysis is a continually growing field, as our dependance on digital systems continues to increase. We interact with and use compiled binary programs all the time, unaware of where the code ... usecases malware, digital forensics, copyright things etc.With rise of IoT, tons of binares compiled to different instruction set architectures. Current effort of reverse engeneering and analsis require lots of manual work. Usecases: embedded systems, IoT devices, industrial control systems (ICS), automotive systems, mobile devices, cryptographic processors, malware (Introduce more and motivate unknown ISA)
 
@@ -9,6 +16,9 @@ ML great at pattern recognition, Clear use in binary code analysis. Binaries are
 Commissioned by NTNU ... Want to broaden the use of deep neural networks for binary code analysis. To this end we provide a Structured Littereature Review.
 
 ## Objectives
+<!-- 
+  - An explicit and concise statement of the review objective(s) or question(s) will help readers understand the scope of the review 
+ -->
 
 In this paper, we have documented and conducted a structured litterature review exploring previous use of convolutional neural networks for binary code analysis. Considering the rise of IoT, our main focus will be on applications of CNN's for binary code analysis without requiring disassembly. With this objective in mind, we want to classify different applications of CNN's to binary code, based on their architecture, encoding of binary code as input, CNN's variations and techniques ... ... ...
 

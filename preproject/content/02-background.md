@@ -1,8 +1,16 @@
 # Background
 
-## Reverse Engineering
 
-TODO
+## Software Reverse Engineering
+
+Software reverse engineering (RE) is the process of analyzing and understanding how a piece of software or software system functions. The term's origins lie in industrial hardware analysis, where Chikofsky & Cross note that examining competitors' designs was important for driving innovation and developing new ideas. While hardware reverse engineering typically also includes replicating existing systems, software RE often aims to gain "sufficient design-level understanding to aid maintenance, strengthen enhancement, or support replacement" [@Chikofsky1990]. Despite the expansion of reverse engineering applications over the years, its core purpose in software is still to recover unavailable information about a system's functionality, requirements, design, and implementation.
+
+### Binary programs and Compiled Software 
+### Instruction Set Architecture 
+### Binary Analysis
+
+Binary analysis is software RE applied to binary programs, and focusing on software only readable by computers. A binary program is a computer program at the lowest level, and binary analysis is the first step in reverse engineering such a piece of software.  At this level, software is read directly by computers, where the 1s and 0s of the program translate directly to specific instructions to execute. Understanding these programs requires knowledge of the target instruction set architecture, which provides a one-to-one mapping between binary code and computer instructions. These can then be directly translated to a higher-level language that is readable by humans like assembly, enabling further analysis to uncover the functionality and design of the software. 
+
 
 ## Convolutional Neural Networks
 
