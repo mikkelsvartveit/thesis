@@ -4,7 +4,7 @@ This section defines the review protocol used for this structured literature rev
 
 ## Database and search queries
 
-Multiple research databases were considered, with our primary concern being including papers from peer-reviewed sources. Our research database of choice is Scopus <!-- (SOURCE?) -->, as it from our experience includes results from a comprehensive list of peer-reviewed journals, workshops and conferences. We recognize that the lack of diversity in research databases can result in missing out relevant work. However, preliminary work querying databases like IEEE and ACM compared to Scopus in our experiences only included duplicate results. We deem Scopus as sufficient for the purpose of this review, given similar results from querying IEEE and ACM directly and ease of consistent data extraction.
+Multiple research databases were considered, with our primary concern being including papers from peer-reviewed sources. Our research database of choice is Scopus [@Scopus], as it from our experience includes results from a comprehensive list of peer-reviewed journals, workshops and conferences. We recognize that the lack of diversity in research databases can result in missing out relevant work. However, preliminary work querying databases like IEEE and ACM compared to Scopus in our experiences only included duplicate results. We deem Scopus as sufficient for the purpose of this review, given similar results from querying IEEE and ACM directly and ease of consistent data extraction.
 
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
@@ -68,8 +68,6 @@ Table: Articles remaining after applying inclusion criteria for ML-ISA studies. 
 Table: Articles remaining after applying inclusion criteria for CNN studies. \label{table:cnn-exclusion-results}
 
 ## Data extraction process
-
-<!-- TODO: ta med ML-ISA, kanskje en mention om LLM hilfe for å oppsummere og få oversikt, selv om selve analysen ikke er basert på direkte output fra claudern (leser jo før vi skriver) -->
 
 In this subsection we provide a short description of how the resulting 26 primary studies were processed and studied. Each paper was read through in its entirety in order to identify potential avenues of comparison. In addition, we used the large language model Claude 3.5 Sonnet in order to create a summary of the research and highlight key aspects of the strategies employed in each paper.
 

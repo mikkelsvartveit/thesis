@@ -1,4 +1,3 @@
-UNAME := $(shell uname -s)
 .PHONY: wordcount watch worddiff
 pdf:
 	@echo "\nCompiling PDF..."
@@ -24,14 +23,6 @@ ifeq ($(shell uname -s),Linux)
 else
 	@fswatch -0 ./content/ | xargs -0 -n 1 -I {} make -s pdf
 endif
-
-watchwsl:
-	@make -s pdf
-	@echo "Watching for changes..."
-	inotifywait -r -m -e modify ./content/ | \
-   while read file_path file_event file_name; do  \
-      make -s pdf; \
-   done 
 
 latex:
 	@echo "\nCompiling LaTeX file..."
