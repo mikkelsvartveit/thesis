@@ -29,7 +29,7 @@ The specific objectives of this study is as follows:
 > > **RQ1.1**: the machine learning techniques and architectures employed? \newline
 > > **RQ1.2**: their prerequisites, preprocessing, and assumptions about the binary programs? \newline
 > > **RQ1.3**: the types of ISA features they can identify? \newline
-> > **RQ1.4**: the methods performance metrics for discovered ISA features? \newline
+> > **RQ1.4**: the methods performance metrics for discovered ISA features? \newline <!-- TODO: Brukes trenger vi denne? -->
 
 > **RQ2:** What approaches for applying CNN to raw binary code analysis have been explored in existing literature? How do the identified CNN approaches compare with respect to:
 >
