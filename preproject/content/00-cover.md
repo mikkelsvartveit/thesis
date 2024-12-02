@@ -32,6 +32,7 @@ mainfontoptions:
 linestretch: 1.25
 numbersections: true
 link-citations: true
+linkcolor: "blue"
 urlcolor: "blue"
 toc: "true"
 
