@@ -1,14 +1,16 @@
 # Methodology
 
-This section defines the review protocol used for this structured literature review, and provides justification for the strategies used in regard to answering our research questions. This outlines methods for identification of relevant studies to be considered included our review, describing selected inclusion criteria and quality assessment for primary sources and the data extraction process for acquiring results. The overall review protocol is identical for literature regarding ML for ISA identification and CNN's applied to binary programs, where any differences in inclusion criteria and data extraction are explained. The review protocol is split into 3 phases: research identification through database selection and querying, filtering and selection of primary studies based on inclusion criteria, and data extraction and synthesis.
+This section defines the review protocol used for this structured literature review, and provides justification for the strategies used in the context of our research questions. We outline our methodology for identifying and selecting relevant studies, including inclusion criteria, quality assessment standards for primary sources, and the data extraction process. The overall review protocol is identical for the two parts of the literature review. Differences in inclusion criteria and data extraction are explained and justified. The review protocol is split into three phases:
+
+1. Research identification through database selection and querying
+2. Filtration and selection of primary studies based on inclusion criteria
+3. Data extraction and synthesis
 
 ## Database and search queries
 
-Multiple research databases were considered, with our primary concern being including papers from peer-reviewed sources. Our research database of choice is Scopus [@Scopus], as it from our experience includes results from a comprehensive list of peer-reviewed journals, workshops and conferences. We recognize that the lack of diversity in research databases can result in missing out relevant work. However, preliminary work querying databases like IEEE and ACM compared to Scopus in our experiences only included duplicate results. We deem Scopus as sufficient for the purpose of this review, given similar results from querying IEEE and ACM directly and ease of consistent data extraction.
+Multiple research databases were considered, with our primary concern being including papers from peer-reviewed sources. Our research database of choice is Scopus [@Scopus], which from our experience includes results from a comprehensive list of peer-reviewed journals, workshops, and conferences. We acknowledge that the lack of diversity in research databases may result in missing relevant research. However, preliminary searches in IEEE and ACM revealed that all relevant results were already captured in Scopus, producing mostly duplicate entries. We deem Scopus as sufficient for the purpose of this review, considering the similar results from querying IEEE and ACM directly as well as the ease of consistent data extraction.
 
-Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
-
-This review was in part commissioned by our supervisor Donn Morrison in preparation for our master’s thesis. We were provided a list of relevant papers, as part of the preliminary search and getting an overview of the field of machine learning applied to software RE. While we consider our search queries on the ML-ISA part of the review to be solid and encapsulate our goals in regard to **RQ1**, some notable papers from the preparation phase were not a part of our search results. The papers in question is ELISA and Ma et al. [@Nicolao2018] [@Ma2019]. These papers are available on Scopus, but the chosen search terms did not match these papers in the title, abstract, or key-words. We have decided to include these papers in our review due to: their high relevancy, they are found on Scopus which we consider to be a reputable scientific database, and our knowledge of existing research not included in the review might influence our analysis. The two papers are listed under the ML-ISA part of the review {table:search-queries}.
+Using the "Advanced Search" feature in Scopus, we combine relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
 <!-- TODO: Inital preliminary research n ML-ISA provided by our supervisor -->
 
@@ -27,10 +29,6 @@ ML-ISA
 CNN
 & TITLE-ABS-KEY(( "CNN" OR "convolutional neural network" ) AND ( "object code" OR "machine code" OR "binary file" OR "binary program" ))
 & 86 \\
-\hline
-Prelimenary search
-& Supplied by our supervisor, Donn Morrison
-& 2 \\
 \hline
 \end{tabular}
 \end{table}
@@ -61,8 +59,8 @@ CNN:
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
-| IC (Abstract)      |                76 |                43 |
-| IC (Full-text)     |                33 |                25 |
+| IC (Abstract)      |                74 |                43 |
+| IC (Full-text)     |                31 |                25 |
 | Included in review |             **6** |                 – |
 
 Table: Articles remaining after applying inclusion criteria for ML-ISA studies. \label{table:ml-isa-exclusion-results}
