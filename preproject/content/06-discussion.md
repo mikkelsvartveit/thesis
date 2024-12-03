@@ -29,13 +29,11 @@ The most common application for applying CNN to binary code is malware classific
 - Reliance on ELF, is it realistic to always know ELF and .text section, both when training and testing?
 - Architecture specific features, less transferable.
 - Performance metrics imbalance dataset comparison
-- How domain specific is malware classificaton
-  - Comment on performance being so high on malimg
-  - Dataset imbalance? (might just be true for ml in general)
-- Compiler optimization detection might be more transferable to ISA detection?
-  - Their approach is quite different than most of the malware papers
+- architecture agnostic.
 
-architecture agnostic.
+Results strongly indicate that CNN architectures can be successfully used for binary analysis tasks. We also note that prior approaches achieve high accuracy even without manual feature engineering. This proves that CNNs indeed are able to automatically discover and learn patterns from binary machine code. However, a limitation in existing literature is that it is predominantly focused on malware. It remains to be seen how transferable these methods are to other binary code classification tasks. In addition, we observe that the malware datasets are quite imbalanced, and some of the existing literature fail to acknowledge this when evaluating the performance. Metrics like class-specific accuracy would be a useful benchmark to reveal whether the models developed exhibit a performance loss with underrepresented classes.
+
+That said, there is reason to believe that methods for detecting of compiler optimization levels might be more transferable to ISA related classification tasks. Since compiler optimization does not alter the behavior of the program, but rather optimize the specific implementation of machine code, we hypothesize that these approaches might be preferred for ISA feature classification.
 
 ## Research gaps
 
