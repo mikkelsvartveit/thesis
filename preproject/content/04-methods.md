@@ -12,6 +12,14 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combine relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
+This review was in part commissioned by our supervisor Donn Morrison in preparation for our master’s thesis. We were provided with a list of relevant papers as part of the preliminary search. The purpose of this was to gain an overview of the field of machine learning aided reverse engineering. While we consider our search queries for the ML-ISA part of the review to encapsulate our goals in regard to **RQ1**, some notable papers from the preparation phase did not show up in our search results. The papers in question are ELISA [@Nicolao2018] and Ma et al. [@Ma2019]. These articles are available on Scopus, but the chosen search terms did not match the in the title, abstract, or keywords of these studies. We have decided to include these papers in our review due to:
+
+- Their high relevancy for our research questions
+- Their presence on Scopus, which we consider a reputable scientific database
+- The possibility that our knowledge of existing research might influence further analysis if not included in the review
+
+The two papers are listed under the ML-ISA part of the review {table:search-queries}.
+
 <!-- TODO: Inital preliminary research n ML-ISA provided by our supervisor -->
 
 \begin{table}
@@ -29,6 +37,10 @@ ML-ISA
 CNN
 & TITLE-ABS-KEY(( "CNN" OR "convolutional neural network" ) AND ( "object code" OR "machine code" OR "binary file" OR "binary program" ))
 & 86 \\
+\hline
+Preliminary search
+& Supplied by our supervisor, Donn Morrison
+& 2 \\
 \hline
 \end{tabular}
 \end{table}
@@ -59,8 +71,8 @@ CNN:
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
-| IC (Abstract)      |                74 |                43 |
-| IC (Full-text)     |                31 |                25 |
+| IC (Abstract)      |                76 |                43 |
+| IC (Full-text)     |                33 |                25 |
 | Included in review |             **6** |                 – |
 
 Table: Articles remaining after applying inclusion criteria for ML-ISA studies. \label{table:ml-isa-exclusion-results}
