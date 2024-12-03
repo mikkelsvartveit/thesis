@@ -8,6 +8,8 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
+This review was in part commissioned by our supervisor Donn Morrison in preparation for our master’s thesis. We were provided a list of relevant papers, as part of the preliminary search and getting an overview of the field of machine learning applied to software RE. While we consider our search queries on the ML-ISA part of the review to be solid and encapsulate our goals in regard to **RQ1**, some notable papers from the preparation phase were not a part of our search results. The papers in question is ELISA and Ma et al. [@Nicolao2018] [@Ma2019]. These papers are available on Scopus, but the chosen search terms did not match these papers in the title, abstract, or key-words. We have decided to include these papers in our review due to: their high relevancy, they are found on Scopus which we consider to be a reputable scientific database, and our knowledge of existing research not included in the review might influence our analysis. The two papers are listed under the ML-ISA part of the review {table:search-queries}.
+
 <!-- TODO: Inital preliminary research n ML-ISA provided by our supervisor -->
 
 \begin{table}
@@ -26,12 +28,16 @@ CNN
 & TITLE-ABS-KEY(( "CNN" OR "convolutional neural network" ) AND ( "object code" OR "machine code" OR "binary file" OR "binary program" ))
 & 86 \\
 \hline
+Prelimenary search
+& Supplied by our supervisor, Donn Morrison
+& 2 \\
+\hline
 \end{tabular}
 \end{table}
 
 ## Inclusion criteria and quality assessment
 
-All 160 identified research papers across ML-ISA and CNN were assessed using inclusion and quality criteria, and excluded from the review if the paper is not deemed relevant. This leaves us with a selection of high quality and highly relevant primary studies to be used in the review. The inclusion criteria (IC) and quality assessment (QA) were selected based on our research questions for each topic, and applied through three steps:
+All 162 identified research papers across ML-ISA and CNN were assessed using inclusion and quality criteria, and excluded from the review if the paper is not deemed relevant. This leaves us with a selection of high quality and highly relevant primary studies to be used in the review. The inclusion criteria (IC) and quality assessment (QA) were selected based on our research questions for each topic, and applied through three steps:
 
 - Exclusion of papers after applying IC on the abstract
 - Exclusion of papers after applying IC on full-text
@@ -55,8 +61,8 @@ CNN:
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
-| IC (Abstract)      |                74 |                43 |
-| IC (Full-text)     |                31 |                25 |
+| IC (Abstract)      |                76 |                43 |
+| IC (Full-text)     |                33 |                25 |
 | Included in review |             **6** |                 – |
 
 Table: Articles remaining after applying inclusion criteria for ML-ISA studies. \label{table:ml-isa-exclusion-results}
