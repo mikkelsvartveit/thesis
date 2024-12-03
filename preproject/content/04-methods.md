@@ -8,6 +8,8 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combined relevant keywords from both of our topics into two separate search queries, one for ML-ISA and one for CNN-part of this review. These search terms were grouped based on similarity and combined in conjunctive normal form. The final queries and result counts can be seen in Table \ref{table:search-queries}.
 
+<!-- TODO: Inital preliminary research n ML-ISA provided by our supervisor -->
+
 \begin{table}
 \caption{Scopus search queries for each topic and result count}
 \label{table:search-queries}\tabularnewline
