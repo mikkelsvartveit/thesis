@@ -8,6 +8,8 @@
   - IoT and embedded diverse architectures, hard to develop one fits all. ML aids in this field, features.
 -->
 
+<!-- TODO: ikke nødvendigvis compiled form? -->
+
 Software reverse engineering is the process of analyzing and understanding how existing software works by examining its compiled form, with the goal of discovering features and functionality from it [@Chikofsky1990]. We rely on compiled software all the time, often unaware of its underlying source code. For these programs, reverse engineering is crucial for uncovering security vulnerabilities, verifying and assuring quality of programs, and analyzing systems for compatibility or interoperability.
 
 The first step in a reverse engineering pipeline is usually disassembly and code discovery [@Chen2019]. Most software that runs on general-purpose computers and mobile devices use instruction set architectures (ISA) derived from x86 or ARM [@Gupta2021]. Thanks to standardized architectures, it is relatively straightforward for a reverse engineer to disassemble binaries, identify the code section, and start analyzing the behavior of programs compiled for these platforms. However, the workflow becomes more challenging when faced with non-standard ISAs that is often found in embedded systems and IoT devices. Typically, these instruction sets are proprietary and undocumented [@Chen2024], which significantly complicates the disassembly process.
