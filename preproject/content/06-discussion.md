@@ -4,19 +4,27 @@
 
 ### ML ISA detection
 
-We have found that all papers use some form of byte N-gram for feature extraction when detecting ISA from binary programs. From our findings it appears that the differences between architectures is can efficiently be captured by analyzing the distrubution of counts of byte N-grams. One of the two most noteble ways of doing this was first introduced by Clemens, where 256 wide feature vector just containing counts of the bytes (BFD) from the input binary was enough to reach an accuracy above 90%, and a simple endiannes huristic increased this to > 98%. While this strategy is simple and cheap in terms of network input size, there were some limitations with this approach also noted by ISAdetect, that reproduced Clemens results. The BFD feature has a hard time seperating classes of similar ISAs, such as mips and mipsel. In order to combat this, later work like ELISA and ISAdetect experimented wit harchitecture specific features like function prologs and epilogs. The second identified most promising strategy, we consider to be Sahabundu et al.'s paper with TF-IDF features. Using a selection of 1 2 and 3 grams and TF-IDF, Sahabundu et al. was able to improve on Clemens results at the cost of a much larger feature vector. However, an important limitation with Sahabundu et al.'s paper is that they do not list classification performance results on individual architectures.
+Our analysis reveals that machine learning approaches to ISA detection predominantly rely on byte-level features, with two main strategies emerging as particularly effective: Byte Frequency Distribution (BFD) and Term Frequency-Inverse Document Frequency (TF-IDF) of N-grams. The most widely adopted approach, BFD introduced by Clemens, uses 256-dimentional feature vector containing counts of the bytes from the input binary was enough to reach an accuracy above 90%. The addition of a simple endianness heuristic increased this to > 98%. While this strategy is simple and cheap in terms of network input size, there were some limitations with this approach also noted by ISAdetect. Base BFD networks struggle separating classes of similar ISAs, such as mips and mipsel. An alternative approach by Sahabandu et al. employs TF-IDF features using combinations of 1-, 2-, and 3-grams. While this method improved upon Clemens' results, it requires a substantially larger feature vector.
 
-In terms of ML architectures, SVM and Logistic Regression performs the best. The main focus on the papers seem to be on feature engineering rather than specic ML architectures employed, however the constently perfmant results of SVM across all papers points to this classifier being apt at detecting ISA from byte level N-gram features.
+Across the reviewed studies, Support Vector Machines (SVM) and Logistic Regression consistently performs the best. While the main focus on the papers has been feature engineering rather than the specific ML architectures employed, SVM' superior performance points to this classifier being well suited at detecting ISA from byte level n-gram features.
 
-We have also identified that all of the included research attempts to classify ISA's from a list of known ISAs. the only counts of ISAs other than multiclass ISa classification, is specific endiannes heuristics and function prologs and epilogs.
+All the papers seem to rely heavily on code section identification during training, usually using binary program header information like ELF. This is highlighted by ELISA and Beckman & Haile, where they dedicate parts of their paper for code section discovery. ISAdetect attempts to classify full binary programs on classifiers only trained on code-only sections and got much lower classification scores compared to code only. We consider this to be significant, as the included literature points to the significant difference in classification accuracy when including sections of data in the input.
 
-All the papers seem to rely heavely on code section identification during training, usually using binary program header information like ELF.
+We have also identified that all the included research attempts to classify ISA's from a list of known ISAs. The other examples of feature detection in ISAs is used to augment multiclass classification of ISAs with is specific endianness heuristics introduced by Clemens and function prologues and epilogues used by ELISA and ISAdetect.
 
 <!--
 - Most important feature extraction, all byte level N-grams
 - SVM goated, but many works
 - ALL on detecting ISA from list of known isas.
 - Importance of ELF code section dings, worse performance on whole binaries (ISAdetect)
+
+save for analysis:
+
+Worse performance between some architectures. Addressed by ISAdetect and ELISA, at the cost of less generalizability, featers per included architecture.
+In order to combat this, later work like ELISA and ISAdetect experimented with architecture specific features like function prologs and epilogues.
+
+A notable limitation of Sahabandu et al.'s work is the absence of per-architecture classification performance results. Dont know limitations of cross architecture classification of similar architectures.
+
  -->
 
 ### CNN on binary code
