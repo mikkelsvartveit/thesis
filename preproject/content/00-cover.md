@@ -1,5 +1,5 @@
 ---
-title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Structured Literature Review"
+title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Systematic Literature Review"
 subtitle: |
   Specialization Project\
   \vspace{1cm}
