@@ -1,5 +1,5 @@
 ---
-title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Structured Literature Review"
+title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Systematic Literature Review"
 subtitle: |
   Specialization Project\
   \vspace{1cm}
@@ -37,14 +37,7 @@ urlcolor: "blue"
 toc: "true"
 
 abstract: |
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eu sagittis nisl. Duis vitae maximus libero. In hac habitasse platea dictumst. Vivamus ac fermentum libero. Curabitur aliquet lorem tincidunt, consequat nisl sed, ultricies nisi. Vivamus fermentum blandit dui, ac vehicula tellus mattis at. Nullam bibendum, neque ut efficitur posuere, nibh lorem molestie ex, vitae fermentum turpis ante id tellus. Phasellus ullamcorper lectus ipsum, nec volutpat urna fermentum at.
-
-  Suspendisse in viverra lorem. Duis vestibulum odio id ante dictum suscipit. Nulla ut nisl ultrices, lobortis tortor vitae, egestas nisl. Mauris fringilla nulla purus, sit amet posuere metus dignissim nec. Aliquam nec velit a libero finibus dictum sit amet eget tellus. In lobortis euismod fermentum. Nullam nec iaculis neque, a dictum ipsum. Ut non scelerisque quam. In dapibus felis gravida eros dictum, eget porta urna sodales.
-
-  Morbi lobortis magna iaculis libero pulvinar, vitae posuere metus dignissim. Aliquam erat volutpat. Nam ultricies ac dui id pulvinar. Cras quis eros maximus, sagittis urna vitae, auctor justo. Sed justo tellus, malesuada scelerisque porttitor id, vehicula eu elit. Proin egestas lacus at dignissim vestibulum. Ut vitae nulla scelerisque, gravida enim sed, accumsan ipsum. Donec porta faucibus purus eu consequat. Sed ac felis in dui pretium auctor vel eget magna. Morbi semper massa nunc, non fringilla enim tincidunt et.
-
-  Maecenas accumsan vitae enim ac lacinia. Mauris facilisis felis eu ipsum gravida, tempor rhoncus libero placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac tempus est, at sodales orci. Integer semper id mi a euismod. Duis.
-
+  Binary reverse engineering is critical for analyzing security, quality, and compatibility of compiled programs. The increased demand of IoT devices leads to new challenges for reverse engineers, as embedded systems often use custom instruction set architectures (ISA). This systematic literature review examines two key areas in software reverse engineering: machine learning approaches for ISA detection and convolutional neural networks (CNN) for binary code analysis. Through a structured review of 26 primary studies, we analyze how machine learning techniques have been applied to classify ISA features and how CNNs have been used for analyzing raw binary code. Our findings reveal that current machine learning approaches for ISA detection predominantly employ traditional models not based on deep learning. They achieve high accuracy in classifying known architectures, but face limitations in distinguishing similar architectures and handling non-code sections of the binary file. For CNN applications to binary code, we find strong evidence of effectiveness particularly in malware classification, with accuracies exceeding 99% on standard datasets without requiring manual feature engineering. However, CNN applications beyond malware detection remain limited. The review identifies significant research gaps, particularly in developing architecture-agnostic methods capable of identifying specific ISA features rather than just classifying known architectures. We conclude that while current machine learning methods show promise, future research should focus on leveraging CNN's automatic feature learning capabilities while reducing reliance on binary format metadata.
 include-before: |
   \pagebreak
 
