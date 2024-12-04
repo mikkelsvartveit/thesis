@@ -13,6 +13,7 @@ All the papers seem to rely heavily on code section identification during traini
 We have also identified that all the included research attempts to classify ISA's from a list of known ISAs. The other examples of feature detection in ISAs is used to augment multiclass classification of ISAs with is specific endianness heuristics introduced by Clemens and function prologues and epilogues used by ELISA and ISAdetect [@Clemens2015] [@Nicolao2018] [@Kairajarvi2020].
 
 <!--
+
 - Most important feature extraction, all byte level N-grams
 - SVM goated, but many works
 - ALL on detecting ISA from list of known isas.
@@ -47,17 +48,15 @@ That said, there is reason to believe that methods for detecting of compiler opt
 
 ## Research gaps
 
-<!-- Isa features in general, instruction width, other than endianness etc., unknown isas. -->
+We identify multiple research gaps in the current literature. Firstly, while machine learning approaches have been successfully applied to ISA classification applications, these models are trained on a pre-defined set of known architectures. If presented with a software binary of an undocumented ISA, these models would not be able to extract useful information about the architecture. Moreover, the current approaches partially rely on engineering features specific for each instruction set, such as function prologues and epilogues as well as the endian heuristic discussed earlier. This implies that the algorithms developed may not be scalable to other ISAs without further feature engineering work.
 
-All reliance on known isas, what to do when presented with an unknown architecture that does not match entirely.
-Feature engineering needing architecture specific features, like function epilogues end such, not scaleble.
-No Deep learning has been tried. Can it be used to eliminate feature engineeering.
+Additionally, we are under the impression that deep learning, including CNN, is underutilized for software binary analysis. The strong results from malware classification research provide some evidence that CNNs are able to learn patterns from image representations of software binaries, but this seems under-explored for applications outside the malware space. While some promising attempts at detecting compiler optimization levels using similar techniques have been conducted, the scope of this literature is quite limited.
 
-CNNs underutilized or binary code analysis. Mostly malware. Compiler optimization looks promising.
+## Future work
 
-## Implications (future work, future use)
+To address the gap in scalability of current ISA detection approaches, we propose researching machine learning models that can identify specific architectural features. Where current methods classifies the full ISA from a set of known architectures, it would be useful to extract properties such as endianness, instruction width, opcode length, register organization, et cetera. This would enable reverse engineers to employ the model for software binaries of unknown architectures.
 
-Practical and theoretical applications of what we have found
+We hypothesize that deep learning approaches, and CNN in particular, have potential for improving the state of the art in ISA detection of software binaries. By eliminating the need for feature engineering, deep learning algorithms could significantly improve the scalability and scope of the approaches used in current literature.
 
 ## Limitations (of our work, methodology)
 
@@ -65,6 +64,10 @@ Practical and theoretical applications of what we have found
 - Bias in papers included from our supervisor.
 - IC and QA's affected by researcher bias during screening.
 - Qualitiative Research, based on our own experience in the flied, bias shit
+
+
+
+
 
 <!--
 
