@@ -2,7 +2,7 @@
 
 ## Software Reverse Engineering
 
-Software reverse engineering (RE) is the process of analyzing and understanding how a piece of software or software system functions. The term's origins lie in industrial hardware analysis, where Chikofsky & Cross note that examining competitors' designs was important for driving innovation and developing new ideas. While hardware reverse engineering typically also includes replicating existing systems, software RE often aims to gain "sufficient design-level understanding to aid maintenance, strengthen enhancement, or support replacement" [@Chikofsky1990]. Despite the expansion of reverse engineering applications over the years, its core purpose in software is still to recover unavailable information about a system's functionality, requirements, design, and implementation.
+Software reverse engineering is the process of analyzing and understanding how a piece of software or software system functions. The term's origins lie in industrial hardware analysis, where Chikofsky & Cross note that examining competitors' designs was important for driving innovation and developing new ideas. While hardware reverse engineering typically also includes replicating existing systems, software reverse engineering often aims to gain "sufficient design-level understanding to aid maintenance, strengthen enhancement, or support replacement" [@Chikofsky1990]. Despite the expansion of reverse engineering applications over the years, its core purpose in software is still to recover unavailable information about a system's functionality, requirements, design, and implementation.
 
 ### Binary programs and Instruction Set Architectures
 
@@ -14,7 +14,7 @@ An instruction set architecture (ISA) is a contract between hardware and softwar
 
 <!-- TODO: Føler kanskje binary analysis kan være andre ting enn RE? Tror jeg har brukt at CNN for malware også er "binary analysis" lenger ned -->
 
-Binary analysis is software RE applied to binary programs, focusing on analyzing machine code in its executable form. Since a binary program represents software at its lowest level of abstraction, binary analysis is often the first step in reverse engineering such software. Understanding these programs requires knowledge of the target instruction set architecture, as the ISA provides a one-to-one mapping between binary code and computer instructions. These instructions can then be directly translated to a higher-level language that is more easily understood by humans like assembly, enabling further analysis to uncover the functionality and design of the software.
+Binary analysis is reverse engineering applied to binary programs, focusing on analyzing machine code in its executable form. Since a binary program represents software at its lowest level of abstraction, binary analysis is often the first step in reverse engineering such software. Understanding these programs requires knowledge of the target instruction set architecture, as the ISA provides a one-to-one mapping between binary code and computer instructions. These instructions can then be directly translated to a higher-level language that is more easily understood by humans like assembly, enabling further analysis to uncover the functionality and design of the software.
 
 ## Convolutional Neural Networks
 

@@ -1,6 +1,6 @@
 # Methodology
 
-This section defines the review protocol used for this structured literature review, and provides justification for the strategies used in the context of our research questions. We outline our methodology for identifying and selecting relevant studies, including inclusion criteria, quality assessment standards for primary sources, and the data extraction process. The overall review protocol is identical for the two parts of the literature review. Differences in inclusion criteria and data extraction are explained and justified. The review protocol is split into three phases:
+This section defines the review protocol used for this systematic literature review, and provides justification for the strategies used in the context of our research questions. We outline our methodology for identifying and selecting relevant studies, including inclusion criteria, quality assessment standards for primary sources, and the data extraction process. The overall review protocol is identical for the two parts of the literature review. Differences in inclusion criteria and data extraction are explained and justified. The review protocol is split into three phases:
 
 1. Research identification through database selection and querying
 2. Filtration and selection of primary studies based on inclusion criteria
