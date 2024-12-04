@@ -18,7 +18,7 @@ This review was in part commissioned by our supervisor Donn Morrison in preparat
 - Their presence on Scopus, which we consider a reputable scientific database
 - The possibility that our knowledge of existing research might influence further analysis if not included in the review
 
-<!-- TODO: Inital preliminary research n ML-ISA provided by our supervisor -->
+<!-- ER nå 76 results, så mer har blitt publisert. kanskje spesifisere dato søket fant sted -->
 
 \begin{table}
 \caption{Scopus search queries for each topic and result count}

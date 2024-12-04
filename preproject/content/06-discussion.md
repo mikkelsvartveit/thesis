@@ -39,17 +39,19 @@ Two papers used CNN binary analysis for detecting compiler optimization levels. 
 ## Analysis and interpretation
 
 <!-- - Architecture specific features, less transferable. Architecture agnostic©. -->
+
 The reviewed methods for ISA detection face two main limitations, namely their difficulty in separating similar architectures and potential lack of transferability to larger architecture sets. While the feature engineering approaches demonstrated strong performance even with basic linear classifiers, byte level n-gram feature based methods come with apparent challenges. BFD appears to struggle when separating classes of similar architectures, and this is a problem that ELISA and ISAdetect attempts to mitigate using architecture specific features [@Nicolao2018] [@Kairajarvi2020]. BFD works best on architectures with as different encoding of instructions as possible. We suspect that in case of IoT, embedded devices and custom hardware, BFD based approaches would struggle to separate classes of ISA extensions tailored for specific devices. Architecture specific feature engineering for each new included class of ISA does not appear to scale well in this context. Sahabandu et al.'s TF-IDF approach has more potential in this case, as similar architectures with minor, but important differences can be captured by the TF-IDF. However, a major limitation of Sahabandu et al.'s paper is the lack of reported performance on classification of each architecture. This makes it difficult to compare how well their method performed on similar architectures [@Sahabandu2023].
 
 <!-- - Dont need Deep learning for ISA detection? -->
+
 Deep learning approaches could potentially eliminate the need for architecture-specific feature engineering through automatic feature discovery. Based on the included ML-ISA papers, there was not an apparent need for deep learning for ISA classification from a list of known ISAs. However, architecture agnostic methods offers significant advantages in terms of transferability and scalability to new architectures. The main drawback with deep learning is the reliance on large datasets and longer training times compared to traditional ML approaches. However, the CNN-BCA part of the review highlights the potential in strategies like dataset augmentation and transfer learning, which could improve feasibility of a deep learning approach.
 
 <!-- - Reliance on ELF, is it realistic to always know ELF and .text section, both when training and testing? -->
 <!-- Er "lack of transparancy" litt harsh? -->
+
 Code section detection and reliance on header information has shown to impact the byte level n-gram features greatly. ISAdetects presents this discrepancy when testing on BFD's ability to work on real world scenarios where header information might be missing [@Kairajarvi2020]. The two other papers by Ma et al. and Sahabandu et al. seems to largely ignore this issue when discussing their results, only highlighting training on code only sections [@Ma2019] [@Sahabandu2023]. Combining ISAdetects results and the lack of transparency on this matters from those two papers, it appears that data sections provide detrimental amounts of noise to byte level n-gram features. From our analysis, Beckman and Haile's strategy of using uncertainty in classification across a sliding window seems to be a promising and simple code section detection method. This strategy does require training on code sections only in order for the model to be certain when analyzing sections of code [@Beckman2020]. However, none of the proposed ML methods found a way around this limitation regardless. ELISA's code section detection method seems promising at the cost of more implementation complexity. In this context however, their approach requires the classification of ISA before code section identification [@Nicolao2018]. A crucial unanswered question remains: the availability of code section location information when expanding the set of targeted ISAs. The current approaches demonstrate heavy reliance on header information that may not be consistently available.
 
 <!-- Hva med ISA specific features? kanskje kun research gaps -->
-
 
 Results strongly indicate that CNN architectures can be successfully used for binary analysis tasks. We also note that prior approaches achieve high accuracy even without manual feature engineering. This proves that CNNs indeed are able to automatically discover and learn patterns from binary machine code. However, a limitation in existing literature is that it is predominantly focused on malware. It remains to be seen how transferable these methods are to other binary code classification tasks. In addition, we observe that the malware datasets are quite imbalanced, and some of the existing literature fail to acknowledge this when evaluating the performance. Metrics like class-specific accuracy would be a useful benchmark to reveal whether the models developed exhibit a performance loss with underrepresented classes.
 
@@ -69,17 +71,20 @@ We hypothesize that deep learning approaches, and CNN in particular, have potent
 
 ## Limitations (of our work, methodology)
 
+<!--
 - Kun scopus
 - Bias in papers included from our supervisor.
 - IC and QA's affected by researcher bias during screening.
 - Qualitiative Research, based on our own experience in the flied, bias shit
+-->
+
+A potential limitation of our research is only using Scopus [@Scopus] as our database of choice for all data gathering for the review. Limiting ourselves to one database has the advantage of a standardized exportation format that we could use to great effect when structuring primary study selection and data extraction from the included articles. We consider Scopus to be a reputable source of high quality, peer-reviewed papers from all the major journals and conferences. However, we acknowledge that a single database increases the likelihood of bias in the study selection. We consider this risk to be acceptable, since preliminary searches found Scopus to encompass all relevant articles from IEEE, ACM and Science Direct, which also were considered as databases for primary source selection. The ML-ISA part of the review contained two articles not found in our search queries, provided to us by our supervisor. We acknowledge that despite carefully selecting search terms that fit our RQ's, there is a risk of having missed relevant research that influence the state-of-the-art.
+
+The application of inclusion criteria and quality assessment on the reviewed research is influenced by us as researchers. While the IC's and QA's were made and phrased such as to remove as much ambiguity as possible to keep our work reproducible, IC-3 on CNN-BCA and QA is inherently based on qualitative measures. They are influenced by researcher bias, and our prior experience in the field of software RE and ML might have affected our results. Analysis and interpretation of the results is also mostly based on qualitative measures. While we strive for objectivity and have documented our methodology and approaches, we cannot guarantee that other researchers from the field would reach the same conclusions.
 
 <!--
-
------------------------------------------------------------------
 Notes ml-isa
 
-  - Capturing features (clemens, NLP papers) across multiple bytes when counting require large feature vectors. encoding worked well for n-grams, ie  < 8bit as smallest unit. NLP paper does not have f1 scores, lot of grpahs, but lacks hard numbers for different architectures.
-    -
-  - SVM performed best, fast learning little data, nice with incomplete binaries reduce viable training data.
- -->
+- ## Capturing features (clemens, NLP papers) across multiple bytes when counting require large feature vectors. encoding worked well for n-grams, ie < 8bit as smallest unit. NLP paper does not have f1 scores, lot of grpahs, but lacks hard numbers for different architectures.
+- SVM performed best, fast learning little data, nice with incomplete binaries reduce viable training data.
+  -->
