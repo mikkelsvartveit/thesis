@@ -18,7 +18,6 @@ This review was in part commissioned by our supervisor Donn Morrison in preparat
 - Their presence on Scopus, which we consider a reputable scientific database
 - The possibility that our knowledge of existing research might influence further analysis if not included in the review
 
-<!-- ER nå 76 results, så mer har blitt publisert. kanskje spesifisere dato søket fant sted -->
 
 \begin{table}
 \caption{Scopus search queries for each topic and result count}
@@ -53,8 +52,6 @@ We assessed all 162 identified research papers using inclusion criteria and qual
 
 The ML-ISA inclusion criteria focuses on filtering out articles that do not require disassembling the binary prior to applying machine learning, as this requires detailed knowledge about the instruction set. In addition, for the article to be considered relevant, we require that the proposed method attempts to aid software reverse engineering. CNN-BCA inclusion criteria are less strict, and do not require the article to focus on reverse engineering specifically. We wish to discover ways of applying CNN to binary code directly, which predominantly implies excluding papers that require disassembled input. The specific inclusion criteria for both topics are:
 
-<!-- TODO: **(Some mention of quality assesment would be nice ? )** -->
-
 ML-ISA:
 
 1. The research attempts to reverse engineer or aid in reverse engineering of raw binaries.
@@ -66,6 +63,11 @@ CNN-BCA:
 1. The research applies CNN to binary code of some sort.
 2. The method does not require reverse engineering of the binary prior to analysis.
 3. The method is not overly specialized for a specific task to the point where it would prevent transferability to other target features.
+
+As for quality assessment, we focus on evaluating the reporting quality of the included studies using two primary criteria. We examine whether there is a clear statement of research goals, which ensures that objectives and scope of the article is clearly defined. We also want included papers to be contextualized within existing research, that it is built upon existing knowledge and contributes to the field. The specific quality assessment criteria are:
+
+1. Is there is a clear statement of the aim of the research?
+2. Is the study is put into context of other studies and research?
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
@@ -89,4 +91,4 @@ In this subsection, we provide a short description of how the remaining 26 prima
 
 Based on this and our research questions, we label each paper based on categories relevant for answering our research questions. The categories used for the ML-ISA part of the review are machine learning architecture (**RQ1.1**), notable feature engineering techniques (**RQ1.2**), datasets (**RQ1.3**), and type of ISA identification or main contributions (**RQ1.3**). Relevant information for each research question is gathered and synthesized into the three topics presented in our results: Feature engineering & extraction, machine learning architecture, and ISA classification targets.
 
-In the CNN-BCA part of the review, we label the articles with datasets (**RQ2.1**), encoding strategies of the binary files (**RQ2.2**)**, **CNN architecture designs (**RQ2.3**), and use of pre-trained models (**RQ2.3**)**. **To compare the performance of the different approaches (**RQ2.4**), we group and list performance metrics for studies in similar domains that target the same feature. We choose to gather and report accuracy, precision, recall, and F1-scores of all studies where a performance comparison makes sense, i.e. given similar datasets and target features. Qualitative data is synthesized into four topics: applications, encoding of binary data, transfer learning, and CNN variations.
+In the CNN-BCA part of the review, we label the articles with datasets (**RQ2.1**), encoding strategies of the binary files (**RQ2.2**), CNN architecture designs (**RQ2.3**), and use of pre-trained models (**RQ2.3**). To compare the performance of the different approaches (**RQ2.4**), we group and list performance metrics for studies in similar domains that target the same feature. We choose to gather and report accuracy, precision, recall, and F1-scores of all studies where a performance comparison makes sense, i.e. given similar datasets and target features. Qualitative data is synthesized into four topics: applications, encoding of binary data, transfer learning, and CNN variations.
