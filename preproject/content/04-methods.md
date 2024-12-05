@@ -12,7 +12,7 @@ Multiple research databases were considered, with our primary concern being incl
 
 Using the "Advanced Search" feature in Scopus, we combine relevant keywords from both of our topics into two separate search queries, one of them covering machine learning for ISA detection (hereby referred to as ML-ISA) and the other covering CNN applied to binary code analysis (hereby referred to as CNN-BCA). The search terms are grouped based on similarity and combined in conjunctive normal form. The full queries and the number of results for each are shown in Table \ref{table:search-queries}.
 
-This review was in part commissioned by our supervisor Donn Morrison in preparation for our master’s thesis. We were provided a list of relevant papers as part of the preliminary search. The purpose of this was to gain an overview of the field of machine learning aided reverse engineering. While we consider our search queries for the ML-ISA part of the review to encapsulate our goals in **RQ1**, some notable papers from the preparation phase did not show up in our search results. The papers in question are ELISA [@Nicolao2018] and Ma et al. [@Ma2019]. These articles are available on Scopus, but the chosen search terms did not match the in the title, abstract, or keywords of these studies. We have decided to include these papers in our review due to:
+This review was in part commissioned by our supervisor Donn Morrison in preparation for our master’s thesis. We were provided a list of relevant papers as part of the preliminary search. The purpose of this was to gain an overview of the field of machine learning aided reverse engineering. While we consider our search query for the ML-ISA part of the review to encapsulate our goals presented in **RQ1**, some notable papers from the preparation phase did not show up in our search results. The papers in question are ELISA [@Nicolao2018] and Ma et al. [@Ma2019]. The two articles are available on Scopus, but the chosen search terms did not match in the title, abstract, or keywords of these studies. We have decided to include these papers in our review due to:
 
 - Their high relevancy for our research questions
 - Their presence on Scopus, which we consider a reputable scientific database
@@ -64,7 +64,7 @@ CNN-BCA:
 2. The method does not require reverse engineering of the binary prior to analysis.
 3. The method is not overly specialized for a specific task to the point where it would prevent transferability to other target features.
 
-As for quality assessment, we focus on evaluating the reporting quality of the included studies using two primary criteria. We examine whether there is a clear statement of research goals, which ensures that objectives and scope of the article is clearly defined. We also want included papers to be contextualized within existing research, that it is built upon existing knowledge and contributes to the field. The specific quality assessment criteria are:
+As for quality assessment, we focus on evaluating the reporting quality of the included studies using two primary criteria. We examine whether there is a clear statement of research goals, which ensures that objectives and scope of the article is clearly defined. We also want included papers to be contextualized within existing research, that it is built upon existing knowledge, and contributes to the field. The specific quality assessment criteria are:
 
 1. Is there is a clear statement of the aim of the research?
 2. Is the study is put into context of other studies and research?

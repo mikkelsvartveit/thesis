@@ -10,11 +10,9 @@ Most of the feature engineering and feature extraction approaches identified are
 
 In order to tackle BFDs' inability to differentiate architectures with different endianness, Clemens introduces a heuristic approach based on common immediate values. Increment and decrement by one is an operation that is commonly encountered in computer programs. The immediate values 1 and -1 are encoded as 0x0001 and 0xFFFE in big endian, while their little endian counterparts are 0x0100 and 0xFEFF. These endianness-specific patterns are counted and added to the original 256-dimensional BFD feature vector, expanding it to 260 dimensions for input into the machine learning models. With this addition, overall accuracy on the best performing classifiers increases from ~93% to ~98%, mainly due to the improvement in correctly distinguishing MIPS and MIPSEL [@Clemens2015]. ELISA [@Nicolao2018], Beckman & Haile [@Beckman2020], and ISAdetect [@Kairajarvi2020] all use BFD in combination with the endianness heuristic as the basis for their approaches.
 
-ELISA [@Nicolao2018] and ISAdetect [@Kairajarvi2020] augment their models with architecture specific features to help classify ISAs. Both use known function prologues and epilogue signatures for all architectures documented by the binary analysis platform angr [@Angr2016]. The authors of ELISA note that these architecture specific features do improve accuracy, but at the cost of manually defining function signatures for all ISAs the models would be designed to classify. These features are deemed as optional, due to the goal of "good results _without_ ISA-specific knowledge" [@Nicolao2018]. ISAdetect also include specific signatures for the PowerPCSPE architecture. However, the authors do not provide rationale for this inclusion, nor do the results show any significant improvement based on it ^[Likely due to the similarities between PowerPC and PowerPCSPE]<!-- TODO: Åpenbart at det er en issue med powerpc vs powerpcspe, men står ikke noe sted (står i preprint artikkelen, men den er jo ikke inkludert) burde vi beholde en fot fotnote her? -->[@Kairajarvi2020].
+ELISA [@Nicolao2018] and ISAdetect [@Kairajarvi2020] augment their models with architecture specific features to help classify ISAs. Both use known function prologues and epilogue signatures for all architectures documented by the binary analysis platform angr [@Angr2016]. The authors of ELISA note that these architecture specific features do improve accuracy, but at the cost of manually defining function signatures for all ISAs the models would be designed to classify. These features are deemed as optional, due to the goal of "good results _without_ ISA-specific knowledge" [@Nicolao2018]. ISAdetect also include specific signatures for the PowerPCSPE architecture. However, the authors do not provide rationale for this inclusion, nor do the results show any significant improvement based on it ^[Likely due to the similarities between PowerPC and PowerPCSPE] [@Kairajarvi2020].
 
 Ma et al. [@Ma2019] and their SVM-IBPS model target typical grid device firmware architectures for ISA classification. The authors note that most grid device firmware run on RISC instruction sets like ARM, Alpha, PowerPC, MIPS, and SPARC, which typically has instructions widths of 4 bytes. Knowing this, SVM-IBPS divides the binary programs into 4-byte chunks, and processes each chunk with a text classification technique called information gain. The model achieves a 100% and 99.0% classification accuracy on a self-compiled dataset and the proprietary FirmwareSet, respectively. The authors do not comment on the model's scalability to a wider range of ISAs like CISC, as their dataset only includes three 4-byte instruction width architectures [@Ma2019].
-
-<!-- TODO: Beckman & haile brute entropy filter (fra BinWalk) for å fjerne deler av binaries med apparent mye noise. De claimer at det ga gode resultater. -->
 
 Sahabandu et al. [@Sahabandu2023] proposes another byte level feature extraction method, inspired by natural language processing. In their paper they used N-gram Term Frequency Inverse Document Frequency (TF-IDF) for ISA identification, where the product of term frequency (TF) and inverse document frequencies (IDF) for all 1-grams, 2-grams, and 3-grams are computed. The author motivates their approach by stating that N-grams that often appear in a smaller subset of input binaries have a high chance of capturing defining patterns for each architecture. 2-grams and 3-grams preserve information across consecutive bytes, and they found that TF-IDF is able to distinguish between similar architectures with different endianness as well. Sahabandu et al. used all 1-grams and 2-grams as input, as well as the top 5000 3-grams, resulting in a feature vector of length $256+256^2+5000 = 70792$. They were able to achieve 99% and 98% classification accuracies on the Praetorian and Clemens datasets, respectively. The authors also experimented with different base-encoding of binaries to reduce the feature count, decreasing it by a factor of $1/16$ while maintaining high accuracy [@Sahabandu2023].
 
@@ -24,82 +22,15 @@ Clemens [@Clemens2015], Ma et al. [@Ma2019], ISAdetect [@Kairajarvi2020], Beckma
 
 Even though SVM, Logistic Regression, and Decision Tree-based models perform the best, the studies do not focus much on details such as hyperparameter selection. It is clear that the main focus of the reviewed research is feature engineering, where SVM happens to be most proficient in capturing ISA information from the previously presented byte-level N-gram features.
 
-<!-- TODO
-
-| ML_model                          | paper count | result clemens dataset | which papers |
-| --------------------------------- | ----------- | ---------------------- | ------------ |
-| SVM                               |             |                        |              |
-| Decision Tree                     |             |                        |              |
-| Random Tree                       |             |                        |              |
-| Random Forest                     |             |                        |              |
-| Naive Bayes (incl. GNB, MNB, CNB) |             |                        |              |
-| BayesNet                          |             |                        |              |
-| Logistic Regression               |             |                        |              |
-| Neural Network (feed forward)     |             |                        |              |
-| K-Nearest Neighbors               |             |                        |              |
-| AdaBoost                          |             |                        |              |
--->
-
-<!--
-Traditional ML approaches:
-
-- SVM (5 av 6 papers, med strong performance)
-- Random Forests
-- Logistic Regression
-- K-Nearest Neighbors (KNN)
-- Decision Trees
-- Neural Nets, simple feed forward. (some papers comment on overfitting)
-
-Sequential Learning
-
-- Conditional Random Fields (for code sections
-- Markov models for opcode pattern detection) -->
-
-<!-- TODO: Bedre tittel. Vil diskutere hva er det papersene prøver å classifie (bare at alle gjorde det samme (isa classification)) -->
-
 ### ISA classification targets
 
-All six papers included in the review attempted to classify the instruction set architecture of binary programs from a list of known ISAs. The general objective of the papers was ISA detection through multiclass classification on datasets ranging from 3 to 23 architectures, rather than detecting specific ISA features from the binaries. The most commonly included architectures were RISC-based ISAs – ARM, MIPS, and PowerPC – and the most notable CISC-based ISA was X86_amd64. The ARM-based architectures ARM32, ARM64, MIPS, and PowerPC were represented in all studies. We see the widest range of ISAs in the studies by Clemens (20) [@Clemens2015], ELISA (21) [@Nicolao2018], ISAdetect (23) [@Kairajarvi2020], and Sahabandu et al. (12 and 23 across two datasets) [@Sahabandu2023]. These are all byte-level N-gram feature based approaches, and their results found no significant difference in accuracy when comparing different architecture types such as 32-bit versus 64-bit word size, and RISC versus CISC instruction sets. Most of the differences in classification accuracy came from ISAs with similar opcodes but different endianness, or lack of training data for architectures like CUDA in Clemens' dataset.
+All six papers included in the review attempted to classify the instruction set architecture of binary programs from a list of known ISAs. The general objective of the papers was ISA detection through multiclass classification on datasets ranging from 3 to 23 architectures, rather than detecting specific ISA features from the binaries. The most commonly included architectures were RISC-based ISAs – ARM, MIPS, and PowerPC – and the most notable CISC-based ISA was X86_amd64. The ARM-based architectures ARM32, ARM64, MIPS, and PowerPC were represented in all studies. We see the widest range of different ISAs in the studies by Clemens (20) [@Clemens2015], ELISA (21) [@Nicolao2018], ISAdetect (23) [@Kairajarvi2020], and Sahabandu et al. (12 and 23 across two datasets) [@Sahabandu2023]. These are all byte-level N-gram feature based approaches, and their results found no significant difference in accuracy when comparing different architecture types such as 32-bit versus 64-bit word size, and RISC versus CISC instruction sets. Most of the differences in classification accuracy came from ISAs with similar opcodes but different endianness, or lack of training data for architectures like CUDA in Clemens' dataset.
 
-In terms of targeted ISA features, none of the studies were aimed at identifying specific features of an ISA, like instruction width, word size, RISC vs CISC, et cetera. However, a key differentiator between the approaches was their handling of endianness detection. Clemens [@Clemens2015] first introduced specific endianness features by analyzing byte patterns like 0x0001 vs 0x0100. ELISA [@Nicolao2018] and Beckman & Haile [@Beckman2020] adopted and simplified Clemens' endianness features, while Sahabandu et al. [@Sahabandu2023] developed character-level features that could inherently capture endianness information. Endianness detection was motivated by augmenting the existing feature-sets to help distinguish between similar architectures, like MIPS and MIPSEL. However, none of the authors comments on evaluating endianness detection in isolation or across architectures that support multiple endianness configurations like ARM and PowerPC. <!-- https://developer.arm.com/documentation/den0013/d/Porting/Endianness?lang=en -->
+In terms of targeted ISA features, none of the studies were aimed at identifying specific features of an ISA, like instruction width, word size, RISC vs CISC, et cetera. However, a key differentiator between the approaches was their handling of endianness detection. Clemens [@Clemens2015] first introduced specific endianness features by analyzing byte patterns like 0x0001 vs 0x0100. ELISA [@Nicolao2018] and Beckman & Haile [@Beckman2020] adopted and simplified Clemens' endianness features, while Sahabandu et al. [@Sahabandu2023] developed character-level features that could inherently capture endianness information. Endianness detection was motivated by augmenting the existing feature-sets to help distinguish between similar architectures, like MIPS and MIPSEL. However, none of the authors comments on evaluating endianness detection in isolation or across architectures that support multiple endianness configurations like ARM and PowerPC [@ARMendianness].
 
-Studies included in this review take different approaches to training and evaluation on code sections versus data sections in binaries. While file formats like ELF are not directly linked to ISA, the handling of these sections varies significantly across studies. The key differences lie in whether researchers train on code sections and/or validate/test on whole binaries versus code-only sections. Clemens uses ELF headers to identify code sections and conducts training and testing on code only sections [@Clemens2015]. Ma et al. also use ELF headers in the training set to identify code sections, while noting that file header information is likely to be missing in real-world grid device firmware for security reasons. However, they do not specify whether testing is done on full binaries or code-only sections [@Ma2019]. Similarly, Sahabandu mentions the likelihood of missing file header information in real-world applications, but appears to do both training and testing on code-only sections [@Sahabandu2023]. Clemens, Ma et al., and Sahabandu do not explicitly state how they differentiate their training-testing split in terms of code sections versus whole files. ISAdetect takes a more comprehensive approach by explicitly investigating the difference between testing on code-only sections and full binary files (including .data sections). Their results revealed reduced performance when testing on whole binaries, with SVM accuracy dropping from 99.7% to 73.2%, while even the best-performing model, Random Forest, only achieved 90.1% [@Kairajarvi2020]. <!-- TODO: Dette er egt litt significant. Highlighter viktigheten av å finne code section -->
+Studies included in this review take different approaches to training and evaluation on code sections versus data sections in binaries. While file formats like ELF are not directly linked to ISA, the handling of these sections varies significantly across studies. The key differences lie in whether researchers train on code sections and/or validate/test on whole binaries versus code-only sections. Clemens uses ELF headers to identify code sections and conducts training and testing on code only sections [@Clemens2015]. Ma et al. also use ELF headers in the training set to identify code sections, while noting that file header information is likely to be missing in real-world grid device firmware for security reasons. However, they do not specify whether testing is done on full binaries or code-only sections [@Ma2019]. Similarly, Sahabandu mentions the likelihood of missing file header information in real-world applications, but appears to do both training and testing on code-only sections [@Sahabandu2023]. Clemens, Ma et al., and Sahabandu do not explicitly state how they differentiate their training-testing split in terms of code sections versus whole files. ISAdetect takes a more comprehensive approach by explicitly investigating the difference between testing on code-only sections and full binary files (including .data sections). Their results revealed reduced performance when testing on whole binaries, with SVM accuracy dropping from 99.7% to 73.2%, while even the best-performing model, Random Forest, only achieved 90.1% [@Kairajarvi2020]. 
 
-ELISA [@Nicolao2018] and Beckman & Haile [@Beckman2020], on the other hand, address the challenge of identifying code sections within binaries. ELISA introduced a two-phase approach using Conditional Random Fields to first identify code sections and then perform fine-grained code discovery within those sections [@Nicolao2018]. Beckman & Haile introduced "architectural agreement" to identify code sections within binaries. Their method divided binaries into overlapping chunks using a rolling window technique and analyzed each chunk with their machine learning model. Areas where the model consistently predicted the same architecture across multiple windows were likely to contain executable code, since data sections would give more random results due to lacking architectural patterns [@Beckman2020]. Although binary file formats are not directly tied to ISA or ISA feature detection, the ability to analyze arbitrary binaries without relying on headers or known code sections has practical value. This capability can improve analysis of partial binaries, firmware images, and other real-world scenarios where section information may be missing or unreliable, as shown by ISAdetect's comparisons [@Kairajarvi2020].
-
-<!-- TODO
-
-| paper         | Training with code secion | Evaluate on code section | Evaluate on whole binaries |
-| ------------- | ------------------------- | ------------------------ | -------------------------- |
-| Clemens       |                           |                          |                            |
-| Elisa         |                           |                          |                            |
-| Ma2019        |                           |                          |                            |
-| beckman       |                           |                          |                            |
-| NLP sahabandu |                           |                          |                            |
-| ISAdetect     |                           |                          |                            |
-
-Basic isa classification
-
-- Core isa family (ARM, x86, Mips etc)
-- Word size, RISC vs CISC (variable vs fixed instruction width)
-- Which papers uses elf header to find code section?
-
-Datasets - Clemens, ISAdetect, Ma2019, Praetorian
-
-Endianness
-
-- Mips vs mipsel
-- 0x0001 heuristic most common. Huge boost in classification accuracy (clemens, kanskje obvious men idk)
-- Endiannes agnostic approches?
-
-Code section identification:
-- Føler det har stor nok sannsynlighet for å være relevant for fremtiden, at vi ikke kun gjør greiene våre på .data seksjon liksom.
-
-Beckman & haile untrained architecture.
-
--->
-
-<!-- ### Datasets -->
+ELISA [@Nicolao2018] and Beckman & Haile [@Beckman2020], on the other hand, address the challenge of identifying code sections within binaries. ELISA introduced a two-phase approach using Conditional Random Fields to first identify code sections and then perform fine-grained code discovery within those sections. However, they trained different code section detection models for each included ISA. When presented with a binary of unknown ISA, their code section detection methods required them to make the correct ISA classification first [@Nicolao2018]. Beckman & Haile introduced "architectural agreement" to identify code sections within binaries. Their method divided binaries into overlapping chunks using a rolling window technique and analyzed each chunk with their machine learning model. Areas where the model consistently predicted the same architecture across multiple windows were likely to contain executable code, since data sections would give more random results due to lacking architectural patterns [@Beckman2020]. Although binary file formats are not directly tied to ISA or ISA feature detection, the ability to analyze arbitrary binaries without relying on headers or known code sections has practical value. This capability can improve analysis of partial binaries, firmware images, and other real-world scenarios where section information may be missing or unreliable, as shown by ISAdetect's comparisons [@Kairajarvi2020].
 
 ## CNN applied to binary code
 
