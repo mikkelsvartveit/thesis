@@ -7,7 +7,7 @@ subtitle: |
   Department of Computer Science\
   Norwegian University of Science and Technology\
   Trondheim, Norway
-date: \today
+date: November 19, 2024
 author:
   - Stian Sulebak
   - Mikkel Svartveit

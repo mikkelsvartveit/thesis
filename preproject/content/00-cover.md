@@ -1,16 +1,19 @@
 ---
 title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Systematic Literature Review"
 subtitle: |
-  Specialization Project\
+  \vspace{0.2cm}
+  TDT4501 – Computer Science, Specialization Project\
+  \vspace{0.1cm}
+  Fall 2024\
   \vspace{1cm}
   ![NTNU Logo](./images/ntnu.png){ width=12% }\
-  \vspace{0.5cm}
+  \vspace{0.3cm}
   \small
-  Department of Computer Science\
   Norwegian University of Science and Technology\
-  Trondheim, Norway\
+  Supervised by Donn Morrison\
+  \vspace{0.3cm}
 date: |
-  \today
+  December 11, 2024
   \vspace{2.5cm}
 author:
   - Stian J. Sulebak
