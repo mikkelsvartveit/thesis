@@ -34,7 +34,7 @@ The most common application for applying CNN to binary code is malware classific
 
 Moreover, transfer learning approaches have been employed to great success. Comparisons show that a pre-trained VGG-16 architecture with a small fully-connected network performs the same or better than CNNs trained from scratch [@Kumari2017] [@Prima2021]. Another study compared eight different pre-trained CNN architectures and concluded that VGG-16 performed the best [@El-Shafai2021].
 
-Two papers used CNN binary analysis for detecting compiler optimization levels. Interestingly, their encoding approach differs from most of the malware classification research. Instead of converting the bytes to an image, they used a one-dimensional CNN with a word embedding layer at the beginning of the network.
+Two papers used CNN binary code analysis for detecting compiler optimization levels. Interestingly, their encoding approach differs from most of the malware classification research. Instead of converting the bytes to an image, they used a one-dimensional CNN with a word embedding layer at the beginning of the network.
 
 ## Analysis and interpretation
 
@@ -51,7 +51,7 @@ Code section detection and reliance on header information has shown to impact th
 
 <!-- Hva med ISA specific features? kanskje kun research gaps -->
 
-Our results strongly indicate that CNN architectures can be successfully used for binary analysis tasks. We also note that prior approaches achieve high accuracy even without manual feature engineering. This proves that CNNs indeed are able to automatically discover and learn patterns from binary machine code. However, a limitation in existing literature is that it is predominantly focused on malware. It remains to be seen how transferable these methods are to other binary code classification tasks. In addition, we observe that the malware datasets are quite imbalanced, and some of the existing literature fail to acknowledge this when evaluating the performance. Metrics like class-specific accuracy would be a useful benchmark to reveal whether the models developed exhibit a performance loss with underrepresented classes.
+Our results strongly indicate that CNN architectures can be successfully used for binary code analysis tasks. We also note that prior approaches achieve high accuracy even without manual feature engineering. This proves that CNNs indeed are able to automatically discover and learn patterns from binary machine code. However, a limitation in existing literature is that it is predominantly focused on malware. It remains to be seen how transferable these methods are to other binary code classification tasks. In addition, we observe that the malware datasets are quite imbalanced, and some of the existing literature fail to acknowledge this when evaluating the performance. Metrics like class-specific accuracy would be a useful benchmark to reveal whether the models developed exhibit a performance loss with underrepresented classes.
 
 That said, there is reason to believe that methods for detecting of compiler optimization levels might be more transferable to ISA related classification tasks. Since compiler optimization does not alter the behavior of the program, but rather optimize the specific implementation of machine code, we hypothesize that these approaches might be preferred for ISA feature classification.
 

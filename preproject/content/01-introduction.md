@@ -2,12 +2,6 @@
 
 ## Rationale
 
-<!--
-  - Why reverse engineering is important, usecases, embedded systems, Binary analysis is first step of RE
-
-  - IoT and embedded diverse architectures, hard to develop one fits all. ML aids in this field, features.
--->
-
 <!-- TODO: ikke nødvendigvis compiled form? -->
 
 Software reverse engineering is the process of analyzing and understanding how existing software works by examining its compiled form, with the goal of discovering features and functionality from it [@Chikofsky1990]. We rely on compiled software all the time, often unaware of its underlying source code. For these programs, reverse engineering is crucial for uncovering security vulnerabilities, verifying and assuring quality of programs, and analyzing systems for compatibility or interoperability.
@@ -20,14 +14,14 @@ Our preliminary literature searches indicate that CNN has been applied to softwa
 
 ## Objectives
 
-This work aims to explore the viability of leveraging convolutional neural networks for identifying ISA features from unknown software binaries. We hypothesize that the structure of binary code exhibit spatial patterns that can be discovered and learned by a CNN. With this objective in mind, we present a two-fold systematic literature review. First, we will examine prior attempts at using machine learning techniques for detecting ISA features from compiled software binaries. Then, we will analyze existing research that utilizes CNN for classifying binary code. More specifically, we aim to answer the following research questions:
+This work aims to explore the viability of leveraging CNN for identifying ISA features from unknown software binaries. We hypothesize that the structure of binary code exhibit spatial patterns that can be discovered and learned by a CNN. With this objective in mind, we present a two-fold systematic literature review. First, we will examine prior attempts at using machine learning techniques for detecting ISA features from compiled software binaries. Then, we will analyze existing research that utilizes CNN for classifying binary code. More specifically, we aim to answer the following research questions:
 
 > **RQ1**: What machine learning approaches have been proposed for discovering ISA information from binary programs? How do the identified approaches compare with respect to:
 >
 > > **RQ1.1**: the machine learning techniques and architectures employed? \newline
 > > **RQ1.2**: their prerequisites, preprocessing, and assumptions about the binary programs? \newline
 > > **RQ1.3**: the types of ISA features they can identify? \newline
-> > **RQ1.4**: their performance metrics for discovered ISA features? \newline <!-- TODO: Brukes trenger vi denne? -->
+> > **RQ1.4**: their evaluation and reported performance? \newline <!-- TODO: Brukes trenger vi denne? -->
 
 > **RQ2:** What approaches for applying CNN to raw binary code analysis have been explored in existing literature? How do the identified CNN approaches compare with respect to:
 >
