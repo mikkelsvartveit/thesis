@@ -20,24 +20,24 @@ This review was in part commissioned by our supervisor Donn Morrison in preparat
 
 
 \begin{table}
+\def\arraystretch{2}
 \caption{Scopus search queries for each topic and result count}
 \label{table:search-queries}\tabularnewline
+\vspace{0.5cm}
 \centering
-\begin{tabular}{ |c|m{0.7\textwidth}|c| }
+\begin{tabular}{ m{0.15\textwidth} m{0.7\textwidth} c }
 \hline
 Topic & Query & Results \\
 \hline
 ML-ISA
 & TITLE-ABS-KEY(( "machine learning" OR "deep learning" OR "neural network" ) AND \ ( "binary files" OR "binary code" OR "object code" OR "machine code" OR "binary program" ) AND \ ( "ISA" OR "instruction set" OR "target architecture" OR "reverse engineering" ))
 & 74 \\
-\hline
+Preliminary ML-ISA search
+& Supplied by our supervisor, Donn Morrison
+& 2 \\
 CNN-BCA
 & TITLE-ABS-KEY(( "CNN" OR "convolutional neural network" ) AND ( "object code" OR "machine code" OR "binary file" OR "binary program" ))
 & 86 \\
-\hline
-Preliminary search
-& Supplied by our supervisor, Donn Morrison
-& 2 \\
 \hline
 \end{tabular}
 \end{table}
