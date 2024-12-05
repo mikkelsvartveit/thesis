@@ -3,7 +3,7 @@
 This section defines the review protocol used for this systematic literature review, and provides justification for the strategies used in the context of our research questions. We outline our methodology for identifying and selecting relevant studies, including inclusion criteria, quality assessment standards for primary sources, and the data extraction process. The overall review protocol is identical for the two parts of the literature review. Differences in inclusion criteria and data extraction are explained and justified. The review protocol is split into three phases:
 
 1. Research identification through database selection and querying
-2. Filtration and selection of primary studies based on inclusion criteria
+2. Filtration and selection of primary studies based on inclusion criteria and quality assessment
 3. Data extraction and synthesis
 
 ## Database and search queries
@@ -45,13 +45,13 @@ Preliminary search
 
 ## Inclusion criteria and quality assessment
 
-All 162 identified research papers across the two parts of our review are assessed using inclusion and quality criteria, and excluded from the review if the article is found to be irrelevant. This leaves us with a selection of high quality and highly relevant primary studies to be further analyzed in the review. The inclusion criteria (IC) and quality criteria (QC) were selected based on our research questions for each topic, and applied through three steps:
+We assessed all 162 identified research papers using inclusion criteria and quality assessment, excluding those found to be irrelevant to our two-part review. This leaves us with a selection of high quality and highly relevant primary studies to be further analyzed in the review. The inclusion criteria were selected based on our research questions for each topic. Articles were filtered through three steps:
 
-- Exclusion of papers after applying IC on the abstract
-- Exclusion of papers after applying IC on full-text
-- Exclusion of papers after QC on full-text
+- Exclusion of papers after applying inclusion criteria on the abstract
+- Exclusion of papers after applying inclusion criteria on full text
+- Exclusion of papers after quality assessment on full text
 
-The ML-ISA inclusion criteria focuses on filtering out articles that do not require disassembling the binary prior to applying machine learning, as this requires detailed knowledge about the instruction set. In addition, for the article to be considered relevant, we require that the proposed method attempts to aid software reverse engineering. CNN-BCA inclusion criteria are less strict, and do not require the article to focus on reverse engineering specifically. We wish to discover ways of applying CNN to binary code directly, which predominantly implies excluding papers that require disassembled input. The specific IC and QC for both topics are:
+The ML-ISA inclusion criteria focuses on filtering out articles that do not require disassembling the binary prior to applying machine learning, as this requires detailed knowledge about the instruction set. In addition, for the article to be considered relevant, we require that the proposed method attempts to aid software reverse engineering. CNN-BCA inclusion criteria are less strict, and do not require the article to focus on reverse engineering specifically. We wish to discover ways of applying CNN to binary code directly, which predominantly implies excluding papers that require disassembled input. The specific inclusion criteria for both topics are:
 
 <!-- TODO: **(Some mention of quality assesment would be nice ? )** -->
 
@@ -69,19 +69,19 @@ CNN-BCA:
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
-| IC (Abstract)      |                76 |                43 |
-| IC (Full-text)     |                33 |                25 |
+| Abstract           |                76 |                43 |
+| Full text          |                33 |                25 |
 | Included in review |             **6** |                 – |
 
-Table: Articles remaining after applying inclusion criteria for ML-ISA primary studies. \label{table:ml-isa-exclusion-results}
+Table: Articles remaining after applying inclusion criteria and quality assessment for ML-ISA primary studies. \label{table:ml-isa-exclusion-results}
 
 | Screening step     | Articles reviewed | Articles excluded |
 | ------------------ | ----------------: | ----------------: |
-| IC (Abstract)      |                86 |                46 |
-| IC (Full-text)     |                40 |                20 |
+| Abstract           |                86 |                46 |
+| Full text          |                40 |                20 |
 | Included in review |            **20** |                 – |
 
-Table: Articles remaining after applying inclusion criteria for CNN-BCA primary studies. \label{table:cnn-exclusion-results}
+Table: Articles remaining after applying inclusion criteria and quality assessment for CNN-BCA primary studies. \label{table:cnn-exclusion-results}
 
 ## Data extraction process
 
