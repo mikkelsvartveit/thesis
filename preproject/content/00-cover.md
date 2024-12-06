@@ -48,6 +48,7 @@ include-before: |
 
 header-includes:
   - \usepackage{array}
+  - \usepackage[all]{nowidow}
 ---
 
 \pagebreak
