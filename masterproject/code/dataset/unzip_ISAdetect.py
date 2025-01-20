@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Union, List
 
 # Set the fixed destination directory
-DEST_DIR = Path("./test/dest")
+DEST_DIR = Path("./ISAdetect")
 
 def get_basename(filepath: Union[str, Path]) -> str:
     """Get the base name without .tar.gz extension."""
