@@ -1,0 +1,4 @@
+{
+  "latex-citations.customPatterns": ["[@"],
+  "python.defaultInterpreterPath": "./masterproject/code/.venv"
+}

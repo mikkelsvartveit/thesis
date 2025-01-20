@@ -1,0 +1,9 @@
+datatypes
+Chikofsky
+endianness
+endian
+endianness-specific
+Endianness
+Haile
+Sahabandu
+ISAdetect
