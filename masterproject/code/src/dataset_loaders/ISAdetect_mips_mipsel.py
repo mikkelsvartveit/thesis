@@ -50,17 +50,11 @@ class BinaryFileDataset(Dataset):
 class BytePatternTransform:
     def __init__(self):
         self.patterns = [
-            b"\xa1\xd1",  # 0x0001
-            b"\xb1\x2a",  # 0x0100
-            b"\x1e\x87",  # 0x0100
-            b"\x2f\x71",  # 0x1011
+            b"\x00\x01",  # 0x0001
+            b"\x01\x00",  # 0x0100
+            b"\xfe\xff",  # 0x0100
+            b"\xff\xfe",  # 0x1011
         ]
-        """ self.patterns = [
-            b'\x00\x01',  # 0x0001
-            b'\x01\x00',  # 0x0100
-            b'\xfe\xff',  # 0x0100
-            b'\xff\xfe'   # 0x1011
-        ] """
 
     def __call__(self, data):
         # Convert data to bytes if it's not already
@@ -108,6 +102,7 @@ def create_train_test_dataloaders(
         shuffle=True,
         num_workers=num_workers,
         pin_memory=True,
+        prefetch_factor=2,
     )
 
     test_loader = DataLoader(
@@ -116,6 +111,7 @@ def create_train_test_dataloaders(
         shuffle=False,  # No need to shuffle test data
         num_workers=num_workers,
         pin_memory=True,
+        prefetch_factor=2,
     )
 
     return train_loader, test_loader
