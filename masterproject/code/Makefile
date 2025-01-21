@@ -1,4 +1,4 @@
 .PHONY: format
 
 format:
-	black ./src/
+	poetry run black ./src/
