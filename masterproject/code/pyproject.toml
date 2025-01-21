@@ -7,7 +7,7 @@ authors = [
     {name = "Stian Jørstad Sulebak",email = "stianjsu@gmail.com"}
 ]
 requires-python = "==3.12.8"
-dependencies = ["torch (==2.2.2)", "torchvision (==0.17.2)", "torchaudio (==2.2.2)", "numpy (==1.26.4)", "ipykernel (>=6.29.5,<7.0.0)", "jupyter (>=1.1.1,<2.0.0)"]
+dependencies = ["torch (==2.2.2)", "torchvision (==0.17.2)", "torchaudio (==2.2.2)", "numpy (==1.26.4)", "ipykernel (>=6.29.5,<7.0.0)", "jupyter (>=1.1.1,<2.0.0)", "black[jupyter] (>=24.10.0,<25.0.0)"]
 
 
 [build-system]
