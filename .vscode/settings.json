@@ -1,4 +1,8 @@
 {
   "latex-citations.customPatterns": ["[@"],
-  "python.defaultInterpreterPath": "./masterproject/code/.venv"
+  "python.defaultInterpreterPath": "./masterproject/code/.venv",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  }
 }
