@@ -1,3 +1,3 @@
-from .mips_mipsel import MIPSModel
+from .mips_mipsel import EndiannessModel
 
-__all__ = ['MIPSModel']
+__all__ = ['EndiannessModel']
