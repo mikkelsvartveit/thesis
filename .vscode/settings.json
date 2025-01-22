@@ -4,5 +4,9 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true
+  },
+  "notebook.formatOnSave.enabled": true,
+  "files.exclude": {
+    "**/__pycache__": true
   }
 }
