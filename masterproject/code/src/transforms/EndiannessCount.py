@@ -1,6 +1,7 @@
 from typing_extensions import Buffer
 import torch
 import numpy as np
+from torch import Tensor
 
 
 class EndiannessCount:
@@ -12,14 +13,14 @@ class EndiannessCount:
             b"\xff\xfe",  # 0x1011
         ]
 
-    def __call__(self, data: np.ndarray | Buffer) -> torch.Tensor:
-        # ensure np array
-        if not isinstance(data, np.ndarray):
-            data = np.frombuffer(data, dtype=np.uint8)
+    def __call__(self, data: torch.Tensor) -> torch.Tensor:
+        # ensure tensor
+        if not isinstance(data, torch.Tensor):
+            raise ValueError(
+                "data is not a torch.Tensor. Check that dataset returns tensor"
+            )
 
-        # Convert data to bytes if it's not already
-        if isinstance(data, np.ndarray):
-            data = data.tobytes()
+        data: bytearray = data.numpy().tobytes()
 
         # Count occurrences of each pattern
         counts = []

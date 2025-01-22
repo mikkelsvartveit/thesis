@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 
@@ -17,3 +19,20 @@ def random_train_test_split(dataset: Dataset, test_split=0.2, seed=420):
     )
 
     return train_dataset, test_dataset
+
+
+def architecture_metadata_info(architecture_path, architecture_name):
+    architecture_path = Path(architecture_path)
+    # get file with achitecture_name.json
+    architecture_path = architecture_path / f"{architecture_name}.json"
+
+    with open(architecture_path, "r") as f:
+        metadata = json.load(f)
+        # get first as relevant metadata are the same for all files
+        metadata = metadata[0]
+
+    metadata = {
+        key: metadata[key] for key in ["architecture", "endianness", "wordsize"]
+    }
+
+    return metadata
