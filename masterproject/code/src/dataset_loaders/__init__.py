@@ -1,3 +1,4 @@
 from .MipsMipselDataset import *
 from .utils import *
-from .ISAdetectCodeOnlyDataset import *
+from .ISAdetectDataset import *
+from .ISAdetectEndiannessCounts import *

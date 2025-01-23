@@ -1,3 +1,3 @@
-from .EndiannessModel import EndiannessModel
+from .EndiannessModels import *
 
-__all__ = ["EndiannessModel"]
+__all__ = ["EndiannessModels"]

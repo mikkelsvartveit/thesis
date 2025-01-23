@@ -5,18 +5,21 @@ import numpy as np
 from src.dataset_loaders.utils import architecture_metadata_info
 
 
-class ISAdetectCodeOnlyDataset(Dataset):
+class ISAdetectDataset(Dataset):
     def __init__(
         self,
         dataset_path,
         transform=None,
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
+        use_code_only: bool = True,
     ):
         self.transform = transform
         self.files = []
         self.labels = []
         self.file_byte_read_limit = file_byte_read_limit
+
+        self.use_code_only = use_code_only
 
         # Collect files
         for architecture in Path(dataset_path).iterdir():
@@ -31,11 +34,17 @@ class ISAdetectCodeOnlyDataset(Dataset):
                         print(architecture.name, "limit reached")
                         break
 
+    def set_code_only(self, use_code_only: bool):
+        self.use_code_only = use_code_only
+
     def __len__(self):
         return len(self.files)
 
     def __getitem__(self, idx) -> tuple[torch.Tensor, str]:
         file_path = self.files[idx]
+        if not self.use_code_only:
+            file_path = file_path.with_suffix("")  # remove .code extension
+
         label = self.labels[idx]
 
         # Read binary file
@@ -58,7 +67,7 @@ if __name__ == "__main__":
     # Replace with your actual path
     dataset_path = "dataset/ISAdetect/ISAdetect_full_dataset"
 
-    dataset = ISAdetectCodeOnlyDataset(
+    dataset = ISAdetectDataset(
         dataset_path, file_byte_read_limit=2**10, per_architecture_limit=1
     )
     print(len(dataset))

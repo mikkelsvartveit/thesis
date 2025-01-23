@@ -18,3 +18,16 @@ class EndiannessModel(nn.Module):
         if self.with_sigmoid:
             x = self.sigmoid(x)
         return x
+
+
+class MikkelEndiannessModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.l1 = nn.Linear(4, 1)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        x = self.l1(x)
+        x = self.sigmoid(x)
+        return x

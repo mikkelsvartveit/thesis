@@ -37,6 +37,7 @@ class MipsMipselDataset(Dataset):
 
         # Convert to numpy array for easier processing
         data = np.frombuffer(binary_data, dtype=np.uint8)
+        data = torch.frombuffer(data.copy(), dtype=torch.uint8)
 
         # Apply transforms if any
         if self.transform:

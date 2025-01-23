@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, random_split, Subset
 
 
-def random_train_test_split(dataset: Dataset, test_split=0.2, seed=420):
+def random_train_test_split(
+    dataset: Dataset, test_split=0.2, seed=420
+) -> tuple[Subset, Subset]:
 
     # Calculate split sizes
     total_size = len(dataset)
@@ -12,7 +14,7 @@ def random_train_test_split(dataset: Dataset, test_split=0.2, seed=420):
     train_size = total_size - test_size
 
     # Split the dataset
-    train_dataset, test_dataset = torch.utils.data.random_split(
+    train_dataset, test_dataset = random_split(
         dataset,
         [train_size, test_size],
         generator=torch.manual_seed(seed),
