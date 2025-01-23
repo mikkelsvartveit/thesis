@@ -20,6 +20,20 @@ class EndiannessModel(nn.Module):
         return x
 
 
+class LinearRegression(nn.Module):
+    def __init__(self, input_size, output_size, with_sigmoid=False):
+        super().__init__()
+        self.l1 = nn.Linear(input_size, output_size)
+        self.with_sigmoid = with_sigmoid
+        self.sig = nn.Sigmoid()
+
+    def forward(self, x):
+        x = self.l1(x)
+        if self.with_sigmoid:
+            x = self.sig(x)
+        return x
+
+
 class MikkelEndiannessModel(nn.Module):
     def __init__(self):
         super().__init__()

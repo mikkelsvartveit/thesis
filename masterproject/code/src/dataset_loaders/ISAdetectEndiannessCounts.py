@@ -6,9 +6,6 @@ import numpy as np
 from src.dataset_loaders.utils import architecture_metadata_info
 from src.transforms.EndiannessCount import EndiannessCount
 
-# endiannes json format:
-# file_name,0x0001,0xfffe,0x0100,0xfeff
-
 
 class ISAdetectEndiannessCountsDataset(Dataset):
     def __init__(
@@ -27,8 +24,8 @@ class ISAdetectEndiannessCountsDataset(Dataset):
             # check if endianness.json exists
             metadata = architecture_metadata_info(architecture, architecture.name)
             endianness_json_path = architecture / "_endianness_test.json"
-            print(architecture.name, f"has_json: {endianness_json_path.exists()}")
             if not endianness_json_path.exists():
+                print(f"generating json for {architecture.name}")
                 endiannes_json = []
                 # generate endianness.json
                 for file_path in architecture.glob("*.code"):
@@ -106,6 +103,17 @@ if __name__ == "__main__":
     dataset_path = "dataset/ISAdetect/ISAdetect_full_dataset"
 
     dataset = ISAdetectEndiannessCountsDataset(dataset_path=dataset_path)
+    print(len(dataset))
+    print(dataset[0])
+    print(dataset[0][0].shape)
+    print(dataset[0][1])
+    print(dataset[0][1])
+    print(dataset[-1])
+    print(dataset[-1][0].shape)
+    print(dataset[-1][1])
+    print(dataset[-1][1])
+
+    dataset.use_code_only = False
     print(len(dataset))
     print(dataset[0])
     print(dataset[0][0].shape)
