@@ -1,3 +1,2 @@
 from .EndiannessModels import *
-
-__all__ = ["EndiannessModels"]
+from .MINOS_cnn import *

@@ -13,6 +13,7 @@ class ISAdetectEndiannessCountsDataset(Dataset):
         dataset_path,
         transform=None,
         use_code_only: bool = True,
+        recalculate_endianness_counts: bool = False,
     ):
         self.transform = transform
         self.counts_code_only = []
@@ -23,8 +24,9 @@ class ISAdetectEndiannessCountsDataset(Dataset):
         for architecture in Path(dataset_path).iterdir():
             # check if endianness.json exists
             metadata = architecture_metadata_info(architecture, architecture.name)
-            endianness_json_path = architecture / "_endianness_test.json"
-            if not endianness_json_path.exists():
+            endianness_json_path = architecture / "_endianness_counts.json"
+
+            if recalculate_endianness_counts or not endianness_json_path.exists():
                 print(f"generating json for {architecture.name}")
                 endiannes_json = []
                 # generate endianness.json
@@ -34,11 +36,10 @@ class ISAdetectEndiannessCountsDataset(Dataset):
                         binary_data = f.read()
 
                     # count .code file
-                    data_code_only = torch.frombuffer(
-                        binary_data, dtype=torch.uint8, requires_grad=False
+                    data_code_only = torch.from_numpy(
+                        np.frombuffer(binary_data, np.uint8).copy()
                     )
                     count_code_only_tensor = EndiannessCount()(data_code_only)
-                    count_code_only_arr = count_code_only_tensor.tolist()
 
                     # read full program file
                     file_path_full_program = file_path.with_suffix("")
@@ -46,22 +47,22 @@ class ISAdetectEndiannessCountsDataset(Dataset):
                         binary_data = f.read()
 
                     # count full program file
-                    data_full_program = torch.frombuffer(
-                        binary_data, dtype=torch.uint8, requires_grad=False
+                    data_full_program = torch.from_numpy(
+                        np.frombuffer(binary_data, np.uint8).copy()
                     )
+
                     count_full_program_tensor = EndiannessCount()(data_full_program)
-                    count_full_program_arr = count_full_program_tensor.tolist()
 
                     endiannes_json.append(
                         {
                             "file_name": file_path_full_program.name,
-                            "counts_code": count_code_only_arr,
-                            "counts_full": count_full_program_arr,
+                            "counts_code": count_code_only_tensor.tolist(),
+                            "counts_full": count_full_program_tensor.tolist(),
                         }
                     )
 
-                    self.counts_code_only.append(count_code_only_arr)
-                    self.counts_full_program.append(count_full_program_arr)
+                    self.counts_code_only.append(count_code_only_tensor.tolist())
+                    self.counts_full_program.append(count_full_program_tensor.tolist())
                     self.labels.append(metadata)
 
                 with open(endianness_json_path, "w") as f:
