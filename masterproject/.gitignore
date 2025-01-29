@@ -3,7 +3,7 @@ code/dataset/*
 !code/dataset/download_isadetect.sh
 !code/dataset/ISAdetect-features.csv
 
-
+.venv
 *__pycache__
 *.pytest_cache
 wandb
