@@ -1,5 +1,4 @@
 - code/dataset/
   - ISAdetect
-    - ISA_detect_full_dataset
-    - Isa_detect_only_code_sections
+    - ISAdetect_full_dataset
   - (other_dataset_folder)

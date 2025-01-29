@@ -16,22 +16,22 @@ class ISAdetectDataset(Dataset):
     ):
         self.transform = transform
         self.files = []
-        self.labels = []
+        self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
 
         self.use_code_only = use_code_only
 
         # Collect files
-        for architecture in Path(dataset_path).iterdir():
-            if architecture.is_dir():
+        for isa in Path(dataset_path).iterdir():
+            if isa.is_dir():
                 file_count = 0
-                metadata = architecture_metadata_info(architecture, architecture.name)
-                for file_path in architecture.glob("*.code"):
+                metadata = architecture_metadata_info(isa, isa.name)
+                for file_path in isa.glob("*.code"):
                     self.files.append(file_path)
-                    self.labels.append(metadata)
+                    self.metadata.append(metadata)
                     file_count += 1
                     if per_architecture_limit and file_count >= per_architecture_limit:
-                        print(architecture.name, "limit reached")
+                        print(isa.name, "limit reached")
                         break
 
     def set_code_only(self, use_code_only: bool):
@@ -45,7 +45,7 @@ class ISAdetectDataset(Dataset):
         if not self.use_code_only:
             file_path = file_path.with_suffix("")  # remove .code extension
 
-        label = self.labels[idx]
+        labels = self.metadata[idx]
 
         # Read binary file
         with open(file_path, "rb") as f:
@@ -56,11 +56,9 @@ class ISAdetectDataset(Dataset):
 
         # Apply transforms if any
         if self.transform:
-            features = self.transform(data)
-        else:
-            features = data
+            data = self.transform(data)
 
-        return features, label
+        return data, labels
 
 
 if __name__ == "__main__":

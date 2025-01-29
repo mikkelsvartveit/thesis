@@ -11,9 +11,10 @@ class GrayScaleImage:
     Output tensor shape: torch.tensor([1, dimx, dimy])
     """
 
-    def __init__(self, dimx, dimy):
+    def __init__(self, dimx, dimy, normalize=True):
         self.dimx = dimx
         self.dimy = dimy
+        self.normalize = normalize
 
     def __call__(self, binary_data: torch.Tensor) -> torch.Tensor:
         # ensure tensor
@@ -33,6 +34,10 @@ class GrayScaleImage:
 
         gray_scale = truncated_data.view(self.dimx, self.dimy)
         gray_scale = gray_scale.unsqueeze(0)
+
+        if self.normalize:
+            gray_scale = gray_scale.float() / 255.0
+
         return gray_scale
 
 
