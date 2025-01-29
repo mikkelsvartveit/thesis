@@ -1,6 +1,6 @@
 code/dataset/*
 !code/dataset/structure.md
-!code/dataset/unzip_ISAdetect.py
+!code/dataset/download_isadetect.sh
 !code/dataset/ISAdetect-features.csv
 
 
