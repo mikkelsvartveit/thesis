@@ -6,6 +6,11 @@ from torch import Tensor
 
 
 class GrayScaleImage:
+    """
+    Transforms binary data into a grayscale image tensor
+    Output tensor shape: torch.tensor([1, dimx, dimy])
+    """
+
     def __init__(self, dimx, dimy):
         self.dimx = dimx
         self.dimy = dimy
