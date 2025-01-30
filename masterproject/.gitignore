@@ -7,3 +7,4 @@ code/dataset/*
 *__pycache__
 *.pytest_cache
 wandb
+nohup.out
