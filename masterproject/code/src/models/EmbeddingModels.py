@@ -2,7 +2,7 @@ from torch import nn
 
 
 class EmbeddingAndCNNModel(nn.Module):
-    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.5):
+    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.0):
         super(EmbeddingAndCNNModel, self).__init__()
 
         self.embedding = nn.Embedding(256, 128)
