@@ -1,0 +1,16 @@
+dataset/*
+!dataset/structure.md
+!dataset/download_isadetect.sh
+!dataset/ISAdetect-features.csv
+!dataset/Andreassen-ISAdetect-features.csv
+
+.venv
+*__pycache__
+*.pytest_cache
+wandb
+nohup.out
+
+
+*job*.out
+*job*.err
+slurm_out

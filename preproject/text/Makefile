@@ -1,7 +1,7 @@
 .PHONY: wordcount watch worddiff
 pdf:
 	@echo "\nCompiling PDF..."
-	mkdir -p ../output
+	mkdir -p ../../output
 	pandoc content/*.md \
 		--resource-path=content \
 		--citeproc \
@@ -9,7 +9,7 @@ pdf:
 		--pdf-engine=xelatex \
 		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
 		--to=latex \
-		--output=../output/preproject.pdf
+		--output=../../output/preproject.pdf
 	@echo "Finished compiling PDF."
 
 watch:
