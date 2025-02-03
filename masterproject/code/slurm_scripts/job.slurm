@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=logo-embed-1d           # Job name
+#SBATCH --job-name=job-name           # Job name
 #SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
 #SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
 #SBATCH --time=4:00:00              # Time limit (hours:min:sec)

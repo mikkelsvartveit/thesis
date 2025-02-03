@@ -2,6 +2,7 @@ code/dataset/*
 !code/dataset/structure.md
 !code/dataset/download_isadetect.sh
 !code/dataset/ISAdetect-features.csv
+!code/dataset/Andreassen-ISAdetect-features.csv
 
 .venv
 *__pycache__
