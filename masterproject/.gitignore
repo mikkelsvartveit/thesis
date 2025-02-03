@@ -8,5 +8,8 @@ code/dataset/*
 *.pytest_cache
 wandb
 nohup.out
+
+
 *job*.out
 *job*.err
+slurm_out

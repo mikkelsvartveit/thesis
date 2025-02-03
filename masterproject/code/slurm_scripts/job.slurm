@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --job-name=my_job           # Job name
-#SBATCH --output=job_%j.slurm.out         # Standard output file (%j expands to jobID)
-#SBATCH --error=job_%j.slurm.err          # Standard error file (%j expands to jobID)
-#SBATCH --time=1:00:00              # Time limit (hours:min:sec)
+#SBATCH --job-name=logo-embed-1d           # Job name
+#SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
+#SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
+#SBATCH --time=4:00:00              # Time limit (hours:min:sec)
 #SBATCH --nodes=1                   # Number of nodes requested
 #SBATCH --cpus-per-task=12          # Number of CPUs per task
 #SBATCH --mem=16G                   # Memory requested
@@ -13,13 +13,13 @@
 module load Python/3.12.3-GCCcore-13.3.0
 
 source ~/thesis/masterproject/code/.venv/bin/activate
-echo "which python: $(which python)"
 
 echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
-
-python job.py
-
+NOTEBOOK_FILE_NAME="logo-embedding-1d"
+tmpdir=$(mktemp -d)
+jupyter nbconvert --to script "$NOTEBOOK_FILE_NAME.ipynb" --output-dir $tmpdir --output="$NOTEBOOK_FILE_NAME"
+python $tmpdir/"$NOTEBOOK_FILE_NAME.py"
 
 echo "Job finished on $(date)"
