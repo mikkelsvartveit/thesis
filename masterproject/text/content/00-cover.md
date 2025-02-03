@@ -1,8 +1,8 @@
 ---
-title: "Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Systematic Literature Review"
+title: "[Title undecided]"
 subtitle: |
   \vspace{0.2cm}
-  TDT4501 – Computer Science, Specialization Project\
+  TDT4900 – Master's Thesis\
   \vspace{0.1cm}
   Fall 2024\
   \vspace{1cm}
@@ -13,7 +13,7 @@ subtitle: |
   Supervised by Donn Morrison\
   \vspace{0.3cm}
 date: |
-  December 11, 2024
+  \today
   \vspace{2.5cm}
 author:
   - Stian J. Sulebak
@@ -42,7 +42,7 @@ urlcolor: "blue"
 toc: "true"
 
 abstract: |
-  Binary reverse engineering is critical for analyzing security, quality, and compatibility of compiled programs. The increased demand of IoT devices leads to new challenges for reverse engineers, as embedded systems often use custom instruction set architectures (ISA). This systematic literature review examines two key areas in software reverse engineering: machine learning approaches for ISA detection and convolutional neural networks (CNN) for binary code analysis. Through a structured review of 26 primary studies, we analyze how machine learning techniques have been applied to classify ISA features and how CNN have been used for analyzing raw binary code. Our findings reveal that current machine learning approaches for ISA detection predominantly employ traditional models not based on deep learning. They achieve high accuracy in classifying known architectures, but face limitations in distinguishing similar architectures and handling non-code sections of the binary file. For CNN applications to binary code, we find strong evidence of effectiveness particularly in malware classification, with accuracies exceeding 99% on standard datasets without requiring manual feature engineering. However, CNN applications beyond malware detection remain limited. The review identifies significant research gaps, particularly in developing architecture-agnostic methods capable of identifying specific ISA features rather than classifying known architectures. We conclude that while current machine learning methods show promise, future research should focus on leveraging CNN's automatic feature learning capabilities while reducing reliance on binary format metadata.
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat in varius, temporibus et semper, facilisi. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed ut perspiciatis unde omnis iste natus error similique et maxime. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, while ac sapien inceptos himenaeos justo etiam phasellus turpis nullam fringilla semper, rhoncus sem, vitae. Integer nec odio praesent libero sed cursus ante dapibus diam, maecenas faucibus mollis interdum efficitur justo in tellus tempor, nunc. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi rerum facilis est cumque, optime. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et doloremque magnam aliquam.
 include-before: |
   \pagebreak
 
