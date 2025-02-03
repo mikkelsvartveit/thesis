@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y pandoc make
+          apt-get install -y pandoc make librsvg2-bin
 
       - name: Build master's thesis PDF
         run: cd masterproject/text && make pdf && cd ../../
