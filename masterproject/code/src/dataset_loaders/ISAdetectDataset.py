@@ -2,13 +2,14 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 import numpy as np
-from src.dataset_loaders.utils import architecture_metadata_info
+from src.dataset_loaders.utils import get_architecture_features
 
 
 class ISAdetectDataset(Dataset):
     def __init__(
         self,
         dataset_path,
+        feature_csv_path,
         transform=None,
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
@@ -25,7 +26,7 @@ class ISAdetectDataset(Dataset):
         for isa in Path(dataset_path).iterdir():
             if isa.is_dir():
                 file_count = 0
-                metadata = architecture_metadata_info(isa, isa.name)
+                metadata = get_architecture_features(feature_csv_path, isa.name)
                 for file_path in isa.glob("*.code"):
                     self.files.append(file_path)
                     self.metadata.append(metadata)
@@ -66,7 +67,10 @@ if __name__ == "__main__":
     dataset_path = "dataset/ISAdetect/ISAdetect_full_dataset"
 
     dataset = ISAdetectDataset(
-        dataset_path, file_byte_read_limit=2**10, per_architecture_limit=1
+        dataset_path,
+        feature_csv_path="dataset/ISAdetect-features.csv",
+        file_byte_read_limit=2**10,
+        per_architecture_limit=1,
     )
     print(len(dataset))
     print(dataset[0])

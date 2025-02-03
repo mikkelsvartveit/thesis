@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import pandas as pd
 import torch
 from torch.utils.data import Dataset, random_split, Subset
 
@@ -38,3 +39,35 @@ def architecture_metadata_info(architecture_path, architecture_name):
     }
 
     return metadata
+
+
+def get_architecture_features(csv_file, architecture):
+    """
+    Takes a CSV file containing ISA features and an architecture name,
+    and returns a dictionary of features for that architecture.
+
+    Parameters:
+        csv_file (str): Path to the CSV file with ISA features.
+        architecture (str): Name of the architecture to lookup.
+
+    Returns:
+        dict: Dictionary containing features for the given architecture.
+              Returns an empty dictionary if the architecture is not found.
+    """
+    # Read the CSV into a DataFrame
+    try:
+        df = pd.read_csv(csv_file, delimiter=";")
+    except Exception as e:
+        raise ValueError(f"Error reading CSV file: {e}")
+
+    # Ensure the architecture exists in the data
+    if architecture not in df.iloc[:, 0].values:
+        return {}
+
+    # Filter the row corresponding to the given architecture
+    row = df[df.iloc[:, 0] == architecture].iloc[0]
+
+    # Convert the row to a dictionary
+    features_dict = row.to_dict()
+
+    return features_dict

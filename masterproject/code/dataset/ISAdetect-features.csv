@@ -1,4 +1,4 @@
-isa;endianness;wordsize;instructionwidth_type;instructionwidth
+architecture;endianness;wordsize;instructionwidth_type;instructionwidth
 alpha;little;64;fixed;32
 amd64;little;64;variable;na
 arm64;little;64;fixed;32
