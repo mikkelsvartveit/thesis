@@ -10,6 +10,8 @@
 #SBATCH --partition=GPUQ            # Partition/queue requested
 #SBATCH --gres=gpu:a100:1           # GPU resources requested
 
+# Usage: sbatch slurm_scripts/job.slurm src/notebooks/<notebook_name>.ipynb
+
 module load Python/3.12.3-GCCcore-13.3.0
 
 source ~/thesis/masterproject/code/.venv/bin/activate
@@ -17,9 +19,21 @@ source ~/thesis/masterproject/code/.venv/bin/activate
 echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
-NOTEBOOK_FILE_NAME="logo-embedding-1d"
+if [ -z "$1" ]; then
+    echo "Error: Notebook filename not provided"
+    echo "Usage: sbatch job.slurm <notebook_filename.ipynb>"
+    exit 1
+fi
+
+notebook_path=$(readlink -f "$1")
+notebook_dir=$(dirname "$notebook_path")
+notebook_filename=$(basename "$notebook_path" .ipynb)
+
 tmpdir=$(mktemp -d)
-jupyter nbconvert --to script "$NOTEBOOK_FILE_NAME.ipynb" --output-dir $tmpdir --output="$NOTEBOOK_FILE_NAME"
-python $tmpdir/"$NOTEBOOK_FILE_NAME.py"
+jupyter nbconvert --to script "$notebook_path" --output-dir $tmpdir --output="$notebook_filename"
+
+cd "$notebook_dir"
+pwd
+python $tmpdir/"$notebook_filename.py"
 
 echo "Job finished on $(date)"
