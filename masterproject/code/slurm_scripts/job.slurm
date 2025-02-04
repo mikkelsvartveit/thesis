@@ -1,16 +1,16 @@
 #!/bin/bash
 
-#SBATCH --job-name=job-name           # Job name
-#SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
-#SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
+# Usage: sbatch slurm_scripts/job.slurm src/notebooks/<notebook_name>.ipynb
+
+#SBATCH --job-name=job              # Job name
+#SBATCH --output=./slurm_out/%j.slurm.out   # Standard output file (%j expands to jobID)
+#SBATCH --error=./slurm_out/%j.slurm.err    # Standard error file (%j expands to jobID)
 #SBATCH --time=4:00:00              # Time limit (hours:min:sec)
 #SBATCH --nodes=1                   # Number of nodes requested
 #SBATCH --cpus-per-task=12          # Number of CPUs per task
 #SBATCH --mem=16G                   # Memory requested
 #SBATCH --partition=GPUQ            # Partition/queue requested
 #SBATCH --gres=gpu:a100:1           # GPU resources requested
-
-# Usage: sbatch slurm_scripts/job.slurm src/notebooks/<notebook_name>.ipynb
 
 module load Python/3.12.3-GCCcore-13.3.0
 
@@ -24,6 +24,8 @@ if [ -z "$1" ]; then
     echo "Usage: sbatch job.slurm <notebook_filename.ipynb>"
     exit 1
 fi
+
+echo "Running notebook: $1"
 
 notebook_path=$(readlink -f "$1")
 notebook_dir=$(dirname "$notebook_path")
