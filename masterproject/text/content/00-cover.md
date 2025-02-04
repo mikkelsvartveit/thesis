@@ -49,6 +49,11 @@ include-before: |
 header-includes:
   - \usepackage{array}
   - \usepackage[all]{nowidow}
+  - \usepackage{acronym}
 ---
 
+\begin{acronym}
+\acro{ISA}[ISA]{Instruction Set Architecture}
+
+\end{acronym}
 \pagebreak

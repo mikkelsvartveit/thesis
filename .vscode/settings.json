@@ -8,5 +8,13 @@
   "notebook.formatOnSave.enabled": true,
   "files.exclude": {
     "**/__pycache__": true
+  },
+  "PandocCiter.DefaultBibs": ["./masterproject/text/content/bibliography.bib"],
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    }
   }
 }
