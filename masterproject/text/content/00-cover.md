@@ -49,11 +49,16 @@ include-before: |
 header-includes:
   - \usepackage{array}
   - \usepackage[all]{nowidow}
-  - \usepackage{acronym}
+  - \usepackage[nohyperlinks]{acronym}
 ---
+
+\pagebreak
+
+# Acronyms {-}
 
 \begin{acronym}
 \acro{ISA}[ISA]{Instruction Set Architecture}
-
+\acro{CNN}[CNN]{Convolutional Neural Network}
 \end{acronym}
+
 \pagebreak
