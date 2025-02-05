@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+    <!-- Background -->
+    <rect width="800" height="400" fill="#ffffff"/>
+    
+    <!-- Input Image -->
+    <rect x="30" y="150" width="100" height="100" fill="#A8E6CE" stroke="#333" stroke-width="2"/>
+    <text x="80" y="130" text-anchor="middle" font-size="14">Input Image</text>
+    
+    <!-- Convolution Layers -->
+    <g transform="translate(160, 140)">
+        <!-- Conv1 -->
+        <rect x="0" y="0" width="80" height="80" fill="#FFB5B5" stroke="#333" stroke-width="2"/>
+        <rect x="10" y="10" width="80" height="80" fill="#FFB5B5" stroke="#333" stroke-width="2"/>
+        <rect x="20" y="20" width="80" height="80" fill="#FFB5B5" stroke="#333" stroke-width="2"/>
+        <text x="40" y="-10" text-anchor="middle" font-size="14">Conv1</text>
+    </g>
+    
+    <!-- Max Pooling 1 -->
+    <g transform="translate(280, 150)">
+        <rect x="0" y="0" width="60" height="60" fill="#DCD3FF" stroke="#333" stroke-width="2"/>
+        <rect x="10" y="10" width="60" height="60" fill="#DCD3FF" stroke="#333" stroke-width="2"/>
+        <text x="30" y="-10" text-anchor="middle" font-size="14">Pool1</text>
+    </g>
+    
+    <!-- Conv2 -->
+    <g transform="translate(380, 140)">
+        <rect x="0" y="0" width="70" height="70" fill="#FFB5B5" stroke="#333" stroke-width="2"/>
+        <rect x="10" y="10" width="70" height="70" fill="#FFB5B5" stroke="#333" stroke-width="2"/>
+        <text x="35" y="-10" text-anchor="middle" font-size="14">Conv2</text>
+    </g>
+    
+    <!-- Max Pooling 2 -->
+    <g transform="translate(480, 150)">
+        <rect x="0" y="0" width="50" height="50" fill="#DCD3FF" stroke="#333" stroke-width="2"/>
+        <rect x="10" y="10" width="50" height="50" fill="#DCD3FF" stroke="#333" stroke-width="2"/>
+        <text x="25" y="-10" text-anchor="middle" font-size="14">Pool2</text>
+    </g>
+    
+    <!-- Flatten -->
+    <g transform="translate(570, 150)">
+        <rect x="0" y="0" width="40" height="100" fill="#FFDAAA" stroke="#333" stroke-width="2"/>
+        <text x="20" y="-10" text-anchor="middle" font-size="14">Flatten</text>
+    </g>
+    
+    <!-- Fully Connected Layers -->
+    <g transform="translate(640, 130)">
+        <!-- FC1 -->
+        <line x1="0" y1="20" x2="40" y2="20" stroke="#333" stroke-width="2"/>
+        <line x1="0" y1="40" x2="40" y2="40" stroke="#333" stroke-width="2"/>
+        <line x1="0" y1="60" x2="40" y2="60" stroke="#333" stroke-width="2"/>
+        <line x1="0" y1="80" x2="40" y2="80" stroke="#333" stroke-width="2"/>
+        <line x1="0" y1="100" x2="40" y2="100" stroke="#333" stroke-width="2"/>
+        <text x="20" y="-10" text-anchor="middle" font-size="14">FC</text>
+    </g>
+    
+    <!-- Output -->
+    <g transform="translate(700, 150)">
+        <rect x="0" y="0" width="40" height="80" fill="#FFE3E3" stroke="#333" stroke-width="2"/>
+        <text x="20" y="-10" text-anchor="middle" font-size="14">Output</text>
+    </g>
+    
+    <!-- Arrows -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+    </defs>
+    
+    <line x1="130" y1="200" x2="160" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="260" y1="200" x2="280" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="360" y1="200" x2="380" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="460" y1="200" x2="480" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="550" y1="200" x2="570" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="610" y1="200" x2="640" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="680" y1="200" x2="700" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- Legend -->
+    <g transform="translate(30, 320)">
+        <rect x="0" y="0" width="20" height="20" fill="#A8E6CE" stroke="#333" stroke-width="1"/>
+        <text x="30" y="15" font-size="12">Input Layer</text>
+        
+        <rect x="120" y="0" width="20" height="20" fill="#FFB5B5" stroke="#333" stroke-width="1"/>
+        <text x="150" y="15" font-size="12">Convolutional Layers</text>
+        
+        <rect x="270" y="0" width="20" height="20" fill="#DCD3FF" stroke="#333" stroke-width="1"/>
+        <text x="300" y="15" font-size="12">Pooling Layers</text>
+        
+        <rect x="390" y="0" width="20" height="20" fill="#FFDAAA" stroke="#333" stroke-width="1"/>
+        <text x="420" y="15" font-size="12">Flatten Layer</text>
+        
+        <rect x="510" y="0" width="20" height="20" fill="#FFE3E3" stroke="#333" stroke-width="1"/>
+        <text x="540" y="15" font-size="12">Output Layer</text>
+    </g>
+</svg>
