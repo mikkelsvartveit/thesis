@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360">
+    <!-- Background -->
+    <rect width="800" height="360" fill="#ffffff"/>
+    
+    <!-- Legend -->
+    <rect x="600" y="40" width="40" height="20" fill="#e6f3ff"/>
+    <rect x="600" y="70" width="40" height="20" fill="#ffd700"/>
+    <text x="650" y="55" font-family="Arial" font-size="14" fill="#333333">Training Data</text>
+    <text x="650" y="85" font-family="Arial" font-size="14" fill="#333333">Validation Data</text>
+
+    <!-- Fold Labels -->
+    <text x="60" y="70" font-family="Arial" font-size="16" fill="#333333">Iteration 1</text>
+    <text x="60" y="130" font-family="Arial" font-size="16" fill="#333333">Iteration 2</text>
+    <text x="60" y="190" font-family="Arial" font-size="16" fill="#333333">Iteration 3</text>
+    <text x="60" y="250" font-family="Arial" font-size="16" fill="#333333">Iteration 4</text>
+    <text x="60" y="310" font-family="Arial" font-size="16" fill="#333333">Iteration 5</text>
+
+    <!-- Data Blocks -->
+    <!-- Fold 1 -->
+    <rect x="150" y="50" width="80" height="30" fill="#ffd700"/>
+    <rect x="230" y="50" width="320" height="30" fill="#e6f3ff"/>
+    
+    <!-- Fold 2 -->
+    <rect x="150" y="110" width="80" height="30" fill="#e6f3ff"/>
+    <rect x="230" y="110" width="80" height="30" fill="#ffd700"/>
+    <rect x="310" y="110" width="240" height="30" fill="#e6f3ff"/>
+    
+    <!-- Fold 3 -->
+    <rect x="150" y="170" width="160" height="30" fill="#e6f3ff"/>
+    <rect x="310" y="170" width="80" height="30" fill="#ffd700"/>
+    <rect x="390" y="170" width="160" height="30" fill="#e6f3ff"/>
+    
+    <!-- Fold 4 -->
+    <rect x="150" y="230" width="240" height="30" fill="#e6f3ff"/>
+    <rect x="390" y="230" width="80" height="30" fill="#ffd700"/>
+    <rect x="470" y="230" width="80" height="30" fill="#e6f3ff"/>
+    
+    <!-- Fold 5 -->
+    <rect x="150" y="290" width="320" height="30" fill="#e6f3ff"/>
+    <rect x="470" y="290" width="80" height="30" fill="#ffd700"/>
+</svg>
