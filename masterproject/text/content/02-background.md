@@ -6,7 +6,7 @@ TODO: Introduce section
 
 ### Binary executables
 
-All computer software boils down to a series of bytes readable by the CPU. The bytes are organized in _instructions_. An instruction always includes an _opcode_ (Operation Code), which tells the CPU what operation should be executed. Depending on the opcode, the instruction often contains one or more _operands_, which provides the CPU with the data that should be operated on. The operands can be immediate values (values specified directly in the instruction), registers (a small, very fast memory located physically on the CPU), or memory addresses. Figure \ref{fig:arm-instruction} illustrates the instruction format of the ARM \ac{ISA}, which uses 32-bit instructions.
+All computer software boils down to a series of bytes readable by the CPU. The bytes are organized in _instructions_. An instruction always includes an _opcode_ (Operation Code), which tells the CPU what operation should be executed. Depending on the opcode, the instruction often contains one or more _operands_, which provides the CPU with the data that should be operated on. The operands can be immediate values (values specified directly in the instruction), registers (a small, very fast memory located physically on the CPU), or memory addresses. Figure \ref{fig:arm-instruction} illustrates the instruction format of ARM, which uses 32-bit instructions.
 
 ![Instruction format and examples from the ARM instruction set. \label{fig:arm-instruction}](images/arm-instruction.svg)
 
@@ -14,23 +14,64 @@ All computer software boils down to a series of bytes readable by the CPU. The b
 
 ### Instruction set architectures
 
-An instruction set architecture (ISA) is a contract between hardware and software on how binary code should be run a given computer. In the early days, every new computer system were created with a new ISA, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the ISA as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all System/360 computers could run the same programs as they shared a common ISA. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established ISAs, ensuring cross generational program compatibility.
+An \ac{ISA} is a contract between hardware and software on how binary code should be run a given computer. In the early days, every new computer system were created with a new \ac{ISA}, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the \ac{ISA} as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all System/360 computers could run the same programs as they shared a common \ac{ISA}. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established \acp{ISA}, ensuring cross generational program compatibility.
 
-#### CISC vs RISC
+In addition to defining an instruction set, the \ac{ISA} gives a complete specification about how software interfaces with hardware, including how instructions can be combined, memory organization and addressing, supported data types, memory consistency models, and interrupt handling. Examples of well‐known \ac{ISA} families are x86, ARM, and RISC-V. Compilers can typically target multiple \acp{ISA}, allowing the same high‐level source code to be executed on different architectures through appropriate translation to the target instruction set.
 
-ISAs today generally fall into two camps: \ac{CISC} and \ac{RISC}. CISC architectures, like x86, provide many specialized instructions that can perform complex operations in a single instruction. CISC can simplify complex operations at the programming level as well as potentially reduce code size, but at the cost of requiring more complex hardware. RISC architectures, like ARM and RISC-V, favor simplicity with a smaller set of fixed-length instructions that execute in a single cycle, making them potentially more energy-efficient and easier to implement.
+#### CISC and RISC
 
-#### Instruction Set
+\acp{ISA} today generally fall into two camps: \ac{CISC} and \ac{RISC}. \ac{CISC} architectures, like x86, provide many specialized instructions that can perform complex operations in a single instruction. \ac{CISC} can simplify complex operations at the programming level as well as potentially reduce code size, but at the cost of requiring more complex hardware. \ac{RISC} architectures, like ARM and RISC-V, favor simplicity with a smaller set of fixed-length instructions that execute in a single cycle, making them potentially more energy-efficient and easier to implement.
 
-An important part of all ISAs is the instruction set, which defines the binary encoding of different instructions, providing a mapping of which bits and bytes translates to which instructions. Each instruction typically has a human‐readable keyword (like 'ADD' or 'MOV'), forming an assembly language that allows programmers to understand and write code at the machine level.
+#### Instruction set
 
-#### Wordsize and endianness
+An important part of all \acp{ISA} is the instruction set, which defines the binary encoding of different instructions, providing a mapping of which bits and bytes translates to which instructions. Each instruction typically has a human‐readable keyword (like 'ADD' or 'MOV'), forming an assembly language that allows programmers to understand and write code at the machine level.
 
-Another fundamental characteristic of any ISA is its word size, which defines the natural unit of data the processor works with - typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. Another crucial aspect is endianness, which determines how multibyte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first.
+#### Word size
 
-<!-- maybe too much detail (paragraph below), could move examples of architectures to beginning -->
+A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities.
 
-In addition to defining an instruction set, the ISA gives a complete specification about how software interfaces with hardware, including how instructions can be combined, memory organization and addressing, supported data types, memory consistency models, and interrupt handling. Examples of well‐known ISA families are x86, ARM, and RISC-V. Compilers can typically target multiple ISAs, allowing the same high‐level source code to be executed on different architectures through appropriate translation to the target instruction set.
+#### Endianness
+
+The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in Table \ref{tab:endianness}.
+
+```{=latex}
+\begin{table}[h]
+
+\vspace{0.2cm}
+
+\begin{center}
+
+\strong{(a) Big endian}
+\vspace{0.1cm}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Address & 0x1000 & 0x1001 & 0x1002 & 0x1003 \\
+\hline
+Byte & 0x12 & 0x34 & 0x56 & 0x78 \\
+\hline
+\end{tabular}
+
+\vspace{0.4cm}
+
+\strong{(b) Little endian}
+\vspace{0.1cm}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Address & 0x1000 & 0x1001 & 0x1002 & 0x1003 \\
+\hline
+Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
+\hline
+\end{tabular}
+
+\end{center}
+
+\caption{Comparison of how a 32-bit integer is stored in big endian and little endian.}
+\label{tab:endianness}
+
+\end{table}
+```
 
 ### Compilers
 

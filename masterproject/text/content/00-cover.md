@@ -57,8 +57,7 @@ header-includes:
 # Acronyms {-}
 
 \begin{acronym}
-\acro{ISA}[ISA]{Instruction Set Architecture}
-\acroplural{ISA}[ISAs]{Instruction Set Architectures}
+\acro{ISA}[ISA]{Instruction Set Architecture}[ISAs]{Instruction Set Architectures}
 \acro{CISC}[CISC]{Complex Instruction Set Computing}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}
 \acro{CNN}[CNN]{Convolutional Neural Network}[CNNs]{Convolutional Neural Networks}
