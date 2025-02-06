@@ -41,7 +41,7 @@ def architecture_metadata_info(architecture_path, architecture_name):
     return metadata
 
 
-def get_architecture_features(csv_file, architecture):
+def get_architecture_features(csv_file, architecture) -> dict[str, str | int]:
     """
     Takes a CSV file containing ISA features and an architecture name,
     and returns a dictionary of features for that architecture.
@@ -71,3 +71,22 @@ def get_architecture_features(csv_file, architecture):
     features_dict = row.to_dict()
 
     return features_dict
+
+
+def get_elf_header_end(file_path) -> int | None:
+    with open(file_path, "rb") as f:
+        # Read magic number (first 4 bytes)
+        magic = f.read(4)
+        if magic != b"\x7fELF":
+            return None  # Not an ELF file
+
+        # Read EI_CLASS byte (5th byte)
+        f.seek(4)
+        ei_class = ord(f.read(1))
+
+        if ei_class == 1:  # 32-bit
+            return 52
+        elif ei_class == 2:  # 64-bit
+            return 64
+        else:
+            raise ValueError(f"Invalid ELF EI_CLASS: {ei_class}")

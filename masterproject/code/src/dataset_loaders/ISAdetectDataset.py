@@ -2,7 +2,7 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 import numpy as np
-from src.dataset_loaders.utils import get_architecture_features
+from src.dataset_loaders.utils import get_architecture_features, get_elf_header_end
 
 
 class ISAdetectDataset(Dataset):
@@ -17,6 +17,7 @@ class ISAdetectDataset(Dataset):
     ):
         self.transform = transform
         self.files = []
+        self.file_byte_offset = []
         self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
 
@@ -27,29 +28,45 @@ class ISAdetectDataset(Dataset):
             if isa.is_dir():
                 file_count = 0
                 metadata = get_architecture_features(feature_csv_path, isa.name)
-                for file_path in isa.glob("*.code"):
-                    self.files.append(file_path)
-                    self.metadata.append(metadata)
-                    file_count += 1
-                    if per_architecture_limit and file_count >= per_architecture_limit:
-                        print(isa.name, "limit reached")
-                        break
 
-    def set_code_only(self, use_code_only: bool):
-        self.use_code_only = use_code_only
+                for file_path in isa.glob("*.code"):
+
+                    # if using full binary, remove .code and add offset skipping elf header
+                    elf_end_offset = 0
+                    if not use_code_only:
+                        file_path = file_path.with_suffix("")
+                        elf_end_offset = get_elf_header_end(file_path)
+
+                    # Split file into file_byte_read_limit chunks
+                    file_splits = 1
+                    if file_byte_read_limit:
+                        file_size = file_path.stat().st_size
+                        file_splits = file_size // file_byte_read_limit
+
+                    for i in range(file_splits):
+                        self.files.append(file_path)
+                        self.file_byte_offset.append(
+                            elf_end_offset + i * file_byte_read_limit
+                        )
+                        self.metadata.append(metadata)
+                        file_count += 1
+                        if (
+                            per_architecture_limit
+                            and file_count >= per_architecture_limit
+                        ):
+                            print(isa.name, "limit reached")
+                            break
 
     def __len__(self):
         return len(self.files)
 
     def __getitem__(self, idx) -> tuple[torch.Tensor, str]:
         file_path = self.files[idx]
-        if not self.use_code_only:
-            file_path = file_path.with_suffix("")  # remove .code extension
-
         labels = self.metadata[idx]
 
         # Read binary file
         with open(file_path, "rb") as f:
+            f.seek(self.file_byte_offset[idx])
             binary_data = f.read(self.file_byte_read_limit)
 
         # Convert to numpy array for easier processing
@@ -65,13 +82,15 @@ class ISAdetectDataset(Dataset):
 if __name__ == "__main__":
     # Replace with your actual path
     dataset_path = "dataset/ISAdetect/ISAdetect_full_dataset"
+    feature_csv_path = "dataset/ISAdetect-features.csv"
 
     dataset = ISAdetectDataset(
         dataset_path,
-        feature_csv_path="dataset/ISAdetect-features.csv",
+        feature_csv_path=feature_csv_path,
         file_byte_read_limit=2**10,
-        per_architecture_limit=1,
+        use_code_only=True,
     )
+
     print(len(dataset))
     print(dataset[0])
     print(dataset[0][0].shape)
@@ -81,3 +100,36 @@ if __name__ == "__main__":
     print(dataset[-1][0].shape)
     print(dataset[-1][1])
     print(dataset[-1][1])
+
+    # elf_count = 0
+    # elf_full_code_count = 0
+    # total_files = 0
+    # elf_length_set = {}
+
+    # print("Counting ELF files")
+    # for isa in Path(dataset_path).iterdir():
+    #     num = 0
+    #     print(isa.name)
+    #     elf_length_set[isa.name] = set()
+    #     if isa.is_dir():
+    #         for file_path in isa.glob("*"):
+    #             num += 1
+    #             if num > 1000:
+    #                 break
+
+    #             total_files += 1
+    #             elf_end = get_elf_header_end(file_path)
+
+    #             if elf_end == None:
+    #                 continue
+
+    #             elf_count += 1
+    #             elf_length_set[isa.name].add(elf_end)
+
+    #             if file_path.suffix != ".code":
+    #                 elf_full_code_count += 1
+
+    # print(f"Total files: {total_files}")
+    # print(f"Total ELF files: {elf_count}")
+    # print(f"Total ELF full code files: {elf_full_code_count}")
+    # print(f"Total ELF lengths: {elf_length_set}")

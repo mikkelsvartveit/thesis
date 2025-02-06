@@ -2,15 +2,15 @@
 
 # Usage: sbatch slurm_scripts/job.slurm src/notebooks/<notebook_name>.ipynb
 
-#SBATCH --job-name=job              # Job name
-#SBATCH --output=./slurm_out/%j.slurm.out   # Standard output file (%j expands to jobID)
-#SBATCH --error=./slurm_out/%j.slurm.err    # Standard error file (%j expands to jobID)
-#SBATCH --time=4:00:00              # Time limit (hours:min:sec)
-#SBATCH --nodes=1                   # Number of nodes requested
-#SBATCH --cpus-per-task=12          # Number of CPUs per task
-#SBATCH --mem=16G                   # Memory requested
-#SBATCH --partition=GPUQ            # Partition/queue requested
-#SBATCH --gres=gpu:a100:1           # GPU resources requested
+#SBATCH --job-name=job                              # Job name %x
+#SBATCH --output=./slurm_out/%x.%j.slurm.out        # Standard output file (%j - jobID, %x - job-name)
+#SBATCH --error=./slurm_out/%x.%j.slurm.err         # Standard error file (%j - jobID, %x - job-name)
+#SBATCH --time=4:00:00                              # Time limit (hours:min:sec)
+#SBATCH --nodes=1                                   # Number of nodes requested
+#SBATCH --cpus-per-task=12                          # Number of CPUs per task
+#SBATCH --mem=16G                                   # Memory requested
+#SBATCH --partition=GPUQ                            # Partition/queue requested
+#SBATCH --gres=gpu:a100:1                           # GPU resources requested
 
 module load Python/3.12.3-GCCcore-13.3.0
 
