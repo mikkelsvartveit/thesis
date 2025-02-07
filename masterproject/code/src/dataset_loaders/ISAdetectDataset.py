@@ -54,8 +54,10 @@ class ISAdetectDataset(Dataset):
                             per_architecture_limit
                             and file_count >= per_architecture_limit
                         ):
-                            print(isa.name, "limit reached")
                             break
+                    if per_architecture_limit and file_count >= per_architecture_limit:
+                        print(isa.name, "limit reached")
+                        break
 
     def __len__(self):
         return len(self.files)
