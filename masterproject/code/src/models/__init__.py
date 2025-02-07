@@ -11,5 +11,7 @@ def get_model(**kwargs):
         return EndiannessModel
     elif name == "EmbeddingModel":
         return EmbeddingAndCNNModel
+    elif name == "Simple1DCNN":
+        return Simple1DCNN
     else:
         raise ValueError(f"Model {name} not found")

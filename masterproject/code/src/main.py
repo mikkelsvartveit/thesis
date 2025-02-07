@@ -13,7 +13,7 @@ from dataset_loaders import get_dataset
 
 # from models import get_model
 from src.models import get_model
-from src.validators import LOGO_architecture
+from src.validators import LOGO_architecture, LOGO_architecture_wandb
 from transforms import get_transform
 
 
@@ -121,6 +121,11 @@ def main():
     if validator_name == "LOGO_architecture":
         print("LOGO_architecture")
         return LOGO_architecture(config, dataset, model, device)
+    elif validator_name == "LOGO_architecture_wandb":
+        print("LOGO_architecture_wandb")
+        return LOGO_architecture_wandb(config, dataset, model, device)
+    else:
+        raise ValueError(f"Unknown validator: {validator_name}")
 
 
 if __name__ == "__main__":

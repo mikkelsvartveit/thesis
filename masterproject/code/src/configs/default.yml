@@ -23,7 +23,7 @@ model:
   weight_decay: 0.0001
 
 validator:
-  name: LOGO_architecture
+  name: LOGO_architecture_wandb
 
 training:
   epochs: 2

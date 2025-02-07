@@ -14,6 +14,7 @@ class ISAdetectDataset(Dataset):
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
         use_code_only: bool = True,
+        use_file_splits: bool = False,
     ):
         self.transform = transform
         self.files = []
@@ -39,7 +40,7 @@ class ISAdetectDataset(Dataset):
 
                     # Split file into file_byte_read_limit chunks
                     file_splits = 1
-                    if file_byte_read_limit:
+                    if use_file_splits and file_byte_read_limit:
                         file_size = file_path.stat().st_size
                         file_splits = file_size // file_byte_read_limit
 
