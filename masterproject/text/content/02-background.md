@@ -83,6 +83,14 @@ The evolution of compilers brought significant advantages in code portability an
 As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
  -->
 
+### Reverse engineering
+
+TODO
+
+- Typical reverse engineering process
+
+- Explain what ISA features are needed for reverse engineering
+
 ## Machine learning
 
 ### Deep learning
@@ -116,3 +124,11 @@ It is worth noting that cross validation is used only when verifying the model a
 ![K-fold cross validation with 5 folds. \label{fig:cross-validation}](images/cross-validation.svg)
 
 \ac{LOGO CV} is a variation used in cases where the data is grouped into distinct clusters or categories. The purpose is to ensure that the trained model is tested on data independent of the groups it was trained on. Instead of partitioning the data into random subsets, it is split into groups based on a predefined variable. For each iteration, one group is left out as the validation set, and the model is trained on the remaining groups. This technique assesses how well the model generalizes to completely unseen groups, which is especially useful in case the final model will be used with data that does not belong to any of the groups present in the training data.
+
+### Embeddings
+
+TODO
+
+### Transfer learning
+
+TODO
