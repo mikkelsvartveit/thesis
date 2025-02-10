@@ -5,6 +5,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
 
+import wandb
+
 import torch
 from torch.utils.data import DataLoader
 
@@ -100,6 +102,8 @@ def get_config():
 def main():
     # Get configuration
     config = get_config()
+
+    wandb.login(key="YOUR KEY :D")
 
     # Initialize experiment manager
     # exp_manager = ExperimentManager(config)
