@@ -1,0 +1,197 @@
+from datetime import datetime
+import wandb
+import numpy as np
+from sklearn.calibration import LabelEncoder
+from sklearn.model_selection import LeaveOneGroupOut
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, Dataset, Subset
+from tqdm import tqdm
+
+
+def LOGO_architecture_wandb(
+    config, dataset: Dataset, model_class: nn.Module.__class__, device
+):
+    wandb_name = f"logo_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    wandb_project = "testing"
+    # Initialize W&B
+
+    groups = list(map(lambda x: x["architecture"], dataset.metadata))
+    target_features = list(map(lambda x: x[config["target_feature"]], dataset.metadata))
+
+    logo = LeaveOneGroupOut()
+    label_encoder = LabelEncoder()
+    scaler = torch.cuda.amp.GradScaler()
+
+    fold = 1
+    accuracies = {}
+    all_predictions = []
+    all_true_labels = []
+
+    for train_idx, test_idx in logo.split(
+        X=range(len(dataset)), y=target_features, groups=groups
+    ):
+
+        group_left_out = groups[test_idx[0]]
+        wandb.init(
+            project=wandb_project,
+            config=config,
+            group=f"LOGO_{wandb_name}",
+            name=f"fold_{fold}, group left out: {group_left_out}",
+        )
+
+        wandb.define_metric("epoch")
+        # define which metrics will be plotted against it
+        wandb.define_metric("train_loss", step_metric="epoch")
+        wandb.define_metric("test_loss", step_metric="epoch")
+        wandb.define_metric("test_accuracy", step_metric="epoch")
+
+        print(f"\n=== Fold {fold} leaving out group '{group_left_out}' ===")
+        fold += 1
+
+        all_train_labels = [
+            dataset.metadata[i][config["target_feature"]] for i in train_idx
+        ]
+        label_encoder.fit(all_train_labels)
+
+        train_dataset = Subset(dataset, train_idx)
+        test_dataset = Subset(dataset, test_idx)
+
+        train_loader = DataLoader(
+            train_dataset,
+            batch_size=config["training"]["batch_size"],
+            shuffle=True,
+            num_workers=8,
+            pin_memory=True,
+            prefetch_factor=2,
+        )
+        test_loader = DataLoader(
+            test_dataset,
+            batch_size=config["training"]["batch_size"],
+            shuffle=False,
+            num_workers=8,
+            pin_memory=True,
+            prefetch_factor=2,
+        )
+
+        model = model_class(**config["model"])
+        model = model.to(device)
+        criterion = model.criterion
+        optimizer = getattr(torch.optim, config["model"]["optimizer"])(
+            model.parameters(),
+            lr=config["model"]["learning_rate"],
+            weight_decay=config["model"]["weight_decay"],
+        )
+
+        # Training loop
+        for epoch in range(config["training"]["epochs"]):
+            model.train()
+            print(f"\nEpoch {epoch+1}:")
+
+            # Training metrics
+            total_training_loss = 0
+            training_predictions = []
+            training_true_labels = []
+
+            for batch_idx, (images, labels) in enumerate(tqdm(train_loader)):
+                images = images.to(device)
+                encoded_labels = torch.from_numpy(
+                    label_encoder.transform(labels[config["target_feature"]])
+                ).to(device)
+
+                optimizer.zero_grad()
+                predictions = model(images)
+                loss = criterion(predictions, encoded_labels)
+                loss.backward()
+                optimizer.step()
+
+                total_training_loss += loss.item()
+
+                # Collect predictions and true labels
+                _, predicted = torch.max(predictions, 1)
+                training_predictions.extend(predicted.cpu().numpy())
+                training_true_labels.extend(encoded_labels.cpu().numpy())
+
+                # Log batch metrics
+                wandb.log(
+                    {
+                        f"batch_loss": loss.item(),
+                    },
+                )
+
+            # Calculate training metrics
+            avg_training_loss = total_training_loss / len(train_loader)
+
+            # Evaluation loop
+            model.eval()
+            total_test_loss = 0
+            test_predictions = []
+            test_true_labels = []
+
+            with torch.no_grad():
+                for images, labels in test_loader:
+                    images = images.to(device)
+                    encoded_labels = torch.from_numpy(
+                        label_encoder.transform(labels[config["target_feature"]])
+                    ).to(device)
+
+                    outputs = model(images)
+                    loss = criterion(outputs, encoded_labels)
+                    total_test_loss += loss.item()
+
+                    _, predicted = torch.max(outputs, 1)
+                    test_predictions.extend(predicted.cpu().numpy())
+                    test_true_labels.extend(encoded_labels.cpu().numpy())
+
+            # Calculate test metrics
+            avg_test_loss = total_test_loss / len(test_loader)
+
+            accuracy = np.mean(np.array(test_predictions) == np.array(test_true_labels))
+            print(
+                f"Training Loss: {avg_training_loss:.4f} | Test loss: {avg_test_loss:.4f}"
+            )
+            print(f"Test Accuracy: {100*accuracy:.2f}%")
+
+            wandb.log(
+                {
+                    "epoch": epoch,
+                    "train_loss": avg_training_loss,
+                    "test_loss": avg_test_loss,
+                    "test_accuracy": accuracy,
+                }
+            )
+
+        accuracies[group_left_out] = accuracy
+        all_predictions.extend(test_predictions)
+        all_true_labels.extend(test_true_labels)
+
+        wandb.finish()
+
+    wandb.init(
+        project=wandb_project,
+        config=config,
+        group=f"LOGO_{wandb_name}",
+        name="overall_metrics",
+    )
+
+    # Calculate and log overall metrics
+    overall_accuracy = np.mean(np.array(all_predictions) == np.array(all_true_labels))
+
+    wandb.log(
+        {
+            "overall_accuracy": overall_accuracy,
+            "accuracies_per_group": wandb.Table(
+                data=[[group, acc] for group, acc in accuracies.items()],
+                columns=["group", "accuracy"],
+            ),
+        }
+    )
+
+    # Print final results
+    print("\n=== Results ===")
+    for group, accuracy in accuracies.items():
+        print(f"Group '{group}': {100*accuracy:.2f}%")
+    print(f"Average accuracy: {100*sum(accuracies.values())/len(accuracies):.2f}%")
+
+    wandb.finish()
+    return accuracies

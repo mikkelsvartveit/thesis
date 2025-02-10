@@ -3,7 +3,7 @@ import torch
 
 
 class MINOS(nn.Module):
-    def __init__(self, num_classes: int):
+    def __init__(self, num_classes: int, **kwargs):
         super(MINOS, self).__init__()
         # 100x100x1
         self.conv1 = nn.Sequential(
@@ -26,6 +26,8 @@ class MINOS(nn.Module):
             nn.Linear(10 * 10 * 64, num_classes),
             nn.Softmax(dim=1) if num_classes > 1 else nn.Sigmoid(),
         )
+
+        self.criterion = nn.CrossEntropyLoss()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.conv1(x)

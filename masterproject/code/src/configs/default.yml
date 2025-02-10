@@ -1,0 +1,30 @@
+target_feature: endianness
+
+data:
+  name: ISAdetectDataset
+  dataset_path: ../dataset/ISAdetect/ISAdetect_full_dataset
+  feature_csv_path: ../dataset/ISAdetect-features.csv
+  per_architecture_limit: null
+  file_byte_read_limit: 10000
+  use_code_only: True
+
+transforms:
+  name: GrayScaleImage
+  dimx: 100
+  dimy: 100
+  normalize: True
+  duplicate_to_n_channels: 1
+
+model:
+  name: MINOS_cnn
+  learning_rate: 0.001
+  optimizer: AdamW
+  num_classes: 2
+  weight_decay: 0.0001
+
+validator:
+  name: LOGO_architecture_wandb
+
+training:
+  epochs: 2
+  batch_size: 32
