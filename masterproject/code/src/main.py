@@ -1,5 +1,6 @@
 import argparse
 import json
+from pprint import pprint
 import yaml
 from datetime import datetime
 from pathlib import Path
@@ -102,8 +103,10 @@ def get_config():
 def main():
     # Get configuration
     config = get_config()
+    pprint(config)
 
-    wandb.login(key="YOUR KEY :D")
+    if not wandb.login(timeout=60):
+        raise ValueError("Failed to login to wandb")
 
     # Initialize experiment manager
     # exp_manager = ExperimentManager(config)

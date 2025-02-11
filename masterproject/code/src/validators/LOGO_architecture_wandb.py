@@ -74,13 +74,13 @@ def LOGO_architecture_wandb(
             prefetch_factor=2,
         )
 
-        model = model_class(**config["model"])
+        model = model_class(**config["model"]["params"])
         model = model.to(device)
-        criterion = model.criterion
-        optimizer = getattr(torch.optim, config["model"]["optimizer"])(
+        criterion = getattr(model, "criterion", None) or getattr(nn, config["training"]["criterion"])()
+        optimizer = getattr(torch.optim, config["training"]["optimizer"])(
             model.parameters(),
-            lr=config["model"]["learning_rate"],
-            weight_decay=config["model"]["weight_decay"],
+            lr=config["training"]["learning_rate"],
+            weight_decay=config["training"]["weight_decay"],
         )
 
         # Training loop

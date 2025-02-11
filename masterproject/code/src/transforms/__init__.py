@@ -13,13 +13,13 @@ def get_transform(**kwargs):
 
     elif transform_name == "GrayScaleImage":
         return GrayScaleImage(
-            dimx=kwargs["dimx"],
-            dimy=kwargs["dimy"],
-            normalize=kwargs["normalize"],
-            duplicate_to_n_channels=kwargs["duplicate_to_n_channels"],
+            dimx=kwargs["params"]["dimx"],
+            dimy=kwargs["params"]["dimy"],
+            normalize=kwargs["params"]["normalize"],
+            duplicate_to_n_channels=kwargs["params"]["duplicate_to_n_channels"],
         )
 
     elif transform_name == "Vector1D":
-        return Vector1D(length=kwargs["length"])
+        return Vector1D(length=kwargs["params"]["length"])
 
     raise ValueError(f"Unknown transform: {transform_name}")

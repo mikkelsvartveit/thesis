@@ -9,7 +9,7 @@ def get_model(**kwargs):
         return MINOS
     elif name == "EndiannessModel":
         return EndiannessModel
-    elif name == "EmbeddingModel":
+    elif name == "EmbeddingAndCNNModel":
         return EmbeddingAndCNNModel
     elif name == "Simple1DCNN":
         return Simple1DCNN

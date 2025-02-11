@@ -9,20 +9,16 @@ def get_dataset(transform, **kwargs):
 
     if dataset_name == "MipsMipselDataset":
         return MipsMipselDataset(
-            data_dir=kwargs["data_dir"],
             transform=transform,
+            **kwargs["params"]
         )
     elif dataset_name == "ISAdetectDataset":
         return ISAdetectDataset(
-            dataset_path=kwargs["dataset_path"],
-            feature_csv_path=kwargs["feature_csv_path"],
-            per_architecture_limit=kwargs["per_architecture_limit"],
-            file_byte_read_limit=kwargs["file_byte_read_limit"],
-            use_code_only=kwargs["use_code_only"],
             transform=transform,
+            **kwargs["params"],
         )
     elif dataset_name == "ISAdetectEndiannessCounts":
         return ISAdetectEndiannessCounts(
-            data_dir=kwargs["data_dir"],
             transform=transform,
+            **kwargs["params"]
         )
