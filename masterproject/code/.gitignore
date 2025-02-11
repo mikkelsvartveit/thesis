@@ -3,6 +3,7 @@ dataset/*
 !dataset/download_isadetect.sh
 !dataset/ISAdetect-features.csv
 !dataset/Andreassen-ISAdetect-features.csv
+!dataset/download_cpu_rec.sh
 
 .venv
 *__pycache__
