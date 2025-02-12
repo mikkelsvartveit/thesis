@@ -38,11 +38,27 @@ This approach was chosen based on previous literature which successfully detecte
 
 ### Model architectures
 
-#### Embeddings
+Our research will explore various \ac{CNN} architectures to determine the most effective approach for ISA detection. We will train and validate several models while experimenting with the following architectural choices.
 
-### Validation
+#### CNN size and complexity
 
-- LOGO-CV
+The size of the \ac{CNN} determines the amount of computation required to train the model. While we have significant amounts of computation power available, we will need to balance the computational complexity of the model with the available resources as well as the size and diversity of our dataset. We will also experiment with both one-dimensional and two-dimensional \ac{CNN} architectures to determine the most effective approach for our dataset.
+
+#### Embedding layers
+
+An embedding layer transforms categorical data into vectors of continuous numbers. We attempt treating each byte value as a category, and use an embedding layer at the beginning of the \ac{CNN}. Instead of treating the byte values as numbers, this allows the model to learn the characteristics of each byte value and represent it mathematically.
+
+#### Transfer learning
+
+Transfer learning is a machine learning technique where a model developed for one task is re-used for another task. Transfer learning is very useful when there is little training data available, as well as in cases of limited computation power or time. Using a transfer learning approach can allow for deep networks despite these constraints. We attempt using \acp{CNN} pre-trained on ImageNet [@TODO], and use fine-tuning and feature extraction techniques to create tailored models.
+
+### Model training and validation
+
+#### Leave-one-group-out cross validation
+
+#### Hyperparameter tuning
+
+#### Final models
 
 ## Evaluation
 
