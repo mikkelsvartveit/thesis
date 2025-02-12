@@ -26,7 +26,7 @@ endif
 
 latex:
 	@echo "\nCompiling LaTeX file..."
-	mkdir -p ../output
+	mkdir -p ../../output
 	pandoc content/*.md \
 		--resource-path=content \
 		--citeproc \
@@ -34,7 +34,7 @@ latex:
 		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
 		--to=latex \
 		--standalone \
-		--output=../output/preproject.tex
+		--output=../../output/master-thesis.tex
 	@echo "Finished compiling LaTeX file."
 
 wordcount:
