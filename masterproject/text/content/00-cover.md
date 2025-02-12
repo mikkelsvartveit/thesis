@@ -59,6 +59,7 @@ header-includes:
 \begin{acronym}
 \acro{CISC}[CISC]{Complex Instruction Set Computing}
 \acro{CNN}[CNN]{Convolutional Neural Network}
+\acro{GPU}[GPU]{Graphics Processing Unit}
 \acro{ISA}[ISA]{Instruction Set Architecture}
 \acro{LOGO CV}{Leave-One-Group-Out Cross-Validation}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}

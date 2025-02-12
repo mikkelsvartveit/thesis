@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+    <!-- Background -->
+    
+    <!-- Binary File Section -->
+    <g transform="translate(100, 140)">
+        <!-- Binary File Label -->
+        <text x="0" y="-20" font-family="sans-serif" font-size="18" fill="#1a1a1a">Byte sequence (hex)</text>
+        
+        <!-- Binary Bytes - Made wider to fit text -->
+        <rect x="0" y="0" width="210" height="30" fill="#e9ecef" stroke="#495057"/>
+        <text x="10" y="18" font-family="monospace" font-size="12" fill="#495057">FF 80 40 00 C0 20 60 A0 E0</text>
+    </g>
+
+    <!-- Arrow -->
+    <g transform="translate(350, 155)">
+        <path d="M0,0 L80,0" stroke="#495057" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    
+    <!-- Pixel Grid Section -->
+    <g transform="translate(480, 80)">
+        <!-- Grid Label - Aligned with grid -->
+        <text x="0" y="-20" font-family="sans-serif" font-size="18" fill="#1a1a1a">Pixel Values</text>
+        
+        <!-- 3x3 Pixel Grid -->
+        <g>
+            <!-- Row 1 -->
+            <rect x="0" y="0" width="50" height="50" fill="#ffffff"/>
+            <rect x="50" y="0" width="50" height="50" fill="#808080"/>
+            <rect x="100" y="0" width="50" height="50" fill="#404040"/>
+            
+            <!-- Row 2 -->
+            <rect x="0" y="50" width="50" height="50" fill="#000000"/>
+            <rect x="50" y="50" width="50" height="50" fill="#c0c0c0"/>
+            <rect x="100" y="50" width="50" height="50" fill="#202020"/>
+            
+            <!-- Row 3 -->
+            <rect x="0" y="100" width="50" height="50" fill="#606060"/>
+            <rect x="50" y="100" width="50" height="50" fill="#a0a0a0"/>
+            <rect x="100" y="100" width="50" height="50" fill="#e0e0e0"/>
+            
+            <!-- Pixel Values -->
+            <text x="15" y="30" font-family="monospace" font-size="12" fill="#000000">255</text>
+            <text x="65" y="30" font-family="monospace" font-size="12" fill="#ffffff">128</text>
+            <text x="115" y="30" font-family="monospace" font-size="12" fill="#ffffff">64</text>
+            
+            <text x="20" y="80" font-family="monospace" font-size="12" fill="#ffffff">0</text>
+            <text x="65" y="80" font-family="monospace" font-size="12" fill="#000000">192</text>
+            <text x="115" y="80" font-family="monospace" font-size="12" fill="#ffffff">32</text>
+            
+            <text x="15" y="130" font-family="monospace" font-size="12" fill="#ffffff">96</text>
+            <text x="60" y="130" font-family="monospace" font-size="12" fill="#000000">160</text>
+            <text x="110" y="130" font-family="monospace" font-size="12" fill="#000000">224</text>
+        </g>
+    </g>
+
+    <!-- Value Range Indicator -->
+    <g transform="translate(480, 250)">
+        <!-- Gradient Bar -->
+        <defs>
+            <linearGradient id="pixel-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#000000"/>
+                <stop offset="100%" style="stop-color:#ffffff"/>
+            </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="150" height="20" fill="url(#pixel-gradient)"/>
+        
+        <!-- Value Labels -->
+        <text x="0" y="35" font-family="monospace" font-size="12" fill="#495057">0</text>
+        <text x="135" y="35" font-family="monospace" font-size="12" fill="#495057">255</text>
+    </g>
+
+    <!-- Arrow Marker Definition -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#495057"/>
+        </marker>
+    </defs>
+</svg>
