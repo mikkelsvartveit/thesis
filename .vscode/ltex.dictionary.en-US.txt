@@ -7,3 +7,4 @@ Endianness
 Haile
 Sahabandu
 ISAdetect
+Kairajärvi
