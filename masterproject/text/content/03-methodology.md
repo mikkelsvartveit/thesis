@@ -38,7 +38,7 @@ While most \ac{CNN} architectures are designed for image data, our datasets cons
 
 We treat each byte value as an integer whose value range from 0 to 255. The values are placed in a two-dimensional array of a predetermined size. If the file is larger than the predetermined size, only the first bytes are used. If the file is smaller than the predetermined size, the remaining bytes are padded with zero values.
 
-When applying two-dimensional \ac{CNN} on 2D grids of this format, the byte values will essentially be treated as pixel values, where the byte sequence forms a grayscale image. Figure \ref{fig:byte-encoding} shows an example of a 9-byte sequence encoded as a 3x3 pixel grayscale image.
+When applying two-dimensional \ac{CNN} on 2D grids of this format, the byte values will essentially be treated as pixel values, where the byte sequence forms a grayscale image. \autoref{fig:byte-encoding} shows an example of a 9-byte sequence encoded as a 3x3 pixel grayscale image.
 
 ![Encoding bytes as a grayscale image. \label{fig:byte-encoding}](images/byte-encoding.svg)
 
@@ -50,9 +50,9 @@ Similar to the 2D approach, we treat each byte as an integer. The values are pla
 
 This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019] [@Pizzolotto2021].
 
-### Model architectures
+### Model architecture
 
-Our research will explore various \ac{CNN} architectures to determine the most effective approach for ISA detection. We will train and validate several models while experimenting with the following architectural choices.
+Our research will explore various \ac{CNN} architectures to determine the most effective approach for ISA detection. We will train and validate several models while experimenting with the following configuration choices.
 
 #### CNN size and complexity
 
@@ -68,11 +68,43 @@ Transfer learning is a machine learning technique where a model developed for on
 
 ### Model training and validation
 
+#### Hyperparameters
+
+Unless specified otherwise, we will use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
+
+Table: Hyperparameter selection \label{table:hyperparameters}
+
+| Hyperparameter | Value         |
+| :------------- | :------------ |
+| Batch size     | 64            |
+| Loss function  | Cross entropy |
+| Optimizer      | AdamW         |
+| Learning rate  | 0.0001        |
+| Weight decay   | 0.01          |
+
+We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient GPU utilization, while small enough to provide a regularization effect through noise in gradient estimation.
+
+Cross entropy loss is the natural choice for classification tasks, as it tends to provide superior performance for classification tasks compared to mean squared error loss [@Golik2013].
+
+The AdamW optimizer is an improved version of Adam that implements weight decay correctly, decoupling it from the learning rate. It also improves on Adam's generalization performance on image classification datasets [@Loshchilov2019].
+
+A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We make this conservative choice due to early observations showing that small learning rates still cause the AdamW optimizer to reach convergence rather quickly for our dataset. Considering our vast amounts of computational resources, we want to err on the side of slower training rather than risking convergence issues.
+
+A weight decay of 0.01 provides moderate regularization strength, and provides a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
+
 #### Leave-one-group-out cross validation
 
-#### Hyperparameter tuning
+The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
+
+To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we will train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISADetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we will get a strong indication of how the model will perform on previously unseen \acp{ISA}.
+
+#### Cross-seed validation
+
+To account for the stochastic nature of deep neural network training, we validate each architecture by training five times with different random seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different random seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
 
 #### Final models
+
+When a model configuration exhibits high performance under \ac{LOGO CV}, we include it for further performance testing in the evaluation phase. Before evaluation, a final model is trained using all available training data, that is, without leaving out training instances of any group.
 
 ## Evaluation
 

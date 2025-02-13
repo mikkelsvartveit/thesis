@@ -6,7 +6,7 @@ TODO: Introduce section
 
 ### Binary executables
 
-All computer software boils down to a series of bytes readable by the CPU. The bytes are organized in _instructions_. An instruction always includes an _opcode_ (Operation Code), which tells the CPU what operation should be executed. Depending on the opcode, the instruction often contains one or more _operands_, which provides the CPU with the data that should be operated on. The operands can be immediate values (values specified directly in the instruction), registers (a small, very fast memory located physically on the CPU), or memory addresses. Figure \ref{fig:arm-instruction} illustrates the instruction format of ARM, which uses 32-bit instructions.
+All computer software boils down to a series of bytes readable by the CPU. The bytes are organized in _instructions_. An instruction always includes an _opcode_ (Operation Code), which tells the CPU what operation should be executed. Depending on the opcode, the instruction often contains one or more _operands_, which provides the CPU with the data that should be operated on. The operands can be immediate values (values specified directly in the instruction), registers (a small, very fast memory located physically on the CPU), or memory addresses. \autoref{fig:arm-instruction} illustrates the instruction format of ARM, which uses 32-bit instructions.
 
 ![Instruction format and examples from the ARM instruction set. \label{fig:arm-instruction}](images/arm-instruction.svg)
 
@@ -32,7 +32,7 @@ A fundamental characteristic of any \ac{ISA} is its word size, which defines the
 
 #### Endianness
 
-The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in Table \ref{tab:endianness}.
+The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{tab:endianness}.
 
 ```{=latex}
 \begin{table}[h]
@@ -99,11 +99,11 @@ Modern machine learning has roots all the way back to the 1950s, when the first 
 
 ### Convolutional neural networks
 
-\acp{CNN} is a deep learning technique designed for processing grid-based data. It is most commonly applied to visual tasks such as image classification and object detection. The main invention of \acp{CNN} is the concept of convolution layers. These layers scan across the input using _kernels_. The kernels detect features such as edges, textures, and patterns in the input data, and each output a feature map that is passed to the next layer. Each kernel has parameters that are trained based on the entire input grid. Figure \ref{fig:sliding-kernel} shows an example of a kernel sliding over the input.
+\acp{CNN} is a deep learning technique designed for processing grid-based data. It is most commonly applied to visual tasks such as image classification and object detection. The main invention of \acp{CNN} is the concept of convolution layers. These layers scan across the input using _kernels_. The kernels detect features such as edges, textures, and patterns in the input data, and each output a feature map that is passed to the next layer. Each kernel has parameters that are trained based on the entire input grid. \autoref{fig:sliding-kernel} shows an example of a kernel sliding over the input.
 
 ![A 3x3 kernel sliding over a 4x4 input. This layer will result in a 2x2 output. \label{fig:sliding-kernel}](images/sliding-kernel.svg)
 
-Most \ac{CNN} architectures also use pooling layers, which are static, non-trainable layers that reduce the spatial dimensions of the data. Activation layers, usually ReLU, are used to introduce non-linearity into the network. Finally, fully-connected layers at the end of the network are used for final classification. Figure \ref{fig:cnn-architecture} shows an example of a basic \ac{CNN} architecture.
+Most \ac{CNN} architectures also use pooling layers, which are static, non-trainable layers that reduce the spatial dimensions of the data. Activation layers, usually ReLU, are used to introduce non-linearity into the network. Finally, fully-connected layers at the end of the network are used for final classification. \autoref{fig:cnn-architecture} shows an example of a basic \ac{CNN} architecture.
 
 ![Simple CNN architecture \label{fig:cnn-architecture}](images/cnn-architecture.svg)
 
@@ -125,9 +125,13 @@ Choosing a \ac{CNN} architecture is often a trade-off between several factors:
 
 - **Inference resources**: Larger models do not only increase the cost of training, it also increases the cost of inference, i.e. making predictions using the trained model. Depending on where the model will be deployed, this may be a deciding factor.
 
+### Regularization
+
+TODO
+
 ### Leave-one-group-out cross validation
 
-_Cross validation_ is a technique used to assess performance and generalizability of a machine learning model. It involves partitioning data into subsets, where the model is trained on certain subsets while validated using the remaining ones. The process is repeated, making sure the model is trained and validated using different splits. This helps reduce overfitting on a fixed validation set, with the trade-off of requiring more computation since the model needs to be trained multiple times. Figure \ref{fig:cross-validation} illustrates how the data can be split in a 5-fold cross validation. Each fold serves as validation data once while remaining data is used for training.
+_Cross validation_ is a technique used to assess performance and generalizability of a machine learning model. It involves partitioning data into subsets, where the model is trained on certain subsets while validated using the remaining ones. The process is repeated, making sure the model is trained and validated using different splits. This helps reduce overfitting on a fixed validation set, with the trade-off of requiring more computation since the model needs to be trained multiple times. \autoref{fig:cross-validation} illustrates how the data can be split in a 5-fold cross validation. Each fold serves as validation data once while remaining data is used for training.
 
 It is worth noting that cross validation is used only when verifying the model architecture and hyperparameters, not when training the actual model that will be deployed. After performance is assessed using cross validation techniques, the final model is trained on all available training data without holding out a validation set.
 
