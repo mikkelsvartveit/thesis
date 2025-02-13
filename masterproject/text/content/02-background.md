@@ -83,11 +83,27 @@ The evolution of compilers brought significant advantages in code portability an
 As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
  -->
 
-### Reverse engineering
+## Software reverse engineering
 
-TODO
+<!-- What is it, why is it useful -->
+<!-- An Observational Investigation of Reverse Engineers’ Processes (veldig nice paper) -->
 
-- Typical reverse engineering process
+Software reverse engineering is a systematic process of analyzing and understanding how a program works without access to its original source code or internal documentation. At its core, reverse engineering involves working backwards from a compiled program to comprehend its functionality, architecture, and behavior - the opposite direction of traditional software development. Reverse engineering has its origins in hardware reverse engineering, where analysis of competitors designs was used to gain a competitive advantage. Software reverse engineering has evolved to focus primarily on understanding program behavior rather than replication. Whether investigating potentially malicious code or auditing critical systems, software reverse engineering provides insights when source code and documentation are unavailable.
+
+Software reverse engineering serves many different purposes in the digital landscape of today. In the domain of software security, it enables many types of vulnerability detection, where security researchers and bug hunters identify exploitable pieces of code. In addition, software RE is also used to identify and analyze malware, protecting critical systems from infected executables and preventing cyberattacks. Beyond cybersecurity, reverse engineering enables software interoperability by allowing engineers to understand how systems interact when documentation is unavailable. It can play a vital role in software maintenance, especially for legacy systems where original documentation or development expertise has been lost. Additional uses of software RE include: compliance verification and legal analysis, helping organizations validate software adherence to security standards and licensing requirements, and code ownership detection to enable accountability and uphold copyright laws.
+
+### Typical RE process
+
+<!--
+Automatic Vulnerability Detection in Embedded Devices and Firmware: Survey and Layered Taxonomies
+An Observational Investigation of Reverse Engineers’ Processes (veldig nice paper)
+
+Helping Johnny to Analyze Malware A Usability-Optimized Decompiler and Malware Analysis User Study
+ -->
+
+### Tools and challenges
+
+### What is needed to reverse engineer
 
 - Explain what ISA features are needed for reverse engineering
 
@@ -138,34 +154,45 @@ Regularization is a set of techniques for reducing overfitting in machine learni
 #### Ridge and Lasso regularization
 
 Lasso (L1) regularization and Ridge (L2) regularization both work by appending a regularization term to the loss function. The standard loss function for Mean Squared Error (MSE) is:
+
 $$
 L_{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y_i})^2
 $$
+
 Lasso (L1) regularization sums up the absolute value of all model weights, multiplies it by a regularization strength $\lambda$, and adds this term to the loss function:
+
 $$
 L_{lasso} = \underbrace{\frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2}_{\text{MSE}} + \underbrace{\lambda\sum_{j=1}^p|w_j|}_{\text{L1 penalty}}
 $$
+
 Ridge (L2) regularization sums up the absolute value of all model weights, multiplies it by a regularization strength $\lambda$, and adds this term to the loss function:
+
 $$
 L_{ridge} = \underbrace{\frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2}_{\text{MSE}} + \underbrace{\lambda\sum_{j=1}^pw_j^2}_{\text{L2 penalty}}
 $$
+
 Since the training process tries to update the model parameters in such a way that the loss function is minimized, both these regularization techniques result in models that balance fitting on the training data with maintaining simplicity.
 
 #### Weight decay
 
 Where L1 and L2 regularization add a regularization term to the loss function, weight decay instead modifies the weight update rule to include a decay factor. The standard weight update rule for gradient descent is:
+
 $$
 w_t = w_{t-1} - \eta\frac{\partial L}{\partial w}
 $$
+
 Weight decay scales down the previous parameter value by a factor of $(1 - \eta\lambda)$, where $\eta$ is the learning rate and $\lambda$ is the weight decay coefficient:
+
 $$
 w_t = w_{t-1}\underbrace{(1 - \eta\lambda)}_{\text{Decay factor}} - \eta\frac{\partial L}{\partial w}
 $$
+
 This causes the weights to gradually decay unless the gradient update is large enough to counteract it, leading to simpler models with smaller weights.
 
 When using standard gradient descent for training, weight decay is mathematically equivalent to Ridge (L2) regularization. However, with adaptive optimizers such as Adam, L2 regularization gets scaled by the adaptive learning rates. Weight decay avoids this issue by applying the penalty directly to the weights, which makes it preferable to L2 regularization for these optimizers.
 
 #### Dropout
+
 Dropout is a regularization technique that randomly deactivates a portion of neurons during each training iteration. During training, each neuron has a probability $p$ of being temporarily removed from the network along with its connections. For the next iteration, all neurons are restored before randomly dropping a new subset.
 
 During testing and inference, no neurons are dropped. Instead, all neuron outputs are scaled by $p$ to maintain the same expected magnitude of activations:
