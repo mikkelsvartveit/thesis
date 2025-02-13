@@ -8,3 +8,5 @@ Haile
 Sahabandu
 ISAdetect
 Kairajärvi
+Andreassen
+Granboulan

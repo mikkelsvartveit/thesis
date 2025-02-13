@@ -190,3 +190,75 @@
   primaryclass  = {cs.LG},
   url           = {https://arxiv.org/abs/1711.05101}
 }
+
+@conference{Kairajarvi2020,
+  author            = {Kairajärvi, Sami and Costin, Andrei and Hämäläinen, Timo},
+  title             = {ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code},
+  year              = {2020},
+  journal           = {CODASPY 2020 - Proceedings of the 10th ACM Conference on Data and Application Security and Privacy},
+  pages             = {376 - 380},
+  doi               = {10.1145/3374664.3375742},
+  url               = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85083380553&doi=10.1145%2f3374664.3375742&partnerID=40&md5=f0a84cc85f235cc9aa787e3fe10abee2},
+  abstract          = {Static and dynamic binary analysis techniques are actively used to reverse engineer software's behavior and to detect its vulnerabilities, even when only the binary code is available for analysis. To avoid analysis errors due to misreading op-codes for a wrong CPU architecture, these analysis tools must precisely identify the Instruction Set Architecture (ISA) of the object code under analysis. The variety of CPU architectures that modern security and reverse engineering tools must support is ever increasing due to massive proliferation of IoT devices and the diversity of firmware and malware targeting those devices. Recent studies concluded that falsely identifying the binary code's ISA caused alone about 10% of failures of IoT firmware analysis. The state of the art approaches detecting ISA for executable object code look promising, and their results demonstrate effectiveness and high-performance. However, they lack the support of publicly available datasets and toolsets, which makes the evaluation, comparison, and improvement of those techniques, datasets, and machine learning models quite challenging (if not impossible). This paper bridges multiple gaps in the field of automated and precise identification of architecture and endianness of binary files and object code. We develop from scratch the toolset and datasets that are lacking in this research space. As such, we contribute a comprehensive collection of open data, open source, and open API web-services. We also attempt experiment reconstruction and cross-validation of effectiveness, efficiency, and results of the state of the art methods. When training and testing classifiers using solely code-sections from executable binary files, all our classifiers performed equally well achieving over 98% accuracy. The results are consistent and comparable with the current state of the art, hence supports the general validity of the algorithms, features, and approaches suggested in those works. © 2020 ACM.},
+  type              = {Conference paper},
+  publication_stage = {Final},
+  source            = {Scopus},
+  note              = {Cited by: 4; All Open Access, Green Open Access}
+}
+
+@misc{Kairajarvi_dataset2020,
+  author = {Kairajärvi, Sami and Costin, Andrei},
+  title = {ISAdetect binary file and object code dataset},
+  howpublished = {\url{http://urn.fi/urn:nbn:fi:att:693a3e3a-976a-4eac-8c3d-a4a62619f8b1}},
+  month = {3},
+  year = {2020},
+  note = {University of Jyväskylä, Informaatioteknologian tiedekunta}
+}
+
+@conference{Clemens2015,
+  author            = {Clemens, John},
+  title             = {Automatic classification of object code using machine learning},
+  year              = {2015},
+  journal           = {Proceedings of the Digital Forensic Research Conference, DFRWS 2015 USA},
+  pages             = {S156 - S162},
+  doi               = {10.1016/j.diin.2015.05.007},
+  url               = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85054073102&doi=10.1016%2fj.diin.2015.05.007&partnerID=40&md5=0ef7b775f4964200f8dc48479ac27cad},
+  abstract          = {Recent research has repeatedly shown that machine learning techniques can be applied to either whole files or file fragments to classify them for analysis. We build upon these techniques to show that for samples of un-labeled compiled computer object code, one can apply the same type of analysis to classify important aspects of the code, such as its target architecture and endianess. We show that using simple byte-value histograms we retain enough information about the opcodes within a sample to classify the target architecture with high accuracy, and then discuss heuristic-based features that exploit information within the operands to determine endianess. We introduce a dataset with over 16000 code samples from 20 architectures and experimentally show that by using our features, classifiers can achieve very high accuracy with relatively small sample sizes. © 2015 The Authors. Published by Elsevier Ltd on behalf of DFRWS.},
+  type              = {Conference paper},
+  publication_stage = {Final},
+  source            = {Scopus},
+  note              = {Cited by: 2; All Open Access, Green Open Access, Hybrid Gold Open Access}
+}
+
+@article{Andreassen_Morrison_2024, 
+  title={Discovery of endianness and instruction size characteristics in binary programs from unknown instruction set architectures}, 
+  url={https://www.ntnu.no/ojs/index.php/nikt/article/view/6225},
+  abstractNote={&lt;p&gt;We approach the problem of streamlining reverse engineering (RE) of binary programs from unknown instruction set architectures (ISA). We focus on two fundamental ISA prerequisites to beginning the RE process: identification of endianness and whether the instruction width is a fixed or variable. For ISAs with a fixed instruction width, we also present methods for estimating the width. In addition to advancing research in software RE, our work can also be seen as a first step in hardware reverse engineering, because endianness and instruction format inherently describe properties of the underlying ISA.&lt;/p&gt; &lt;p&gt;We detail our efforts at feature engineering and perform experiments using a variety of machine learning models on two datasets of architectures using leave-one-group-out-cross-validation to simulate conditions where the tested ISA is unknown and unseen during model training. We use bigram-based features for endianness detection and the autocorrelation function, commonly used in signal processing applications, for differentiation between fixed- and variable-width instruction sizes. Initial results are promising, with endianness detection at 99.4%, fixed- versus variable-width instruction size at 86.0%, and detection of fixed instruction sizes at 88.0%.&lt;/p&gt;}, 
+  number={1}, 
+  journal={Norsk IKT-konferanse for forskning og utdanning}, 
+  author={Andreassen, Joachim and Morrison, Donn}, 
+  year={2024}, 
+  month={Nov.} 
+}
+
+@misc{Granboulan_paper2020,
+  author = {Granboulan, Louis},
+  title = {cpu_rec_sstic_english.md},
+  year = {2020},
+  month = {02},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/airbus-seclab/cpu_rec/blob/master/doc/cpu_rec_sstic_english.md},
+  commit = {ccc733093cef9eec3e7d68081ead187ab5ea19bc},
+  urldate = {2025-02-13}
+}
+
+@misc{Granboulan_cpu_rec_dataset2024,
+  author = {Granboulan, Louis},
+  title = {cpu_rec_corpus},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/airbus-seclab/cpu_rec/tree/master/cpu_rec_corpus},
+  commit = {87f50b1df4125fced3f69e0d93dcfdd6ef70d087},
+  urldate = {2025-02-13}
+}
