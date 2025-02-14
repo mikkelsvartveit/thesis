@@ -262,3 +262,92 @@
   commit = {87f50b1df4125fced3f69e0d93dcfdd6ef70d087},
   urldate = {2025-02-13}
 }
+
+@article{Chikofsky1990,
+  author   = {Chikofsky, E.J. and Cross, J.H.},
+  journal  = {IEEE Software},
+  title    = {Reverse engineering and design recovery: a taxonomy},
+  year     = {1990},
+  volume   = {7},
+  number   = {1},
+  pages    = {13-17},
+  keywords = {Reverse engineering;Taxonomy;Software maintenance;Hardware;Software systems;Software performance;Water heating;Engineering drawings;Cloning;Control systems},
+  doi      = {10.1109/52.43044}
+}
+
+@ARTICLE{Qasem2022,
+	author = {Qasem, Abdullah and Shirani, Paria and Debbabi, Mourad and Wang, Lingyu and Lebel, Bernard and Agba, Basile L.},
+	title = {Automatic Vulnerability Detection in Embedded Devices and Firmware: Survey and Layered Taxonomies},
+	year = {2022},
+	journal = {ACM Computing Surveys},
+	volume = {54},
+	number = {2},
+	doi = {10.1145/3432893},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85105762241&doi=10.1145%2f3432893&partnerID=40&md5=fbe266e1d3c5a3a1c727d3ca1989ab50},
+	type = {Review},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 40}
+}
+
+@CONFERENCE{Votipka2020,
+	author = {Votipka, Daniel and Rabin, Seth M. and Micinski, Kristopher and Foster, Jeffrey S. and Mazurek, Michelle M.},
+	title = {An observational investigation of reverse engineers' processes},
+	year = {2020},
+	journal = {Proceedings of the 29th USENIX Security Symposium},
+	pages = {1875 - 1892},
+	url = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85091828567&partnerID=40&md5=16d9d8131667a5095d5b391e538b7181},
+	type = {Conference paper},
+	publication_stage = {Final},
+	source = {Scopus},
+	note = {Cited by: 48}
+}
+
+TODO ASK DONNER OM THIS
+@unpublished{GorkeSteensland2024,
+  author = {Görke, Norbert Arkadiusz and Steensland, Magnus Hektoen},
+  note = {@TODO},
+  title = {A Semi-Systematic Review of Reverse Engineering: Processes, Tools, and Their Internal Operations},
+  year = {2024},
+  month = {12},
+}
+@unpublished{SvartveitSulebak2024,
+  author = {Svartveit, Mikkel and Sulebak, Stian Jørstad},
+  note = {@TODO},
+  title = {Machine Learning for Reverse Engineering & Convolutional Neural Networks for Binary Code Analysis: A Systematic Literature Review},
+  year = {2024},
+  month = {12},
+}
+--------------------------
+@article{Nicolao2018,
+  author            = {De Nicolao, Pietro and Pogliani, Marcello and Polino, Mario and Carminati, Michele and Quarta, Davide and Zanero, Stefano},
+  title             = {ELISA: ELiciting ISA of raw binaries for fine-grained code and data separation},
+  year              = {2018},
+  journal           = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+  volume            = {10885 LNCS},
+  pages             = {351 - 371},
+  doi               = {10.1007/978-3-319-93411-2_16},
+  url               = {https://www.scopus.com/inward/record.uri?eid=2-s2.0-85049313640&doi=10.1007%2f978-3-319-93411-2_16&partnerID=40&md5=82ff352427ff57da78df485e9db70903},
+  abstract          = {Static binary analysis techniques are widely used to reconstruct the behavior and discover vulnerabilities in software when source code is not available. To avoid errors due to mis-interpreting data as machine instructions (or vice-versa), disassemblers and static analysis tools must precisely infer the boundaries between code and data. However, this information is often not readily available. Worse, compilers may embed small chunks of data inside the code section. Most state of the art approaches to separate code and data are rooted on recursive traversal disassembly, with severe limitations when dealing with indirect control instructions. We propose ELISA, a technique to separate code from data and ease the static analysis of executable files. ELISA leverages supervised sequential learning techniques to locate the code section(s) boundaries of header-less binary files, and to predict the instruction boundaries inside the identified code section. As a preliminary step, if the Instruction Set Architecture (ISA) of the binary is unknown, ELISA leverages a logistic regression model to identify the correct ISA from the file content. We provide a comprehensive evaluation on a dataset of executables compiled for different ISAs, and we show that our method is capable to identify code sections with a byte-level accuracy (F1 score) ranging from 98.13% to over 99.9% depending on the ISA. Fine-grained separation of code from embedded data on x86, x86-64 and ARM executables is accomplished with an accuracy of over 99.9%. © Springer International Publishing AG, part of Springer Nature 2018.},
+  type              = {Conference paper},
+  publication_stage = {Final},
+  source            = {Scopus},
+  note              = {Cited by: 9}
+}
+
+@inproceedings{BinJuice2013,
+author = {Lakhotia, Arun and Preda, Mila Dalla and Giacobazzi, Roberto},
+title = {Fast location of similar code fragments using semantic 'juice'},
+year = {2013},
+isbn = {9781450318570},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2430553.2430558},
+doi = {10.1145/2430553.2430558},
+abstract = {Abstraction of semantics of blocks of a binary is termed as 'juice.' Whereas the denotational semantics summarizes the computation performed by a block, its juice presents a template of the relationships established by the block. BinJuice is a tool for extracting the 'juice' of a binary. It symbolically interprets individual blocks of a binary to extract their semantics: the effect of the block on the program state. The semantics is generalized to juice by replacing register names and literal constants by typed, logical variables. The juice also maintains algebraic constraints between the numeric variables. Thus, this juice forms a semantic template that is expected to be identical regardless of code variations due to register renaming, memory address allocation, and constant replacement. The terms in juice can be canonically ordered using a linear order presented. Thus semantically equivalent (rather, similar) code fragments can be identified by simple structural comparison of their juice, or by comparing their hashes. While BinJuice cannot find all equivalent constructs, for that would solve the Halting Problem, it does significantly improve the state-of-the-art in both the computational complexity as well as the set of equivalences it can establish. Preliminary results show that juice is effective in pairing code variants created by post-compile obfuscating transformations.},
+booktitle = {Proceedings of the 2nd ACM SIGPLAN Program Protection and Reverse Engineering Workshop},
+articleno = {5},
+numpages = {6},
+location = {Rome, Italy},
+series = {PPREW '13}
+}
