@@ -31,7 +31,7 @@ While many of the more common ISAs were packaged using standard file-headers, so
 
 ## Machine learning models
 
-This research will primarily involve training, validating, and evaluating \ac{CNN} models using ISA characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing, model architecture selection, and validation techniques.
+This research primarily involves training, validating, and evaluating \ac{CNN} models using ISA characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing, model architecture selection, and validation techniques.
 
 ### Data preprocessing
 
@@ -55,11 +55,11 @@ This approach was chosen based on previous literature which successfully detecte
 
 ### Model architecture
 
-Our research will explore various \ac{CNN} architectures to determine the most effective approach for ISA detection. We will train and validate several models while experimenting with the following configuration choices.
+Our research explores various \ac{CNN} architectures to determine the most effective approach for ISA detection. We train and validate several models while experimenting with the following configuration choices.
 
 #### CNN size and complexity
 
-The size of the \ac{CNN} determines the amount of computation required to train the model. While we have significant amounts of computation power available, we will need to balance the computational complexity of the model with the available resources as well as the size and diversity of our dataset. We will also experiment with both one-dimensional and two-dimensional \ac{CNN} architectures to determine the most effective approach for our dataset.
+The size of the \ac{CNN} determines the amount of computation required to train the model. While we have significant amounts of computation power available, we need to balance the computational complexity of the model with the available resources as well as the size and diversity of our dataset. We also experiment with both one-dimensional and two-dimensional \ac{CNN} architectures to determine the most effective approach for our dataset.
 
 #### Embedding layers
 
@@ -73,7 +73,7 @@ Transfer learning is a machine learning technique where a model developed for on
 
 #### Hyperparameters
 
-Unless specified otherwise, we will use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
+Unless specified otherwise, we use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
 
 Table: Hyperparameter selection \label{table:hyperparameters}
 
@@ -99,7 +99,7 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
 
-To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we will train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISADetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we will get a strong indication of how the model will perform on previously unseen \acp{ISA}.
+To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISADetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we get a strong indication of how the model performs on previously unseen \acp{ISA}.
 
 #### Cross-seed validation
 
