@@ -63,11 +63,11 @@ The size of the \ac{CNN} determines the amount of computation required to train 
 
 #### Embedding layers
 
-An embedding layer transforms categorical data into vectors of continuous numbers. We attempt treating each byte value as a category, and use an embedding layer at the beginning of the \ac{CNN}. Instead of treating the byte values as numbers, this allows the model to learn the characteristics of each byte value and represent it mathematically.
+An embedding layer transforms categorical data into vectors of continuous numbers (see \autoref{embeddings} for details). We attempt treating each byte value as a category, and use an embedding layer at the beginning of the \ac{CNN}. Instead of treating the byte values as numbers, this allows the model to learn the characteristics of each byte value and represent it mathematically.
 
 #### Transfer learning
 
-Transfer learning is a machine learning technique where a model developed for one task is re-used for another task. Transfer learning is very useful when there is little training data available, as well as in cases of limited computation power or time. Using a transfer learning approach can allow for deep networks despite these constraints. We attempt using \acp{CNN} pre-trained on ImageNet [@TODO], and use fine-tuning and feature extraction techniques to create tailored models.
+Transfer learning is a machine learning technique where a model developed for one task is re-used for another task (see \autoref{transfer-learning} for details). Transfer learning is very useful when there is little training data available, as well as in cases of limited computation power or time. Using a transfer learning approach can allow for deep networks despite these constraints. We attempt using \acp{CNN} pre-trained on ImageNet [@ImageNet], and use fine-tuning and feature extraction techniques to create tailored models.
 
 ### Model training and validation
 

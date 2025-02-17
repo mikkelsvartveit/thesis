@@ -222,8 +222,18 @@ It is worth noting that cross validation is used only when verifying the model a
 
 ### Embeddings
 
-TODO
+Embeddings are a way a to convert discrete data like words, categories, or items into continuous vectors of numbers that capture semantic relationships or patterns. These vectors are part of the model's trainable parameters, which allows the model to discover semantics from the input data during training. It is common to include an embedding layer as the first layer of a deep learning model, essentially creating a mathematical representation of arbitrary categorical data.
+
+Word embeddings serve as the foundation for many natural language processing tasks. When trained on massive English datasets, these embeddings often capture sophisticated semantic relationships. A classic example in the literature demonstrates this through vector arithmetic: starting with the vector of "king", subtracting "man", and adding "woman", we end up with a vector that is very close to that of "queen" [@Mikolov2013].
 
 ### Transfer learning
 
-TODO
+Transfer learning is the concept of training a model for one purpose, and then re-using some or all of the trained weights for a different application. For instance, CNN models trained on ImageNet – a large dataset of 3.2 million images – are readily available online [@ImageNet]. Transfer learning is useful in cases where there is not enough training data to train a model from scratch, or when there are limited amounts of time or computational resources available.
+
+#### Fine-tuning
+
+Fine-tuning involves taking a pre-trained model and then training it further on a new but related task. The model's weights are updated to work with the new task, while retaining knowledge from pre-training. Common approaches include full fine-tuning (updating all parameters), partial fine-tuning (updating certain layers while others reming frozen), and gradual fine-tuning (progressively increasing the learning rate across layers).
+
+#### Feature extraction
+
+Instead of updating the model's weights, we can use the pre-trained model as a feature extractor. In this case, we typically remove the final classification layers of the pre-trained model, and feed the remaining layers into a new classifier that is trained on our own data. The pre-trained layers remain completely frozen during training.
