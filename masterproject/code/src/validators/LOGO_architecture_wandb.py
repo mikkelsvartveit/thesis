@@ -12,7 +12,7 @@ from tqdm import tqdm
 def LOGO_architecture_wandb(
     config, dataset: Dataset, model_class: nn.Module.__class__, device
 ):
-    wandb_name = f"logo_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    group_name = f"logo {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
     wandb_project = "testing"
     # Initialize W&B
 
@@ -36,8 +36,8 @@ def LOGO_architecture_wandb(
         wandb.init(
             project=wandb_project,
             config=config,
-            group=f"LOGO_{wandb_name}",
-            name=f"fold_{fold}, group left out: {group_left_out}",
+            group=f"{group_name}",
+            name=f"fold_{group_left_out}",
         )
 
         wandb.define_metric("epoch")
@@ -76,7 +76,10 @@ def LOGO_architecture_wandb(
 
         model = model_class(**config["model"]["params"])
         model = model.to(device)
-        criterion = getattr(model, "criterion", None) or getattr(nn, config["training"]["criterion"])()
+        criterion = (
+            getattr(model, "criterion", None)
+            or getattr(nn, config["training"]["criterion"])()
+        )
         optimizer = getattr(torch.optim, config["training"]["optimizer"])(
             model.parameters(),
             lr=config["training"]["learning_rate"],
@@ -170,9 +173,23 @@ def LOGO_architecture_wandb(
     wandb.init(
         project=wandb_project,
         config=config,
-        group=f"LOGO_{wandb_name}",
+        group=f"{group_name}",
         name="overall_metrics",
     )
+
+    # try save model if onnx is installed
+    try:
+        sample_input = DataLoader(dataset, batch_size=1, shuffle=True)
+        sample_input = next(iter(sample_input))[0]
+
+        torch.onnx.export(
+            model_class(**config["model"]["params"]),
+            sample_input,
+            "model.onnx",
+        )
+        wandb.save("model.onnx")
+    except Exception as e:
+        print(f"Failed to save model as onnx: {e}")
 
     # Calculate and log overall metrics
     overall_accuracy = np.mean(np.array(all_predictions) == np.array(all_true_labels))

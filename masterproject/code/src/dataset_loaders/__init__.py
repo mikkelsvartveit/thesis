@@ -8,17 +8,11 @@ def get_dataset(transform, **kwargs):
     dataset_name = kwargs["name"]
 
     if dataset_name == "MipsMipselDataset":
-        return MipsMipselDataset(
-            transform=transform,
-            **kwargs["params"]
-        )
+        return MipsMipselDataset(transform=transform, **kwargs["params"])
     elif dataset_name == "ISAdetectDataset":
         return ISAdetectDataset(
             transform=transform,
             **kwargs["params"],
         )
     elif dataset_name == "ISAdetectEndiannessCounts":
-        return ISAdetectEndiannessCounts(
-            transform=transform,
-            **kwargs["params"]
-        )
+        return ISAdetectEndiannessCounts(transform=transform, **kwargs["params"])

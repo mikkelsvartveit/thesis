@@ -54,7 +54,10 @@ def LOGO_architecture(
 
         model = model_class(**config["model"]["params"])
         model = model.to(device)
-        criterion = getattr(model, "criterion", None) or getattr(nn, config["training"]["criterion"])()
+        criterion = (
+            getattr(model, "criterion", None)
+            or getattr(nn, config["training"]["criterion"])()
+        )
         optimizer = getattr(torch.optim, config["training"]["optimizer"])(
             model.parameters(),
             lr=config["training"]["learning_rate"],

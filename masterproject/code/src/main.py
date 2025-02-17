@@ -47,7 +47,9 @@ def get_config():
     parser = argparse.ArgumentParser(description="Training script")
     parser.add_argument("--config", type=str, help="Path to config file")
     parser.add_argument(
-        "--override", type=json.loads, help="JSON string to override config"
+        "--override",
+        type=json.loads,
+        help='JSON string to override config, ex: --override \'{"data": {"params": {"per_architecture_limit": 5}}}\'',
     )
     args = parser.parse_args()
 
@@ -56,33 +58,9 @@ def get_config():
         with open(args.config) as f:
             config = yaml.safe_load(f)
     else:
-        config = {
-            "target_feature": "endianness",
-            "data": {
-                "name": "ISAdetectDataset",
-                "dataset_path": "../dataset/ISAdetect/ISAdetect_full_dataset",
-                "feature_csv_path": "../dataset/ISAdetect-features.csv",
-                "per_architecture_limit": None,
-                "file_byte_read_limit": 10000,
-                "use_code_only": True,
-            },
-            "transforms": {
-                "name": "GrayScaleImage",
-                "dimx": 100,
-                "dimy": 100,
-                "normalize": True,
-                "duplicate_to_n_channels": 1,
-            },
-            "model": {
-                "name": "MINOS_cnn",
-                "learning_rate": 0.001,
-                "optimizer": "AdamW",
-                "num_classes": 2,
-                "weight_decay": 0.0001,
-            },
-            "validator": {"name": "LOGO_architecture"},
-            "training": {"epochs": 2, "batch_size": 32},
-        }
+        # Default config
+        with open("configs/default.yml") as f:
+            config = yaml.safe_load(f)
 
     # Override with command line arguments if provided
     if args.override:
@@ -96,6 +74,8 @@ def get_config():
             return d
 
         config = update_dict(config, args.override)
+        print("Overridden config:")
+        pprint(config)
 
     return config
 
@@ -103,7 +83,6 @@ def get_config():
 def main():
     # Get configuration
     config = get_config()
-    pprint(config)
 
     if not wandb.login(timeout=60):
         raise ValueError("Failed to login to wandb")
