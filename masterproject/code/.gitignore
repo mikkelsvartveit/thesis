@@ -5,6 +5,7 @@ dataset/*
 !dataset/Andreassen-ISAdetect-features.csv
 !dataset/generate_filesizes.py
 
+.env
 .venv
 *__pycache__
 *.pytest_cache
