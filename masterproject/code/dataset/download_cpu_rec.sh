@@ -15,3 +15,6 @@ for file in *.xz; do
     xz -d -q $file
 done
 echo "Done."
+
+# rm files that starts with _
+rm _*

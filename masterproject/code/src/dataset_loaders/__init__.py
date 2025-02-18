@@ -2,6 +2,7 @@ from .MipsMipselDataset import *
 from .utils import *
 from .ISAdetectDataset import *
 from .ISAdetectEndiannessCounts import *
+from .CpuRecDataset import *
 
 
 def get_dataset(transform, dataset_base_path: PathLike, **kwargs):
@@ -18,6 +19,11 @@ def get_dataset(transform, dataset_base_path: PathLike, **kwargs):
         return MipsMipselDataset(transform=transform, **params)
     elif dataset_name == "ISAdetectDataset":
         return ISAdetectDataset(
+            transform=transform,
+            **params,
+        )
+    elif dataset_name == "CpuRecDataset":
+        return CpuRecDataset(
             transform=transform,
             **params,
         )

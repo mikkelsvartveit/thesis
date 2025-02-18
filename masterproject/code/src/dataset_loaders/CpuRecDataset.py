@@ -6,7 +6,7 @@ import numpy as np
 from src.dataset_loaders.utils import get_architecture_features, get_elf_header_end
 
 
-class ISAdetectDataset(Dataset):
+class CpuRecDataset(Dataset):
     def __init__(
         self,
         dataset_path: PathLike,
@@ -14,7 +14,6 @@ class ISAdetectDataset(Dataset):
         transform=None,
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
-        use_code_only: bool = True,
         max_file_splits: int | None = None,
     ):
         self.transform = transform
@@ -23,51 +22,34 @@ class ISAdetectDataset(Dataset):
         self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
 
-        self.use_code_only = use_code_only
-
-        # Collect files
         metadata_errors = []
+        # Collect files
         for isa in Path(dataset_path).iterdir():
-            if isa.is_dir():
-                file_count = 0
-                metadata = get_architecture_features(
-                    dataset_path / feature_csv_path, isa.name
-                )
+            isa_name = isa.name.split(".")[0].lower()
+            file_count = 0
+            metadata = get_architecture_features(
+                dataset_path / feature_csv_path, isa_name
+            )
+            if not metadata:
+                metadata_errors.append(isa_name)
+                continue
+            # Split file into file_byte_read_limit chunks
+            file_splits = 1
+            if max_file_splits and file_byte_read_limit:
+                file_size = isa.stat().st_size
+                file_splits = file_size // file_byte_read_limit
+                file_splits = min(file_splits, max_file_splits)
 
-                if not metadata:
-                    metadata_errors.append(isa.name)
-                    continue
-
-                for file_path in isa.glob("*.code"):
-
-                    # if using full binary, remove .code and add offset skipping elf header
-                    elf_end_offset = 0
-                    if not use_code_only:
-                        file_path = file_path.with_suffix("")
-                        elf_end_offset = get_elf_header_end(file_path)
-
-                    # Split file into file_byte_read_limit chunks
-                    file_splits = 1
-                    if max_file_splits and file_byte_read_limit:
-                        file_size = file_path.stat().st_size
-                        file_splits = file_size // file_byte_read_limit
-                        file_splits = min(file_splits, max_file_splits)
-
-                    for i in range(file_splits):
-                        self.files.append(file_path)
-                        self.file_byte_offset.append(
-                            elf_end_offset + i * file_byte_read_limit
-                        )
-                        self.metadata.append(metadata)
-                        file_count += 1
-                        if (
-                            per_architecture_limit
-                            and file_count >= per_architecture_limit
-                        ):
-                            break
-                    if per_architecture_limit and file_count >= per_architecture_limit:
-                        print(isa.name, "limit reached")
-                        break
+            for i in range(file_splits):
+                self.files.append(isa)
+                self.file_byte_offset.append(i * file_byte_read_limit)
+                self.metadata.append(metadata)
+                file_count += 1
+                if per_architecture_limit and file_count >= per_architecture_limit:
+                    break
+            if per_architecture_limit and file_count >= per_architecture_limit:
+                print(isa_name, "limit reached")
+                break
 
         if metadata_errors:
             print("Metadata errors:", metadata_errors)
