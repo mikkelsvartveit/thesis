@@ -6,23 +6,25 @@ data:
     dataset_path: ISAdetect/ISAdetect_full_dataset/
     feature_csv_path: ISAdetect-features.csv
     per_architecture_limit: null
-    file_byte_read_limit: 512
+    file_byte_read_limit: 1024
     use_code_only: True
 
 transforms:
-  name: Vector1D
+  name: GrayScaleImage
   params:
-    length: 512
+    dimx: 32
+    dimy: 32
+    normalize: True
+    duplicate_to_n_channels: null
 
 model:
-  name: EmbeddingAndCNNModel
+  name: Simple2dCNN
   params:
-    input_length: 512
     num_classes: 2
     dropout_rate: 0.3
 
 validator:
-  name: LOGO_architecture
+  name: LOGO_architecture_wandb
 
 training:
   optimizer: AdamW

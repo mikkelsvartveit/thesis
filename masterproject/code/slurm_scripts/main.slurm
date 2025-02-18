@@ -20,6 +20,6 @@ echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
 cd src
-python ./main.py --config configs/default.yml
+python ./main.py --config default.yml
 
 echo "Job finished on $(date)"

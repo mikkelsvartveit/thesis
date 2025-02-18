@@ -22,7 +22,7 @@ model:
     dropout_rate: 0.3
 
 validator:
-  name: LOGO_architecture
+  name: LOGO_architecture_wandb
 
 training:
   optimizer: AdamW
