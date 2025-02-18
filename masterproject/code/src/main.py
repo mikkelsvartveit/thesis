@@ -53,7 +53,7 @@ def get_config(configs_base_path: Path) -> Dict[str, Any]:
 
     # Load base config
     if args.config:
-        with open(configs_base_path / Path(args.config)) as f:
+        with open(args.config) as f:
             config = yaml.safe_load(f)
     else:
         # Default config

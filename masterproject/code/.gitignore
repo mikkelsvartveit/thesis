@@ -1,6 +1,7 @@
 dataset/*
 !dataset/structure.md
 !dataset/download_isadetect.sh
+!dataset/download_cpu_rec.sh
 !dataset/ISAdetect-features.csv
 !dataset/Andreassen-ISAdetect-features.csv
 !dataset/generate_filesizes.py
