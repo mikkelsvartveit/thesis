@@ -1,3 +1,4 @@
+from os import PathLike
 from pathlib import Path
 import torch
 from torch.utils.data import Dataset
@@ -8,7 +9,7 @@ from src.dataset_loaders.utils import get_architecture_features, get_elf_header_
 class ISAdetectDataset(Dataset):
     def __init__(
         self,
-        dataset_path,
+        dataset_path: PathLike,
         feature_csv_path,
         transform=None,
         per_architecture_limit=None,
@@ -28,8 +29,9 @@ class ISAdetectDataset(Dataset):
         for isa in Path(dataset_path).iterdir():
             if isa.is_dir():
                 file_count = 0
-                metadata = get_architecture_features(feature_csv_path, isa.name)
-
+                metadata = get_architecture_features(
+                    dataset_path / feature_csv_path, isa.name
+                )
                 for file_path in isa.glob("*.code"):
 
                     # if using full binary, remove .code and add offset skipping elf header

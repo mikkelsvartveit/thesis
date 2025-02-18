@@ -14,7 +14,6 @@ def LOGO_architecture_wandb(
 ):
     group_name = f"logo {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
     wandb_project = "testing"
-    # Initialize W&B
 
     groups = list(map(lambda x: x["architecture"], dataset.metadata))
     target_features = list(map(lambda x: x[config["target_feature"]], dataset.metadata))

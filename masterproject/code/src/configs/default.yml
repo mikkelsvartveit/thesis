@@ -3,8 +3,8 @@ target_feature: endianness
 data:
   name: ISAdetectDataset
   params:
-    dataset_path: ../dataset/ISAdetect/ISAdetect_full_dataset
-    feature_csv_path: ../dataset/ISAdetect-features.csv
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
     per_architecture_limit: null
     file_byte_read_limit: 10000
     use_code_only: True

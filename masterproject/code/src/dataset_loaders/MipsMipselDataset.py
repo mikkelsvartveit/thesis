@@ -1,3 +1,4 @@
+from os import PathLike
 import torch
 from torch.utils.data import Dataset, DataLoader
 from src.dataset_loaders.utils import random_train_test_split
@@ -7,19 +8,22 @@ import numpy as np
 
 
 class MipsMipselDataset(Dataset):
-    def __init__(self, mips_dir, mipsel_dir, transform=None):
+    def __init__(self, dataset_path: PathLike, transform=None):
         self.transform = transform
         self.files = []
         self.labels = []
 
+        mips_path = Path(dataset_path) / Path("mips")
+        mipsel_path = Path(dataset_path) / Path("mipsel")
+
         # Collect MIPS files (label 0)
-        mips_files = Path(mips_dir).glob("*.code")
+        mips_files = mips_path.glob("*.code")
         for file_path in mips_files:
             self.files.append(file_path)
             self.labels.append(0)  # 0 for MIPS
 
         # Collect MIPSEL files (label 1)
-        mipsel_files = Path(mipsel_dir).glob("*.code")
+        mipsel_files = mipsel_path.glob("*.code")
         for file_path in mipsel_files:
             self.files.append(file_path)
             self.labels.append(1)  # 1 for MIPSEL

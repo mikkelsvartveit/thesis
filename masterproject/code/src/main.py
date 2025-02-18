@@ -5,16 +5,14 @@ import yaml
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
-
+from dotenv import load_dotenv
+import os
+import torch
 import wandb
 
-import torch
-from torch.utils.data import DataLoader
 
-# Import your custom modules
-from dataset_loaders import get_dataset
-
-# from models import get_model
+load_dotenv()
+from src.dataset_loaders import get_dataset
 from src.models import get_model
 from src.validators import LOGO_architecture, LOGO_architecture_wandb
 from transforms import get_transform
@@ -42,7 +40,7 @@ class ExperimentManager:
             yaml.dump(self.config, f)
 
 
-def get_config():
+def get_config(configs_base_path: Path) -> Dict[str, Any]:
     """Get configuration from command line arguments or default config file."""
     parser = argparse.ArgumentParser(description="Training script")
     parser.add_argument("--config", type=str, help="Path to config file")
@@ -55,11 +53,11 @@ def get_config():
 
     # Load base config
     if args.config:
-        with open(args.config) as f:
+        with open(configs_base_path / Path(args.config)) as f:
             config = yaml.safe_load(f)
     else:
         # Default config
-        with open("configs/default.yml") as f:
+        with open(configs_base_path / Path("default.yml")) as f:
             config = yaml.safe_load(f)
 
     # Override with command line arguments if provided
@@ -81,10 +79,15 @@ def get_config():
 
 
 def main():
-    # Get configuration
-    config = get_config()
+    DATASET_BASE_PATH = Path(os.environ["DATASET_BASE_PATH"])
+    CONFIGS_BASE_PATH = Path(os.environ["CONFIGS_PATH"])
+    WANDB_API_KEY = os.environ.get("WANDB_API_KEY")
 
-    if not wandb.login(timeout=60):
+    # Get configuration
+    config = get_config(configs_base_path=CONFIGS_BASE_PATH)
+
+    # Login to wandb
+    if not wandb.login(key=WANDB_API_KEY, timeout=60):
         raise ValueError("Failed to login to wandb")
 
     # Initialize experiment manager
@@ -96,10 +99,13 @@ def main():
         if torch.cuda.is_available()
         else "mps" if torch.backends.mps.is_available() else "cpu"
     )
+    print(f"Using device: {device}")
 
     # Get dataset and transforms
     transforms = get_transform(**config["transforms"])
-    dataset = get_dataset(transform=transforms, **config["data"])
+    dataset = get_dataset(
+        transform=transforms, dataset_base_path=DATASET_BASE_PATH, **config["data"]
+    )
     model = get_model(**config["model"])
 
     validator_name = config["validator"]["name"]
