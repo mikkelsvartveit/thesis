@@ -1,9 +1,11 @@
 from os import PathLike
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 import torch
 from torch.utils.data import Dataset
 import numpy as np
-from src.dataset_loaders.utils import get_architecture_features, get_elf_header_end
+from src.dataset_loaders.utils import get_architecture_features
 
 
 class CpuRecDataset(Dataset):
@@ -25,11 +27,9 @@ class CpuRecDataset(Dataset):
         metadata_errors = []
         # Collect files
         for isa in Path(dataset_path).iterdir():
-            isa_name = isa.name.split(".")[0].lower()
+            isa_name = isa.name.split(".")[0].lower()  # remove .corpus extension
             file_count = 0
-            metadata = get_architecture_features(
-                dataset_path / feature_csv_path, isa_name
-            )
+            metadata = get_architecture_features(feature_csv_path, isa_name)
             if not metadata:
                 metadata_errors.append(isa_name)
                 continue
@@ -78,15 +78,15 @@ class CpuRecDataset(Dataset):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     # Replace with your actual path
-    dataset_path = "dataset/ISAdetect/ISAdetect_full_dataset"
-    feature_csv_path = "dataset/ISAdetect-features.csv"
+    dataset_path = Path(os.environ["DATASET_BASE_PATH"]) / "cpu_rec/cpu_rec_corpus"
+    feature_csv_path = Path(os.environ["DATASET_BASE_PATH"]) / "ISAdetect-features.csv"
 
-    dataset = ISAdetectDataset(
+    dataset = CpuRecDataset(
         dataset_path,
         feature_csv_path=feature_csv_path,
         file_byte_read_limit=2**10,
-        use_code_only=True,
     )
 
     print(len(dataset))

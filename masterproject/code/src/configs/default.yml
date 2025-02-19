@@ -3,7 +3,7 @@ target_feature: endianness
 data:
   name: CpuRecDataset
   params:
-    dataset_path: cpu_rec/cpu_rec_corpus
+    dataset_path: ISAdetect/ISAdetect_full_dataset
     feature_csv_path: ISAdetect-features.csv
     per_architecture_limit: null
     file_byte_read_limit: 512

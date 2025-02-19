@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 import statistics
@@ -9,6 +10,10 @@ def analyze_code_files(root_dir):
     # Walk through all directories
     dir_stats = []
     for dirpath, dirnames, filenames in os.walk(root_dir):
+
+        for dir in sorted(dirnames):
+            architecture_metadata_info(Path(dirpath) / dir, dir)
+
         # Filter for .code files
         code_files = [f for f in filenames if f.endswith(".code")]
 
@@ -114,6 +119,33 @@ def convert_size(size_bytes):
 def convert_kb(size_bytes):
     # Convert bytes to human readable format
     return size_bytes / 1024
+
+
+def architecture_metadata_info(architecture_path, architecture_name):
+    architecture_path = Path(architecture_path)
+    # get file with achitecture_name.json
+    architecture_path = architecture_path / f"{architecture_name}.json"
+    with open(architecture_path, "r") as f:
+        metadata = json.load(f)
+        # get first as relevant metadata are the same for all files
+        metadata0 = metadata[0]
+
+    metadata0 = {
+        key: metadata0[key] for key in ["architecture", "endianness", "wordsize"]
+    }
+
+    endianness = set()
+    wordsize = set()
+    for file in metadata:
+        endianness.add(file["endianness"])
+        wordsize.add(file["wordsize"])
+
+    if len(endianness) > 1:
+        raise ValueError(f"Multiple endianness found: {endianness}")
+    if len(wordsize) > 1:
+        raise ValueError(f"Multiple wordsize found: {wordsize}")
+
+    print(metadata0)
 
 
 # Usage

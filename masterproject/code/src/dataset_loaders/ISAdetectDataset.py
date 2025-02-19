@@ -30,9 +30,7 @@ class ISAdetectDataset(Dataset):
         for isa in Path(dataset_path).iterdir():
             if isa.is_dir():
                 file_count = 0
-                metadata = get_architecture_features(
-                    dataset_path / feature_csv_path, isa.name
-                )
+                metadata = get_architecture_features(feature_csv_path, isa.name)
 
                 if not metadata:
                     metadata_errors.append(isa.name)
