@@ -12,8 +12,12 @@ from tqdm import tqdm
 def LOGO_architecture_wandb(
     config, dataset: Dataset, model_class: nn.Module.__class__, device
 ):
+    if "wandb_project_name" not in config["validator"]:
+        raise ValueError("wandb_project_name not specified in config")
+
     group_name = f"logo {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
-    wandb_project = "testing"
+
+    wandb_project = config["validator"]["wandb_project_name"]
 
     groups = list(map(lambda x: x["architecture"], dataset.metadata))
     target_features = list(map(lambda x: x[config["target_feature"]], dataset.metadata))

@@ -6,10 +6,12 @@ class Simple2dCNN(nn.Module):
         super(Simple2dCNN, self).__init__()
         self.dropout = nn.Dropout(p=dropout_rate)
 
+        self.input_layer = nn.Conv2d(in_channels=1, out_channels=128, kernel_size=1)
+
         # Block 1: Note the input channel is now 1 instead of 128.
         self.block1 = nn.Sequential(
             nn.Conv2d(
-                in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=32, kernel_size=3, stride=1, padding=1
             ),
             nn.Conv2d(
                 in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2
@@ -47,6 +49,7 @@ class Simple2dCNN(nn.Module):
 
     def forward(self, x):
         # x is expected to have shape (batch, 1, 32, 32)
+        x = self.input_layer(x)
         x = self.block1(x)
         x = self.dropout(x)
         x = self.block2(x)

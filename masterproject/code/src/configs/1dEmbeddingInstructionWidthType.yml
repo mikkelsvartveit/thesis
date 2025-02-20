@@ -1,28 +1,29 @@
-target_feature: endianness
+target_feature: instructionwidth_type
 
 data:
-  name: CpuRecDataset
+  name: ISAdetectDataset
   params:
-    dataset_path: ISAdetect/ISAdetect_full_dataset
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
     feature_csv_path: ISAdetect-features.csv
     per_architecture_limit: null
-    file_byte_read_limit: 512
+    file_byte_read_limit: 1024
+    use_code_only: True
 
 transforms:
   name: Vector1D
   params:
-    length: 512
+    length: 1024
 
 model:
   name: EmbeddingAndCNNModel
   params:
-    input_length: 512
+    input_length: 1024
     num_classes: 2
     dropout_rate: 0.3
 
 validator:
   name: LOGO_architecture_wandb
-  wandb_project_name: test
+  wandb_project_name: 1d-embedding-instructionwidth-type
 
 training:
   optimizer: AdamW

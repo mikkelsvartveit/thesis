@@ -6,7 +6,7 @@
 #SBATCH --job-name=wandb_test         # Job name
 #SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
 #SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
-#SBATCH --time=1:00:00              # Time limit (hours:min:sec)
+#SBATCH --time=2:00:00              # Time limit (hours:min:sec)
 #SBATCH --nodes=1                   # Number of nodes requested
 #SBATCH --cpus-per-task=12          # Number of CPUs per task
 #SBATCH --mem=16G                   # Memory requested
@@ -21,6 +21,15 @@ echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
 cd src
-python ./main.py --config configs/1dEmbedding.yml --override '{"target_feature": "endianness"}'
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
+python ./main.py --config configs/1dEmbeddingInstructionWidthType.yml
 
 echo "Job finished on $(date)"
