@@ -18,3 +18,7 @@ echo "Done."
 
 # rm files that starts with _
 rm _*
+
+cd ../../
+
+python rename_cpu_rec.py
