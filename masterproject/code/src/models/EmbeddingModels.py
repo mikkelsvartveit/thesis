@@ -76,15 +76,15 @@ class EmbeddingAndCNNModel(nn.Module):
 
 
 class EmbeddingAnd2dCNNModel(nn.Module):
-    def __init__(self, input_length=1024, num_classes=2, dropout_rate=0.0):
+    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.0):
         super(EmbeddingAnd2dCNNModel, self).__init__()
 
-        # Ensure the input length matches 32x32 = 1024 tokens.
-        assert input_length == 32 * 32, "For a 32x32 grid, input_length must be 1024."
+        assert input_length == 32 * 16, "For a 32x16 grid, input_length must be 512."
 
         self.embedding = nn.Embedding(256, 128)
         self.dropout = nn.Dropout(p=dropout_rate)
-        self.spatial_dim = 32  # since 32 x 32 = 1024
+        self.spatial_dim_h = 32
+        self.spatial_dim_w = 16
 
         self.block1 = nn.Sequential(
             nn.Conv2d(
@@ -122,12 +122,9 @@ class EmbeddingAnd2dCNNModel(nn.Module):
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
-        # x is expected to have shape (batch, 1024)
-        x = self.embedding(x)  # -> (batch, 1024, 128)
+        x = self.embedding(x)
         x = self.dropout(x)
-        # Reshape to a 32x32 grid.
-        x = x.view(x.size(0), self.spatial_dim, self.spatial_dim, 128)
-        # Permute to channel-first format: (batch, 128, 32, 32)
+        x = x.view(x.size(0), self.spatial_dim_h, self.spatial_dim_w, 128)
         x = x.permute(0, 3, 1, 2)
 
         x = self.block1(x)
@@ -137,16 +134,13 @@ class EmbeddingAnd2dCNNModel(nn.Module):
         x = self.block3(x)
         x = self.dropout(x)
 
-        x = self.global_pool(x)  # -> (batch, 128, 1, 1)
-        x = x.view(x.size(0), -1)  # flatten -> (batch, 128)
+        x = self.global_pool(x)
+        x = x.view(x.size(0), -1)
 
         x = self.dense1(x)
         x = self.relu(x)
         x = self.dropout(x)
         x = self.dense2(x)
-        # If using CrossEntropyLoss later, you can return logits directly.
-        # Otherwise, uncomment the next line to output probabilities.
-        # x = self.softmax(x)
 
         return x
 
