@@ -145,7 +145,7 @@ def architecture_metadata_info(architecture_path, architecture_name):
     if len(wordsize) > 1:
         raise ValueError(f"Multiple wordsize found: {wordsize}")
 
-    print(metadata0)
+    print(metadata0["architecture"], metadata0["endianness"], metadata0["wordsize"])
 
 
 # Usage

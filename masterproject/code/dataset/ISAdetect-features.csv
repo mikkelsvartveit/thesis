@@ -1,14 +1,14 @@
-architecture;endianness;wordsize;instructionwidth_type;instructionwidth
+architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
 alpha;little;64;fixed;32
 amd64;little;64;variable;na
 arm64;little;64;fixed;32
 armel;little;32;fixed;32
 armhf;little;32;fixed;32
-hppa;big;32;fixed;32
+hppa;big;32;fixed;32;"wrong wordsize in Andreassen table"
 i386;little;32;variable;na
-ia64;little;64;fixed;128
-m68k;big;32;variable;na
-mips;big;32;fixed;32
+ia64;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
+m68k;big;32;variable;na;"https://en.wikipedia.org/wiki/Motorola_68000"
+mips;big;32;fixed;32;
 mips64el;little;64;fixed;32
 mipsel;little;32;fixed;32
 powerpc;big;32;fixed;32
@@ -18,7 +18,7 @@ ppc64el;little;64;fixed;32
 riscv64;little;64;fixed;32
 s390;big;32;variable;na
 s390x;big;64;variable;na
-sh4;little;32;fixed;16
+sh4;little;32;fixed;16;"BI endian in Andreassen table, little in dataset metadata"
 sparc;big;32;fixed;32
 sparc64;big;64;fixed;32
 x32;little;32;variable;na

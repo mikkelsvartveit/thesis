@@ -1,0 +1,77 @@
+architecture;cpu_rec_name;endianness;wordsize;instructionwidth_type;instructionwidth;comment
+i386;X86;little;32;variable;na;
+alpha;Alpha;little;64;fixed;32;
+armel;ARMel;little;32;fixed;32;
+armhf;ARMhf;little;32;fixed;32;
+mips;MIPSeb;big;32;fixed;32;"mipseb from corpus, all MIPSeb lables map to this, checked for wsize and iw"
+mipsel;MIPSel;little;32;fixed;32;
+powerpc;PPCeb;big;32;fixed;32;
+ppc64el;PPC64el;little;64;fixed;32;
+hppa;HP-PA;big;32;fixed;32;"wrong wordsize in Andreassen table"
+ia64;IA-64;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
+m68k;M68k;big;32;variable;na;
+riscv64;RISC-V;little;64;fixed;32;
+s390x;S-390;big;64;variable;na;"wrong in Andreassen table, S-390 map to s390x"
+sh4;SuperH;little;32;fixed;16;"BI endian in Andreassen table, must be investigated more"
+sparc32&64;SPARC;big;na;fixed;32;"one sparc32 and one sparc64 binary are merged into one SPARC"
+;;;;;;
+;ARC32el;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+;AxisCris;little;32;fixed;16;https://www.axis.com/dam/public/25/67/ab/etrax-100lx-programmer%E2%80%99s-manual-en-US-33419.pdf https://en.wikipedia.org/wiki/ETRAX_CRIS
+;Epiphany;little;32;variable;16/32;instr size depends on reg used, chapt 7.6: https://adapteva.com/docs/epiphany_arch_ref.pdf, 
+;M88k;big;32;fixed;32;file in dataset is big endian, checked with readelf on c-kermit/cku190.dgux540c-88k file (search on google). https://en.wikipedia.org/wiki/Motorola_88000 http://www.bitsavers.org/components/motorola/88000/MC88100_RISC_Microprocessor_Users_Manual_2ed_1990.pdf (chap 1.2)
+;MMIX;big;64;fixed;32;https://en.wikipedia.org/wiki/MMIXhttps://en.wikipedia.org/wiki/MMIX https://mmix.cs.hm.edu/doc/index.html
+;PDP-11;mixed;16;variable;16/32/48;middleendian for 32 bit words (called PDP-endian) https://en.wikipedia.org/wiki/Endianness#Middle-endian, https://en.wikipedia.org/wiki/PDP-11_architecture
+;Stormy16;bi;32;variable;16/32;wrong wordsize Andreassen table, endiannes bi https://sourceware.org/cgen/gen-doc/xstormy16.html#mach-xstormy16, https://sourceware.org/cgen/gen-doc/xstormy16-insn.html
+;V850;little;32;variable;16/32;https://www.renesas.com/en/document/mah/v850-familytm-architecture?language=en&srsltid=AfmBOopXB1J0-YNDX6GviV6gGkLCFFazYNur2hCQjzo64m8e1gRYB9em https://en.wikipedia.org/wiki/V850
+;Xtensa;bi;32;variable;16/24;https://www.cadence.com/content/dam/cadence-www/global/en_US/documents/tools/silicon-solutions/compute-ip/isa-summary.pdf
+;6502;little;8;variable;8/16/24;http://masswerk.at/6502/6502_instruction_set.html https://en.wikipedia.org/wiki/MOS_Technology_6502
+;ARcompact;little;32;variable;16/32;probably little, but isa does support big-endian aswell. http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+;Blackfin;little;32;variable;16/32;https://www.analog.com/media/en/dsp-documentation/processor-manuals/blackfin_pgr_rev2.2.pdf https://en.wikipedia.org/wiki/Blackfin
+;FR30;big;32;fixed;16;https://sourceware.org/cgen/gen-doc/fr30.html#model-fr30-1
+;i860;bi;32;fixed;32;https://www.ardent-tool.com/CPU/INTEL_80860.pdf https://en.wikipedia.org/wiki/Intel_i860
+;MCore;big;32;fixed;16;aka Motorola RCE, https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
+;MN10300;little;32;unk ;unk;found docs for 10300/103S, dont know if the same http://www.bitsavers.org/components/panasonic/panaXseries/13250-040E_MN1030_MN103S_Series_Instruction_Manual.pdf
+;PIC10;na;8;fixed;12;https://en.wikipedia.org/wiki/PIC_microcontrollers https://en.wikipedia.org/wiki/PIC_instruction_listings#Baseline_core_devices_(12-bit)
+;RL78;little;unk;unk;unk;Dont know which rl78 version, but they are consistently little endian. https://en.wikipedia.org/wiki/RL78 
+;VAX;little;32;variable;unk;wiki says instr encoding 1 to 58 bytes, seems kinda wierd https://en.wikipedia.org/wiki/VAX https://www.stromasys.com/resources/understanding-the-vax-processors-architecture/
+;XtensaEB;big;32;variable;16/24;Assume same as Xtensa, but big endian
+;68HC08;;;;;
+;Cell-SPU;;;;;
+;FR-V;;;;;
+;Mico32;;;;;
+;Moxie;;;;;
+;PIC16;na;8;fixed;14;
+;ROMP;;;;;
+;TILEPro;;;;;
+;Visium;;;;;
+;Z80;;;;;
+;68HC11;;;;;
+;ARMeb;;;;;
+;CLIPPER;;;;;
+;FT32;;;;;
+;IQ2000;;;;;
+;MicroBlaze;;;;;
+;MSP430;;;;;
+;PIC18;na;8;fixed;16;
+;RX;;;;;
+;TLCS-90;;;;;
+;8051;;;;;
+;CompactRISC;;;;;
+;H8-300;;;;;
+;M32C;;;;;
+;MIPS16;;;;;
+;NDS32;;;;;
+;PIC24;little;16;fixed;24;
+;TMS320C2x;;;;;
+;WE32000;;;;;
+;Cray;;;;;
+;H8S;;;;;
+;M32R;;;;;
+;NIOS-II;;;;;
+;TMS320C6x;;;;;
+;ARC32eb;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+;AVR;;;;;
+;HP-Focus;;;;;
+;PPCel;;;;;
+;STM8;;;;;
+;TriMedia;;;;;

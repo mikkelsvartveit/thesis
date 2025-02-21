@@ -4,6 +4,7 @@ dataset/*
 !dataset/download_cpu_rec.sh
 !dataset/ISAdetect-features.csv
 !dataset/Andreassen-ISAdetect-features.csv
+!dataset/cpu_rec-features.csv
 !dataset/generate_filesizes.py
 
 .env
@@ -12,6 +13,7 @@ dataset/*
 *.pytest_cache
 wandb
 nohup.out
+
 
 
 *job*.out
