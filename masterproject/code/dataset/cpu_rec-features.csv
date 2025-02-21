@@ -5,8 +5,8 @@ armel;ARMel;little;32;fixed;32;
 armhf;ARMhf;little;32;fixed;32;
 mips;MIPSeb;big;32;fixed;32;"mipseb from corpus, all MIPSeb lables map to this, checked for wsize and iw"
 mipsel;MIPSel;little;32;fixed;32;
-powerpc;PPCeb;big;32;fixed;32;
-ppc64el;PPC64el;little;64;fixed;32;
+powerpc;PPCeb;big;32;fixed;32;unsure if this is 64 or 32 bit
+ppc64el;PPCel;little;64;fixed;32;
 hppa;HP-PA;big;32;fixed;32;"wrong wordsize in Andreassen table"
 ia64;IA-64;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
 m68k;M68k;big;32;variable;na;
@@ -14,7 +14,6 @@ riscv64;RISC-V;little;64;fixed;32;
 s390x;S-390;big;64;variable;na;"wrong in Andreassen table, S-390 map to s390x"
 sh4;SuperH;little;32;fixed;16;"BI endian in Andreassen table, must be investigated more"
 sparc32&64;SPARC;big;na;fixed;32;"one sparc32 and one sparc64 binary are merged into one SPARC"
-;;;;;;
 ;ARC32el;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
 ;AxisCris;little;32;fixed;16;https://www.axis.com/dam/public/25/67/ab/etrax-100lx-programmer%E2%80%99s-manual-en-US-33419.pdf https://en.wikipedia.org/wiki/ETRAX_CRIS
 ;Epiphany;little;32;variable;16/32;instr size depends on reg used, chapt 7.6: https://adapteva.com/docs/epiphany_arch_ref.pdf, 
@@ -35,43 +34,42 @@ sparc32&64;SPARC;big;na;fixed;32;"one sparc32 and one sparc64 binary are merged 
 ;RL78;little;unk;unk;unk;Dont know which rl78 version, but they are consistently little endian. https://en.wikipedia.org/wiki/RL78 
 ;VAX;little;32;variable;unk;wiki says instr encoding 1 to 58 bytes, seems kinda wierd https://en.wikipedia.org/wiki/VAX https://www.stromasys.com/resources/understanding-the-vax-processors-architecture/
 ;XtensaEB;big;32;variable;16/24;Assume same as Xtensa, but big endian
-;68HC08;;;;;
-;Cell-SPU;;;;;
-;FR-V;;;;;
-;Mico32;;;;;
-;Moxie;;;;;
-;PIC16;na;8;fixed;14;
-;ROMP;;;;;
-;TILEPro;;;;;
-;Visium;;;;;
-;Z80;;;;;
-;68HC11;;;;;
-;ARMeb;;;;;
-;CLIPPER;;;;;
-;FT32;;;;;
-;IQ2000;;;;;
-;MicroBlaze;;;;;
-;MSP430;;;;;
+;68HC08;big;8;variable;8/16/24; https://ia803001.us.archive.org/1/items/bitsavers_motorola68tralProcessorUnitReferenceManualRev11994_11429498/CPU08RM_CPU08_Central_Processor_Unit_Reference_Manual_Rev_1_1994.pdf https://en.wikipedia.org/wiki/Motorola_68HC08
+;Cell-SPU;bi;64;unk;unk;Most likely big, but hard to know for sure, since many variations. Same with variable or fixed: https://en.wikipedia.org/wiki/Cell_(processor)
+;FR-V;unk;32;fixed;32;VLIW processor, so prett sure it is fixed. https://en.wikipedia.org/wiki/FR-V_(microprocessor) https://web.archive.org/web/20110720090106/http://www.ece.umd.edu/class/enee759m.S2002/papers/suga2000-micro20-4.pdf
+;Mico32;big;32;fixed;32;https://en.wikipedia.org/wiki/LatticeMico32
+;Moxie;bi;32;variable;16/32/48;http://moxielogic.org/blog/pages/architecture.html
+;PIC16;na;8;fixed;14;see PIC12
+;ROMP;big;32;variable;16/32;https://en.wikipedia.org/wiki/IBM_ROMP, big according to andreassen
+;TILEPro;unk;32;variable;8/16/32;VLIW, https://web.archive.org/web/20130123124859/http://www.tilera.com/scm/docs/UG120-Architecture-Overview-TILEPro.pdf
+;Visium;unk;unk;unk;unk;Could not find anything on goole
+;Z80;little;8;variable;8-32;https://www.smspower.org/Development/Little-Endian https://en.wikipedia.org/wiki/Zilog_Z80
+;68HC11;big;8;variable;8-32;not sure about endiannes, if it has a concept of endianness. https://stackoverflow.com/questions/26247017/fibonacci-sequence-on-68hc11-using-4-byte-numbers https://en.wikipedia.org/wiki/Motorola_68HC11
+armv4eb;ARMeb;big;32;fixed;32;is a armv4 binary. might be armv4t, which has16bit thumb instructions, but assume fixed width. https://faculty-web.msoe.edu/meier/ce1921/slidesets/isaarm-instructions.pdf https://en.wikipedia.org/wiki/ARM_architecture_family
+;CLIPPER;little;32;variable;16/32/48/64;http://www.bitsavers.org/components/fairchild/clipper/The_CLIPPER_Processor_Instruction_Set_Architecture_and_Implementation.pdf
+;FT32;unk;32;unk;unk;found no good sources
+;IQ2000;big;32;unk;unk;Based off Andreassen, found no good sources
+;MicroBlaze;big;32;fixed;32; https://en.wikipedia.org/wiki/MicroBlaze https://www.ee.torontomu.ca/~courses/ee8205/Data-Sheets/sopc/MicroBlaze_DataSheet.pdf
+;MSP430;little;16;variable;16/32/48;https://en.wikipedia.org/wiki/TI_MSP430
 ;PIC18;na;8;fixed;16;
-;RX;;;;;
-;TLCS-90;;;;;
-;8051;;;;;
-;CompactRISC;;;;;
-;H8-300;;;;;
-;M32C;;;;;
-;MIPS16;;;;;
-;NDS32;;;;;
+;RX;little;32;variable;8-64;https://en-support.renesas.com/knowledgeBase/16980415 https://www.renesas.com/en/document/mas/rx-family-users-manual-software-rev120?srsltid=AfmBOoo7-ZI96FMFgjLqLB9mWeGhJWlrxPGfdtbRwsb91S3bpAcXBFU3
+;TLCS-90;na;8;variable;8/16;https://en.wikipedia.org/wiki/Toshiba_TLCS
+;8051;na;8;variable;8/16/24;https://www.keil.com/dd/docs/datashts/intel/ism51.pdf https://en.wikipedia.org/wiki/Intel_MCS-51
+;CompactRISC;little;16;variable;16/32/48;CR16, opcode field allways 16 bits. operands 2 or 4 bytes -> 16/32/48, https://my.eng.utah.edu/~cs3710/handouts/cr16a-prog-ref.pdf
+;H8-300;na;8;variable;8/16;"binary is ""H8/300"", not L or H. sh4 precursor. https://www.renesas.com/en/document/gde/h8300-programming-manual?srsltid=AfmBOorkkc0UEjCawkqxFfLAl-URrlSvp1EXGRZJnJBWX_4vsmVlWsVi"
+;M32C;little;32;variable;16-32;https://en-support.renesas.com/knowledgeBase/16978511
+;MIPS16;bi;16;fixed;16;https://www.ijser.org/researchpaper/Instruction-Set-Architecture-for-a-MIPS-based-16-bit-RISC-Processor.pdf https://en.wikipedia.org/wiki/MIPS_architecture, endianness from andreassen
+;NDS32;little;32;variable;16/32;little based on cpu_rec.py file name, https://docs.u-boot.org/en/v2020.07/arch/nds32.html, isa called andestar, https://download.paulk.fr/coreboot/mt8173-spm/documentation/isa/AndeStar_ISA_v1.3.pdf
 ;PIC24;little;16;fixed;24;
-;TMS320C2x;;;;;
-;WE32000;;;;;
-;Cray;;;;;
-;H8S;;;;;
-;M32R;;;;;
-;NIOS-II;;;;;
-;TMS320C6x;;;;;
+;TMS320C2x;unk;16/32;variable;16/32;https://ardent-tool.com/datasheets/TI_TMS320C2x_Users_Guide_1990.pdf
+;WE32000;na;32;;;https://bitsavers.org/pdf/westernElectric/WE_32100_Microprocessor_Information_Manual_Jan85.pdf
+;Cray;na;64;variable;16/32;https://bitsavers.trailing-edge.com/pdf/cray/CRAY-1/2240004C_CRAY-1_Hardware_Reference_Nov77.pdf
+;H8S;unk;16;variable;16/32;https://4donline.ihs.com/images/VipMasterIC/IC/RNCC/RNCCS09014/RNCCS09014-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0
+;M32R;bi;32;variable;16/32;https://www.farnell.com/datasheets/2865722.pdf
+;NIOS-II;little;32;fixed;32;fpga https://www-ug.eecg.toronto.edu/msl/manuals/n2cpu_nii51017.pdf, https://en.wikipedia.org/wiki/Nios_II
+;TMS320C6x;bi;32;;;
 ;ARC32eb;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
-;AVR;;;;;
-;HP-Focus;;;;;
-;PPCel;;;;;
-;STM8;;;;;
-;TriMedia;;;;;
+;AVR;na;8;variable;16/32;16bit instr + some with 16 bit operand, https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf
+;HP-Focus;na;32;variable;16/32;https://www.openpa.net/focus_processor_hp.html
+;STM8;na;8;variable;;https://en.wikipedia.org/wiki/STM8
+;TriMedia;unk;32;;;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)
