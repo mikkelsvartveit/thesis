@@ -63,9 +63,13 @@ def get_architecture_features(csv_file, architecture) -> dict[str, str | int]:
     # Ensure the architecture exists in the data
     if architecture not in df.iloc[:, 0].values:
         return {}
+    
+    # remove comments column
+    df = df.drop(columns=["comment"])
 
     # Filter the row corresponding to the given architecture
     row = df[df.iloc[:, 0] == architecture].iloc[0]
+
 
     # Convert the row to a dictionary
     features_dict = row.to_dict()

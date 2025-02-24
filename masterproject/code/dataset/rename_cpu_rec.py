@@ -79,6 +79,10 @@ def main():
             print(f"Warning: {file} not found")
 
     # Rename files that map to the other dataset
+    res = input("Do you want to rename the files? (y/n): ")
+    if res.lower() != "y":
+        print("not renaming files")
+        return
     print("\nRenaming files...")
     for old_name, new_name in rename_map.items():
         old_path = cpu_rec_dir / old_name

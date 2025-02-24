@@ -1,5 +1,7 @@
-cpu_rec_name;architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
+architecture;isa_detect_name;endianness;wordsize;instructionwidth_type;instructionwidth;comment
 X86;i386;little;32;variable;na;
+X86-64;amd64;little;64;variable;na;
+ARM64;arm64;little;64;fixed;32;
 Alpha;alpha;little;64;fixed;32;
 ARMel;armel;little;32;fixed;32;
 ARMhf;armhf;little;32;fixed;32;
@@ -67,9 +69,9 @@ Cray;;na;64;variable;16/32;https://bitsavers.trailing-edge.com/pdf/cray/CRAY-1/2
 H8S;;unk;16;variable;16/32;https://4donline.ihs.com/images/VipMasterIC/IC/RNCC/RNCCS09014/RNCCS09014-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0
 M32R;;bi;32;variable;16/32;https://www.farnell.com/datasheets/2865722.pdf
 NIOS-II;;little;32;fixed;32;fpga https://www-ug.eecg.toronto.edu/msl/manuals/n2cpu_nii51017.pdf, https://en.wikipedia.org/wiki/Nios_II
-TMS320C6x;;bi;32;;;
+TMS320C6x;;bi;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171 
 ARC32eb;;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
 AVR;;na;8;variable;16/32;16bit instr + some with 16 bit operand, https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf
 HP-Focus;;na;32;variable;16/32;https://www.openpa.net/focus_processor_hp.html
 STM8;;na;8;variable;;https://en.wikipedia.org/wiki/STM8
-TriMedia;;unk;32;;;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)
+TriMedia;;unk;32;unk;unk;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)

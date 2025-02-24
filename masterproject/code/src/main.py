@@ -15,8 +15,12 @@ import random
 load_dotenv()
 from src.dataset_loaders import get_dataset
 from src.models import get_model
-from src.validators import LOGO_architecture, LOGO_architecture_wandb
-from src.transforms import get_transform
+from src.validators import (
+    ISAdetect_train_cpu_rec_test,
+    LOGO_architecture,
+    LOGO_architecture_wandb,
+)
+from transforms import get_transform
 
 
 class ExperimentManager:
@@ -91,7 +95,7 @@ def main():
     if "seed" not in config.get("validator", {}):
         config.setdefault("validator", {})
         config["validator"]["seed"] = random.randint(0, 2**32 - 1)
-    
+
     print(f"Using random seed: {config["validator"]["seed"]}")
 
     # Login to wandb
@@ -120,12 +124,37 @@ def main():
 
     if validator_name == "LOGO_architecture":
         print("LOGO_architecture")
-        return LOGO_architecture(config, dataset, model, device)
+        LOGO_architecture(config, dataset, model, device)
     elif validator_name == "LOGO_architecture_wandb":
         print("LOGO_architecture_wandb")
-        return LOGO_architecture_wandb(config, dataset, model, device)
+        LOGO_architecture_wandb(config, dataset, model, device)
+    elif validator_name == "pass":
+        print("Passing validor step")
     else:
         raise ValueError(f"Unknown validator: {validator_name}")
+
+    if "testing" in config.keys() and "name" in config["testing"].keys():
+        testing_name = config["testing"]["name"]
+        validator_dataset = get_dataset(
+            transform=transforms,
+            dataset_base_path=DATASET_BASE_PATH,
+            **config["testing"]["data"],
+        )
+        if testing_name == "ISAdetect_train_cpu_rec_test":
+            print("Testing on ISAdetect_train_cpu_rec_test")
+            ISAdetect_train_cpu_rec_test(
+                config,
+                ISAdetectDataset=dataset,
+                CpuRecDataset=validator_dataset,
+                device=device,
+                model_class=model,
+            )
+        else:
+            raise ValueError(f"Unknown testing: {testing_name})")
+    else:
+        print("No testing specified")
+
+    print("============== Done ==============")
 
 
 if __name__ == "__main__":
