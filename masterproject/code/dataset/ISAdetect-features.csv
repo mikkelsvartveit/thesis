@@ -1,24 +1,24 @@
 architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
-alpha;little;64;fixed;32
-amd64;little;64;variable;na
-arm64;little;64;fixed;32
-armel;little;32;fixed;32
-armhf;little;32;fixed;32
+alpha;little;64;fixed;32;"none"
+amd64;little;64;variable;na;"none"
+arm64;little;64;fixed;32;"none"
+armel;little;32;fixed;32;"none"
+armhf;little;32;fixed;32;"none"
 hppa;big;32;fixed;32;"wrong wordsize in Andreassen table"
-i386;little;32;variable;na
+i386;little;32;variable;na;"none"
 ia64;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
 m68k;big;32;variable;na;"https://en.wikipedia.org/wiki/Motorola_68000"
-mips;big;32;fixed;32;
-mips64el;little;64;fixed;32
-mipsel;little;32;fixed;32
-powerpc;big;32;fixed;32
-powerpcspe;big;32;fixed;32
-ppc64;big;64;fixed;32
-ppc64el;little;64;fixed;32
-riscv64;little;64;fixed;32
-s390;big;32;variable;na
-s390x;big;64;variable;na
+mips;big;32;fixed;32;"none"
+mips64el;little;64;fixed;32;"none"
+mipsel;little;32;fixed;32;"none"
+powerpc;big;32;fixed;32;"none"
+powerpcspe;big;32;fixed;32;"none"
+ppc64;big;64;fixed;32;"none"
+ppc64el;little;64;fixed;32;"none"
+riscv64;little;64;fixed;32;"none"
+s390;big;32;variable;na;"none"
+s390x;big;64;variable;na;"none"
 sh4;little;32;fixed;16;"BI endian in Andreassen table, little in dataset metadata"
-sparc;big;32;fixed;32
-sparc64;big;64;fixed;32
-x32;little;32;variable;na
+sparc;big;32;fixed;32;"none"
+sparc64;big;64;fixed;32;"none"
+x32;little;32;variable;na;"none"
