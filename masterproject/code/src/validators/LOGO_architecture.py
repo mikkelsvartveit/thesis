@@ -4,11 +4,27 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 from tqdm import tqdm
+import random
+import numpy as np
 
 
 def LOGO_architecture(
     config, dataset: Dataset, model_class: nn.Module.__class__, device
 ):
+    def set_seed(seed: int) -> None:
+        """Set random seed for all libraries to ensure reproducibility."""
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        # For reproducible behavior in CUDA
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
+    # Initial seed setting
+    seed = config["validator"]["seed"]
+    set_seed(seed)
+
     groups = list(map(lambda x: x["architecture"], dataset.metadata))
     target_features = list(map(lambda x: x[config["target_feature"]], dataset.metadata))
 
@@ -21,6 +37,8 @@ def LOGO_architecture(
     for train_idx, test_idx in logo.split(
         X=range(len(dataset)), y=target_features, groups=groups
     ):
+        # Reset seed at the start of each fold
+        set_seed(seed)
 
         group_left_out = groups[test_idx[0]]
 

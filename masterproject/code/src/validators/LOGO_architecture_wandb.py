@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 from tqdm import tqdm
+import random
 
 
 def LOGO_architecture_wandb(
@@ -14,6 +15,20 @@ def LOGO_architecture_wandb(
 ):
     if "wandb_project_name" not in config["validator"]:
         raise ValueError("wandb_project_name not specified in config")
+
+    def set_seed(seed: int) -> None:
+        """Set random seed for all libraries to ensure reproducibility."""
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        # For reproducible behavior in CUDA
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
+    # Initial seed setting
+    seed = config["validator"]["seed"]
+    set_seed(seed)
 
     group_name = f"logo {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
 
@@ -34,6 +49,8 @@ def LOGO_architecture_wandb(
     for train_idx, test_idx in logo.split(
         X=range(len(dataset)), y=target_features, groups=groups
     ):
+        # Reset seed at the start of each fold
+        set_seed(seed)
 
         group_left_out = groups[test_idx[0]]
         wandb.init(

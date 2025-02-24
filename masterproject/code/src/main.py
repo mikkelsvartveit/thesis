@@ -9,13 +9,14 @@ from dotenv import load_dotenv
 import os
 import torch
 import wandb
+import random
 
 
 load_dotenv()
 from src.dataset_loaders import get_dataset
 from src.models import get_model
 from src.validators import LOGO_architecture, LOGO_architecture_wandb
-from transforms import get_transform
+from src.transforms import get_transform
 
 
 class ExperimentManager:
@@ -85,6 +86,13 @@ def main():
 
     # Get configuration
     config = get_config(configs_base_path=CONFIGS_BASE_PATH)
+
+    # Generate random seed if not provided
+    if "seed" not in config.get("validator", {}):
+        config.setdefault("validator", {})
+        config["validator"]["seed"] = random.randint(0, 2**32 - 1)
+    
+    print(f"Using random seed: {config["validator"]["seed"]}")
 
     # Login to wandb
     if not wandb.login(key=WANDB_API_KEY, timeout=60):
