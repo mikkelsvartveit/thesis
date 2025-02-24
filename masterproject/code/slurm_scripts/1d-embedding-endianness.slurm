@@ -6,7 +6,7 @@
 #SBATCH --job-name=wandb_test         # Job name
 #SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
 #SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
-#SBATCH --time=2:00:00              # Time limit (hours:min:sec)
+#SBATCH --time=4:00:00              # Time limit (hours:min:sec)
 #SBATCH --nodes=1                   # Number of nodes requested
 #SBATCH --cpus-per-task=12          # Number of CPUs per task
 #SBATCH --mem=16G                   # Memory requested
@@ -21,15 +21,8 @@ echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
 cd src
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
-python ./main.py --config configs/1dEmbeddingEndianness.yml 
+for i in {1..20}; do
+    python ./main.py --config configs/1dEmbeddingEndianness.yml --override "{\"validator\": {\"seed\": $i, \"wandb_project_name\": \"mikkel-02-24\"}}"
+done
 
 echo "Job finished on $(date)"
