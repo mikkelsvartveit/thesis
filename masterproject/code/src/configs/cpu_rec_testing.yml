@@ -21,7 +21,7 @@ model:
     dropout_rate: 0.3
 
 validator:
-  name: LOGO_architecture_wandb
+  name: pass
   wandb_project_name: stiantest
 
 training:
@@ -31,3 +31,18 @@ training:
   criterion: CrossEntropyLoss
   batch_size: 64
   epochs: 2
+
+
+testing:
+  name: ISAdetect_train_cpu_rec_test
+  wandb_project_name: stiantest
+  test_split: 0.2
+  validation_split: 0.2
+  data:
+    name: CpuRecDataset
+    params:
+      dataset_path: cpu_rec/cpu_rec_corpus
+      feature_csv_path: cpu_rec-features.csv
+      per_architecture_limit: null
+      file_byte_read_limit: 512
+
