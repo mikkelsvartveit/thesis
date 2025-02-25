@@ -5,7 +5,9 @@ from .ISAdetectEndiannessCounts import *
 from .CpuRecDataset import *
 
 
-def get_dataset(transform, dataset_base_path: PathLike, **kwargs):
+def get_dataset(
+    transform, dataset_base_path: PathLike, target_feature: str | None = None, **kwargs
+):
     dataset_name = kwargs["name"]
 
     params = kwargs["params"].copy()
@@ -25,6 +27,7 @@ def get_dataset(transform, dataset_base_path: PathLike, **kwargs):
     elif dataset_name == "CpuRecDataset":
         return CpuRecDataset(
             transform=transform,
+            target_feature=target_feature,
             **params,
         )
     elif dataset_name == "ISAdetectEndiannessCountsDataset":

@@ -138,6 +138,7 @@ def main():
         validator_dataset = get_dataset(
             transform=transforms,
             dataset_base_path=DATASET_BASE_PATH,
+            target_feature=config["target_feature"],
             **config["testing"]["data"],
         )
         if testing_name == "ISAdetect_train_cpu_rec_test":
