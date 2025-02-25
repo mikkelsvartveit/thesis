@@ -91,6 +91,7 @@ def ISAdetect_train_cpu_rec_test(
     label_encoder.fit(all_train_labels)
 
     EPOCHS = config["training"]["epochs"]
+    model.train()
     for epoch in range(EPOCHS):
         print(f"\nEpoch {epoch+1}:")
         # Training metrics
@@ -225,12 +226,12 @@ def ISAdetect_train_cpu_rec_test(
     model.eval()
     total_test_loss = 0
     testing_predictions = []
-    testing_predictions = []
+    testing_true_labels = []
     architecture_predictions = {}
     architecture_true_labels = {}
 
     with torch.no_grad():
-        for images, labels in test_loader:
+        for images, labels in tqdm(test_loader):
             images = images.to(device)
             encoded_labels = torch.from_numpy(
                 label_encoder.transform(labels[config["target_feature"]])
@@ -242,7 +243,7 @@ def ISAdetect_train_cpu_rec_test(
 
             _, predicted = torch.max(outputs, 1)
             testing_predictions.extend(predicted.cpu().numpy())
-            testing_predictions.extend(encoded_labels.cpu().numpy())
+            testing_true_labels.extend(encoded_labels.cpu().numpy())
 
             for i, arch in enumerate(labels["architecture"]):
                 if arch not in architecture_predictions:
@@ -252,6 +253,7 @@ def ISAdetect_train_cpu_rec_test(
                 architecture_predictions[arch].append(predicted[i].cpu().item())
                 architecture_true_labels[arch].append(encoded_labels[i].cpu().item())
 
+    # ====== AFTER TESTING METRICS ======
     testing_accuracies = {}
     for arch in architecture_predictions:
         arch_accuracy = np.mean(
@@ -263,7 +265,7 @@ def ISAdetect_train_cpu_rec_test(
 
     wandb.log(
         {
-            "testing_accuracy_per_group": wandb.Table(
+            "ISAdetect_testing_accuracy_per_group": wandb.Table(
                 data=[[group, acc] for group, acc in testing_accuracies.items()],
                 columns=["group", "accuracy"],
             ),
@@ -272,7 +274,7 @@ def ISAdetect_train_cpu_rec_test(
 
     avg_testing_loss = total_test_loss / len(test_loader)
     testing_total_accuracy = np.mean(
-        np.array(testing_predictions) == np.array(testing_predictions)
+        np.array(testing_predictions) == np.array(testing_true_labels)
     )
     print(f"Test Loss: {avg_testing_loss:.4f}")
     print(f"Test Accuracy: {100*testing_total_accuracy:.2f}%")
@@ -280,8 +282,91 @@ def ISAdetect_train_cpu_rec_test(
     print("Logging to wandb")
     wandb.log(
         {
-            "test_loss": avg_testing_loss,
-            "test_accuracy": testing_total_accuracy,
+            "ISAdetect_test_loss": avg_testing_loss,
+            "ISAdetect_test_accuracy": testing_total_accuracy,
+        }
+    )
+    wandb.finish()
+
+    # ======= CPU REC TESTING =======
+    print("\n===== Testing on CPU REC =====")
+    wandb.init(
+        project=wandb_project,
+        name="CPU_REC_test",
+        group=wandb_group_name,
+        config=config,
+    )
+
+    cpu_rec_loader = DataLoader(
+        CpuRecDataset,
+        batch_size=config["training"]["batch_size"],
+        shuffle=False,
+        num_workers=8,
+        pin_memory=True,
+        prefetch_factor=2,
+    )
+
+    model.eval()
+    total_test_loss = 0
+    testing_predictions = []
+    testing_true_labels = []
+    architecture_predictions = {}
+    architecture_true_labels = {}
+
+    with torch.no_grad():
+        for images, labels in tqdm(cpu_rec_loader):
+            images = images.to(device)
+            encoded_labels = torch.from_numpy(
+                label_encoder.transform(labels[config["target_feature"]])
+            ).to(device)
+
+            outputs = model(images)
+            loss = criterion(outputs, encoded_labels)
+            total_test_loss += loss.item()
+
+            _, predicted = torch.max(outputs, 1)
+            testing_predictions.extend(predicted.cpu().numpy())
+            testing_true_labels.extend(encoded_labels.cpu().numpy())
+
+            for i, arch in enumerate(labels["architecture"]):
+                if arch not in architecture_predictions:
+                    architecture_predictions[arch] = []
+                    architecture_true_labels[arch] = []
+
+                architecture_predictions[arch].append(predicted[i].cpu().item())
+                architecture_true_labels[arch].append(encoded_labels[i].cpu().item())
+
+    # ====== AFTER TESTING METRICS ======
+    testing_accuracies = {}
+    for arch in architecture_predictions:
+        arch_accuracy = np.mean(
+            np.array(architecture_predictions[arch])
+            == np.array(architecture_true_labels[arch])
+        )
+        testing_accuracies[arch] = arch_accuracy
+        print(f"{arch} Accuracy: {100*arch_accuracy:.2f}%")
+
+    wandb.log(
+        {
+            "cpu_rec_testing_accuracy_per_group": wandb.Table(
+                data=[[group, acc] for group, acc in testing_accuracies.items()],
+                columns=["group", "accuracy"],
+            ),
+        }
+    )
+
+    avg_testing_loss = total_test_loss / len(cpu_rec_loader)
+    testing_total_accuracy = np.mean(
+        np.array(testing_predictions) == np.array(testing_true_labels)
+    )
+    print(f"Test Loss: {avg_testing_loss:.4f}")
+    print(f"Test Accuracy: {100*testing_total_accuracy:.2f}%")
+    print("Finished testing")
+    print("Logging to wandb")
+    wandb.log(
+        {
+            "cpu_rec_test_loss": avg_testing_loss,
+            "cpu_rec_test_accuracy": testing_total_accuracy,
         }
     )
     wandb.finish()

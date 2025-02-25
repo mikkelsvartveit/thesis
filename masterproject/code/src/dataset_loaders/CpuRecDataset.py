@@ -13,6 +13,7 @@ class CpuRecDataset(Dataset):
         self,
         dataset_path: PathLike,
         feature_csv_path,
+        target_feature: str,
         transform=None,
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
@@ -24,15 +25,23 @@ class CpuRecDataset(Dataset):
         self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
 
-        metadata_errors = []
+        metadata_missing = []
         # Collect files
         for isa in Path(dataset_path).iterdir():
-            isa_name = isa.name.split(".")[0] # remove .corpus extension
+            isa_name = isa.name.split(".")[0]  # remove .corpus extension
             file_count = 0
             metadata = get_architecture_features(feature_csv_path, isa_name)
             print(metadata)
             if not metadata:
-                metadata_errors.append(isa_name)
+                metadata_missing.append(isa_name)
+                continue
+            if (
+                target_feature not in metadata
+                or not metadata[target_feature]
+                # or metadata["isa_detect_name"] != ""
+                # or metadata["wordsize"] == 8
+            ):
+                metadata_missing.append(isa_name)
                 continue
             # Split file into file_byte_read_limit chunks
             file_splits = 1
@@ -52,9 +61,10 @@ class CpuRecDataset(Dataset):
                 print(isa_name, "limit reached")
                 break
 
-        if metadata_errors:
-            print("Metadata errors:", metadata_errors)
-            raise ValueError("Metadata errors for dataset")
+        if metadata_missing:
+            print(
+                f"Architectures excluded due to lacking {target_feature} metadata:\n\t {metadata_missing}"
+            )
 
     def __len__(self):
         return len(self.files)

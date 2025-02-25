@@ -63,16 +63,25 @@ def get_architecture_features(csv_file, architecture) -> dict[str, str | int]:
     # Ensure the architecture exists in the data
     if architecture not in df.iloc[:, 0].values:
         return {}
-    
+
     # remove comments column
     df = df.drop(columns=["comment"])
 
     # Filter the row corresponding to the given architecture
     row = df[df.iloc[:, 0] == architecture].iloc[0]
 
-
     # Convert the row to a dictionary
     features_dict = row.to_dict()
+
+    # if feature is one of the unsupported values, remoe it from the dixt
+    for key in features_dict:
+        if features_dict[key] in ["na", "nan", "unk", "bi", "middle"] or pd.isna(
+            features_dict[key]
+        ):
+            print(
+                f"{architecture}: Unsupported value for feature {key}: {features_dict[key]}"
+            )
+            features_dict[key] = ""
 
     return features_dict
 
