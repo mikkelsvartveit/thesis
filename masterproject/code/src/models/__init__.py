@@ -2,6 +2,8 @@ from .EndiannessModels import *
 from .MINOS_cnn import *
 from .EmbeddingModels import *
 from .SimpleCnnModels import *
+from .EmbeddingResNet import EmbeddingResNet50
+from torchvision.models import resnet50
 
 
 def get_model(**kwargs):
@@ -18,5 +20,9 @@ def get_model(**kwargs):
         return Simple1DCNN
     elif name == "Simple2dCNN":
         return Simple2dCNN
+    elif name == "ResNet50":
+        return resnet50
+    elif name == "EmbeddingResNet50":
+        return EmbeddingResNet50
     else:
         raise ValueError(f"Model {name} not found")
