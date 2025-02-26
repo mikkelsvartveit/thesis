@@ -1,12 +1,5 @@
-dataset/*
-!dataset/structure.md
-!dataset/download_isadetect.sh
-!dataset/download_cpu_rec.py
-!dataset/rename_cpu_rec.py
-!dataset/ISAdetect-features.csv
-!dataset/Andreassen-ISAdetect-features.csv
-!dataset/cpu_rec-features.csv
-!dataset/generate_filesizes.py
+dataset/cpu_rec
+dataset/ISAdetect
 
 .env
 .venv
