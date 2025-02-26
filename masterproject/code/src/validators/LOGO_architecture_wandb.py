@@ -64,7 +64,8 @@ def LOGO_architecture_wandb(
         # define which metrics will be plotted against it
         wandb.define_metric("train_loss", step_metric="epoch")
         wandb.define_metric("test_loss", step_metric="epoch")
-        wandb.define_metric("test_accuracy", step_metric="epoch")
+        wandb.define_metric("test_accuracy_chunk", step_metric="epoch")
+        wandb.define_metric("test_accuracy_file", step_metric="epoch")
 
         print(f"\n=== Fold {fold} leaving out group '{group_left_out}' ===")
         fold += 1
@@ -148,12 +149,15 @@ def LOGO_architecture_wandb(
             # Evaluation loop
             model.eval()
             total_test_loss = 0
-            test_predictions = []
-            test_true_labels = []
+            chunk_predictions = []
+            chunk_true_labels = []
+            file_predictions_map = {}
+            file_true_labels_map = {}
 
             with torch.no_grad():
                 for images, labels in test_loader:
                     images = images.to(device)
+                    file_paths = labels['file_path']
                     encoded_labels = torch.from_numpy(
                         label_encoder.transform(labels[config["target_feature"]])
                     ).to(device)
@@ -163,30 +167,62 @@ def LOGO_architecture_wandb(
                     total_test_loss += loss.item()
 
                     _, predicted = torch.max(outputs, 1)
-                    test_predictions.extend(predicted.cpu().numpy())
-                    test_true_labels.extend(encoded_labels.cpu().numpy())
+                    batch_predictions = predicted.cpu().numpy()
+                    batch_true_labels = encoded_labels.cpu().numpy()
+
+                    # Store chunk-level predictions
+                    chunk_predictions.extend(batch_predictions)
+                    chunk_true_labels.extend(batch_true_labels)
+
+                    # Store predictions by parent file for majority voting
+                    for pred, true_label, file_path in zip(batch_predictions, batch_true_labels, file_paths):
+                        if file_path not in file_predictions_map:
+                            file_predictions_map[file_path] = []
+                            file_true_labels_map[file_path] = true_label
+                        file_predictions_map[file_path].append(pred)
 
             # Calculate test metrics
             avg_test_loss = total_test_loss / len(test_loader)
 
-            accuracy = np.mean(np.array(test_predictions) == np.array(test_true_labels))
+            # Calculate chunk-level accuracy
+            chunk_accuracy = np.mean(np.array(chunk_predictions) == np.array(chunk_true_labels))
+
+            # Calculate majority voting accuracy
+            file_level_predictions = []
+            file_level_true_labels = []
+            for file_path in file_predictions_map:
+                # Get majority vote for this file
+                chunk_predictions_for_file = file_predictions_map[file_path]
+                vote_distribution = np.bincount(chunk_predictions_for_file, minlength=len(label_encoder.classes_))
+                file_prediction = vote_distribution.argmax()
+                file_true_label = file_true_labels_map[file_path]
+                
+                file_level_predictions.append(file_prediction)
+                file_level_true_labels.append(file_true_label)
+
+            file_level_accuracy = np.mean(
+                np.array(file_level_predictions) == np.array(file_level_true_labels)
+            )
+
             print(
                 f"Training Loss: {avg_training_loss:.4f} | Test loss: {avg_test_loss:.4f}"
             )
-            print(f"Test Accuracy: {100*accuracy:.2f}%")
+            print(f"Chunk-level Test Accuracy: {100*chunk_accuracy:.2f}%")
+            print(f"File-level Test Accuracy: {100*file_level_accuracy:.2f}%")
 
             wandb.log(
                 {
                     "epoch": epoch,
                     "train_loss": avg_training_loss,
                     "test_loss": avg_test_loss,
-                    "test_accuracy": accuracy,
+                    "test_accuracy_chunk": chunk_accuracy,
+                    "test_accuracy_file": file_level_accuracy,
                 }
             )
 
-        accuracies[group_left_out] = accuracy
-        all_predictions.extend(test_predictions)
-        all_true_labels.extend(test_true_labels)
+        accuracies[group_left_out] = file_level_accuracy  # Use file-level accuracy for final results
+        all_predictions.extend(file_level_predictions)
+        all_true_labels.extend(file_level_true_labels)
 
         wandb.finish()
 

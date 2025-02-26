@@ -18,7 +18,7 @@ class ISAdetectDataset(Dataset):
         max_file_splits: int | None = None,
     ):
         self.transform = transform
-        self.files = []
+        self.file_paths = []
         self.file_byte_offset = []
         self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
@@ -37,7 +37,6 @@ class ISAdetectDataset(Dataset):
                     continue
 
                 for file_path in isa.glob("*.code"):
-
                     # if using full binary, remove .code and add offset skipping elf header
                     elf_end_offset = 0
                     if not use_code_only:
@@ -52,7 +51,7 @@ class ISAdetectDataset(Dataset):
                         file_splits = min(file_splits, max_file_splits)
 
                     for i in range(file_splits):
-                        self.files.append(file_path)
+                        self.file_paths.append(file_path)
                         self.file_byte_offset.append(
                             elf_end_offset + i * file_byte_read_limit
                         )
@@ -72,11 +71,12 @@ class ISAdetectDataset(Dataset):
             raise ValueError("Metadata errors for dataset")
 
     def __len__(self):
-        return len(self.files)
+        return len(self.file_paths)
 
-    def __getitem__(self, idx) -> tuple[torch.Tensor, str]:
-        file_path = self.files[idx]
-        labels = self.metadata[idx]
+    def __getitem__(self, idx) -> tuple[torch.Tensor, dict, str]:
+        file_path = str(self.file_paths[idx])
+        labels = self.metadata[idx].copy()
+        labels['file_path'] = file_path
 
         # Read binary file
         with open(file_path, "rb") as f:
