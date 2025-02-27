@@ -31,7 +31,6 @@ class CpuRecDataset(Dataset):
             isa_name = isa.name.split(".")[0]  # remove .corpus extension
             file_count = 0
             metadata = get_architecture_features(feature_csv_path, isa_name)
-            print(metadata)
             if not metadata:
                 metadata_missing.append(isa_name)
                 continue

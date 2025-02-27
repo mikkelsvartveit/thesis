@@ -1,0 +1,45 @@
+target_feature: endianness
+
+data:
+  name: ISAdetectDataset
+  params:
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    use_code_only: True
+
+testing_data:
+  name: CpuRecDataset
+  params:
+    dataset_path: cpu_rec/cpu_rec_corpus
+    feature_csv_path: cpu_rec-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    max_file_splits: 100
+
+transforms:
+  name: Vector1D
+  params:
+    length: 512
+
+model:
+  name: EmbeddingAnd2dCNNModel
+  params:
+    input_length: 512
+    num_classes: 2
+    dropout_rate: 0.3
+
+validator:
+  name: ISAdetect_train_cpu_rec_test
+  wandb_project_name: stian-02-27
+  test_split: 0.2
+  validation_split: 0.2
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2
