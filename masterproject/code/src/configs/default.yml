@@ -22,7 +22,7 @@ model:
 
 validator:
   name: LOGO_architecture_wandb
-  wandb_project_name: stiantest
+  wandb_project_name: logo-test
 
 training:
   optimizer: AdamW

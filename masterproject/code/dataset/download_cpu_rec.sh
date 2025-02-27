@@ -14,11 +14,23 @@ echo "Decompressing files..."
 for file in *.xz; do
     xz -d -q $file
 done
-echo "Done."
 
+echo "Done downloading dataset. Removing files:"
 # rm files that starts with _
-rm _*
+rm -v _*
 
-cd ../../
+# Array of filenames to remove
+files_to_remove=(
+    "CUDA.corpus"  # Probably NVIDIA PTX bytecode
+    "OCaml.corpus"  # OCaml bytecode
+    "WASM.corpus"  # WebAssembly bytecode
+    # Special variants that aren't pure ISA
+    "#6502#cc65.corpus"  # Compiler-specific variant
+)
 
-python rename_cpu_rec.py
+# Remove files in the array
+for file in "${files_to_remove[@]}"; do
+    rm -v "$file"
+done
+
+echo "Dataset ready"
