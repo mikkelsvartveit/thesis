@@ -7,6 +7,8 @@ import torch.nn as nn
 from tqdm import tqdm
 import wandb
 import torch
+import wandb.wandb_run
+from src.validators.train_test_utils import training_loop, test_loop, save_model_as_onnx
 
 
 def ISAdetect_train_cpu_rec_test(
@@ -16,16 +18,24 @@ def ISAdetect_train_cpu_rec_test(
     CpuRecDataset: Dataset,
     device,
 ):
+    assert (
+        "validation_split" in config["validator"]
+    ), 'validation_split not in config["validator"]'
+    assert "test_split" in config["validator"], 'test_split not in config["validator"]'
 
-    wandb_group_name = f"{config["testing"]["name"]} {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
+    wandb_group_name = f"{config["validator"]["name"]} {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
+    wandb_project = config["validator"]["wandb_project_name"]
+    if not wandb_project:
+        print("Wandb project name not provided, skipping wandb logging")
 
-    wandb_project = config["testing"]["wandb_project_name"]
-
-    wandb.init(
+    wandb_run = wandb.init(
         project=wandb_project,
         name="ISAdetect_train",
         group=wandb_group_name,
         config=config,
+        mode=(
+            "online" if config["validator"]["wandb_project_name"] else "disabled"
+        ),  # disabled = no-op
     )
 
     wandb.define_metric("epoch")
@@ -41,8 +51,8 @@ def ISAdetect_train_cpu_rec_test(
     print(f"group: {set(groups)}")
     print(f"target_feature: {set(target_features)}")
 
-    validation_split = config["testing"]["validation_split"]
-    test_split = config["testing"]["test_split"]
+    validation_split = config["validator"]["validation_split"]
+    test_split = config["validator"]["test_split"]
     train_split = 1 - validation_split - test_split
 
     train_size = int(train_split * len(ISAdetectDataset))
@@ -72,7 +82,7 @@ def ISAdetect_train_cpu_rec_test(
 
     model = model_class(**config["model"]["params"])
     model.to(device)
-    wandb.watch(model)
+    wandb_run.watch(model)
     criterion = (
         getattr(model, "criterion", None)
         or getattr(nn, config["training"]["criterion"])()
@@ -92,127 +102,36 @@ def ISAdetect_train_cpu_rec_test(
 
     EPOCHS = config["training"]["epochs"]
     model.train()
-    for epoch in range(EPOCHS):
-        print(f"\nEpoch {epoch+1}:")
-        # Training metrics
-        total_training_loss = 0
-        training_predictions = []
-        training_true_labels = []
 
-        for batch_idx, (images, labels) in enumerate(tqdm(train_loader)):
-            images = images.to(device)
-            encoded_labels = torch.from_numpy(
-                label_encoder.transform(labels[config["target_feature"]])
-            ).to(device)
-
-            optimizer.zero_grad()
-            predictions = model(images)
-            loss = criterion(predictions, encoded_labels)
-            loss.backward()
-            optimizer.step()
-
-            total_training_loss += loss.item()
-
-            # Collect predictions and true labels
-            _, predicted = torch.max(predictions, 1)
-            training_predictions.extend(predicted.cpu().numpy())
-            training_true_labels.extend(encoded_labels.cpu().numpy())
-
-            # Log batch metrics
-            wandb.log(
-                {
-                    f"batch_loss": loss.item(),
-                },
-            )
-
-        # Calculate training metrics
-        avg_training_loss = total_training_loss / len(train_loader)
-
-        # ========== EPOCH VALIDATION LOOOP ==========
-        model.eval()
-        total_test_loss = 0
-        validation_predictions = []
-        validation_true_labels = []
-        architecture_predictions = {}
-        architecture_true_labels = {}
-
-        with torch.no_grad():
-            for images, labels in validation_loader:
-                images = images.to(device)
-                encoded_labels = torch.from_numpy(
-                    label_encoder.transform(labels[config["target_feature"]])
-                ).to(device)
-
-                outputs = model(images)
-                loss = criterion(outputs, encoded_labels)
-                total_test_loss += loss.item()
-
-                _, predicted = torch.max(outputs, 1)
-                validation_predictions.extend(predicted.cpu().numpy())
-                validation_true_labels.extend(encoded_labels.cpu().numpy())
-
-                for i, arch in enumerate(labels["architecture"]):
-                    if arch not in architecture_predictions:
-                        architecture_predictions[arch] = []
-                        architecture_true_labels[arch] = []
-
-                    architecture_predictions[arch].append(predicted[i].cpu().item())
-                    architecture_true_labels[arch].append(
-                        encoded_labels[i].cpu().item()
-                    )
-
-        # ===== AFTER EPOCH METRICS =====
-
-        avg_validation_loss = total_test_loss / len(validation_loader)
-
-        validation_total_accuracy = np.mean(
-            np.array(validation_predictions) == np.array(validation_true_labels)
-        )
-        print(
-            f"Training Loss: {avg_training_loss:.4f} | Validation loss: {avg_validation_loss:.4f}"
-        )
-        print(f"Validation Accuracy: {100*validation_total_accuracy:.2f}%")
-
-        wandb.log(
-            {
-                "epoch": epoch,
-                "train_loss": avg_training_loss,
-                "validation_loss": avg_validation_loss,
-                "validation_accuracy": validation_total_accuracy,
-            }
-        )
-
-        validation_accuracies = {}
-        for arch in architecture_predictions:
-            arch_accuracy = np.mean(
-                np.array(architecture_predictions[arch])
-                == np.array(architecture_true_labels[arch])
-            )
-            validation_accuracies[arch] = arch_accuracy
-            print(f"{arch} Accuracy: {100*arch_accuracy:.2f}%")
-
-    # ======== AFTER TRAINING METRICS ========
-
-    # last validation results
-    wandb.log(
-        {
-            "validation_accuracy_per_group": wandb.Table(
-                data=[[group, acc] for group, acc in validation_accuracies.items()],
-                columns=["group", "accuracy"],
-            ),
-        }
+    training_loop(
+        model=model,
+        criterion=criterion,
+        optimizer=optimizer,
+        device=device,
+        train_loader=train_loader,
+        validation_loader=validation_loader,
+        num_epochs=EPOCHS,
+        label_encoder=label_encoder,
+        target_feature=config["target_feature"],
+        wandb_run=wandb_run,
+        validation_name="ISAdetect_validation",
     )
+    
+    # try save model if onnx is installed
+    if config["validator"].get("save_model", False):
+        print("Saving model as ONNX")
+        save_model_as_onnx(model=model, model_name=config["model"]["name"], sample_dataset=ISAdetectDataset)
 
-    print("Finished training")
-    wandb.finish()
+    wandb_run.finish()
 
     # ======== ISADETECT TESTING ========
     print("\n===== Testing on ISAdetect =====")
-    wandb.init(
+    wandb_run = wandb.init(
         project=wandb_project,
         name="ISAdetect_test",
         group=wandb_group_name,
         config=config,
+        mode="online" if config["validator"]["wandb_project_name"] else "disabled",
     )
 
     test_loader = DataLoader(
@@ -223,78 +142,43 @@ def ISAdetect_train_cpu_rec_test(
         pin_memory=True,
         prefetch_factor=2,
     )
-    model.eval()
-    total_test_loss = 0
-    testing_predictions = []
-    testing_true_labels = []
-    architecture_predictions = {}
-    architecture_true_labels = {}
 
-    with torch.no_grad():
-        for images, labels in tqdm(test_loader):
-            images = images.to(device)
-            encoded_labels = torch.from_numpy(
-                label_encoder.transform(labels[config["target_feature"]])
-            ).to(device)
-
-            outputs = model(images)
-            loss = criterion(outputs, encoded_labels)
-            total_test_loss += loss.item()
-
-            _, predicted = torch.max(outputs, 1)
-            testing_predictions.extend(predicted.cpu().numpy())
-            testing_true_labels.extend(encoded_labels.cpu().numpy())
-
-            for i, arch in enumerate(labels["architecture"]):
-                if arch not in architecture_predictions:
-                    architecture_predictions[arch] = []
-                    architecture_true_labels[arch] = []
-
-                architecture_predictions[arch].append(predicted[i].cpu().item())
-                architecture_true_labels[arch].append(encoded_labels[i].cpu().item())
-
-    # ====== AFTER TESTING METRICS ======
-    testing_accuracies = {}
-    for arch in architecture_predictions:
-        arch_accuracy = np.mean(
-            np.array(architecture_predictions[arch])
-            == np.array(architecture_true_labels[arch])
-        )
-        testing_accuracies[arch] = arch_accuracy
-        print(f"{arch} Accuracy: {100*arch_accuracy:.2f}%")
-
-    wandb.log(
-        {
-            "ISAdetect_testing_accuracy_per_group": wandb.Table(
-                data=[[group, acc] for group, acc in testing_accuracies.items()],
-                columns=["group", "accuracy"],
-            ),
-        }
+    (
+        ISAdetect_testing_accuracies,
+        ISAdetect_avg_testing_loss,
+        ISAdetect_testing_total_accuracy,
+    ) = test_loop(
+        model=model,
+        device=device,
+        test_loader=test_loader,
+        criterion=criterion,
+        label_encoder=label_encoder,
+        target_feature=config["target_feature"],
+        test_name="ISAdetect",
     )
 
-    avg_testing_loss = total_test_loss / len(test_loader)
-    testing_total_accuracy = np.mean(
-        np.array(testing_predictions) == np.array(testing_true_labels)
-    )
-    print(f"Test Loss: {avg_testing_loss:.4f}")
-    print(f"Test Accuracy: {100*testing_total_accuracy:.2f}%")
-    print("Finished testing")
-    print("Logging to wandb")
-    wandb.log(
-        {
-            "ISAdetect_test_loss": avg_testing_loss,
-            "ISAdetect_test_accuracy": testing_total_accuracy,
-        }
-    )
-    wandb.finish()
+
+    wandb_run.log({
+        "ISAdetect_testing_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in ISAdetect_testing_accuracies.items()],
+            columns=["group", "accuracy"],
+        ),
+        "ISAdetect_avg_testing_loss": ISAdetect_avg_testing_loss,
+        "ISAdetect_testing_total_accuracy": ISAdetect_testing_total_accuracy,
+    })
+    print(f"Avg. Test Loss: {ISAdetect_avg_testing_loss:.4f}")
+    print(f"Test Total Accuracy: {100*ISAdetect_testing_total_accuracy:.2f}%")
+
+    wandb_run.finish()
 
     # ======= CPU REC TESTING =======
     print("\n===== Testing on CPU REC =====")
-    wandb.init(
+    wandb_run = wandb.init(
         project=wandb_project,
         name="CPU_REC_test",
         group=wandb_group_name,
         config=config,
+        mode="online" if config["validator"]["wandb_project_name"] else "disabled",
     )
 
     cpu_rec_loader = DataLoader(
@@ -306,67 +190,31 @@ def ISAdetect_train_cpu_rec_test(
         prefetch_factor=2,
     )
 
-    model.eval()
-    total_test_loss = 0
-    testing_predictions = []
-    testing_true_labels = []
-    architecture_predictions = {}
-    architecture_true_labels = {}
-
-    with torch.no_grad():
-        for images, labels in tqdm(cpu_rec_loader):
-            images = images.to(device)
-            encoded_labels = torch.from_numpy(
-                label_encoder.transform(labels[config["target_feature"]])
-            ).to(device)
-
-            outputs = model(images)
-            loss = criterion(outputs, encoded_labels)
-            total_test_loss += loss.item()
-
-            _, predicted = torch.max(outputs, 1)
-            testing_predictions.extend(predicted.cpu().numpy())
-            testing_true_labels.extend(encoded_labels.cpu().numpy())
-
-            for i, arch in enumerate(labels["architecture"]):
-                if arch not in architecture_predictions:
-                    architecture_predictions[arch] = []
-                    architecture_true_labels[arch] = []
-
-                architecture_predictions[arch].append(predicted[i].cpu().item())
-                architecture_true_labels[arch].append(encoded_labels[i].cpu().item())
-
-    # ====== AFTER TESTING METRICS ======
-    testing_accuracies = {}
-    for arch in architecture_predictions:
-        arch_accuracy = np.mean(
-            np.array(architecture_predictions[arch])
-            == np.array(architecture_true_labels[arch])
-        )
-        testing_accuracies[arch] = arch_accuracy
-        print(f"{arch} Accuracy: {100*arch_accuracy:.2f}%")
-
-    wandb.log(
-        {
-            "cpu_rec_testing_accuracy_per_group": wandb.Table(
-                data=[[group, acc] for group, acc in testing_accuracies.items()],
-                columns=["group", "accuracy"],
-            ),
-        }
+    (
+        cpu_rec_testing_accuracies,
+        cpu_rec_avg_testing_loss,
+        cpu_rec_testing_total_accuracy,
+    ) = test_loop(
+        model=model,
+        device=device,
+        test_loader=cpu_rec_loader,
+        criterion=criterion,
+        label_encoder=label_encoder,
+        target_feature=config["target_feature"],
+        test_name="cpu_rec",
     )
 
-    avg_testing_loss = total_test_loss / len(cpu_rec_loader)
-    testing_total_accuracy = np.mean(
-        np.array(testing_predictions) == np.array(testing_true_labels)
-    )
-    print(f"Test Loss: {avg_testing_loss:.4f}")
-    print(f"Test Accuracy: {100*testing_total_accuracy:.2f}%")
-    print("Finished testing")
-    print("Logging to wandb")
-    wandb.log(
-        {
-            "cpu_rec_test_loss": avg_testing_loss,
-            "cpu_rec_test_accuracy": testing_total_accuracy,
-        }
-    )
-    wandb.finish()
+
+    wandb_run.log({
+        "cpu_rec_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in cpu_rec_testing_accuracies.items()],
+            columns=["group", "accuracy"],
+        ),
+        "cpu_rec_avg_testing_loss": cpu_rec_avg_testing_loss,
+        "cpu_rec_testing_total_accuracy": cpu_rec_testing_total_accuracy,
+    })
+    print(f"Avg. Test Loss: {cpu_rec_avg_testing_loss:.4f}")
+    print(f"Test Total Accuracy: {100*cpu_rec_testing_total_accuracy:.2f}%")
+
+    wandb_run.finish()
+

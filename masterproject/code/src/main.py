@@ -2,7 +2,6 @@ import argparse
 import json
 from pprint import pprint
 import yaml
-from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
 from dotenv import load_dotenv
@@ -21,28 +20,6 @@ from src.validators import (
     LOGO_architecture_wandb,
 )
 from transforms import get_transform
-
-
-class ExperimentManager:
-    def __init__(self, config: Dict[str, Any]):
-        self.config = config
-        self.setup_logging()
-        self.save_config()
-
-    def setup_logging(self):
-        # Create experiments directory if it doesn't exist
-        exp_dir = Path("experiments")
-        exp_dir.mkdir(exist_ok=True)
-
-        # Create a unique directory for this run
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.run_dir = exp_dir / f"run_{timestamp}"
-        self.run_dir.mkdir()
-
-    def save_config(self):
-        # Save the configuration for reproducibility
-        with open(self.run_dir / "config.yaml", "w") as f:
-            yaml.dump(self.config, f)
 
 
 def get_config(configs_base_path: Path) -> Dict[str, Any]:
@@ -102,9 +79,6 @@ def main():
     if not wandb.login(key=WANDB_API_KEY, timeout=60):
         raise ValueError("Failed to login to wandb")
 
-    # Initialize experiment manager
-    # exp_manager = ExperimentManager(config)
-
     # Setup device
     device = torch.device(
         "cuda"
@@ -128,32 +102,26 @@ def main():
     elif validator_name == "LOGO_architecture_wandb":
         print("LOGO_architecture_wandb")
         LOGO_architecture_wandb(config, dataset, model, device)
-    elif validator_name == "pass":
-        print("Passing validor step")
-    else:
-        raise ValueError(f"Unknown validator: {validator_name}")
-
-    if "testing" in config.keys() and "name" in config["testing"].keys():
-        testing_name = config["testing"]["name"]
+    elif validator_name == "ISAdetect_train_cpu_rec_test":
         validator_dataset = get_dataset(
             transform=transforms,
             dataset_base_path=DATASET_BASE_PATH,
             target_feature=config["target_feature"],
-            **config["testing"]["data"],
+            **config["testing_data"],
         )
-        if testing_name == "ISAdetect_train_cpu_rec_test":
-            print("Testing on ISAdetect_train_cpu_rec_test")
-            ISAdetect_train_cpu_rec_test(
-                config,
-                ISAdetectDataset=dataset,
-                CpuRecDataset=validator_dataset,
-                device=device,
-                model_class=model,
-            )
-        else:
-            raise ValueError(f"Unknown testing: {testing_name})")
+        print("Testing on ISAdetect_train_cpu_rec_test")
+        ISAdetect_train_cpu_rec_test(
+            config,
+            ISAdetectDataset=dataset,
+            CpuRecDataset=validator_dataset,
+            device=device,
+            model_class=model,
+        )
+
+    elif validator_name == "pass":
+        print("Passing validor step")
     else:
-        print("No testing specified")
+        raise ValueError(f"Unknown validator: {validator_name}")
 
     print("============== Done ==============")
 
