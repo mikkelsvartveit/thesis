@@ -8,7 +8,7 @@ from tqdm import tqdm
 import wandb
 import torch
 import wandb.wandb_run
-from src.validators.train_test_utils import training_loop, test_loop, save_model_as_onnx
+from src.validators.train_test_utils import set_seed, training_loop, test_loop, save_model_as_onnx
 
 
 def ISAdetect_train_cpu_rec_test(
@@ -37,6 +37,10 @@ def ISAdetect_train_cpu_rec_test(
             "online" if config["validator"]["wandb_project_name"] else "disabled"
         ),  # disabled = no-op
     )
+    
+    # Initial seed setting
+    seed = config["validator"]["seed"]
+    set_seed(seed)
 
     wandb.define_metric("epoch")
     wandb.define_metric("validation_loss", step_metric="epoch")
@@ -113,7 +117,7 @@ def ISAdetect_train_cpu_rec_test(
         num_epochs=EPOCHS,
         label_encoder=label_encoder,
         target_feature=config["target_feature"],
-        wandb_run=wandb_run,
+        current_run=wandb_run,
         validation_name="ISAdetect_validation",
     )
     

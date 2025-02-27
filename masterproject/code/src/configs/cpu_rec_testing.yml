@@ -5,7 +5,7 @@ data:
   params:
     dataset_path: ISAdetect/ISAdetect_full_dataset/
     feature_csv_path: ISAdetect-features.csv
-    per_architecture_limit: 50
+    per_architecture_limit: null
     file_byte_read_limit: 512
     max_file_splits: 1
 
@@ -36,6 +36,7 @@ validator:
   test_split: 0.2
   validation_split: 0.2
   save_model: true
+  seed: 420
 
 training:
   optimizer: AdamW

@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 from tqdm import tqdm
-import random
+from .train_test_utils import set_seed
 
 
 def LOGO_architecture_wandb(
@@ -15,16 +15,6 @@ def LOGO_architecture_wandb(
 ):
     if "wandb_project_name" not in config["validator"]:
         raise ValueError("wandb_project_name not specified in config")
-
-    def set_seed(seed: int) -> None:
-        """Set random seed for all libraries to ensure reproducibility."""
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed(seed)
-        # For reproducible behavior in CUDA
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
 
     # Initial seed setting
     seed = config["validator"]["seed"]

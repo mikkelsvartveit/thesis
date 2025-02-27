@@ -1,4 +1,5 @@
 from os import PathLike
+import random
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 import torch
@@ -6,10 +7,20 @@ from tqdm import tqdm
 import numpy as np
 import wandb
 from sklearn.preprocessing import LabelEncoder
+import wandb.wandb_run
 
 def wand_stub():
     return wandb.init(mode="disabled")
 
+def set_seed(seed: int) -> None:
+        """Set random seed for all libraries to ensure reproducibility."""
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        # For reproducible behavior in CUDA
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
 
 def training_loop(
     model: nn.Module,
@@ -21,7 +32,7 @@ def training_loop(
     num_epochs: int,
     label_encoder: LabelEncoder,
     target_feature: str,
-    wandb_run: wandb.wandb_run.Run,
+    current_run: wandb.wandb_run.Run,
     validation_name: str,
 ):
     for epoch in range(num_epochs):
@@ -53,7 +64,7 @@ def training_loop(
 
             # Log batch metrics
             
-            wandb_run.log(
+            current_run.log(
                 {
                     f"batch_loss": loss.item(),
                 },
@@ -78,7 +89,7 @@ def training_loop(
         print(f"Validation Total Accuracy: {100*validation_total_accuracy:.2f}%")
         print("Logging to wandb")
 
-        wandb_run.log(
+        current_run.log(
             {
                 "epoch": epoch,
                 "train_loss": avg_training_loss,
@@ -90,7 +101,7 @@ def training_loop(
     # ======== AFTER TRAINING METRICS ========
 
     # last validation results
-    wandb_run.log(
+    current_run.log(
         {
             "validation_accuracy_per_group": wandb.Table(
                 data=[[group, acc] for group, acc in validation_accuracies.items()],
