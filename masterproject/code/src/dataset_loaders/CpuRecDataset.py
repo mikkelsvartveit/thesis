@@ -70,7 +70,8 @@ class CpuRecDataset(Dataset):
 
     def __getitem__(self, idx) -> tuple[torch.Tensor, str]:
         file_path = self.files[idx]
-        labels = self.metadata[idx]
+        labels = self.metadata[idx].copy()
+        labels['file_path'] = file_path
 
         # Read binary file
         with open(file_path, "rb") as f:

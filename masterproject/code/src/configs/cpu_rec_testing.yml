@@ -32,7 +32,7 @@ model:
 
 validator:
   name: ISAdetect_train_cpu_rec_test
-  wandb_project_name: stian-02-27
+  wandb_project_name: cpu_rec_test
   test_split: 0.2
   validation_split: 0.2
   save_model: true
