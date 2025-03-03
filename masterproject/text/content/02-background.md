@@ -1,6 +1,6 @@
 # Background
 
-TODO: Introduce section
+This chapter presents the theoretical foundation required to understand the rest of the thesis. Starting with \autoref{computer-software}, we look at the basic, low-level concepts of computer software, instruction sets, and compilers. \autoref{software-reverse-engineering} then introduces software reverse engineering, which is the overarching topic of this thesis. Finally, \autoref{machine-learning} introduces the necessary concepts from the field of machine learning, with a focus on \acp{CNN}.
 
 ## Computer software
 

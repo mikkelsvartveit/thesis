@@ -1,6 +1,6 @@
 # Methodology
 
-## Research strategy
+This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models used in the experiments in \autoref{machine-learning-models}. Finally, we describe our evaluation strategy and metrics in \autoref{evaluation}.
 
 ## Experimental setup
 
@@ -27,7 +27,43 @@ While many of the more common ISAs were packaged using standard file-headers, so
 
 ### Technical configuration
 
-<!-- Hvordan specce ut om idun -->
+For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@TODO]. The following hardware configuration was used for all experiments:
+
+- CPU: Intel Xeon or AMD EPYC, 12 cores enabled
+- GPU: NVIDIA A100 (40 GB or 80 GB VRAM)
+- RAM: 16 GB
+
+We use the PyTorch framework for building and training our models. The following software versions were used:
+
+- Python 3.12.3
+- PyTorch 2.2.2
+- torchvision 0.17.2
+- CUDA 12.1
+- cuDNN 8.9.2
+
+### Hyperparameters
+
+Unless specified otherwise, we use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
+
+Table: Hyperparameter selection \label{table:hyperparameters}
+
+| Hyperparameter | Value         |
+| :------------- | :------------ |
+| Batch size     | 64            |
+| Loss function  | Cross entropy |
+| Optimizer      | AdamW         |
+| Learning rate  | 0.0001        |
+| Weight decay   | 0.01          |
+
+We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient GPU utilization, while small enough to provide a regularization effect through noise in gradient estimation.
+
+Cross entropy loss is the natural choice for classification tasks, as it tends to provide superior performance for classification tasks compared to mean squared error loss [@Golik2013].
+
+The AdamW optimizer is an improved version of Adam that implements weight decay correctly, decoupling it from the learning rate. It also improves on Adam's generalization performance on image classification datasets [@Loshchilov2019].
+
+A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We make this conservative choice due to early observations showing that small learning rates still cause the AdamW optimizer to reach convergence rather quickly for our dataset. Considering our vast amounts of computational resources, we want to err on the side of slower training rather than risking convergence issues.
+
+A weight decay of 0.01 provides moderate regularization strength, and provides a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
 
 ## Machine learning models
 
@@ -69,49 +105,21 @@ An embedding layer transforms categorical data into vectors of continuous number
 
 Transfer learning is a machine learning technique where a model developed for one task is re-used for another task (see \autoref{transfer-learning} for details). Transfer learning is very useful when there is little training data available, as well as in cases of limited computation power or time. Using a transfer learning approach can allow for deep networks despite these constraints. We attempt using \acp{CNN} pre-trained on ImageNet [@ImageNet], and use fine-tuning and feature extraction techniques to create tailored models.
 
-### Model training and validation
+## Evaluation
 
-#### Hyperparameters
-
-Unless specified otherwise, we use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
-
-Table: Hyperparameter selection \label{table:hyperparameters}
-
-| Hyperparameter | Value         |
-| :------------- | :------------ |
-| Batch size     | 64            |
-| Loss function  | Cross entropy |
-| Optimizer      | AdamW         |
-| Learning rate  | 0.0001        |
-| Weight decay   | 0.01          |
-
-We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient GPU utilization, while small enough to provide a regularization effect through noise in gradient estimation.
-
-Cross entropy loss is the natural choice for classification tasks, as it tends to provide superior performance for classification tasks compared to mean squared error loss [@Golik2013].
-
-The AdamW optimizer is an improved version of Adam that implements weight decay correctly, decoupling it from the learning rate. It also improves on Adam's generalization performance on image classification datasets [@Loshchilov2019].
-
-A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We make this conservative choice due to early observations showing that small learning rates still cause the AdamW optimizer to reach convergence rather quickly for our dataset. Considering our vast amounts of computational resources, we want to err on the side of slower training rather than risking convergence issues.
-
-A weight decay of 0.01 provides moderate regularization strength, and provides a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
-
-#### Leave-one-group-out cross validation
+### Leave-one-group-out cross validation on ISADetect dataset
 
 The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
 
 To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISADetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we get a strong indication of how the model performs on previously unseen \acp{ISA}.
 
-#### Cross-seed validation
+### Testing on other datasets
+
+When a model configuration exhibits high performance under \ac{LOGO CV}, we include it for further performance testing by doing inference on other datasets. Before this stage, a final model is trained using all available training data in ISADetect, that is, without leaving out training instances of any group. Most notably, we will use the CpuRec dataset to test whether our trained model generalizes to unseen \acp{ISA}.
+
+### Cross-seed validation
 
 To account for the stochastic nature of deep neural network training, we validate each architecture by training five times with different random seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different random seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
-
-#### Final models
-
-When a model configuration exhibits high performance under \ac{LOGO CV}, we include it for further performance testing in the evaluation phase. Before evaluation, a final model is trained using all available training data, that is, without leaving out training instances of any group.
-
-## Evaluation
-
-- CpuReq
 
 ### Baseline
 
