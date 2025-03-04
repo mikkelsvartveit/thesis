@@ -1,0 +1,19 @@
+FROM cross-compile-base:latest
+
+# Install ARM64 cross-compiler toolchain
+RUN apt-get update && apt-get install -y \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
+    binutils-aarch64-linux-gnu \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy ARM64 toolchain file
+COPY toolchains/arm64.cmake /workspace/toolchains/arm64.cmake
+
+# Set environment variables for the architecture
+ENV ARCH="arm64" \
+    CROSS_COMPILE="aarch64-linux-gnu-" \
+    TOOLCHAIN_FILE="/workspace/toolchains/arm64.cmake"
+
+ENTRYPOINT ["build-lib"]

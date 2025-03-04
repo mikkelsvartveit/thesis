@@ -1,0 +1,19 @@
+FROM cross-compile-base:latest
+
+# Install RISC-V cross-compiler toolchain
+RUN apt-get update && apt-get install -y \
+    gcc-riscv64-linux-gnu \
+    g++-riscv64-linux-gnu \
+    binutils-riscv64-linux-gnu \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy RISC-V toolchain file
+COPY toolchains/riscv64.cmake /workspace/toolchains/riscv64.cmake
+
+# Set environment variables for the architecture
+ENV ARCH="riscv64" \
+    CROSS_COMPILE="riscv64-linux-gnu-" \
+    TOOLCHAIN_FILE="/workspace/toolchains/riscv64.cmake"
+
+ENTRYPOINT ["build-lib"]
