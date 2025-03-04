@@ -65,9 +65,9 @@ A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We
 
 A weight decay of 0.01 provides moderate regularization strength, and provides a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
 
-## Machine learning models
+## Experiments
 
-This research primarily involves training, validating, and evaluating \ac{CNN} models using ISA characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing, model architecture selection, and validation techniques.
+This research primarily involves training, validating, and evaluating \ac{CNN} models using ISA characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
 
 ### Data preprocessing
 
@@ -89,7 +89,70 @@ Similar to the 2D approach, we treat each byte as an integer. The values are pla
 
 This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019] [@Pizzolotto2021].
 
-### Model architecture
+### Model architectures
+
+In our experiments, we train, evaluate, and compare the model architectures outlined in this subsection.
+
+#### Simple 1D CNN
+
+| Layer      | Type                 | Activation | Output Shape | Parameters |
+| ---------- | -------------------- | ---------- | ------------ | ---------- |
+| Input      | Input Layer          | -          | (512, 1)     | 0          |
+| Conv1a     | Convolution 1D       | ReLU       | (512, 32)    | 128        |
+| Conv1b     | Convolution 1D       | ReLU       | (256, 32)    | 5,152      |
+| Pool1      | Max Pooling 1D       | -          | (128, 32)    | 0          |
+| Conv2a     | Convolution 1D       | ReLU       | (128, 64)    | 6,208      |
+| Conv2b     | Convolution 1D       | ReLU       | (64, 64)     | 20,544     |
+| Pool2      | Max Pooling 1D       | -          | (32, 64)     | 0          |
+| Conv3a     | Convolution 1D       | ReLU       | (32, 128)    | 8,320      |
+| Conv3b     | Convolution 1D       | ReLU       | (16, 128)    | 41,088     |
+| Pool3      | Max Pooling 1D       | -          | (8, 128)     | 0          |
+| Dropout2   | Dropout              | -          | (8, 128)     | 0          |
+| GlobalPool | Adaptive Avg Pool 1D | -          | (1, 128)     | 0          |
+| Flatten    | Reshape Layer        | -          | (128,)       | 0          |
+| FC1        | Fully Connected      | ReLU       | (8,)         | 1,032      |
+| Dropout3   | Dropout              | -          | (8,)         | 0          |
+| FC2        | Fully Connected      | -          | (2,)         | 18         |
+
+#### 1D CNN with embedding layer
+
+| Layer      | Type                 | Activation | Output Shape | Parameters |
+| ---------- | -------------------- | ---------- | ------------ | ---------- |
+| Input      | Input Layer          | -          | (512,)       | 0          |
+| Embedding  | Embedding Layer      | -          | (512, 128)   | 32,768     |
+| Dropout1   | Dropout              | -          | (512, 128)   | 0          |
+| Conv1a     | Convolution 1D       | ReLU       | (512, 32)    | 12,320     |
+| Conv1b     | Convolution 1D       | ReLU       | (256, 32)    | 5,152      |
+| Pool1      | Max Pooling 1D       | -          | (128, 32)    | 0          |
+| Conv2a     | Convolution 1D       | ReLU       | (128, 64)    | 6,208      |
+| Conv2b     | Convolution 1D       | ReLU       | (64, 64)     | 20,544     |
+| Pool2      | Max Pooling 1D       | -          | (32, 64)     | 0          |
+| Conv3a     | Convolution 1D       | ReLU       | (32, 128)    | 8,320      |
+| Conv3b     | Convolution 1D       | ReLU       | (16, 128)    | 41,088     |
+| Pool3      | Max Pooling 1D       | -          | (8, 128)     | 0          |
+| Dropout2   | Dropout              | -          | (8, 128)     | 0          |
+| GlobalPool | Adaptive Avg Pool 1D | -          | (1, 128)     | 0          |
+| Flatten    | Reshape Layer        | -          | (128,)       | 0          |
+| FC1        | Fully Connected      | ReLU       | (8,)         | 1,032      |
+| Dropout3   | Dropout              | -          | (8,)         | 0          |
+| FC2        | Fully Connected      | -          | (2,)         | 18         |
+
+#### Simple 2D CNN
+
+#### 2D CNN with embedding layer
+
+### Target features
+
+For every model architecture, we will separately train and evaluate model using these target features:
+
+- **Endianness** – the ordering of bytes in a multi-byte value.
+- **Instruction width type** – whether the length of each instruction is fixed or variable.
+
+We choose these features due to their importance in a reverse engineering process – if the reverse engineer can predictably split up the file into instructions of fixed width, it provides a solid starting point for understanding the control flow. Knowing the endianness allows the reverse engineer to properly interpret numerical values such as memory addresses.
+
+Additionally, these features have certain technical properties that make them suitable for deep learning models. Firstly, the features themselves have less ambiguous definitions than other \ac{ISA} characteristics such as word size. In addition, the chosen features exhibit consistent byte patterns across the entire binary, allowing for analyzing small segments of binary code at the time.
+
+### Model architecture (old)
 
 Our research explores various \ac{CNN} architectures to determine the most effective approach for ISA detection. We train and validate several models while experimenting with the following configuration choices.
 
