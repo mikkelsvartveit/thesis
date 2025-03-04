@@ -67,6 +67,9 @@ echo "Library information:"
 if [ -f "${OUTPUT_DIR}/lib/libz.a" ]; then
   ${CROSS_COMPILE}readelf -h "${OUTPUT_DIR}/lib/libz.a" | grep -E "Class|Machine|Version"
 fi
+if [ -f "${OUTPUT_DIR}/lib/libz.a" ]; then
+  ${CROSS_COMPILE}readelf -h "${OUTPUT_DIR}/lib/libz.a" | grep -E "Class|Machine|Version"
+fi
 
 # Return to workspace
 cd /workspace

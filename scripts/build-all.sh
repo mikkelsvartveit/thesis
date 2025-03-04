@@ -7,6 +7,7 @@ set -e
 ARCHITECTURES=(
   "arm64"
   "riscv64"
+  "xtensa"
   # Add more architectures here
   # "ppc64le"
   # "s390x"
