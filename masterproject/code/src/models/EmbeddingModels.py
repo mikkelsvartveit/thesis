@@ -3,39 +3,33 @@ import torch.nn.functional as F
 
 
 class EmbeddingAndCNNModel(nn.Module):
-    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.0):
+    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.3):
         super(EmbeddingAndCNNModel, self).__init__()
 
         self.embedding = nn.Embedding(256, 128)
         self.dropout = nn.Dropout(p=dropout_rate)
 
         self.block1 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=128, out_channels=32, kernel_size=3, stride=1, padding=1
-            ),
-            nn.Conv1d(
-                in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2
-            ),
+            nn.Conv1d(in_channels=128, out_channels=32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv1d(in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
         self.block2 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1
-            ),
-            nn.Conv1d(
-                in_channels=64, out_channels=64, kernel_size=5, stride=2, padding=2
-            ),
+            nn.Conv1d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv1d(in_channels=64, out_channels=64, kernel_size=5, stride=2, padding=2),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
         self.block3 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1
-            ),
-            nn.Conv1d(
-                in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2
-            ),
+            nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv1d(in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
@@ -54,10 +48,8 @@ class EmbeddingAndCNNModel(nn.Module):
         x = x.permute(0, 2, 1)
 
         x = self.block1(x)
-        x = self.dropout(x)
 
         x = self.block2(x)
-        x = self.dropout(x)
 
         x = self.block3(x)
         x = self.dropout(x)
@@ -198,7 +190,7 @@ class Simple1DCNN(nn.Module):
 
 
 class Cnn1dModel(nn.Module):
-    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.0):
+    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.3):
         super(Cnn1dModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout_rate)
@@ -207,10 +199,13 @@ class Cnn1dModel(nn.Module):
             nn.Conv1d(
                 in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1
             ),
+            nn.BatchNorm1d(32),
+            nn.ReLU(),
             nn.Conv1d(
                 in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2
             ),
-            nn.LeakyReLU(),
+            nn.BatchNorm1d(32),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
@@ -218,10 +213,11 @@ class Cnn1dModel(nn.Module):
             nn.Conv1d(
                 in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1
             ),
+            nn.ReLU(),
             nn.Conv1d(
                 in_channels=64, out_channels=64, kernel_size=5, stride=2, padding=2
             ),
-            nn.LeakyReLU(),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
@@ -229,10 +225,11 @@ class Cnn1dModel(nn.Module):
             nn.Conv1d(
                 in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
+            nn.ReLU(),
             nn.Conv1d(
                 in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2
             ),
-            nn.LeakyReLU(),
+            nn.ReLU(),
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
@@ -247,10 +244,8 @@ class Cnn1dModel(nn.Module):
         x = x.unsqueeze(1)
 
         x = self.block1(x)
-        x = self.dropout(x)
 
         x = self.block2(x)
-        x = self.dropout(x)
 
         x = self.block3(x)
         x = self.dropout(x)
