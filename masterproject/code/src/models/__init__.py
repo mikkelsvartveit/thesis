@@ -16,8 +16,8 @@ def get_model(**kwargs):
         return EmbeddingAndCNNModel
     elif name == "EmbeddingAnd2dCNNModel":
         return EmbeddingAnd2dCNNModel
-    elif name == "Simple1DCNN":
-        return Simple1DCNN
+    elif name == "Simple1dCNN":
+        return Simple1dCNN
     elif name == "Simple2dCNN":
         return Simple2dCNN
     elif name == "ResNet50":
