@@ -1,6 +1,6 @@
 # Methodology
 
-This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models used in the experiments in \autoref{machine-learning-models}. Finally, we describe our evaluation strategy and metrics in \autoref{evaluation}.
+This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models, target features, and data preprocessing used in the experiments in \autoref{experiments}. Finally, we describe our evaluation strategy and metrics in \autoref{evaluation}.
 
 ## Experimental setup
 
@@ -95,47 +95,74 @@ In our experiments, we train, evaluate, and compare the model architectures outl
 
 #### Simple 1D CNN
 
-| Layer      | Type                 | Activation | Output Shape | Parameters |
-| ---------- | -------------------- | ---------- | ------------ | ---------- |
-| Input      | Input Layer          | -          | (512, 1)     | 0          |
-| Conv1a     | Convolution 1D       | ReLU       | (512, 32)    | 128        |
-| Conv1b     | Convolution 1D       | ReLU       | (256, 32)    | 5,152      |
-| Pool1      | Max Pooling 1D       | -          | (128, 32)    | 0          |
-| Conv2a     | Convolution 1D       | ReLU       | (128, 64)    | 6,208      |
-| Conv2b     | Convolution 1D       | ReLU       | (64, 64)     | 20,544     |
-| Pool2      | Max Pooling 1D       | -          | (32, 64)     | 0          |
-| Conv3a     | Convolution 1D       | ReLU       | (32, 128)    | 8,320      |
-| Conv3b     | Convolution 1D       | ReLU       | (16, 128)    | 41,088     |
-| Pool3      | Max Pooling 1D       | -          | (8, 128)     | 0          |
-| Dropout2   | Dropout              | -          | (8, 128)     | 0          |
-| GlobalPool | Adaptive Avg Pool 1D | -          | (1, 128)     | 0          |
-| Flatten    | Reshape Layer        | -          | (128,)       | 0          |
-| FC1        | Fully Connected      | ReLU       | (8,)         | 1,032      |
-| Dropout3   | Dropout              | -          | (8,)         | 0          |
-| FC2        | Fully Connected      | -          | (2,)         | 18         |
+This model is a small one-dimensional CNN. It has three convolution blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 139,834 trainable parameters.
 
-#### 1D CNN with embedding layer
+Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
-| Layer      | Type                 | Activation | Output Shape | Parameters |
-| ---------- | -------------------- | ---------- | ------------ | ---------- |
-| Input      | Input Layer          | -          | (512,)       | 0          |
-| Embedding  | Embedding Layer      | -          | (512, 128)   | 32,768     |
-| Dropout1   | Dropout              | -          | (512, 128)   | 0          |
-| Conv1a     | Convolution 1D       | ReLU       | (512, 32)    | 12,320     |
-| Conv1b     | Convolution 1D       | ReLU       | (256, 32)    | 5,152      |
-| Pool1      | Max Pooling 1D       | -          | (128, 32)    | 0          |
-| Conv2a     | Convolution 1D       | ReLU       | (128, 64)    | 6,208      |
-| Conv2b     | Convolution 1D       | ReLU       | (64, 64)     | 20,544     |
-| Pool2      | Max Pooling 1D       | -          | (32, 64)     | 0          |
-| Conv3a     | Convolution 1D       | ReLU       | (32, 128)    | 8,320      |
-| Conv3b     | Convolution 1D       | ReLU       | (16, 128)    | 41,088     |
-| Pool3      | Max Pooling 1D       | -          | (8, 128)     | 0          |
-| Dropout2   | Dropout              | -          | (8, 128)     | 0          |
-| GlobalPool | Adaptive Avg Pool 1D | -          | (1, 128)     | 0          |
-| Flatten    | Reshape Layer        | -          | (128,)       | 0          |
-| FC1        | Fully Connected      | ReLU       | (8,)         | 1,032      |
-| Dropout3   | Dropout              | -          | (8,)         | 0          |
-| FC2        | Fully Connected      | -          | (2,)         | 18         |
+| Layer                | Hyperparameters | Output Shape | Parameters |
+| -------------------- | --------------- | ------------ | ---------- |
+| Input                | –               | (512, 1)     | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (512, 32)    | 128        |
+| Convolution 1D       | k=5, s=2, p=2   | (256, 32)    | 5,152      |
+| Max Pooling 1D       | k=2, s=2        | (128, 32)    | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (128, 64)    | 6,208      |
+| Convolution 1D       | k=5, s=2, p=2   | (64, 64)     | 20,544     |
+| Max Pooling 1D       | k=2, s=2        | (32, 64)     | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (32, 128)    | 24,704     |
+| Convolution 1D       | k=5, s=2, p=2   | (16, 128)    | 82,048     |
+| Max Pooling 1D       | k=2, s=2        | (8, 128)     | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Adaptive Avg Pool 1D | output=1        | (1, 128)     | –          |
+| Reshape              | –               | (128,)       | –          |
+|                      |                 |              |            |
+| Fully Connected      | –               | (8,)         | 1,032      |
+| ReLU                 | –               | (8,)         | –          |
+| Dropout              | p=0.3           | (8,)         | –          |
+| Fully Connected      | –               | (2,)         | 18         |
+| Softmax              | –               | (2,)         | –          |
+
+#### Simple 1D CNN with embedding layer
+
+This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by adding an embedding layer at the beginning of the model. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 172,474 trainable parameters.
+
+Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
+
+| Layer                | Hyperparameters | Output Shape | Parameters |
+| -------------------- | --------------- | ------------ | ---------- |
+| Input                | –               | (512,)       | –          |
+|                      |                 |              |            |
+| Embedding            | v=256, d=128    | (512, 128)   | 32,768     |
+| Dropout              | p=0.3           | (512, 128)   | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (512, 32)    | 12,320     |
+| Convolution 1D       | k=5, s=2, p=2   | (256, 32)    | 5,152      |
+| Max Pooling 1D       | k=2, s=2        | (128, 32)    | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (128, 64)    | 6,208      |
+| Convolution 1D       | k=5, s=2, p=2   | (64, 64)     | 20,544     |
+| Max Pooling 1D       | k=2, s=2        | (32, 64)     | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (32, 128)    | 24,704     |
+| Convolution 1D       | k=5, s=2, p=2   | (16, 128)    | 82,048     |
+| Max Pooling 1D       | k=2, s=2        | (8, 128)     | –          |
+| Dropout              | p=0.3           | (8, 128)     | –          |
+|                      |                 |              |            |
+| Adaptive Avg Pool 1D | output=1        | (1, 128)     | –          |
+| Reshape              | –               | (128,)       | –          |
+|                      |                 |              |            |
+| Fully Connected      | –               | (8,)         | 1,032      |
+| ReLU                 | –               | (8,)         | –          |
+| Dropout              | p=0.3           | (8,)         | –          |
+| Fully Connected      | –               | (2,)         | 18         |
+| Softmax              | –               | (2,)         | –          |
 
 #### Simple 2D CNN
 
