@@ -1,0 +1,34 @@
+target_feature: endianness
+
+data:
+  name: ISAdetectDataset
+  params:
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    use_code_only: True
+
+transforms:
+  name: Vector1D
+  params:
+    length: 512
+
+model:
+  name: Simple1dCNN
+  params:
+    input_length: 512
+    num_classes: 2
+    dropout_rate: 0.3
+
+validator:
+  name: LOGO_architecture_wandb
+  wandb_project_name: 1d-endianness
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2
