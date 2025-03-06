@@ -17,9 +17,10 @@ ARCHITECTURES=(
 # Libraries to build
 LIBRARIES=(
   "zlib:1.3"
+  "libjpeg-turbo:3.1.0"
+  "libxml2:2.14"
   # Add more libraries here in format "name:version"
   # "openssl:3.0.8"
-  # "libxml2:2.10.3"
 )
 
 # Script directory

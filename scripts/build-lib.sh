@@ -51,6 +51,8 @@ cmake -G "Ninja" \
       -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
       -DCMAKE_INSTALL_PREFIX="${OUTPUT_DIR}" \
       -DBUILD_SHARED_LIBS=OFF \
+      -DLIBXML2_WITH_ICONV=OFF \
+      -DLIBXML2_WITH_PYTHON=OFF \
       "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
 
 echo "Building ${LIB_NAME}..."
@@ -64,9 +66,6 @@ echo "Library installed to ${OUTPUT_DIR}"
 
 # Print information about the built library
 echo "Library information:"
-if [ -f "${OUTPUT_DIR}/lib/libz.a" ]; then
-  ${CROSS_COMPILE}readelf -h "${OUTPUT_DIR}/lib/libz.a" | grep -E "Class|Machine|Version"
-fi
 if [ -f "${OUTPUT_DIR}/lib/libz.a" ]; then
   ${CROSS_COMPILE}readelf -h "${OUTPUT_DIR}/lib/libz.a" | grep -E "Class|Machine|Version"
 fi
