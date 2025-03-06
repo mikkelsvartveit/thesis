@@ -190,70 +190,76 @@ class Simple1DCNN(nn.Module):
 
 
 class Cnn1dModel(nn.Module):
-    def __init__(self, input_length=512, num_classes=2, dropout_rate=0.3):
+    def __init__(self, num_classes=2, dropout_rate=0.3):
         super(Cnn1dModel, self).__init__()
 
-        self.dropout = nn.Dropout(p=dropout_rate)
-
-        self.block1 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1
-            ),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.Conv1d(
-                in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2
-            ),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2, stride=2),
+        # First convolutional block
+        self.conv1 = nn.Conv1d(
+            in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1
         )
-
-        self.block2 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1
-            ),
-            nn.ReLU(),
-            nn.Conv1d(
-                in_channels=64, out_channels=64, kernel_size=5, stride=2, padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2, stride=2),
+        self.conv2 = nn.Conv1d(
+            in_channels=32, out_channels=32, kernel_size=5, stride=2, padding=2
         )
+        self.pool1 = nn.MaxPool1d(kernel_size=2, stride=2)
+        self.dropout1 = nn.Dropout(p=dropout_rate)
 
-        self.block3 = nn.Sequential(
-            nn.Conv1d(
-                in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1
-            ),
-            nn.ReLU(),
-            nn.Conv1d(
-                in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2
-            ),
-            nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2, stride=2),
+        # Second convolutional block
+        self.conv3 = nn.Conv1d(
+            in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1
         )
+        self.conv4 = nn.Conv1d(
+            in_channels=64, out_channels=64, kernel_size=5, stride=2, padding=2
+        )
+        self.pool2 = nn.MaxPool1d(kernel_size=2, stride=2)
+        self.dropout2 = nn.Dropout(p=dropout_rate)
 
-        self.dense1 = nn.Linear(128 * (input_length // 64), 1024)
-        self.relu = nn.ReLU()
+        # Third convolutional block
+        self.conv5 = nn.Conv1d(
+            in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1
+        )
+        self.conv6 = nn.Conv1d(
+            in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2
+        )
+        self.pool3 = nn.MaxPool1d(kernel_size=2, stride=2)
+        self.dropout3 = nn.Dropout(p=dropout_rate)
 
-        self.dense2 = nn.Linear(1024, num_classes)
-        self.softmax = nn.Softmax(dim=1)
+        # Global pooling
+        self.adaptive_pool = nn.AdaptiveAvgPool1d(output_size=1)
+
+        # Fully connected layers
+        self.fc1 = nn.Linear(128, 8)
+        self.dropout4 = nn.Dropout(p=dropout_rate)
+        self.fc2 = nn.Linear(8, num_classes)
 
     def forward(self, x):
-        x = x.float()
-        x = x.unsqueeze(1)
+        # Input shape: (batch_size, 1, 512)
 
-        x = self.block1(x)
+        # First block
+        x = self.conv1(x)  # (batch_size, 32, 512)
+        x = self.conv2(x)  # (batch_size, 32, 256)
+        x = self.pool1(x)  # (batch_size, 32, 128)
+        x = self.dropout1(x)
 
-        x = self.block2(x)
+        # Second block
+        x = self.conv3(x)  # (batch_size, 64, 128)
+        x = self.conv4(x)  # (batch_size, 64, 64)
+        x = self.pool2(x)  # (batch_size, 64, 32)
+        x = self.dropout2(x)
 
-        x = self.block3(x)
-        x = self.dropout(x)
+        # Third block
+        x = self.conv5(x)  # (batch_size, 128, 32)
+        x = self.conv6(x)  # (batch_size, 128, 16)
+        x = self.pool3(x)  # (batch_size, 128, 8)
+        x = self.dropout3(x)
 
-        x = self.dense1(x)
-        x = self.relu(x)
-        x = self.dropout(x)
+        # Global pooling
+        x = self.adaptive_pool(x)  # (batch_size, 128, 1)
+        x = x.reshape(x.size(0), -1)  # (batch_size, 128)
 
-        x = self.dense2(x)
+        # Fully connected layers
+        x = self.fc1(x)  # (batch_size, 8)
+        x = F.relu(x)
+        x = self.dropout4(x)
+        x = self.fc2(x)  # (batch_size, 2)
 
         return x
