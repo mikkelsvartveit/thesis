@@ -1,0 +1,24 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -247,6 +247,10 @@
+ if(LIBXML2_WITH_C14N)
+    list(APPEND LIBXML2_SRCS c14n.c)
+ endif()
++if(CMAKE_SYSTEM_NAME MATCHES "Generic" OR CMAKE_SYSTEM_PROCESSOR MATCHES "xtensa")
++   list(APPEND LIBXML2_SRCS dup_stub.c)
++   add_definitions(-DLIBXML_DUP_STUB)
++endif()
+ if(LIBXML2_WITH_CATALOG)
+    list(APPEND LIBXML2_SRCS catalog.c)
+ endif()
+--- /dev/null
++++ b/dup_stub.c
+@@ -0,0 +1,8 @@
++#include <unistd.h>
++#include <errno.h>
++
++int dup(int oldfd) {
++    // Simple stub implementation
++    errno = ENOSYS;  // Not implemented
++    return -1;
++}

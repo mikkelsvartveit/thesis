@@ -37,10 +37,24 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 set(ENABLE_SHARED FALSE)
 set(ENABLE_TESTING FALSE) 
 set(WITH_TURBOJPEG FALSE)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm") 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm -mlongcalls") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lm -mlongcalls") 
 
 set(LIBXML2_WITH_PYTHON OFF)
 set(LIBXML2_WITH_THREADS OFF)
 set(LIBXML2_WITH_LZMA OFF)
 set(LIBXML2_WITH_ZLIB OFF)
 set(LIBXML2_WITH_MODULES OFF)
+
+
+# stubs:
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/dup_stub.c
+"#include <unistd.h>
+#include <errno.h>
+
+int dup(int oldfd) {
+    errno = ENOSYS;  // Not implemented
+    return -1;
+}
+")
+set(LIBXML2_SRCS ${LIBXML2_SRCS} dup_stub.c)

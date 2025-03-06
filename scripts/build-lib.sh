@@ -33,12 +33,19 @@ mkdir -p "${OUTPUT_DIR}"
 
 # Apply patches if they exist
 if [ -d "${PATCH_DIR}" ]; then
-  echo "Applying patches from ${PATCH_DIR}..."
+  echo "Checking and applying patches from ${PATCH_DIR}..."
   for patch in "${PATCH_DIR}"/*.patch; do
     if [ -f "${patch}" ]; then
-      echo "Applying patch: $(basename ${patch})"
+      echo "Processing patch: $(basename ${patch})"
       cd "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
-      patch -p1 < "${patch}"
+      
+      # Check if patch can be applied in reverse - if yes, it's already applied
+      if patch -R --dry-run --quiet -p1 < "${patch}"; then
+        echo "  Patch already applied, skipping."
+      else
+        echo "  Applying patch..."
+        patch -p1 < "${patch}"
+      fi
     fi
   done
 fi
