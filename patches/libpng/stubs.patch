@@ -1,0 +1,84 @@
+--- /dev/null
++++ b/xtensa_stubs.c
+@@ -0,0 +1,77 @@
++/**
++ * ESP32/Xtensa stubs for missing system functions
++ * 
++ * These stubs are used when building libpng for ESP32 to provide
++ * minimal implementations of system functions that aren't fully
++ * supported in the ESP32 environment.
++ */
++
++#include <errno.h>
++#include <sys/types.h>
++#include <signal.h>
++#include <stdio.h>
++#include <sys/stat.h>                   
++
++// We need to include reent.h for struct _reent definition
++struct _reent;
++
++// Stub for _fcntl_r
++int _fcntl_r(struct _reent *r, int fd, int cmd, int arg) {
++    errno = ENOSYS;
++    return -1;
++}
++
++// Stub for signal
++typedef void (*sighandler_t)(int);
++sighandler_t signal(int signum, sighandler_t handler) {
++    errno = ENOSYS;
++    return (sighandler_t)-1; // SIG_ERR equivalent
++}
++
++// Stub for _fdopen_r
++FILE *_fdopen_r(struct _reent *r, int fd, const char *mode) {
++    errno = ENOSYS;
++    return NULL;
++}
++
++// Additional common stubs that might be needed
++int _isatty_r(struct _reent *r, int fd) {
++    errno = ENOSYS;
++    return 0;
++}
++
++int _close_r(struct _reent *r, int fd) {
++    errno = ENOSYS;
++    return -1;
++}
++
++int _fstat_r(struct _reent *r, int fd, struct stat *buf) {
++    errno = ENOSYS;
++    return -1;
++}
++
++int _getpid_r(struct _reent *r) {
++    errno = ENOSYS;
++    return -1;
++}
++
++int _kill_r(struct _reent *r, int pid, int sig) {
++    errno = ENOSYS;
++    return -1;
++}
++
++off_t _lseek_r(struct _reent *r, int fd, off_t offset, int whence) {
++    errno = ENOSYS;
++    return -1;
++}
++
++int _open_r(struct _reent *r, const char *path, int flags, int mode) {
++    errno = ENOSYS;
++    return -1;
++}
++
++ssize_t _read_r(struct _reent *r, int fd, void *buf, size_t count) {
++    errno = ENOSYS;
++    return -1;
++}
++
++ssize_t _write_r(struct _reent *r, int fd, const void *buf, size_t count) {
++    errno = ENOSYS;
++    return -1;              
++}

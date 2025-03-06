@@ -1,0 +1,39 @@
+--- a/CMakeLists.old.txt	2025-03-06 14:07:29
++++ b/CMakeLists.txt	2025-03-06 15:42:35
+@@ -114,6 +114,9 @@
+   endif()
+ endif()
+ 
++set(ZLIB_LIBRARY "/workspace/output/$ENV{ARCH}/zlib/install/lib/libzlibstatic.a")
++set(ZLIB_INCLUDE_DIR "/workspace/output/$ENV{ARCH}/zlib/install/include")
++
+ find_package(ZLIB REQUIRED)
+ 
+ if(UNIX
+@@ -543,6 +546,7 @@
+     ${libpng_powerpc_sources}
+     ${libpng_loongarch_sources}
+ )
++
+ set(pngtest_sources
+     pngtest.c
+ )
+@@ -551,6 +555,7 @@
+ )
+ set(pngstest_sources
+     contrib/libtests/pngstest.c
++    xtensa_stubs.c
+ )
+ set(pngunknown_sources
+     contrib/libtests/pngunknown.c
+@@ -564,6 +569,10 @@
+ set(png_fix_itxt_sources
+     contrib/tools/png-fix-itxt.c
+ )
++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(xtensa)")
++  list(APPEND libpng_sources xtensa_stubs.c)
++  list(APPEND pngstest_sources xtensa_stubs.c)
++endif()
+ 
+ if(MSVC OR (WIN32 AND (CMAKE_C_COMPILER_ID MATCHES "Clang")))
+   add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)

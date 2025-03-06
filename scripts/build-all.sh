@@ -5,8 +5,8 @@ set -e
 
 # Architectures to build for
 ARCHITECTURES=(
-  #"arm64"
-  #"riscv64"
+  "arm64"
+  "riscv64"
   "xtensa"
   # Add more architectures here
   # "ppc64le"
@@ -16,9 +16,10 @@ ARCHITECTURES=(
 
 # Libraries to build
 LIBRARIES=(
-  #"zlib:1.3"
-  #"libjpeg-turbo:3.1.0"
+  "zlib:1.3"
+  "libjpeg-turbo:3.1.0"
   "libxml2:2.14"
+  "libpng:1.6.47"
   # Add more libraries here in format "name:version"
   # "openssl:3.0.8"
 )

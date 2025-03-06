@@ -11,7 +11,8 @@ BUILD_TYPE=${3:-"Release"}
 SOURCES_DIR="/workspace/sources"
 BUILD_DIR="/workspace/output/${ARCH}/${LIB_NAME}/build"
 OUTPUT_DIR="/workspace/output/${ARCH}/${LIB_NAME}/install"
-PATCH_DIR="/workspace/patches/${LIB_NAME}/${ARCH}"
+ARCH_PATCH_DIR="/workspace/patches/${LIB_NAME}/${ARCH}"
+LIB_PATCH_DIR="/workspace/patches/${LIB_NAME}"
 
 # Print build information
 echo "Building ${LIB_NAME} ${LIB_VERSION} for ${ARCH} architecture"
@@ -32,9 +33,28 @@ mkdir -p "${BUILD_DIR}"
 mkdir -p "${OUTPUT_DIR}"
 
 # Apply patches if they exist
-if [ -d "${PATCH_DIR}" ]; then
-  echo "Checking and applying patches from ${PATCH_DIR}..."
-  for patch in "${PATCH_DIR}"/*.patch; do
+if [ -d "${ARCH_PATCH_DIR}" ]; then
+  echo "Checking and applying patches from ${ARCH_PATCH_DIR}..."
+  for patch in "${ARCH_PATCH_DIR}"/*.patch; do
+    if [ -f "${patch}" ]; then
+      echo "Processing patch: $(basename ${patch})"
+      cd "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
+      
+      # Check if patch can be applied in reverse - if yes, it's already applied
+      if patch -R --dry-run --quiet -p1 < "${patch}"; then
+        echo "  Patch already applied, skipping."
+      else
+        echo "  Applying patch..."
+        patch -p1 < "${patch}"
+      fi
+    fi
+  done
+fi
+
+# Apply patches if they exist
+if [ -d "${LIB_PATCH_DIR}" ]; then
+  echo "Checking and applying patches from ${LIB_PATCH_DIR}..."
+  for patch in "${LIB_PATCH_DIR}"/*.patch; do
     if [ -f "${patch}" ]; then
       echo "Processing patch: $(basename ${patch})"
       cd "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
