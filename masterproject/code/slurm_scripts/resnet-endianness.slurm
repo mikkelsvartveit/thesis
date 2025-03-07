@@ -21,6 +21,8 @@ echo "Job started on $(date)"
 echo "Running on host: $(hostname)"
 
 cd src
-python ./main.py --config configs/ResNet50.yml --override "{\"validator\": {\"seed\": 1, \"wandb_project_name\": \"mikkel-02-26\"}}"
+for i in {1..5}; do
+    python ./main.py --config configs/ResNet50.yml --override "{\"validator\": {\"seed\": $i, \"wandb_project_name\": \"mikkel-03-07-resnet-endianness\"}}"
+done
 
 echo "Job finished on $(date)"

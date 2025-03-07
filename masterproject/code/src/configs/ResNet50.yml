@@ -8,7 +8,6 @@ data:
     per_architecture_limit: null
     file_byte_read_limit: 1024
     use_code_only: True
-    max_file_splits: 100
 
 transforms:
   name: GrayScaleImage
@@ -25,6 +24,7 @@ model:
 
 validator:
   name: LOGO_architecture_wandb
+  wandb_project_name: resnet-endianness
 
 training:
   optimizer: AdamW
@@ -32,4 +32,4 @@ training:
   weight_decay: 0.01
   criterion: CrossEntropyLoss
   batch_size: 64
-  epochs: 1
+  epochs: 2

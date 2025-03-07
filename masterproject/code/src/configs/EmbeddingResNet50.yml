@@ -20,12 +20,12 @@ model:
   params:
     input_length: 1024
     num_classes: 2
-    dropout_rate: 0.3
     embedding_dim: 128
     vocab_size: 256
 
 validator:
   name: LOGO_architecture_wandb
+  wandb_project_name: resnet-embedding-endianness
 
 training:
   optimizer: AdamW

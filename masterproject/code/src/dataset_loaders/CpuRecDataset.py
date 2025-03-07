@@ -69,7 +69,7 @@ class CpuRecDataset(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx) -> tuple[torch.Tensor, str]:
-        file_path = self.files[idx]
+        file_path = str(self.files[idx])
         labels = self.metadata[idx].copy()
         labels['file_path'] = file_path
 

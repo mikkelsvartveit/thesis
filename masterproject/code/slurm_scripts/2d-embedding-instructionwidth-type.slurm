@@ -6,7 +6,7 @@
 #SBATCH --job-name=wandb_test         # Job name
 #SBATCH --output=./slurm_out/%x.%j.slurm.out   # Standard output file (%j expands to jobID)
 #SBATCH --error=./slurm_out/%x.%j.slurm.err    # Standard error file (%j expands to jobID)
-#SBATCH --time=4:00:00              # Time limit (hours:min:sec)
+#SBATCH --time=2:00:00              # Time limit (hours:min:sec)
 #SBATCH --nodes=1                   # Number of nodes requested
 #SBATCH --cpus-per-task=12          # Number of CPUs per task
 #SBATCH --mem=16G                   # Memory requested
@@ -22,7 +22,7 @@ echo "Running on host: $(hostname)"
 
 cd src
 for i in {1..20}; do
-    python ./main.py --config configs/2dEmbeddingInstructionWidthType.yml --override "{\"validator\": {\"seed\": $i, \"wandb_project_name\": \"mikkel-02-24\"}}"
+    python ./main.py --config configs/2dEmbeddingInstructionWidthType.yml --override "{\"validator\": {\"seed\": $i, \"wandb_project_name\": \"03-07-2d-embedding-instructionwidth-type\"}}"
 done
 
 echo "Job finished on $(date)"
