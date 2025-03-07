@@ -20,8 +20,7 @@ LIBRARIES=(
   "libjpeg-turbo:3.1.0"
   "libxml2:2.14"
   "libpng:1.6.47"
-  # Add more libraries here in format "name:version"
-  # "openssl:3.0.8"
+  "freetype:2.13.3"
 )
 
 # Script directory
@@ -78,11 +77,12 @@ for arch in "${ARCHITECTURES[@]}"; do
   echo "Architecture: ${arch}"
   for lib_info in "${LIBRARIES[@]}"; do
     IFS=':' read -r lib_name lib_version <<< "${lib_info}"
-    lib_path="${PROJECT_ROOT}/output/${arch}/${lib_name}/install/lib/libz.a"
-    if [ -f "${lib_path}" ]; then
+    lib_dir="${PROJECT_ROOT}/output/${arch}/${lib_name}/install/lib"
+    # Check if any *.a file exists in the directory
+    if [ -n "$(find "${lib_dir}" -name "*.a" -print -quit 2>/dev/null)" ]; then
       echo "  - ${lib_name} ${lib_version}: SUCCESS"
     else
-      echo "  - ${lib_name} ${lib_version}: FAILED (library not found)"
+      echo "  - ${lib_name} ${lib_version}: FAILED (no static library found)"
     fi
   done
 done
