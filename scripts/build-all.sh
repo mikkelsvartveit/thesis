@@ -23,7 +23,8 @@ LIBRARIES=(
   #  "freetype:2.13.3"
   #  "xzutils:1"
   #  "harfbuzz:10.4.0"
-  "pcre2:10.45"
+  #  "pcre2:10.45"
+  "libyaml:0.2.5"
 )
 
 # Script directory

@@ -2,9 +2,7 @@ FROM cross-compile-base:latest
 
 # Install Xtensa toolchain
 RUN apt-get update && apt-get install -y \
-    wget \
     xz-utils \
-    python3 \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
