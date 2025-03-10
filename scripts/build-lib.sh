@@ -80,6 +80,7 @@ cmake -G "Ninja" \
       -DBUILD_SHARED_LIBS=OFF \
       -DLIBXML2_WITH_ICONV=OFF \
       -DLIBXML2_WITH_PYTHON=OFF \
+      -DBOOST_RUNTIME_LINK=STATIC \
       "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
 
 echo "Building ${LIB_NAME}..."

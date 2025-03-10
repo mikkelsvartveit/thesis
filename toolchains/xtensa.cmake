@@ -23,24 +23,26 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 # Compiler flags
-set(CMAKE_C_FLAGS_INIT "-mlongcalls")
+set(CMAKE_C_FLAGS_INIT "-mlongcalls ")
 set(CMAKE_CXX_FLAGS_INIT "-mlongcalls")
 
 # Disable some features that might cause problems with Xtensa
+set(M_LIBRARY m)
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 
 set(ENABLE_SHARED FALSE)
 set(ENABLE_TESTING FALSE)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
+
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
 
 set(ENABLE_SHARED FALSE)
 set(ENABLE_TESTING FALSE) 
 set(WITH_TURBOJPEG FALSE)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mlongcalls") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mlongcalls") 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mlongcalls -I/workspace/patches/mock_headers/") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mlongcalls -I/workspace/patches/mock_headers/") 
 
 set(LIBXML2_WITH_PYTHON OFF)
 set(LIBXML2_WITH_THREADS OFF)
@@ -48,4 +50,4 @@ set(LIBXML2_WITH_LZMA OFF)
 set(LIBXML2_WITH_ZLIB OFF)
 set(LIBXML2_WITH_MODULES OFF)
 
-set(M_LIBRARY m)
+set(XZ_THREADS no)
