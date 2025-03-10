@@ -148,9 +148,9 @@ def ISAdetect_train_cpu_rec_test(
     )
 
     (
-        ISAdetect_testing_accuracies,
+        (ISAdetect_chunk_accuracies, ISAdetect_file_accuracies),
         ISAdetect_avg_testing_loss,
-        ISAdetect_testing_total_accuracy,
+        (ISAdetect_chunk_total_accuracy, ISAdetect_file_total_accuracy),
     ) = test_loop(
         model=model,
         device=device,
@@ -161,17 +161,22 @@ def ISAdetect_train_cpu_rec_test(
         test_name="ISAdetect",
     )
 
-
     wandb_run.log({
-        "ISAdetect_testing_accuracy_per_group": wandb.Table(
-            data=[[group, acc] for group, acc in ISAdetect_testing_accuracies.items()],
+        "ISAdetect_chunk_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in ISAdetect_chunk_accuracies.items()],
+            columns=["group", "accuracy"],
+        ),
+        "ISAdetect_file_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in ISAdetect_file_accuracies.items()],
             columns=["group", "accuracy"],
         ),
         "ISAdetect_avg_testing_loss": ISAdetect_avg_testing_loss,
-        "ISAdetect_testing_total_accuracy": ISAdetect_testing_total_accuracy,
+        "ISAdetect_chunk_total_accuracy": ISAdetect_chunk_total_accuracy,
+        "ISAdetect_file_total_accuracy": ISAdetect_file_total_accuracy,
     })
     print(f"Avg. Test Loss: {ISAdetect_avg_testing_loss:.4f}")
-    print(f"Test Total Accuracy: {100*ISAdetect_testing_total_accuracy:.2f}%")
+    print(f"Chunk-level Test Total Accuracy: {100*ISAdetect_chunk_total_accuracy:.2f}%")
+    print(f"File-level Test Total Accuracy: {100*ISAdetect_file_total_accuracy:.2f}%")
 
     wandb_run.finish()
 
@@ -195,9 +200,9 @@ def ISAdetect_train_cpu_rec_test(
     )
 
     (
-        cpu_rec_testing_accuracies,
+        (cpu_rec_chunk_accuracies, cpu_rec_file_accuracies),
         cpu_rec_avg_testing_loss,
-        cpu_rec_testing_total_accuracy,
+        (cpu_rec_chunk_total_accuracy, cpu_rec_file_total_accuracy),
     ) = test_loop(
         model=model,
         device=device,
@@ -208,17 +213,22 @@ def ISAdetect_train_cpu_rec_test(
         test_name="cpu_rec",
     )
 
-
     wandb_run.log({
-        "cpu_rec_accuracy_per_group": wandb.Table(
-            data=[[group, acc] for group, acc in cpu_rec_testing_accuracies.items()],
+        "cpu_rec_chunk_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in cpu_rec_chunk_accuracies.items()],
+            columns=["group", "accuracy"],
+        ),
+        "cpu_rec_file_accuracy_per_group": wandb.Table(
+            data=[[group, acc] for group, acc in cpu_rec_file_accuracies.items()],
             columns=["group", "accuracy"],
         ),
         "cpu_rec_avg_testing_loss": cpu_rec_avg_testing_loss,
-        "cpu_rec_testing_total_accuracy": cpu_rec_testing_total_accuracy,
+        "cpu_rec_chunk_total_accuracy": cpu_rec_chunk_total_accuracy,
+        "cpu_rec_file_total_accuracy": cpu_rec_file_total_accuracy,
     })
     print(f"Avg. Test Loss: {cpu_rec_avg_testing_loss:.4f}")
-    print(f"Test Total Accuracy: {100*cpu_rec_testing_total_accuracy:.2f}%")
+    print(f"Chunk-level Test Total Accuracy: {100*cpu_rec_chunk_total_accuracy:.2f}%")
+    print(f"File-level Test Total Accuracy: {100*cpu_rec_file_total_accuracy:.2f}%")
 
     wandb_run.finish()
 

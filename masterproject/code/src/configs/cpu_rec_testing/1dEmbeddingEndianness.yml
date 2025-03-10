@@ -8,6 +8,7 @@ data:
     per_architecture_limit: null
     file_byte_read_limit: 512
     use_code_only: True
+    max_file_splits: 15
 
 testing_data:
   name: CpuRecDataset
@@ -16,7 +17,7 @@ testing_data:
     feature_csv_path: cpu_rec-features.csv
     per_architecture_limit: null
     file_byte_read_limit: 512
-    max_file_splits: 100
+    max_file_splits: 999999
 
 transforms:
   name: Vector1D
