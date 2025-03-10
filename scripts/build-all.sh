@@ -25,7 +25,8 @@ LIBRARIES=(
   #  "harfbuzz:10.4.0"
   #  "pcre2:10.45"
   #  "libyaml:0.2.5"
-  "jsoncpp:1.9.6"
+  # "jsoncpp:1.9.6"
+  "libwebp:1.5.0"
 )
 
 # Script directory
@@ -86,6 +87,7 @@ for arch in "${ARCHITECTURES[@]}"; do
     # Check if any *.a file exists in the directory
     if [ -n "$(find "${lib_dir}" -name "*.a" -print -quit 2>/dev/null)" ]; then
       echo "  - ${lib_name} ${lib_version}: SUCCESS"
+      echo "lib_size  : $(du -sh ${lib_dir})"
     else
       echo "  - ${lib_name} ${lib_version}: FAILED (no static library found)"
     fi
