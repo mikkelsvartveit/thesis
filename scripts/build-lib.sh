@@ -84,7 +84,7 @@ cmake -G "Ninja" \
       "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
 
 echo "Building ${LIB_NAME}..."
-cmake --build . -j$(nproc)
+cmake --build . -j1 #-j$(nproc)
 
 echo "Installing ${LIB_NAME} to ${OUTPUT_DIR}..."
 cmake --install .
