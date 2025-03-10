@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torchvision.models import resnet50
 
 
-class EmbeddingResNet50(nn.Module):
+class ResNet50Embedding(nn.Module):
     def __init__(
         self,
         input_length=512,
@@ -13,7 +13,7 @@ class EmbeddingResNet50(nn.Module):
         embedding_dim=128,
         vocab_size=256,
     ):
-        super(EmbeddingResNet50, self).__init__()
+        super(ResNet50Embedding, self).__init__()
 
         # Make sure input length can be arranged as a grid
         # Assuming a square grid for simplicity, but it could be rectangular

@@ -2,7 +2,7 @@
 
 # Usage: sbatch slurm_scripts/job.slurm src/notebooks/<notebook_name>.ipynb
 
-#SBATCH --job-name=job                              # Job name %x
+#SBATCH --job-name=notebook                              # Job name %x
 #SBATCH --output=./slurm_out/%x.%j.slurm.out        # Standard output file (%j - jobID, %x - job-name)
 #SBATCH --error=./slurm_out/%x.%j.slurm.err         # Standard error file (%j - jobID, %x - job-name)
 #SBATCH --time=4:00:00                              # Time limit (hours:min:sec)

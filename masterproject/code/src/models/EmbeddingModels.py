@@ -2,9 +2,9 @@ from torch import nn
 import torch.nn.functional as F
 
 
-class EmbeddingAndCNNModel(nn.Module):
+class Simple1dEmbedding(nn.Module):
     def __init__(self, input_length=512, num_classes=2, dropout_rate=0.3):
-        super(EmbeddingAndCNNModel, self).__init__()
+        super(Simple1dEmbedding, self).__init__()
 
         self.embedding = nn.Embedding(256, 128)
         self.dropout = nn.Dropout(p=dropout_rate)
@@ -75,9 +75,9 @@ class EmbeddingAndCNNModel(nn.Module):
         return x
 
 
-class EmbeddingAnd2dCNNModel(nn.Module):
+class Simple2dEmbedding(nn.Module):
     def __init__(self, input_length=512, num_classes=2, dropout_rate=0.0):
-        super(EmbeddingAnd2dCNNModel, self).__init__()
+        super(Simple2dEmbedding, self).__init__()
 
         assert input_length == 32 * 16, "For a 32x16 grid, input_length must be 512."
 

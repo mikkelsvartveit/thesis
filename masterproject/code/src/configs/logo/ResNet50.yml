@@ -1,5 +1,3 @@
-target_feature: endianness
-
 data:
   name: ISAdetectDataset
   params:
@@ -9,23 +7,22 @@ data:
     file_byte_read_limit: 1024
     use_code_only: True
 
-# No image transformations needed for embedding model
 transforms:
-  name: Vector1D
+  name: GrayScaleImage
   params:
-    length: 1024
+    dimx: 32
+    dimy: 32
+    normalize: True
+    duplicate_to_n_channels: 3
 
 model:
-  name: EmbeddingResNet50
+  name: ResNet50
   params:
-    input_length: 1024
     num_classes: 2
-    embedding_dim: 128
-    vocab_size: 256
 
 validator:
   name: LOGO_architecture_wandb
-  wandb_project_name: resnet-embedding-endianness
+  wandb_project_name: ResNet50
 
 training:
   optimizer: AdamW

@@ -1,9 +1,9 @@
 from torch import nn
 
 
-class Simple1dCNN(nn.Module):
+class Simple1d(nn.Module):
     def __init__(self, input_length=512, num_classes=2, dropout_rate=0.3):
-        super(Simple1dCNN, self).__init__()
+        super(Simple1d, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout_rate)
 
@@ -68,9 +68,9 @@ class Simple1dCNN(nn.Module):
         return x
 
 
-class Simple2dCNN(nn.Module):
+class Simple2d(nn.Module):
     def __init__(self, num_classes=2, dropout_rate=0.0):
-        super(Simple2dCNN, self).__init__()
+        super(Simple2d, self).__init__()
         self.dropout = nn.Dropout(p=dropout_rate)
 
         self.input_layer = nn.Conv2d(in_channels=1, out_channels=128, kernel_size=1)
