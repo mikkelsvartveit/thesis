@@ -30,7 +30,7 @@ An important part of all \acp{ISA} is the instruction set, which defines the bin
 
 A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities.
 
-#### Endianness
+#### Endianness {#background-endianness}
 
 The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{tab:endianness}.
 
@@ -72,6 +72,10 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 
 \end{table}
 ```
+
+### Instruction width
+
+TODO
 
 ### Compilers
 
@@ -236,3 +240,5 @@ Fine-tuning involves taking a pre-trained model and then training it further on 
 #### Feature extraction
 
 Instead of updating the model's weights, we can use the pre-trained model as a feature extractor. In this case, we typically remove the final classification layers of the pre-trained model, and feed the remaining layers into a new classifier that is trained on our own data. The pre-trained layers remain completely frozen during training.
+
+## Related work

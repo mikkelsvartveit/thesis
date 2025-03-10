@@ -1,16 +1,24 @@
 # Results
 
+This chapter presents the results of the experiments described in \autoref{methodology}. In \autoref{endianness}, we present the results of applying our proposed model architectures to detecting endianness from a binary file. In \autoref{instruction-width-type}, we present the results of applying the same model architectures to detecting whether a binary file has fixed-length or variable-length instructions (hereby referred to as _instruction width type_).
+
+Each section in this chapter is organized as followed: first, each subsection applies one of the proposed experiments from \autoref{experiments} and presents the performance numbers for each \ac{ISA} in the dataset. We present the results both for using \acf{LOGO CV} on the ISADetect dataset (described in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}), and for using ISADetect for training and other datasets for testing (described in \autoref{testing-on-other-datasets}). Finally, a summary subsection aggregates the performance across \acp{ISA} and compares the different model architectures.
+
 ## Endianness
 
-This section evaluates and compares the performance the various \ac{CNN} models in accurately identifying the endianness of binary files.
+This section evaluates and compares the performance the proposed \ac{CNN} models in accurately identifying the endianness of binary files.
 
-### 1D CNN with embedding layer
+### Simple 1D CNN
 
-This subsection presents the results of applying the model specified in \autoref{simple-1d-cnn-with-embedding-layer} to endianness classification.
+TODO
 
-We run \acf{LOGO CV} on ISADetect using each \ac{ISA} as the left-out group, repeating the process 20 times with different random seeds. The per-\ac{ISA} results are aggregated across the 20 runs. The results are shown in \autoref{table:logo-endianness-1d-embedding-results} and \autoref{fig:logo-endianness-1d-embedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 91.3% and a standard deviation of 1.9% across all \acp{ISA}.
+### Simple 1D CNN with embedding layer
 
-Table: Classifying endianness with 1D CNN with embedding layer \label{table:logo-endianness-1d-embedding-results}
+This subsection presents the results of applying the Simple1dEmbedding model specified in \autoref{simple-1d-cnn-with-embedding-layer} to endianness classification.
+
+We run \acf{LOGO CV} on ISADetect, repeating the process 20 times with different random seeds. The per-\ac{ISA} results are aggregated across the 20 runs. The results are shown in \autoref{table:logo-endianness-1d-embedding-results} and \autoref{fig:logo-endianness-1d-embedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 91.3% and a standard deviation of 1.9% across all \acp{ISA}.
+
+Table: Classifying endianness with Simple1dEmbedding \label{table:logo-endianness-1d-embedding-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
@@ -39,21 +47,101 @@ Table: Classifying endianness with 1D CNN with embedding layer \label{table:logo
 | m68k         |         0.065 |              0.123 |
 | **Overall**  |     **0.913** |          **0.019** |
 
-![Classifying endianness with 1D CNN with embedding layer \label{fig:logo-endianness-1d-embedding-results}](./images/logo-endianness-1d-embedding-results.png)
+![Classifying endianness with Simple1dEmbedding \label{fig:logo-endianness-1d-embedding-results}](./images/logo-endianness-1d-embedding-results.png)
+
+### Simple 2D CNN
+
+TODO
+
+### Simple 2D CNN with embedding layer
+
+TODO
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| powerpc      |         1.000 |              0.000 |
+| ppc64el      |         1.000 |              0.000 |
+| powerpcspe   |         1.000 |              0.000 |
+| s390x        |         1.000 |              0.000 |
+| sparc        |         0.999 |              0.002 |
+| x32          |         0.999 |              0.002 |
+| mipsel       |         0.998 |              0.002 |
+| amd64        |         0.997 |              0.003 |
+| mips64el     |         0.996 |              0.007 |
+| s390         |         0.996 |              0.006 |
+| i386         |         0.996 |              0.005 |
+| armel        |         0.993 |              0.009 |
+| alpha        |         0.987 |              0.023 |
+| armhf        |         0.975 |              0.022 |
+| mips         |         0.969 |              0.054 |
+| sparc64      |         0.952 |              0.020 |
+| sh4          |         0.814 |              0.302 |
+| ppc64        |         0.810 |              0.215 |
+| hppa         |         0.662 |              0.212 |
+| riscv64      |         0.636 |              0.340 |
+| ia64         |         0.584 |              0.439 |
+| arm64        |         0.539 |              0.328 |
+| m68k         |         0.041 |              0.089 |
+| **Overall**  |     **0.861** |          **0.041** |
+
+![Classifying endianness with Simple2dEmbedding \label{fig:2d-embedding-endianness-results}](./images/logo-endianness-2d-embedding-results.png)
+
+### ResNet50
+
+TODO
+
+Table: Classifying endianness with ResNet50 \label{table:resnet50-endianness-results}
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| armel        |         1.000 |              0.000 |
+| powerpc      |         0.997 |              0.001 |
+| alpha        |         0.987 |              0.008 |
+| powerpcspe   |         0.982 |              0.007 |
+| x32          |         0.978 |              0.003 |
+| armhf        |         0.972 |              0.007 |
+| i386         |         0.964 |              0.016 |
+| amd64        |         0.950 |              0.005 |
+| mips64el     |         0.929 |              0.078 |
+| ppc64el      |         0.919 |              0.141 |
+| sparc        |         0.764 |              0.124 |
+| ia64         |         0.715 |              0.259 |
+| ppc64        |         0.655 |              0.167 |
+| riscv64      |         0.508 |              0.076 |
+| hppa         |         0.441 |              0.129 |
+| s390x        |         0.355 |              0.384 |
+| sparc64      |         0.330 |              0.189 |
+| mipsel       |         0.264 |              0.089 |
+| mips         |         0.226 |              0.121 |
+| arm64        |         0.200 |              0.098 |
+| s390         |         0.188 |              0.400 |
+| sh4          |         0.124 |              0.077 |
+| m68k         |         0.024 |              0.017 |
+| **Overall**  |     **0.622** |          **0.019** |
+
+![Classifying endianness with ResNet50 \label{fig:resnet50-endianness-results}](./images/logo-endianness-resnet-results.png)
+
+### ResNet50 with embedding layer
+
+TODO
 
 ### Summary
 
 ## Instruction width type
 
-This section evaluates and compares the performance the various \ac{CNN} models in accurately identifying whether the instructions in a binary file are of fixed or variable width (hereby referred to as "instruction width type").
+This section evaluates and compares the performance the proposed \ac{CNN} models in accurately identifying the instruction width type of binary files.
 
-### 1D CNN with embedding layer
+### Simple 1D CNN
+
+TODO
+
+### Simple 1D CNN with embedding layer
 
 This subsection presents the results of applying the model specified in \autoref{simple-1d-cnn-with-embedding-layer} to classifying the instruction width type of a binary file.
 
-We run \acf{LOGO CV} on ISADetect using each \ac{ISA} as the left-out group, repeating the process 20 times with different random seeds. The per-\ac{ISA} results are aggregated across the 20 runs. The results are shown in \autoref{table:1d-cnn-with-embedding-layer-results} and \autoref{fig:logo-instruction-width-type-1d-embedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 85.2% and a standard deviation of 5.8% across all \acp{ISA}.
+We run \acf{LOGO CV} on ISADetect using each \ac{ISA} as the left-out group, repeating the process 20 times with different random seeds. The per-\ac{ISA} results are aggregated across the 20 runs. The results are shown in \autoref{table:1d-cnn-with-embedding-layer-results} and \autoref{fig:logo-instructionwidthtype-1d-embedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 85.2% and a standard deviation of 5.8% across all \acp{ISA}.
 
-Table: Classifying instruction width type with 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer-results}
+Table: Classifying instruction width type with Simple1dEmbedding \label{table:1d-cnn-with-embedding-layer-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
@@ -82,4 +170,80 @@ Table: Classifying instruction width type with 1D CNN with embedding layer \labe
 | alpha        |         0.209 |              0.048 |
 | **Overall**  |     **0.852** |          **0.058** |
 
-![Classifying instruction width type with 1D CNN with embedding layer \label{fig:logo-instruction-width-type-1d-embedding-results}](./images/logo-instruction-width-type-1d-embedding-results.png)
+![Classifying instruction width type with Simple1dEmbedding \label{fig:logo-instructionwidthtype-1d-embedding-results}](./images/logo-instructionwidthtype-1d-embedding-results.png)
+
+### Simple 2D CNN
+
+TODO
+
+### Simple 2D CNN with embedding layer
+
+TODO
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| powerpc      |         1.000 |              0.000 |
+| sparc        |         1.000 |              0.000 |
+| powerpcspe   |         1.000 |              0.000 |
+| riscv64      |         1.000 |              0.000 |
+| sh4          |         1.000 |              0.000 |
+| x32          |         0.998 |              0.001 |
+| amd64        |         0.998 |              0.002 |
+| armel        |         0.991 |              0.014 |
+| i386         |         0.991 |              0.009 |
+| sparc64      |         0.985 |              0.010 |
+| mips64el     |         0.984 |              0.034 |
+| armhf        |         0.974 |              0.013 |
+| m68k         |         0.947 |              0.091 |
+| mips         |         0.912 |              0.080 |
+| mipsel       |         0.895 |              0.156 |
+| s390         |         0.869 |              0.267 |
+| hppa         |         0.819 |              0.200 |
+| ppc64el      |         0.767 |              0.336 |
+| s390x        |         0.751 |              0.402 |
+| arm64        |         0.345 |              0.342 |
+| ppc64        |         0.297 |              0.310 |
+| alpha        |         0.270 |              0.131 |
+| ia64         |         0.233 |              0.406 |
+| **Overall**  |     **0.837** |          **0.031** |
+
+![Classifying instruction width type with Simple2dEmbedding \label{fig:2d-embedding-instructionwidthtype-results}](./images/logo-instructionwidthtype-2d-embedding-results.png)
+
+### ResNet50
+
+TODO
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| powerpc      |         0.999 |              0.000 |
+| armel        |         0.997 |              0.002 |
+| powerpcspe   |         0.992 |              0.012 |
+| mipsel       |         0.986 |              0.001 |
+| mips         |         0.985 |              0.011 |
+| arm64        |         0.984 |              0.009 |
+| ppc64el      |         0.970 |              0.027 |
+| x32          |         0.968 |              0.003 |
+| hppa         |         0.961 |              0.046 |
+| armhf        |         0.950 |              0.013 |
+| sh4          |         0.938 |              0.114 |
+| sparc64      |         0.893 |              0.077 |
+| mips64el     |         0.871 |              0.070 |
+| amd64        |         0.866 |              0.006 |
+| riscv64      |         0.859 |              0.057 |
+| i386         |         0.838 |              0.040 |
+| m68k         |         0.812 |              0.171 |
+| ppc64        |         0.776 |              0.163 |
+| sparc        |         0.756 |              0.172 |
+| s390x        |         0.561 |              0.370 |
+| alpha        |         0.332 |              0.314 |
+| s390         |         0.326 |              0.393 |
+| ia64         |         0.001 |              0.001 |
+| **Overall**  |     **0.798** |          **0.040** |
+
+![Classifying instruction width type with ResNet50 \label{fig:logo-instructionwidthtype-resnet-results}](./images/logo-instructionwidthtype-resnet-results.png)
+
+### ResNet50 with embedding layer
+
+TODO
+
+### Summary

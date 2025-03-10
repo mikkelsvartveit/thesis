@@ -25,9 +25,13 @@ The cpu_rec tool-suite is available on GitHub, and the binaries used in the thes
 <!-- Keep this info for discussion? Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
 
+#### Custom dataset
+
+TODO
+
 ### Technical configuration
 
-For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@TODO]. The following hardware configuration was used for all experiments:
+For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@Idun]. The following hardware configuration was used for all experiments:
 
 - CPU: Intel Xeon or AMD EPYC, 12 cores enabled
 - GPU: NVIDIA A100 (40 GB or 80 GB VRAM)
@@ -95,7 +99,7 @@ In our experiments, we train, evaluate, and compare the model architectures outl
 
 #### Simple 1D CNN
 
-This model is a small one-dimensional CNN. It has three convolution blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 139,834 trainable parameters.
+This model is a small one-dimensional CNN. It has three convolution blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 139,834 trainable parameters. This model is hereby referred to as _Simple1d_.
 
 Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
@@ -129,7 +133,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by adding an embedding layer at the beginning of the model. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 172,474 trainable parameters.
+This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by adding an embedding layer at the beginning of the model. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 172,474 trainable parameters. This model is hereby referred to as _Simple1dEmbedding_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
