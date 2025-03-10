@@ -16,12 +16,13 @@ ARCHITECTURES=(
 
 # Libraries to build
 LIBRARIES=(
-  #"zlib:1.3"
+  #  "zlib:1.3"
   #  "libjpeg-turbo:3.1.0"
   #  "libxml2:2.14"
   #  "libpng:1.6.47"
   #  "freetype:2.13.3"
-  "xzutils:1"
+  #  "xzutils:1"
+  harfbuzz:10.4.0
 )
 
 # Script directory
