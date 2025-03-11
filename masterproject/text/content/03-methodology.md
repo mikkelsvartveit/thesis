@@ -183,22 +183,6 @@ We choose these features due to their importance in a reverse engineering proces
 
 Additionally, these features have certain technical properties that make them suitable for deep learning models. Firstly, the features themselves have less ambiguous definitions than other \ac{ISA} characteristics such as word size. In addition, the chosen features exhibit consistent byte patterns across the entire binary, allowing for analyzing small segments of binary code at the time.
 
-### Model architecture (old)
-
-Our research explores various \ac{CNN} architectures to determine the most effective approach for ISA detection. We train and validate several models while experimenting with the following configuration choices.
-
-#### CNN size and complexity
-
-The size of the \ac{CNN} determines the amount of computation required to train the model. While we have significant amounts of computation power available, we need to balance the computational complexity of the model with the available resources as well as the size and diversity of our dataset. We also experiment with both one-dimensional and two-dimensional \ac{CNN} architectures to determine the most effective approach for our dataset.
-
-#### Embedding layers
-
-An embedding layer transforms categorical data into vectors of continuous numbers (see \autoref{embeddings} for details). We attempt treating each byte value as a category, and use an embedding layer at the beginning of the \ac{CNN}. Instead of treating the byte values as numbers, this allows the model to learn the characteristics of each byte value and represent it mathematically.
-
-#### Transfer learning
-
-Transfer learning is a machine learning technique where a model developed for one task is re-used for another task (see \autoref{transfer-learning} for details). Transfer learning is very useful when there is little training data available, as well as in cases of limited computation power or time. Using a transfer learning approach can allow for deep networks despite these constraints. We attempt using \acp{CNN} pre-trained on ImageNet [@ImageNet], and use fine-tuning and feature extraction techniques to create tailored models.
-
 ## Evaluation
 
 ### Leave-one-group-out cross validation on ISADetect dataset
