@@ -59,6 +59,7 @@ header-includes:
 \acro{HPC}[HPC]{High Performance Computing}
 \acro{ISA}[ISA]{Instruction Set Architecture}
 \acro{LOGO CV}{Leave-One-Group-Out Cross-Validation}
+\acro{MMCC}[MMCC]{Microsoft Malware Classification Challenge}
 \acro{NTNU}[NTNU]{the Norwegian University of Science and Technology}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}
 \end{acronym}

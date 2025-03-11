@@ -242,3 +242,66 @@ Fine-tuning involves taking a pre-trained model and then training it further on 
 Instead of updating the model's weights, we can use the pre-trained model as a feature extractor. In this case, we typically remove the final classification layers of the pre-trained model, and feed the remaining layers into a new classifier that is trained on our own data. The pre-trained layers remain completely frozen during training.
 
 ## Related work
+
+In a specialization project completed prior to this thesis [@Preproject], we conducted a systematic literature review exploring two avenues of existing research:
+
+1. Applying machine learning techniques for \ac{ISA} detection
+2. Applications of CNN for binary machine code
+
+Subsections \ref{machine-learning-for-isa-detection} and \ref{cnn-applications-for-binary-machine-code} summarize our findings from this systematic literature review. Note that parts of the specialization project is revised and reused in these subsections.
+
+Finally, in \autoref{classifying-isa-features-with-machine-learning}, we describe a master thesis from 2024 researching traditional (non-deep) machine learning for detecting specific architectural features from unknown or undocumented \acp{ISA}.
+
+### Machine learning for ISA detection
+
+TODO
+
+### CNN applications for binary machine code
+
+Although \acp{CNN} are traditionally applied to vision tasks such as image classification or object recognition, prior research has also used \acp{CNN} for analyzing binary machine code. Notably, research on malware detection and classification has proven that \acp{CNN} can perform well on raw binary code.
+
+#### Malware classification
+
+The \ac{MMCC} dataset was published as part of a research competition in 2015, and contains malware binaries from 9 different malware families [@MMCC]. Multiple researchers have used this dataset and developed \ac{CNN} architectures for distinguishing the different classes of malware. A summary of said literature and their classification performance is shown in \autoref{table:mmcc-results}.
+
+Table: Microsoft Malware dataset classification performance. \label{table:mmcc-results}
+
+| Paper (year published)                  | Accuracy   | Precision  | Recall     | F1-score   |
+| --------------------------------------- | ---------- | ---------- | ---------- | ---------- |
+| Rahul et al. [@Rahul2017] (2017)        | 0.9491     | -          | -          | -          |
+| Kumari et al. [@Kumari2017] (2017)      | 0.9707     | -          | -          | -          |
+| Yang et al. [@Yang2018] (2018)          | 0.987      | -          | -          | -          |
+| Khan et al. [@Khan2020] (2020)          | 0.9780     | 0.98       | 0.97       | 0.97       |
+| Sartoli et al. [@Sartoli2020] (2020)    | 0.9680     | 0.9624     | 0.9616     | 0.9618     |
+| Bouchaib & Bouhorma [@Prima2021] (2021) | 0.98       | 0.98       | 0.98       | 0.98       |
+| Liang et al. [@Liang2021] (2021)        | 0.9592     | -          | -          | -          |
+| SREMIC [@Alam2024] (2024)               | **0.9972** | **0.9993** | **0.9971** | **0.9988** |
+
+Malimg is another dataset containing malware from 25 different families [@Malimg]. As opposed to \ac{MMCC}, this dataset contains binaries pre-encoded to an image format, using each byte in the file as a single pixel value. A summary of identified research applying \acp{CNN} to this dataset is shown in \autoref{table:malimg-results}.
+
+Table: Malimg dataset classification performance. \label{table:malimg-results}
+
+| Paper (year published)                   | Accuracy   | Precision  | Recall     | F1-score   |
+| ---------------------------------------- | ---------- | ---------- | ---------- | ---------- |
+| Cervantes et al. [@Garcia2019] (2019)    | 0.9815     | -          | -          | -          |
+| El-Shafai et al. [@El-Shafai2021] (2021) | **0.9997** | 0.9904     | 0.9901     | 0.9902     |
+| Li et al. [@Li2021] (2021)               | 0.97       | -          | -          | -          |
+| Son et al. [@Son2022] (2022)             | 0.97       | -          | -          | -          |
+| Hammad et al. [@Hammad2022] (2022)       | 0.9684     | -          | -          | -          |
+| S-DCNN [@Parihar2022] (2022)             | 0.9943     | 0.9944     | 0.9943     | 0.9943     |
+| SREMIC [@Alam2024] (2024)                | 0.9993     | **0.9992** | **0.9987** | **0.9987** |
+| DCMN [@Al-Masri2024] (2024)              | 0.9989     | 0.9971     | 0.9984     | 0.9977     |
+
+The existing literature differs in their approach to data encoding and model architecture. Certain studies used a one-dimensional vector encoding of the binary data, where each byte in the binary file is converted to a decimal value between 0 and 255. The encoded bytes were then passed to a one-dimensional \ac{CNN} for classification [@Rahul2017] [@Li2021]. However, the most common approach was to encode the binary data as a two-dimensional image, where each byte in the binary file is converted to a pixel value. These grayscale images are then used for input to traditional two-dimensional \ac{CNN} architectures [@Kumari2017] [@Prima2021] [@Hammad2022] [@Al-Masri2024] [@Yang2018] [@El-Shafai2021] [@Alvee2021] [@Liang2021] [@Son2022].
+
+#### Compiler optimization detection
+
+Compilers such as GCC allow the user to choose between five general optimization levels: -O0, -O1, -O2, -O3, and -Os. Knowing which of these levels was used for compilation can be useful in areas such as vulnerability discovery. We identified two prior studies that attempt detecting a binary's compiler optimization level.
+
+Yang et al. achieved an overall accuracy of 97.24% on their custom dataset, with precision for each class ranging from 96% to 98% [@Yang2019]. This was a significant improvement compared to previous literature regarding compiler level discovery. Pizzolotto & Inoue elaborated on this work by using binaries compiled across 7 different CPU architectures, as well as compiling with both GCC and Clang for the x86-64 and AArch64 architectures [@Pizzolotto2021]. They showed a 99.95% accuracy in distinguishing between GCC and Clang, while the optimization level accuracy varies from 92% to 98% depending on the CPU architecture. However, we note that Pizzolotto & Inoue treated -O2 and -O3 as separate classes, whereas Yang et al. considered these as the same class, making the comparison slightly unfair.
+
+Both studies used a one-dimensional vector encoding of the binary data, where each byte in the binary file is converted to a decimal value between 0 and 255. The encoded bytes were then passed to a one-dimensional \ac{CNN} for classification.
+
+### Classifying ISA features with machine learning
+
+TODO: Andreassen

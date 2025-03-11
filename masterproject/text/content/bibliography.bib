@@ -1,3 +1,13 @@
+@inproceedings{Preproject,
+  author   = {Sulebak, Stian J. and Svartveit, Mikkel},
+  title    = {Machine Learning for Reverse Engineering &
+              Convolutional Neural Networks for Binary Code
+              Analysis: A Systematic Literature Review},
+  year     = {2024},
+  url      = {https://mikkelsvartveit.github.io/thesis/preproject.pdf},
+  abstract = {Binary reverse engineering is critical for analyzing security, quality, and compatibility of compiled programs. The increased demand of IoT devices leads to new challenges for reverse engineers, as embedded systems often use custom instruction set architectures (ISA). This systematic literature review examines two key areas in software reverse engineering: machine learning approaches for ISA detection and convolutional neural networks (CNN) for binary code analysis. Through a structured review of 26 primary studies, we analyze how machine learning techniques have been applied to classify ISA features and how CNN have been used for analyzing raw binary code. Our findings reveal that current machine learning approaches for ISA detection predominantly employ traditional models not based on deep learning. They achieve high accuracy in classifying known architectures, but face limitations in distinguishing similar architectures and handling non-code sections of the binary file. For CNN applications to binary code, we find strong evidence of effectiveness particularly in malware classification, with accuracies exceeding 99% on standard datasets without requiring manual feature engineering. However, CNN applications beyond malware detection remain limited. The review identifies significant research gaps, particularly in developing architecture-agnostic methods capable of identifying specific ISA features rather than classifying known architectures. We conclude that while current machine learning methods show promise, future research should focus on leveraging CNN's automatic feature learning capabilities while reducing reliance on binary format metadata.}
+}
+
 @inproceedings{Kumari2017,
   author    = {Kumari, Mamta and Hsieh, George and Okonkwo, Christopher A.},
   booktitle = {2017 International Conference on Computational Science and Computational Intelligence (CSCI)},
@@ -375,6 +385,168 @@ TODO ASK DONNER OM THIS
   doi       = {10.1109/CVPR.2009.5206848},
   issn      = {1063-6919},
   month     = {June}
+}
+
+@misc{MMCC,
+  author       = {Alessandro Panconesi and Marian and Will Cukierski and WWW BIG - Cup Committee},
+  title        = {Microsoft Malware Classification Challenge (BIG 2015)},
+  year         = {2015},
+  howpublished = {\url{https://kaggle.com/competitions/malware-classification}},
+  note         = {Kaggle}
+}
+
+@inproceedings{Malimg,
+  author    = {Nataraj, L. and Karthikeyan, S. and Jacob, G. and Manjunath, B. S.},
+  title     = {Malware images: visualization and automatic classification},
+  year      = {2011},
+  isbn      = {9781450306799},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2016904.2016908},
+  doi       = {10.1145/2016904.2016908},
+  abstract  = {We propose a simple yet effective method for visualizing and classifying malware using image processing techniques. Malware binaries are visualized as gray-scale images, with the observation that for many malware families, the images belonging to the same family appear very similar in layout and texture. Motivated by this visual similarity, a classification method using standard image features is proposed. Neither disassembly nor code execution is required for classification. Preliminary experimental results are quite promising with 98\% classification accuracy on a malware database of 9,458 samples with 25 different malware families. Our technique also exhibits interesting resilience to popular obfuscation techniques such as section encryption.},
+  booktitle = {Proceedings of the 8th International Symposium on Visualization for Cyber Security},
+  articleno = {4},
+  numpages  = {7},
+  keywords  = {computer security, image processing, image texture, malware, malware classification, malware visualization, visualization},
+  location  = {Pittsburgh, Pennsylvania, USA},
+  series    = {VizSec '11}
+}
+
+@inproceedings{Rahul2017,
+  author    = {Rahul, R. K.
+               and Anjali, T.
+               and Menon, Vijay Krishna
+               and Soman, K. P.},
+  editor    = {Thampi, Sabu M.
+               and Mart{\'i}nez P{\'e}rez, Gregorio
+               and Westphall, Carlos Becker
+               and Hu, Jiankun
+               and Fan, Chun I.
+               and G{\'o}mez M{\'a}rmol, F{\'e}lix},
+  title     = {Deep Learning for Network Flow Analysis and Malware Classification},
+  booktitle = {Security in Computing and Communications},
+  year      = {2017},
+  publisher = {Springer Singapore},
+  address   = {Singapore},
+  pages     = {226--235},
+  abstract  = {In this paper, we present the results obtained by applying deep learning techniques to classification of network protocols and applications using flow features and data signatures. We also present a similar classification of malware using their binary files. We use our own dataset for traffic identification and Microsoft Kaggle dataset for malware classification tasks. The current techniques used in network traffic analysis and malware detection is time consuming and beatable as the precise signatures are known. Deep learned features in both cases are not hand crafted and are learned form data signatures. It cannot be understood by the attacker or the malware in order to fake or hide it and hence cannot be bypassed easily.},
+  isbn      = {978-981-10-6898-0}
+}
+
+@inproceedings{Yang2018,
+  author    = {Yang, Chun and Wen, Yu and Guo, Jianbin and Song, Haitao and Li, Linfeng and Che, Haoyang and Meng, Dan},
+  title     = {A Convolutional Neural Network based Classifier for Uncompressed Malware Samples},
+  year      = {2018},
+  isbn      = {9781450359917},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3267494.3267496},
+  doi       = {10.1145/3267494.3267496},
+  abstract  = {This paper proposes a deep learning based method for efficient malware classification. Specially, we convert the malware classification problem into the image classification problem, which can be addressed through leveraging convolutional neural networks (CNNs). For many malware families, the images belonging to the same family have similar contours and textures, so we convert the Binary files of malware samples to uncompressed gray-scale images which possess complete information of the original malware without artificial feature extraction. We then design classifier based on Tensorflow framework of Google by combining the deep learning (DL) and malware detection technology. Experimental results show that the uncompressed gray-scale images of the malware are relatively easy to distinguish and the CNN based classifier can achieve a high success rate of 98.2\%},
+  booktitle = {Proceedings of the 1st Workshop on Security-Oriented Designs of Computer Architectures and Processors},
+  pages     = {15-17},
+  numpages  = {3},
+  keywords  = {convolutional neural networks (cnns), deep learning (dl), malware classification, tensorflow framework, uncompressed gray-scale images},
+  location  = {Toronto, Canada},
+  series    = {SecArch'18}
+}
+
+@inproceedings{Khan2020,
+  author    = {Khan, Mamoona and Baig, Duaa and Khan, Usman Shahid and Karim, Ahmad},
+  booktitle = {2020 International Conference on Cyber Warfare and Security (ICCWS)},
+  title     = {Malware Classification Framework using Convolutional Neural Network},
+  year      = {2020},
+  volume    = {},
+  number    = {},
+  pages     = {1-7},
+  abstract  = {Cyber-security is facing a huge threat from malware and malware mass production due to its mutation factors. Classification of malware by their features is necessary for the security of information technology (IT) society. To provide security from malware, deep neural networks (DNN) can offer a superior solution for the detection and categorization of malware samples by using image classification techniques. To strengthen our ideology of malware classification through image recognition, we have experimented by comparing two perspectives of malware classification. The first perspective implements dense neural networks on binary files and the other applies deep layered convolutional neural network on malware images. The proposed model is trained to a set of malware samples, which are further distributed into 9 different families. The dataset of malware samples which is used in this paper is provided by Microsoft for Microsoft Malware Classification Challenge in 2015. The proposed model shows an accuracy of 97.80% on the provided dataset. By using the proposed model optimum classifications results can be attained.},
+  keywords  = {Malware;Neural networks;Feature extraction;Deep learning;Hidden Markov models;Biological neural networks;Data models;Malware;deep learning;dense neural network;convolutional neural network},
+  doi       = {10.1109/ICCWS48432.2020.9292384},
+  issn      = {},
+  month     = {Oct}
+}
+
+@inproceedings{Sartoli2020,
+  author    = {Sartoli, Sara and Wei, Yong and Hampton, Shane},
+  booktitle = {2020 19th IEEE International Conference on Machine Learning and Applications (ICMLA)},
+  title     = {Malware Classification using Recurrence Plots and Deep Neural Network},
+  year      = {2020},
+  volume    = {},
+  number    = {},
+  pages     = {901-906},
+  abstract  = {In this paper, we introduce a method for visualizing and classifying malware binaries. A malware binary consists of a series of data points of compiled machine codes that represent programming components. The occurrence and recurrence behavior of these components is determined by the common tasks malware samples in a particular family carry out. Thus, we view a malware binary as a series of emissions generated by an underlying stochastic process and use recurrence plots to transform malware binaries into two-dimensional texture images. We observe that recurrence plot-based malware images have significant visual similarities within the same family and are different from samples in other families. We apply deep CNN classifiers to classify malware samples. The proposed approach does not require creating malware signature or manual feature engineering. Our preliminary experimental results show that the proposed malware representation leads to a higher and more stable accuracy in comparison to directly transforming malware binaries to gray-scale images.},
+  keywords  = {Visualization;Transfer learning;Transforms;Programming;Malware;Convolutional neural networks;Task analysis;Malware Classification;Deep Learning;Recurrence Plots;Visualization;Static Analysis},
+  doi       = {10.1109/ICMLA51294.2020.00147},
+  issn      = {},
+  month     = {Dec}
+}
+
+@inproceedings{Alam2024,
+  author    = {Alam, Inzamamul and Samiullah, Md and Kabir, Upama and Woo, Simon and Leung, Carson K. and Nguyen, Hoang Hai},
+  booktitle = {2024 18th International Conference on Ubiquitous Information Management and Communication (IMCOM)},
+  title     = {SREMIC: Spatial Relation Extraction-based Malware Image Classification},
+  year      = {2024},
+  volume    = {},
+  number    = {},
+  pages     = {1-8},
+  abstract  = {Around 800,000 people fall prey to cyberattacks annually, most often by “malware”. Malware has the potential to become a destructive weapon in Cyber-world. It is a difficult task to manually thwart an assault by malware. It is crucial to properly categorize malware binaries in order to identify their origins. Furthermore, malware structure discovery through basic feature extraction approaches are time-consuming and challenging. Malware classification was previously solved using naive machine learning approaches like support vector machine (SVM) and extreme gradient boosting (XGBoost). Recently, deep learning (DL) has shown to be impactful in finding malicious patterns. Without DL, analysis of the vast amounts of available data tends to impossible. Existing methods (e.g., transfer learning, fusion methodology, ensemble learning) may not be effective on actual malware binary files. Moreover, some single image-based malware classification used rudimentary convolutional neural network (CNN) that does not perform well. Faced with these challenges, we propose in this paper a novel model with of a spatial CNN with sufficient regularization and data augmentation that can identify and classify malware in images effectively and efficiently. Our model is evaluated using datasets like MalImg and Microfsoft-Big. The proposed model achieves validation score of 99.93% for MalImg and 99.72% for Microsoft-Big datasets. Our approach outperforms VGG16, VGG19, ResNet50, EfficientNetB1, and Google's Inception v3, including state-of-the-art (SOTA) techniques.},
+  keywords  = {Support vector machines;Deep learning;Feature extraction;Malware;Convolutional neural networks;Data mining;Task analysis;Malware classification;Deep learning;Convolutional neural network (CNN);Spatial relation},
+  doi       = {10.1109/IMCOM60618.2024.10418339},
+  issn      = {},
+  month     = {Jan}
+}
+
+@inproceedings{Garcia2019,
+  author    = {García-Daza-Cervantes, Ixcanil and Reyes-Reyes, Rogelio and Cruz-Ramos, Clara and Ponomaryov, Volodymyr and Ponomaryov, Denys},
+  booktitle = {2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T)},
+  title     = {Malware Classification Using Distance and Directional Local Binary Patterns},
+  year      = {2019},
+  volume    = {},
+  number    = {},
+  pages     = {397-401},
+  abstract  = {Nowadays, malware is one of the biggest cyber threats faced by a common user to a large company, since almost any electronic device is susceptible to an infection due to this type of threat. In addition, malwares continue growing in frequency and sophistication where the identification and classification of the classic and new variants of different malware families is a difficult task that requires modern detection techniques. In this paper, a malware classification method based on two novel local binary pattern descriptors and convolutional neural network, which represents malware binary files as gray-scale images, is presented. The proposed method exploits the fact that most malware variants in the same family have similar local and global structures, therefore, the computing of the local binary descriptors of the gray-scale images facilitates the detection and classification of the variants of a malware. Experimental results have shown that the proposed method outperforms previous related schemes in terms of accuracy resulting in of about 98 %.},
+  keywords  = {Malware;Gray-scale;Feature extraction;Convolutional neural networks;Automata;Entropy;Malware classification;Convolutional Neural Network;Local binary patterns;Texture Analysis;visualization},
+  doi       = {10.1109/PICST47496.2019.9061336},
+  issn      = {},
+  month     = {Oct}
+}
+
+@inproceedings{Li2021,
+  author    = {Li, Xinghua and Li, Xiaolong and Wang, Feng and Li, Wenna and Li, Ang},
+  title     = {A Malware Detection Method Based on Machine Learning and Ensemble of Regression Trees},
+  year      = {2021},
+  isbn      = {9781450390200},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3469213.3470713},
+  doi       = {10.1145/3469213.3470713},
+  abstract  = {In the context of the current large number of malicious codes, the detection and protection of malicious codes is particularly important. In recent years, a method of using deep learning to detect malicious code has emerged. Thus, in this paper, we propose a new detection method that converts binary files of malicious code into decimal arrays and use 1-D CNN to perform classification and recognition. Aiming at the imbalance in the number of code families, we choose xgboost, which performs well in the classification prediction competition. We conduct experiments on 9,458 malware samples from 25 different malware families in the Vision Research Lab. The experimental results show that our classification prediction reaches 97\% accuracy.},
+  booktitle = {2021 2nd International Conference on Artificial Intelligence and Information Systems},
+  articleno = {280},
+  numpages  = {6},
+  keywords  = {Cnn, deep learning, malware, xgboost},
+  location  = {Chongqing, China},
+  series    = {ICAIIS 2021}
+}
+
+@article{Parihar2022,
+  abstract      = {Malware classification continues to be exceedingly difficult due to the exponential growth in the number and variants of malicious files. It is crucial to classify malicious files based on their intent, activity, and threat to have a robust malware protection and post-attack recovery system in place. This paper proposes a novel deep learning-based model, S-DCNN, to classify malware binary files into their respective malware families efficiently. S-DCNN uses the image-based representation of the malware binaries and leverages the concepts of transfer learning and ensemble learning. The model incorporates three deep convolutional neural networks, namely ResNet50, Xception, and EfficientNet-B4. The ensemble technique is used to combine these component models'predictions and a multilayered perceptron is used as a meta classifier. The ensemble technique fuses the diverse knowledge of the component models, resulting in high generalizability and low variance of the S-DCNN. Further, it eliminates the use of feature engineering, reverse engineering, disassembly, and other domain-specific techniques earlier used for malware classification. To establish S-DCNN's robustness and generalizability, the performance of proposed model is evaluated on the Malimg dataset, a dataset collected from VirusShare, and packed malware dataset counterparts of both Malimg and VirusShare datasets. The proposed method achieves a state-of-the-art 10-fold accuracy of 99.43{\%} on the Malimg dataset and an accuracy of 99.65{\%} on the VirusShare dataset.},
+  author        = {Parihar, Anil Singh and Kumar, Shashank and Khosla, Savya},
+  date          = {2022/09/01},
+  date-added    = {2024-10-29 16:44:56 +0100},
+  date-modified = {2024-10-29 16:44:56 +0100},
+  doi           = {10.1007/s11042-022-12615-7},
+  id            = {Parihar2022},
+  isbn          = {1573-7721},
+  journal       = {Multimedia Tools and Applications},
+  number        = {21},
+  pages         = {30997--31015},
+  title         = {S-DCNN: stacked deep convolutional neural networks for malware classification},
+  url           = {https://doi.org/10.1007/s11042-022-12615-7},
+  volume        = {81},
+  year          = {2022},
+  bdsk-url-1    = {https://doi.org/10.1007/s11042-022-12615-7}
 }
 
 @misc{Idun,
