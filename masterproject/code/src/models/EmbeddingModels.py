@@ -106,16 +106,6 @@ class Simple2dEmbedding(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2),
         )
 
-        self.block3 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1
-            ),
-            nn.Conv2d(
-                in_channels=128, out_channels=128, kernel_size=5, stride=2, padding=2
-            ),
-        )
-
-        # self.global_pool = nn.AdaptiveAvgPool2d((1, 1))
         self.dense1 = nn.Linear(128, 8)
         self.relu = nn.ReLU()
         self.dense2 = nn.Linear(8, num_classes)
@@ -131,10 +121,7 @@ class Simple2dEmbedding(nn.Module):
         x = self.dropout(x)
         x = self.block2(x)
         x = self.dropout(x)
-        x = self.block3(x)
-        x = self.dropout(x)
 
-        # x = self.global_pool(x)
         x = x.view(x.size(0), -1)
 
         x = self.dense1(x)
