@@ -1,0 +1,19 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y gcc g++ gperf bison flex make libncurses5-dev \
+python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 xz-utils unzip \
+patch libstdc++6 rsync git meson ninja-build
+
+# Usage: buildcross [options] [<TARGET>] [<CROSS_DIR>]
+COPY buildcross.sh /usr/bin/buildcross.sh
+RUN chmod +x /usr/bin/buildcross.sh
+
+RUN mkdir -p /toolchains
+RUN cd /toolchains && /usr/bin/buildcross.sh m88k
+
+
+# set up so that we can enter shell in container
+
+# Make comment with command to do this
+# docker run -it --entrypoint /bin/bash <image-name>
+# docker run -it --entrypoint /bin/bash <image-name>

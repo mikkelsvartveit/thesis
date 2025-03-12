@@ -1,0 +1,2519 @@
+
+#!/bin/sh
+#
+# buildcross - a tool for building GCC cross toolchains
+# Copyright (C) 2019-2025  Mikael Pettersson
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage: buildcross [options] [<TARGET>] [<CROSS_DIR>]
+# Options:
+#	--cross-dir=<CROSS_DIR> | -c <CROSS_DIR>
+#		Place resulting cross-compiler in <CROSS_DIR>.
+#		Default: <CWD>/cross-<TARGET>
+#
+#	--downloads-dir=<DOWNLOADS_DIR> | -d <DOWNLOADS_DIR>
+#		Place downloaded sources in <DOWNLOADS_DIR>.
+#		Default: <CWD>/downloads
+#
+#	--host-tools-dir=<HOST_TOOLS_DIR> | -h <HOST_TOOLS_DIR>
+#		Place built host tools in <HOST_TOOLS_DIR>.
+#		Default: <CWD>/host-tools
+#
+#	-j<N>
+#		Pass -j<N> to make. Default: empty
+#
+#	--sources-dir=<SOURCES_DIR> | -s <SOURCES_DIR>
+#		Place unpacked source archives in <SOURCES_DIR>.
+#		Default: <CWD>/sources
+#
+#	--target=<TARGET> | -t <TARGET>
+#		Build the indicated <TARGET>. If this option is
+#		not present then <TARGET> must be present as the
+#		first non-option parameter.
+#
+# Supported targets and resulting toolchains:
+#
+# 6502		6502 (binutils from cc65, libtinyc)
+# a29k		a29k-unknown-coff (no libc) (3)
+# aarch64	aarch64-unknown-linux-gnu
+# aarch64-mingw64	aarch64-w64-mingw32
+# alpha		alpha-unknown-linux-gnu
+# arc		arc-unknown-linux-gnu
+# armv7l	armv7l-unknown-linux-gnueabi
+# avr		avr-unknown-elf (no libc)
+# avr32		avr32-unknown-linux-uclibc (1)
+# bfin		bfin-unknown-linux-uclibc
+# bpf		bpf-unknown-none (no libc)
+# c4x		c4x-unknown-coff (no libc) (3)
+# c6x		c6x-unknown-uclinux
+# cr16		cr16-unknown-elf
+# cris		crisv32-unknown-linux-uclibc
+# crx		crx-unknown-elf (no libc) (1)
+# csky		csky-unknown-linux-gnu (only little-endian)
+# d10v		d10v-unknown-elf (3)
+# d30v		d30v-unknown-elf (no libc) (2)
+# epiphany	epiphany-unknown-elf
+# fr30		fr30-unknown-elf
+# frv		frv-unknown-linux-uclibc
+# ft32		ft32-unknown-elf
+# h8300		h8300-unknown-linux-uclibc
+# hexagon	hexagon-unknown-linux-gnu (3)
+# hppa		hppa-unknown-linux-gnu (no -m64 support)
+# i860		i860-stardent-sysv4 (no libc) (3)
+# i960		i960-unknown-elf with uclinux and uclibc (3)
+# ia64		ia64-unknown-linux-gnu
+# ip2k		ip2k-unknown-elf (no libc) (2)
+# iq2000	iq2000-unknown-elf
+# kvx		kvx-unknown-uclibc
+# lm32		lm32-uclinux-uclibc
+# loongarch64	loongarch64-unknown-linux-gnu
+# m1750		m1750-coff (custom libc) (3)
+# m32c		m32c-unknown-elf (1)
+# m32r		m32r-unknown-elf
+# m6809		m6809-unknown-none with newlib (1)
+# m68hc11	m68hc11-unknown-elf (1)
+# m68k		m68k-unknown-linux-gnu
+# m68k-elf	m68k-unknown-elf
+# m68k-uclibc	m68k-unknown-linux-uclibc
+# m88k		m88k-unknown-openbsd (elf, no libc) (1)
+# maxq		maxq-unknown-coff (no libc) (1)
+# mcore		mcore-unknown-elf
+# mep		mep-unknown-elf (no libc) (1)
+# metag		metag-unknown-linux-uclibc (1)
+# microblaze	microblaze-unknown-linux-gnu
+# mips64	mips64-unknown-linux-gnu with -mabi=64, -mabi=n32, and -mabi=32 support
+# mmix		mmix-knuth-mmixware with newlib
+# mn10300	mn10300-unknown-elf
+# moxie		moxie-unknown-elf
+# msp430	msp430-unknown-elf
+# mt		mt-unknown-elf (3)
+# nds32		nds32le-unknown-linux-gnu
+# nios2		nios2-unknown-linux-gnu
+# ns32k		ns32k-unknown-netbsd (no libc) (2)
+# nvptx		nvptx-none with newlib
+# or1k		or1k-unknown-linux-gnu
+# pdp11		pdp11-unknown-aout (no libc)
+# pj		pjl-unknown-elf (no libc) (3)
+# ppc64		ppc64-unknown-linux-gnu with -m64 and -m32 support
+# ppc64le	ppc64le-unknown-linux-gnu (no -m32 support)
+# pru		pru-unknown-elf
+# rl78		rl78-unknown-elf
+# riscv64	riscv64-unknown-linux-gnu (no 32-bit support)
+# rx		rx-unknown-elf
+# s390x		s390x-unknown-linux-gnu with -m64 and -m31 support
+# score		score-unknown-elf (no libc) (1)
+# sh4		sh4-unknown-linux-gnu
+# sparc64	sparc64-unknown-linux-gnu with -m64 and -m32 support
+# tilegx	tilegx-unknown-linux-gnu
+# tms9900	tms9900-unknown-elf (no libc) (1)
+# tricore	tricore-unknown-elf
+# ubicom32	ubicom32-linux-uclibc (1)
+# v850		v850e-uclinux-uclibc
+# vax		vax-unknown-linux (no libc or kernel headers)
+# visium	visium-unknown-elf
+# x86_64	x86_64-unknown-linux-gnu with -m64, -mx32, and -m32 support
+# x86_64-mingw64	x86_64-w64-mingw32 with -m64 and -m32 support
+# x86_64-musl	x86_64-unknown-linux-musl (only -m64)
+# x86_64-uclibc	x86_64-unknown-linux-uclibc (only -m64)
+# xc16x		xc16x-unknown-elf (1)
+# xstormy16	xstormy16-unknown-elf
+# xtensa	xtensa-unknown-linux-uclibc
+# z8k		z8k-unknown-coff with newlib (3)
+# zpu		zpu-unknown-elf (1)
+#
+# Notes:
+#
+# (1) Requires an old version of the host GCC. See the code for details.
+# (2) In addition to (1), requires a special build procedure. See the code for details.
+# (3) In addition to (2), requires a 32-bit build. See the code for details.
+#
+# Pending:
+#
+# aarch64	waiting for glibc -mabi=ilp32 support
+# loongarch64	waiting for -m32 support
+#
+# Unsupported:
+#
+# - targets not supported by publicly available sources (obvious)
+# - Linux targets using another libc than glibc, uclibc{,-ng}, or musl
+#   (for now, may change time permitting)
+# - non-Linux targets except mingw-w64, plain ELF with newlib,
+#   or plain targets without newlib
+#
+# Specific unsupported targets:
+#
+# amdgcn	not in binutils, though apparently in llvm's assembler and linker
+# clipper	not in binutils, removed in gcc-3.3
+# convex	not in binutils, removed in gcc-3.3
+# dsp16xx	not in binutils, removed in gcc-4.0
+# elxsi		not in binutils, removed in gcc-3.3
+# fx80		not in binutils, removed in gcc-3.0
+# gmicro	not in binutils, removed in gcc-3.0
+# picochip	not in binutils, removed in gcc-5
+# pyr		not in binutils, removed in gcc-3.0
+# romp		not in binutils, removed in gcc-3.4
+# SHARC		there is an ancient GCC port with custom assembler/linker/etc (not GNU binutils) in
+#		https://github.com/sergev/g21k, but it's apparently not 64-bit clean;
+#		based on gcc-2.3.3, it builds with bison-1.25, gperf-2.7.2, and gcc-2.95.3
+# spur		not in binutils, removed in gcc-3.0
+# tahoe		incomplete in binutils (no ld), removed in binutils-2.17 (gas) and 2.31 (rest) and gcc-3.0
+# transputer	there is an ancient GCC port with custom assembler/linker/etc (not GNU binutils) in
+#		https://github.com/devzendo/transputer-toolchain, but it's apparently not 64-bit clean
+# unicore32	not in any upstream toolchain components, removed in linux-5.9
+# we32k		incomplete in binutils (no gas or ld), removed in binutils-2.31 and gcc-3.3
+
+set -e
+
+VERSION="8.7.0"
+
+CROSS_DIR=
+DASHJ=
+DOWNLOADS_DIR=
+HOST_TOOLS_DIR=
+SOURCES_DIR=
+TARGET_ARCH=
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+	--cross-dir=*)
+	    CROSS_DIR=`echo "x$1" | sed 's,x--cross-dir=,,'`
+	    ;;
+	-c)
+	    shift
+	    CROSS_DIR="$1"
+	    ;;
+	--downloads-dir=*)
+	    DOWNLOADS_DIR=`echo "x$1" | sed 's,x--downloads-dir=,,'`
+	    ;;
+	-d)
+	    shift
+	    DOWNLOADS_DIR="$1"
+	    ;;
+	--host-tools-dir=*)
+	    HOST_TOOLS_DIR=`echo "x$1" | sed 's,x--host-tools-dir=,,'`
+	    ;;
+	-h)
+	    shift
+	    HOST_TOOLS_DIR="$1"
+	    ;;
+	-j*)
+	    DASHJ="$1"
+	    ;;
+	--sources-dir=*)
+	    SOURCES_DIR=`echo "x$1" | sed 's,x--sources-dir=,,'`
+	    ;;
+	-s)
+	    shift
+	    SOURCES_DIR="$1"
+	    ;;
+	--target=*)
+	    TARGET_ARCH=`echo "x$1" | sed 's,x--target=,,'`
+	    ;;
+	-t)
+	    shift
+	    TARGET_ARCH="$1"
+	    ;;
+	-*)
+	    echo "unknown option: $1"
+	    exit 1
+	    ;;
+	*)
+	    break
+	    ;;
+    esac
+    shift
+done
+
+if [ -z "${TARGET_ARCH}" ]; then
+    TARGET_ARCH="$1"
+    shift
+fi
+if [ -z "${TARGET_ARCH}" ]; then
+    echo no target arch provided
+    exit 1
+fi
+
+BUILD_DIR=`realpath .`
+
+if [ -z "${DOWNLOADS_DIR}" ]; then
+    DOWNLOADS_DIR=`realpath ./downloads`
+fi
+if [ -z "${HOST_TOOLS_DIR}" ]; then
+    HOST_TOOLS_DIR=`realpath ./host-tools`
+fi
+if [ -z "${SOURCES_DIR}" ]; then
+    SOURCES_DIR=`realpath ./sources`
+fi
+if [ -z "${CROSS_DIR}" ]; then
+    CROSS_DIR=${1:-"${BUILD_DIR}/cross-${TARGET_ARCH}"}
+fi
+
+# default component versions
+BINUTILS_VSN=2.44
+CC65_VSN=
+GCC_6502_BITS_VSN=
+GCC_VSN=14.2.0
+GCC_GENERATED_FILES_VSN="git;https://github.com/mikpe/gcc-generated-files.git;-;master;HEAD;mikpe"
+GLIBC_VSN=2.41
+GMP_VSN=6.3.0
+LINUX_VSN=6.13
+MAKE_VSN=
+MINGW64_VSN=12.0.0
+MPC_VSN=1.3.1
+MPFR_VSN=4.2.1
+MUSL_VSN=1.2.5
+NEWLIB_VSN=4.5.0.20241231
+NVPTXTOOLS_VSN="git;https://github.com/MentorEmbedded/nvptx-tools.git;-;master;HEAD;-"
+UCLIBC_VSN=1.0.51
+
+# URLs for component tarballs
+GMP_URL="https://ftpmirror.gnu.org/gmp"
+MPC_URL="https://ftpmirror.gnu.org/mpc"
+MPFR_URL="https://ftpmirror.gnu.org/mpfr"
+MAKE_URL="https://ftpmirror.gnu.org/make"
+
+# binutils configuration options
+BINUTILS_WANTS_DISABLE_WERROR=
+BINUTILS_WANTS_ENABLE_OBSOLETE=
+BINUTILS_WANTS_HOST_NOT_BUILD=
+
+# gcc configuration options
+GCC_WANTS_ENABLE_OBSOLETE=
+GCC_WANTS_ENABLE_INITFINI_ARRAY=
+GCC_WANTS_GENERATED_FILES=
+GCC_WANTS_HOST_NOT_BUILD=
+GCC_WANTS_NO_ENABLE_CHECKING=
+
+# glibc configuration options
+GLIBC_WANTS_DISABLE_WERROR=
+
+# linux headers options
+LINUX_HEADERS_WANTS_MANUAL_INSTALL=
+
+# uClibc-ng configuration options
+UCLIBC_WANTS_BIG_ENDIAN=
+UCLIBC_WANTS_LINUXTHREADS=
+UCLIBC_WANTS_LITTLE_ENDIAN=
+UCLIBC_WANTS_NPTL=
+UCLIBC_WANTS_OLDCONFIG=
+UCLIBC_WANTS_RESOLVER_SUPPORT=
+UCLIBC_WANTS_SSP=
+UCLIBC_WANTS_STATIC=
+
+# newlib configuration options
+NEWLIB_WANTS_DISABLE_MULTILIB=
+
+# target-specfic overrides
+case "${TARGET_ARCH}" in
+    "6502")
+	TARGET_TRIPLE="${TARGET_ARCH}"
+	# uses CC65_VSN for binutils
+	CC65_VSN="git;https://github.com/cc65/cc65.git;-;master;HEAD;-"
+	HOST_GCC_VSN="${GCC_VSN}"
+	# 6502 gcc based on gcc-8.4.1
+	GCC_VSN="git;https://github.com/itszor/gcc-6502.git;-;m65x-gcc8-new-mirror;HEAD;-"
+	# 6502 libtinyc
+	GCC_6502_BITS_VSN="git;https://github.com/itszor/gcc-6502-bits.git;-;master;HEAD;-"
+	# disable the components we don't want
+	BINUTILS_VSN=
+	GLIBC_VSN=
+	LINUX_VSN=
+	MINGW64_VSN=
+	MUSL_VSN=
+	NEWLIB_VSN=
+	NVPTXTOOLS_VSN=
+	UCLIBC_VSN=
+	;;
+    "a29k")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-coff"
+	GCC_VSN=2.95.3
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	BINUTILS_VSN=2.16.1
+	NEWLIB_VSN= # fails to build for a29k
+	# you need to:
+	# - adjust PATH to select gcc-3.x (3.4.6 and 3.3.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64:
+	#   + set CC to a wrapper script that enforces -m32
+	#   + set BUILD_TRIPLE=i686-pc-linux-gnu
+	#   + use setarch i686
+	SKIP_HOST_GCC=1
+	;;
+    "aarch64-mingw64")
+	TARGET_ARCH="aarch64"
+	TARGET_TRIPLE="aarch64-w64-mingw32"
+	HOST_GCC_VSN=14.2.0
+	BINUTILS_VSN="git;https://github.com/Windows-on-ARM-Experiments/binutils-woarm64.git;-;woarm64;HEAD;-"
+	GCC_VSN="git;https://github.com/Windows-on-ARM-Experiments/gcc-woarm64.git;-;woarm64;HEAD;-"
+	MINGW64_VSN="git;https://github.com/Windows-on-ARM-Experiments/mingw-woarm64.git;-;woarm64;HEAD;-"
+	;;
+    "armv7l")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-gnueabi"
+	;;
+    "avr")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	NEWLIB_VSN= # not supported in newlib at all
+	;;
+    "avr32")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	BINUTILS_VSN="git;https://github.com/embecosm/avr32-binutils-gdb.git;-;avr32-binutils-2.23;HEAD;-"
+	GCC_VSN="git;https://github.com/embecosm/avr32-gcc.git;-;avr32-gcc-4.4;HEAD;-"
+	LINUX_VSN=4.11 # avr32 was removed in linux-4.12
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	# set PATH to select gcc-4.x (4.4.7 is known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "bfin")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	UCLIBC_WANTS_LINUXTHREADS=y
+	UCLIBC_WANTS_SSP=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	UCLIBC_WANTS_STATIC=y
+	LINUX_VSN=4.16 # blackfin was removed in linux-4.17
+	UCLIBC_VSN="git;https://github.com/mikpe/uclibc-ng.git;-;v1.0.51-bfin;HEAD;mikpe"
+	;;
+    "bpf")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-none"
+	NEWLIB_VSN= # not supported in newlib at all
+	;;
+    "c4x")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-coff"
+	GCC_VSN=3.2.3
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	GCC_WANTS_GENERATED_FILES=3.2.3
+	NEWLIB_VSN=
+	SKIP_HOST_GCC=1
+	# you need to:
+	# - adjust PATH to select gcc-3.x (3.3.6 and 3.4.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64, set BUILD_TRIPLE=x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	# - if on x86_64, set CC to a wrapper script that enforces -m32
+	;;
+    "c6x")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-uclinux"
+	UCLIBC_WANTS_LINUXTHREADS=y
+	UCLIBC_WANTS_SSP=y
+	UCLIBC_WANTS_BIG_ENDIAN=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	LINUX_VSN=5.11 # c6x was removed in linux-5.12
+	UCLIBC_VSN="git;https://github.com/mikpe/uclibc-ng.git;-;v1.0.51-c6x;HEAD;mikpe"
+	;;
+    "cr16")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=11.5.0 # marked obsolete in gcc-12.1.0, but also doesn't build there
+	;;
+    "cris")
+	TARGET_TRIPLE="crisv32-unknown-linux-uclibc"
+	UCLIBC_WANTS_LINUXTHREADS=y
+	UCLIBC_WANTS_SSP=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	LINUX_VSN=4.16 # cris was removed in linux-4.17
+	GCC_WANTS_ENABLE_OBSOLETE=1 # gcc-10 marks cris as obsolete
+	GCC_VSN=10.5.0 # gcc-11.1.0 dropped support for this target triple
+	;;
+    "crx")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=4.5.4 # 4.6 ICEs, removed in 4.7
+	NEWLIB_VSN= # gcc ICEs building newlib
+	SKIP_HOST_GCC=1
+	;;
+    "d10v")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN="git;https://github.com/mikpe/ecosSWtools.git;src;main;HEAD;mikpe"
+	GCC_WANTS_HOST_NOT_BUILD=1
+	# the above repo doesn't like make -jN
+	DASHJ=
+	# the above repo is set up for an all-in-one build
+	NEWLIB_VSN=
+	# set PATH to select gcc-2.95.3
+	# if on x86_64:
+	# - you must have support for building and running 32-bit executables
+	# - set BUILD_TRIPLE=i686-pc-linux-gnu
+	# - run this with setarch i686
+	SKIP_HOST_GCC=1
+	;;
+    "d30v")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=3.4.6
+	GCC_WANTS_ENABLE_OBSOLETE=1
+	GCC_WANTS_GENERATED_FILES=3.4.6
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	BINUTILS_VSN=2.16.1
+	NEWLIB_VSN= # fails to build for d30v
+	# you need to:
+	# - adjust PATH to select gcc-3.x (3.3.6 and 3.4.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64, set BUILD_TRIPLE=x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	SKIP_HOST_GCC=1
+	;;
+    "epiphany")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "fr30")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "frv")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	UCLIBC_WANTS_SSP=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	# fixes for build breakages in 1.0.46
+	UCLIBC_VSN="git;https://github.com/mikpe/uclibc-ng.git;-;v1.0.51-frv;HEAD;mikpe"
+	LINUX_VSN=4.16 # frv was removed in linux-4.17
+	;;
+    "ft32")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "h8300")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	LINUX_VSN=5.18 # h8300 was removed in linux-5.19
+	;;
+    "hexagon")
+	# toolchain salvaged from sourceryg++-2012.03-140-hexagon-linux.src.tar
+	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils_2_21_53_20110905-sourceryg++-2012.03-140;HEAD;mikpe"
+	BINUTILS_WANTS_DISABLE_WERROR=1
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-4.6.1-sourceryg++-2012.03-140;HEAD;mikpe"
+	GLIBC_VSN="git;https://github.com/mikpe/eglibc.git;-;glibc-2.15-sourceryg++-2012.03-140;HEAD;mikpe"
+	LINUX_VSN=5.17 # linux-5.18 can't build its headers with hexagon's ancient gcc
+	# set PATH to select gcc-4.x (4.2.4 is known to work)
+	# if on x86_64, gcc must support -m32
+	SKIP_HOST_GCC=1
+	;;
+    "hppa")
+	# gcc-14/15 fail to build glibc-2.39 for hppa, see:
+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=112358
+	GCC_VSN=13.3.0
+	;;
+    "i860")
+	TARGET_TRIPLE="${TARGET_ARCH}-stardent-sysv4"
+	GCC_VSN=3.2.3
+	GCC_WANTS_ENABLE_OBSOLETE=1
+	GCC_WANTS_GENERATED_FILES=3.2.3
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	BINUTILS_VSN=2.16.1
+	NEWLIB_VSN= # doesn't support i860
+	SKIP_HOST_GCC=1
+	# you need to:
+	# - adjust PATH to select gcc-3.x (3.3.6 and 3.4.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64, set BUILD_TRIPLE=x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	# - if on x86_64, set CC to a wrapper script that enforces -m32
+	;;
+    "i960")
+	# this is a uclinux/uclibc toolchain using a kernel from uClinux-dist-20121024
+	# gcc and binutils only accept certain i960 triplets, so we keep the generic one
+	# you could instead build newlib-2.2.0-1 for a non-uclinux/uclibc toolchain
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	LINUX_VSN="git;https://github.com/mikpe/linux-2.0.39.uc2.git;linux-2.0.x;main;HEAD;mikpe"
+	LINUX_HEADERS_WANTS_MANUAL_INSTALL=1
+	UCLIBC_VSN="git;https://github.com/mikpe/uClibc.git;-;0_9_29-i960;HEAD;mikpe"
+	UCLIBC_WANTS_OLDCONFIG=1
+	GCC_VSN=3.4.6 # obsoleted in 3.4, removed in 4.0
+	GCC_WANTS_ENABLE_OBSOLETE=1
+	GCC_WANTS_GENERATED_FILES=3.4.6
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	BINUTILS_VSN=2.30 # obsoleted in 2.28, removed in 2.31
+	BINUTILS_WANTS_ENABLE_OBSOLETE=1
+	# you need to:
+	# - adjust PATH to select gcc-3.x (3.3.6 and 3.4.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64, set BUILD_TRIPLE=x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	# - if on x86_64, set CC to a wrapper script that enforces -m32
+	SKIP_HOST_GCC=1
+	;;
+    "ia64")
+	LINUX_VSN=6.6 # ia64 was removed in linux-6.7
+	GLIBC_VSN=2.38 # ia64 was removed in glibc-2.39
+	GCC_WANTS_ENABLE_OBSOLETE=1 # gcc-14 marks ia64 as obsolete
+	;;
+    "ip2k")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=3.3.6 # added in 3.3, ICEs in 3.4 and 4.0, removed in 4.1
+	GCC_WANTS_GENERATED_FILES=3.3.6
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	NEWLIB_VSN= # doesn't support ip2k
+	# you need to:
+	# - adjust PATH to select gcc 3.x or 4.x (3.4.6 and 4.2.4 are known to work)
+	# - set BUILD_TRIPLE
+	#   on x86_64-linux use x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	#   as that would cause the gcc-3.3.6 build to enter canadian cross mode
+	SKIP_HOST_GCC=1
+	;;
+    "iq2000")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "kvx")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	# from https://github.com/kalray/build-scripts.git v5.2.0
+	# based on binutils-2.41.50, gcc-13.2.1, linux-6.1.87, and uclibc-ng-1.0.45
+	BINUTILS_VSN="git;https://github.com/kalray/binutils.git;-;-;7a6d3ed83c733b84af62bff0627027b80ad83671;kalray"
+	GCC_VSN="git;https://github.com/kalray/gcc.git;-;-;0067bade4a4efb6b7a2ac9910b96c350aa3655cc;kalray"
+	LINUX_VSN="git;https://github.com/kalray/linux_coolidge.git;-;-;660a33f25bb6fd6b01878411358560be0043e6b7;kalray"
+	UCLIBC_VSN="git;https://github.com/kalray/uclibc-ng.git;-;-;fc3b6dc46a80e1f4aa468472aa6c7083f3bc6581;kalray"
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	HOST_GCC_VSN=14.2.0
+	;;
+    "lm32")
+	TARGET_TRIPLE="${TARGET_ARCH}-uclinux-uclibc"
+	LINUX_VSN="git;https://github.com/m-labs/linux-milkymist.git;-;master;1f446f97a4362092dab13d996193a9dc7b0be8e9"
+	;;
+    "m1750")
+	TARGET_TRIPLE="${TARGET_ARCH}-coff"
+	BINUTILS_VSN="git;https://github.com/mikpe/m1750-tools.git;w1750/src/binutils-2.7;main;HEAD;mikpe"
+	BINUTILS_WANTS_HOST_NOT_BUILD=1
+	GCC_VSN="git;https://github.com/mikpe/m1750-tools.git;w1750/src/gcc-2.7.2;main;HEAD;mikpe"
+	NEWLIB_VSN= # m1750 is not supported in newlib, but comes with its own custom libc
+	DASHJ= # I don't trust -jN in these ancient sources
+	# You must have support for building and running 32-bit executables:
+	# - adjust PATH to select gcc-2.95.3
+	# - set BUILD_TRIPLE=i386-linux
+	SKIP_HOST_GCC=1
+	# See https://github.com/mikpe/m1750-tools for instructions on building sim1750 and gdb for this target.
+	;;
+    "m32c")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	# gcc-4.7.4 is good
+	# gcc-4.8.5 through 6.5.0 require --disable-multilib
+	# gcc-7.5.0 has a spill failure in libgcc
+	# gcc-8 and up fail due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83670
+	GCC_VSN=6.5.0
+	SKIP_HOST_GCC=1
+	;;
+    "m32r")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-m32r;HEAD;mikpe"
+	;;
+    "m6809")
+	# This toolchain uses the 6809 port to gcc-4.3.6 with ASxxxx and newlib.
+	# There is also a port to gcc-4.6.4 with LWTOOLS (www.lwtools.ca), which is recommended by Fuzix,
+	# unfortunately it ICEs with reload failure when building newlib.
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-none"
+	BINUTILS_VSN= # ASxxxx included in GCC sources
+	GCC_VSN="git;https://gitlab.com/dfffffff/gcc6809.git;-;dftools;HEAD;dfffffff"
+	NEWLIB_VSN="git;https://gitlab.com/dfffffff/newlib-6809.git;-;dev-1.15;HEAD;dfffffff"
+	# the above newlib repo seems to malfunction with -jN
+	DASHJ=
+	# GCC is based on 4.3.6
+	SKIP_HOST_GCC=1
+	;;
+    "m68hc11")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	BINUTILS_VSN=2.26.1 # later version cannot assemble m68hc11-gcc's libgcc .asm files
+	GCC_VSN=4.2.4 # later versions ICE, removed in 4.7
+	NEWLIB_VSN=2.2.0-1 # later versions cannot be built by the 4.2-based m68hc11-gcc
+	# PATH must select an older gcc suitable for building the above (4.2 is known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "m68k-elf")
+	TARGET_ARCH="m68k"
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-m68k;HEAD;mikpe"
+	;;
+    "m68k-uclibc")
+	TARGET_ARCH="m68k"
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	UCLIBC_WANTS_STATIC=1
+	;;
+    "m88k")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-openbsd"
+	# binutils and gcc from OpenBSD for m88k
+	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils-2_15-m88k-openbsd;HEAD;mikpe"
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-3.3.6-m88k-openbsd;HEAD;mikpe"
+	NEWLIB_VSN= # fails to build for m88k
+	# you need to:
+	# - adjust PATH to select a gcc capable of building the above, 3.3.6 to 5.5.0 are known to work
+	# - if PATH selects gcc < 4.0, set BUILD_TRIPLE because gcc -v < 4.0 doesn't list Target:
+	SKIP_HOST_GCC=1
+	;;
+    "maxq")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-coff"
+	BINUTILS_VSN=2.18 # later versions fail to build, maxq was removed in binutils-2.21
+	BINUTILS_WANTS_DISABLE_WERROR=1
+	BINUTILS_WANTS_ENABLE_OBSOLETE=1
+	NEWLIB_VSN= # maxq is not supported in newlib at all
+	# GCC port salvaged from https://gcc.gnu.org/pipermail/gcc-patches/2005-January/159504.html
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-4.0.4-maxq;HEAD;mikpe"
+	# set PATH to select gcc-4.x (4.0.4 to 4.9.4 are known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "mcore")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "mep")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=4.5.4 # later ones are broken, removed in gcc-7
+	NEWLIB_VSN= # fails to build for mep
+	SKIP_HOST_GCC=1
+	;;
+    "metag")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils-2_23_2-metag;HEAD;mikpe"
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-4.2.4-metag;HEAD;mikpe"
+	LINUX_VSN=4.16 # metag was removed in linux-4.17
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	# set PATH to select gcc-4.x (4.2.4 is known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "mmix")
+	TARGET_TRIPLE="${TARGET_ARCH}-knuth-mmixware"
+	;;
+    "mn10300")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "moxie")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "msp430")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "mt")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	# binutils must be built in 32-bit mode to avoid a 32/64 bit
+	# extension bug, some version after 2.20.1 fixed that bug, but
+	# versions after 2.20.1 also fail to assemble parts of newlib
+	BINUTILS_VSN=2.20.1
+	# gcc must be built in 32-bit mode to avoid a 32/64 bit extension
+	# bug, 4.3.6 could also be built (same bug though), but we stay
+	# with 4.2.4 to avoid dependencies on 32-bit gmp and mpfr
+	GCC_VSN=4.2.4
+	# 2.2.0-1 is the latest newlib to be buildable by mt-elf gcc
+	NEWLIB_VSN=2.2.0-1
+	# on x86_64 you must set CC to a wrapper script that enforces -m32
+	# PATH must select a older gcc suitable for building gcc-4.2.4 and
+	# binutils-2.20.1 (gcc-4.1 to 4.5 are known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "nds32")
+	TARGET_TRIPLE="nds32le-unknown-linux-gnu"
+	# Building this glibc fails miserably with make-4.4, but works with make-4.3.
+	MAKE_VSN=4.3
+	# Warning: Do not use the ast-v5 branches since v5 is RISC-V not nds32.
+	GLIBC_VSN="git;https://github.com/andestech/glibc.git;-;nds32-glibc-2.29-v6;HEAD;andestech"
+	GLIBC_WANTS_DISABLE_WERROR=1
+	GCC_VSN=12.4.0 # gcc-13.x triggers a linkage error in glibc
+	LINUX_VSN=5.17 # nds32 was removed in linux-5.18
+	;;
+    "nios2")
+	GCC_WANTS_ENABLE_OBSOLETE=1 # gcc-14 marks nios2 as obsolete
+	GLIBC_VSN=2.40 # nios2 was removed in glibc-2.41
+	BINUTILS_VSN=2.43.1 # nios2 was removed in binutils-2.44
+	;;
+    "ns32k")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-netbsd"
+	GCC_VSN=4.0.4
+	GCC_WANTS_ENABLE_OBSOLETE=1 # obsoleted in 4.0, removed in 4.1
+	GCC_WANTS_GENERATED_FILES=4.0.4
+	BINUTILS_WANTS_ENABLE_OBSOLETE=1 # marked obsolete in 2.38
+	BINUTILS_VSN=2.38 # removed in 2.39
+	# you need to:
+	# - adjust PATH to select gcc in range [4.3, 4.9]
+	#   binutils-2.38 requires gcc-4.3 or newer, otherwise 3.3.6 or 3.4.6 would work
+	#   gcc-4.0.4 requires gcc-4.9 or older
+	# - set BUILD_TRIPLE
+	#   on x86_64-linux use x86_64-unknown-linux-gnu NOT x86_64-pc-linux-gnu
+	#   as that would cause the gcc-4.0.4 build to enter canadian cross mode
+	SKIP_HOST_GCC=1 # PATH must point to a suitable old gcc
+	# we can't build libc, but netbsd-1.5.3's can be popped in
+	;;
+    "nvptx")
+	TARGET_TRIPLE="${TARGET_ARCH}-none"
+	;;
+    "pdp11")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-aout"
+	NEWLIB_VSN= # not supported in newlib at all
+	;;
+    "pj")
+	TARGET_TRIPLE="pjl-unknown-elf"
+	# upstream, plus a major pj update that was posted to the mailing list but
+	# never applied, plus a few fixups
+	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils-2_10_1-pj;HEAD;mikpe"
+	# upstream plus a few fixups
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-3.1.1-pj;HEAD;mikpe"
+	GCC_WANTS_ENABLE_OBSOLETE=1 # obsoleted in gcc-3.1, removed in gcc-3.2
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	# The original gcc pj patch submission mentioned linux, glibc, and newlib
+	# support, but I can't find any trace of those.
+	NEWLIB_VSN=
+	# you need to:
+	# - set PATH to select gcc-3.x (3.3.6 and 3.4.6 are known to work)
+	# - set BUILD_TRIPLE because gcc-3.x -v doesn't list Target:
+	# - if on x86_64:
+	#   + you must have support for building and running 32-bit executables
+	#   + set CC to a wrapper script that enforces -m32
+	#   + set BUILD_TRIPLE=i686-pc-linux-gnu
+	#   + use setarch i686
+	SKIP_HOST_GCC=1
+	;;
+    "pru")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "rl78")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "rx")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	;;
+    "score")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	GCC_VSN=4.9.4 # removed in gcc-5.0
+	GCC_WANTS_ENABLE_OBSOLETE=1
+	NEWLIB_VSN= # doesn't support score
+	SKIP_HOST_GCC=1 # PATH must point to a suitable old gcc <= 10.5
+	# https://sourceware.org/bugzilla/show_bug.cgi?id=32700
+	BINUTILS_VSN=2.43.1 # score fails to build with binutils-2.44
+	;;
+    "tilegx")
+	BINUTILS_VSN=2.28.1 # later versions cannot build glibc
+	GCC_VSN=7.5.0 # later versions cannot build glibc
+	GLIBC_VSN=2.25 # later versions do not build
+	LINUX_VSN=4.16 # tile was removed in linux-4.17
+	;;
+    "tms9900")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils-2_19_1-tms9900;HEAD;mikpe"
+	BINUTILS_WANTS_DISABLE_WERROR=1
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-4.4.0-tms9900;HEAD;mikpe"
+	NEWLIB_VSN= # newlib doesn't support tms9900, but insomnia and tursi have published custom ti99 libcs
+	SKIP_HOST_GCC=1 # PATH must point to gcc-9 or older
+	# TODO: extend sim990 to run tms9900 ELF executables
+	;;
+    "tricore")
+	# based on gcc-9.4.0, binutils-2.20, and newlib-1.18
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	BINUTILS_VSN="git;https://github.com/volumit/package_940.git;binutils;main;HEAD;volumit"
+	BINUTILS_WANTS_DISABLE_WERROR=1
+	GCC_VSN="git;https://github.com/volumit/package_940.git;gcc;main;HEAD;volumit"
+	NEWLIB_VSN="git;https://github.com/volumit/package_940.git;newlib;main;HEAD;volumit"
+	HOST_GCC_VSN=9.5.0
+	;;
+    "ubicom32")
+	TARGET_TRIPLE="${TARGET_ARCH}-linux-uclibc"
+	BINUTILS_VSN="git;https://git.codelinaro.org/clo/external-ubicom/ubicom32-toolchain.git;src;caf_migration/IP8K;236bff6653554ce3360dd94cc5291f54c8a550d0"
+	BINUTILS_WANTS_DISABLE_WERROR=1
+	GCC_VSN="git;https://git.codelinaro.org/clo/external-ubicom/ubicom32-toolchain.git;src/gcc;caf_migration/IP8K;236bff6653554ce3360dd94cc5291f54c8a550d0"
+	LINUX_VSN="git;https://git.codelinaro.org/clo/external-ubicom/ubicom32-android.git;-;-;f67b0c971d4aee1825c6288c65f213c298db6062"
+	UCLIBC_VSN="git;https://git.codelinaro.org/clo/external-ubicom/ubicom32-uclibc.git;-;-;e043cec698ee5fa4057eb68b50c3e1f993586a46"
+	UCLIBC_WANTS_OLDCONFIG=1
+	SKIP_HOST_GCC=1 # ubicom32-gcc is based on gcc-4.4.1, you'll need something compatible in PATH
+	;;
+    "v850")
+	TARGET_TRIPLE="${TARGET_ARCH}e-uclinux-uclibc"
+	LINUX_VSN=2.6.26 # v850 was removed in linux-2.6.27
+	# v850 was removed in uClibc-ng-1.0.11, this is an unofficial forward-port from 1.0.10
+	UCLIBC_VSN="git;https://github.com/mikpe/uclibc-ng.git;-;v1.0.51-v850;HEAD;mikpe"
+	;;
+    "vax")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux"
+	NEWLIB_VSN= # not in any supported libc
+	;;
+    "visium")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-visium;HEAD;mikpe"
+	;;
+    "x86_64-mingw64")
+	TARGET_ARCH="x86_64"
+	TARGET_TRIPLE="x86_64-w64-mingw32"
+	;;
+    "x86_64-musl")
+	TARGET_ARCH="x86_64"
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-musl"
+	;;
+    "x86_64-uclibc")
+	TARGET_ARCH="x86_64"
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	UCLIBC_WANTS_NPTL=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	;;
+    "xc16x")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	BINUTILS_VSN=2.35.2 # xc16x was removed in binutils-2.36
+	BINUTILS_WANTS_ENABLE_OBSOLETE=1
+	NEWLIB_VSN=2.2.0.20150824 # later ones cannot be built by the 4.2-based xc16x-gcc
+	NEWLIB_WANTS_DISABLE_MULTILIB=1 # xc16xl triggers gas errors
+	# GCC port salvaged from https://gcc.gnu.org/pipermail/gcc-patches/2006-July/197934.html
+	GCC_VSN="git;https://github.com/mikpe/gcc.git;-;gcc-4.2.4-xc16x;HEAD;mikpe"
+	# set PATH to select gcc-4.x (4.0.4 to 4.9.4 are known to work)
+	SKIP_HOST_GCC=1
+	;;
+    "xstormy16")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-xstormy16;HEAD;mikpe"
+	;;
+    "xtensa")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-uclibc"
+	UCLIBC_WANTS_NPTL=y
+	UCLIBC_WANTS_SSP=y
+	UCLIBC_WANTS_RESOLVER_SUPPORT=y
+	;;
+    "z8k")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-coff"
+	GCC_VSN="git;https://github.com/mikpe/ecosSWtools.git;src;main;HEAD;mikpe"
+	GCC_WANTS_HOST_NOT_BUILD=1
+	# the above repo doesn't like make -jN
+	DASHJ=
+	# the above repo is set up for an all-in-one build
+	NEWLIB_VSN=
+	# set PATH to select gcc-2.95.3
+	# if on x86_64:
+	# - you must have support for building and running 32-bit executables
+	# - set BUILD_TRIPLE=i686-pc-linux-gnu
+	# - run this with setarch i686
+	SKIP_HOST_GCC=1
+	;;
+    "zpu")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	# zpu-binutils is based on binutils-2.15
+	BINUTILS_VSN="git;https://github.com/zylin/zpugcc.git;toolchain/binutils;master;HEAD;-"
+	# zpu-gcc is based on gcc-3.4.2
+	GCC_VSN="git;https://github.com/zylin/zpugcc.git;toolchain/gcc;master;HEAD;-"
+	GCC_WANTS_NO_ENABLE_CHECKING=1
+	NEWLIB_VSN= # included in zpu-gcc
+	# set PATH to select gcc-4.x (4.0.4 and 4.9.4 are known to work)
+	SKIP_HOST_GCC=1
+	;;
+esac
+
+if [ -z "${TARGET_TRIPLE}" ]; then
+    TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-gnu"
+fi
+
+# Host GCC version is normally the same as the cross GCC version,
+# except when building the cross GCC from non-upstream git.
+if [ -z "${HOST_GCC_VSN}" -a -z "${SKIP_HOST_GCC}" ]; then
+    HOST_GCC_VSN="${GCC_VSN}"
+fi
+
+# disable the components we don't want
+case "${TARGET_TRIPLE}" in
+    *linux-gnu*)
+	MINGW64_VSN=
+	MUSL_VSN=
+	NEWLIB_VSN=
+	NVPTXTOOLS_VSN=
+	UCLIBC_VSN=
+	# c.f. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100896
+	GCC_WANTS_ENABLE_INITFINI_ARRAY=1
+	;;
+    *linux-uclibc* | *uclinux* | i960-unknown-elf)
+	GLIBC_VSN=
+	MINGW64_VSN=
+	MUSL_VSN=
+	NEWLIB_VSN=
+	NVPTXTOOLS_VSN=
+	;;
+    *linux-musl*)
+	GLIBC_VSN=
+	LINUX_VSN=
+	MINGW64_VSN=
+	NEWLIB_VSN=
+	NVPTXTOOLS_VSN=
+	UCLIBC_VSN=
+	;;
+    x86_64-w64-mingw32 | aarch64-w64-mingw32)
+	GLIBC_VSN=
+	LINUX_VSN=
+	MUSL_VSN=
+	NEWLIB_VSN=
+	NVPTXTOOLS_VSN=
+	UCLIBC_VSN=
+	;;
+    nvptx-none)
+	BINUTILS_VSN=
+	GLIBC_VSN=
+	LINUX_VSN=
+	MINGW64_VSN=
+	MUSL_VSN=
+	UCLIBC_VSN=
+	;;
+    *-elf | \
+    *-coff | \
+    bpf-unknown-none | \
+    i860-stardent-sysv4 | \
+    m88k-unknown-openbsd | \
+    mmix-knuth-mmixware | \
+    m6809-unknown-none | \
+    ns32k-unknown-netbsd | \
+    pdp11-unknown-aout | \
+    vax-unknown-linux)
+	GLIBC_VSN=
+	LINUX_VSN=
+	MINGW64_VSN=
+	MUSL_VSN=
+	NVPTXTOOLS_VSN=
+	UCLIBC_VSN=
+	;;
+esac
+
+# Map from release tag VSNs to git reference VSNs.
+
+gitify_vsn() {
+    local VSN="$1"
+    local UPSTREAM="$2"
+    local VSNTOREF="$3"
+    local REF
+    case "${VSN}" in
+	git\;*)
+	    echo "${VSN}"
+	    ;;
+	*)
+	    # VSN is a tag, VSNTOREF is the name of a function to convert VSN to a REF in UPSTREAM
+	    REF=`${VSNTOREF} "${VSN}"`
+	    # UPSTREAM should be git;REPO;SUBDIR;BRANCH;-;VENDOR
+	    set `echo "${UPSTREAM}" | tr ';' ' '`
+	    shift
+	    echo "git;$1;$2;$3;${REF};$5"
+	    ;;
+    esac
+}
+
+gitify_vsn_binutils() {
+    gitify_vsn "$1" "git;https://github.com/mikpe/binutils-gdb.git;-;master;-;mikpe" vsntoref_binutils
+}
+
+vsntoref_binutils() {
+    case "$1" in
+	"2.28.1")
+	    # This is the sha matching the 2.28.1 tarball. It has no tag.
+	    echo "71729203ae7b857b6468524e56a593254413eddc"
+	    ;;
+	"2.41")
+	    # The initial 2.41 release tag was wrong, this is the corrected one.
+	    echo "binutils-2_41-release"
+	    ;;
+	*)
+	    echo "binutils-`echo "$1" | tr '.' '_'`"
+	    ;;
+    esac
+}
+
+gitify_vsn_gcc() {
+    gitify_vsn "$1" "git;https://github.com/gcc-mirror/gcc.git;-;master;-;gcc-mirror" vsntoref_gcc
+}
+
+vsntoref_gcc() {
+    echo "releases/gcc-$1"
+}
+
+gitify_vsn_glibc() {
+    gitify_vsn "$1" "git;https://github.com/mikpe/glibc.git;-;master;-;mikpe" vsntoref_glibc
+}
+
+vsntoref_glibc() {
+    echo "glibc-$1"
+}
+
+gitify_vsn_linux() {
+    gitify_vsn "$1" "git;https://github.com/torvalds/linux.git;-;master;-;torvalds" vsntoref_linux
+}
+
+vsntoref_linux() {
+    echo "v$1"
+}
+
+gitify_vsn_mingw64() {
+    # Upstream is https://git.code.sf.net/p/mingw-w64/mingw-w64.git but this mirror is faster.
+    gitify_vsn "$1" "git;https://github.com/mingw-w64/mingw-w64.git;-;master;-;" vsntoref_mingw64
+}
+
+vsntoref_mingw64() {
+    echo "v$1"
+}
+
+gitify_vsn_musl() {
+    gitify_vsn "$1" "git;https://github.com/bminor/musl.git;-;master;-;bminor" vsntoref_musl
+}
+
+vsntoref_musl() {
+    echo "v$1"
+}
+
+gitify_vsn_newlib() {
+    gitify_vsn "$1" "git;https://github.com/bminor/newlib.git;-;master;-;bminor" vsntoref_newlib
+}
+
+vsntoref_newlib() {
+    # newlib tarball names and git tags have an inconsistent relationship
+    case "$1" in
+	"4.5.0.20241231")
+	    echo "newlib-4.5.0"
+	    ;;
+	"4.4.0.20231231")
+	    echo "newlib-4.4.0"
+	    ;;
+	"4.3.0.20230120")
+	    echo "newlib-4.3.0"
+	    ;;
+	"4.2.0.20211231")
+	    echo "newlib-snapshot-20211231"
+	    ;;
+	"2.2.0.20150824")
+	    echo "newlib-snapshot-20150824"
+	    ;;
+	"2.2.0-1")
+	    # This is the sha matching the 2.2.0-1 tarball. It has no tag.
+	    echo "70e52cba1b27fe65dc743b44bb73dc1a5c718bbe"
+	    ;;
+	*)
+	    echo "unsupported newlib vsn $1"
+	    exit 1
+	    ;;
+    esac
+}
+
+gitify_vsn_uclibc() {
+    # The developer has a mirror on GH, but it's broken (missing tags).
+    gitify_vsn "$1" "git;https://git.uclibc-ng.org/git/uclibc-ng.git;-;master;-;" vsntoref_uclibc
+}
+
+vsntoref_uclibc() {
+    echo "v$1"
+}
+
+log() {
+    echo
+    echo "@ $1"
+    echo
+}
+
+get_tarball() {
+    local URL="$1"
+    local FILE="$2"
+    local EXT=${3:-"xz"}
+    if [ ! \( -f "${FILE}.tar.xz" -o -f "${FILE}.tar.bz2" -o -f "${FILE}.tar.gz" \) ]; then
+	wget "${URL}/${FILE}.tar.${EXT}" || :
+	if [ ! -f "${FILE}.tar.${EXT}" ]; then
+	    exit 1
+	fi
+    fi
+}
+
+get_git() {
+    local REPO="$1"
+    # $2 is SUBDIR which is unused here
+    local BRANCH="$3"
+    local REF="$4"
+    local VENDOR="$5"
+    local DIR
+    if [ "${BRANCH}" = "-" ]; then
+	BRANCH=""
+    fi
+    if [ "${VENDOR}" = "-" ]; then
+	VENDOR=""
+    fi
+    if [ -n "${VENDOR}" ]; then
+	VENDOR="${VENDOR}-"
+    fi
+    DIR="${VENDOR}`basename ${REPO}`"
+    if [ -d "${DIR}" ]; then
+	cd "${DIR}"
+	git clean -ffdx
+	git fetch
+	if [ -n "${BRANCH}" ]; then
+	    git checkout "${BRANCH}"
+	fi
+	cd -
+    else
+	if [ -n "${BRANCH}" ]; then
+	    BRANCH="-b ${BRANCH}"
+	fi
+	git clone ${BRANCH} "${REPO}" "${DIR}"
+    fi
+    cd "${DIR}"
+    git reset --hard "${REF}"
+    cd -
+}
+
+get_source() {
+    local VSN="$1"
+    case "${VSN}" in
+	git\;*)
+	    # git;REPO;SUBDIR;BRANCH;REF;VENDOR
+	    set `echo "${VSN}" | tr ';' ' '`
+	    shift
+	    get_git "$1" "$2" "$3" "$4" "$5"
+	    ;;
+	*)
+	    echo "invalid vsn: ${VSN}"
+	    exit 1
+	    ;;
+    esac
+}
+
+get_source_binutils() {
+    local GIT=`gitify_vsn_binutils "$1"`
+    get_source "${GIT}"
+}
+
+get_source_gcc() {
+    local GIT=`gitify_vsn_gcc "$1"`
+    get_source "${GIT}"
+}
+
+get_source_glibc() {
+    local GIT=`gitify_vsn_glibc "$1"`
+    get_source "${GIT}"
+}
+
+get_source_linux() {
+    local GIT=`gitify_vsn_linux "$1"`
+    get_source "${GIT}"
+}
+
+get_source_mingw64() {
+    local GIT=`gitify_vsn_mingw64 "$1"`
+    get_source "${GIT}"
+}
+
+get_source_musl() {
+    local GIT=`gitify_vsn_musl "$1"`
+    get_source "${GIT}"
+}
+
+get_source_newlib() {
+    local GIT=`gitify_vsn_newlib "$1"`
+    get_source "${GIT}"
+}
+
+get_source_uclibc() {
+    local GIT=`gitify_vsn_uclibc "$1"`
+    get_source "${GIT}"
+}
+
+get_sources() {
+    log "getting sources"
+    cd "${DOWNLOADS_DIR}"
+    [ -n "${BINUTILS_VSN}" ] && get_source_binutils "${BINUTILS_VSN}"
+    get_source_gcc "${GCC_VSN}"
+    [ -n "${GCC_WANTS_GENERATED_FILES}" ] && get_source "${GCC_GENERATED_FILES_VSN}"
+    [ -n "${HOST_GCC_VSN}" ] && get_source_gcc "${HOST_GCC_VSN}"
+    [ -n "${GLIBC_VSN}" ] && get_source_glibc "${GLIBC_VSN}"
+    [ -n "${UCLIBC_VSN}" ] && get_source_uclibc "${UCLIBC_VSN}"
+    [ -n "${MUSL_VSN}" ] && get_source_musl "${MUSL_VSN}"
+    [ -n "${MINGW64_VSN}" ] && get_source_mingw64 "${MINGW64_VSN}"
+    [ -n "${NEWLIB_VSN}" ] && get_source_newlib "${NEWLIB_VSN}"
+    [ -n "${NVPTXTOOLS_VSN}" ] && get_source "${NVPTXTOOLS_VSN}"
+    [ -n "${CC65_VSN}" ] && get_source "${CC65_VSN}"
+    [ -n "${GCC_6502_BITS_VSN}" ] && get_source "${GCC_6502_BITS_VSN}"
+    [ -n "${MAKE_VSN}" ] && get_tarball "${MAKE_URL}" "make-${MAKE_VSN}" "gz"
+    get_tarball "${GMP_URL}" "gmp-${GMP_VSN}"
+    [ -n "${LINUX_VSN}" ] && get_source_linux "${LINUX_VSN}"
+    get_tarball "${MPFR_URL}" "mpfr-${MPFR_VSN}"
+    get_tarball "${MPC_URL}" "mpc-${MPC_VSN}" "gz"
+    cd -
+}
+
+unpack_tarball() {
+    if [ ! -d "${SOURCES_DIR}/$1" ]; then
+	if [ -f "${DOWNLOADS_DIR}/$1.tar.xz" ]; then
+	    tar -C "${SOURCES_DIR}" -xf "${DOWNLOADS_DIR}/$1.tar.xz"
+	elif [ -f "${DOWNLOADS_DIR}/$1.tar.bz2" ]; then
+	    tar -C "${SOURCES_DIR}" -xf "${DOWNLOADS_DIR}/$1.tar.bz2"
+	else
+	    tar -C "${SOURCES_DIR}" -xf "${DOWNLOADS_DIR}/$1.tar.gz"
+	fi
+    fi
+}
+
+unpack_source() {
+    local VSN="$1"
+    local REPO
+    local SUBDIR
+    local VENDOR
+    case "${VSN}" in
+	git\;*)
+	    # git;REPO;SUBDIR;BRANCH;REF;VENDOR
+	    set `echo "${VSN}" | tr ';' ' '`
+	    shift
+	    REPO="$1"
+	    SUBDIR="$2"
+	    # $3 is BRANCH which is unused here
+	    # $4 is REF which is unused here
+	    VENDOR="$5"
+	    if [ "${SUBDIR}" = "-" ]; then
+		SUBDIR=""
+	    fi
+	    if [ -n "${SUBDIR}" ]; then
+		SUBDIR="/${SUBDIR}"
+	    fi
+	    if [ "${VENDOR}" = "-" ]; then
+		VENDOR=""
+	    fi
+	    if [ -n "${VENDOR}" ]; then
+		VENDOR="${VENDOR}-"
+	    fi
+	    echo "${DOWNLOADS_DIR}/${VENDOR}`basename ${REPO}`${SUBDIR}"
+	    ;;
+	*)
+	    echo "invalid vsn: ${VSN}"
+	    exit 1
+	    ;;
+    esac
+}
+
+build_host_make() {
+    if [ -x "${HOST_TOOLS_DIR}/make-${MAKE_VSN}/bin/make" ]; then
+	return
+    fi
+    log "building host make-${MAKE_VSN}"
+    unpack_tarball "make-${MAKE_VSN}"
+    rm -rf objdir-make
+    mkdir objdir-make
+    cd objdir-make
+    ${SOURCES_DIR}/make-${MAKE_VSN}/configure \
+		--prefix="${HOST_TOOLS_DIR}/make-${MAKE_VSN}"
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-make
+}
+
+build_host_gmp() {
+    local SUFFIX="$1"
+    if [ -d "${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}" -o -d "${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}" ]; then
+	return
+    fi
+    if [ -n "${SUFFIX}" -a -d "${HOST_TOOLS_DIR}/gmp-${GMP_VSN}" ]; then
+	ln -s "gmp-${GMP_VSN}" "${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}"
+	return
+    fi
+    log "building host gmp-${GMP_VSN}${SUFFIX}"
+    unpack_tarball "gmp-${GMP_VSN}"
+    rm -rf objdir-gmp
+    mkdir objdir-gmp
+    cd objdir-gmp
+    unset ABI
+    ${SOURCES_DIR}/gmp-${GMP_VSN}/configure \
+		--prefix="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}" \
+		--disable-shared \
+		--enable-alloca=alloca \
+		ABI=64
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-gmp
+}
+
+build_host_mpfr() {
+    local SUFFIX="$1"
+    if [ -d "${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}${SUFFIX}" -o -d "${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}" ]; then
+	return
+    fi
+    if [ -n "${SUFFIX}" -a -d "${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}" ]; then
+	ln -s "mpfr-${MPFR_VSN}" "${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}${SUFFIX}"
+	return
+    fi
+    log "building host mpfr-${MPFR_VSN}${SUFFIX}"
+    unpack_tarball "mpfr-${MPFR_VSN}"
+    rm -rf objdir-mpfr
+    mkdir objdir-mpfr
+    cd objdir-mpfr
+    ${SOURCES_DIR}/mpfr-${MPFR_VSN}/configure \
+		--prefix="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}${SUFFIX}" \
+		--with-gmp="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}" \
+		--disable-shared
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-mpfr
+}
+
+build_host_mpc() {
+    local SUFFIX="$1"
+    if [ -d "${HOST_TOOLS_DIR}/mpc-${MPC_VSN}${SUFFIX}" -o -d "${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}" ]; then
+	return
+    fi
+    if [ -n "${SUFFIX}" -a -d "${HOST_TOOLS_DIR}/mpc-${MPC_VSN}" ]; then
+	ln -s "mpc-${MPC_VSN}" "${HOST_TOOLS_DIR}/mpc-${MPC_VSN}${SUFFIX}"
+	return
+    fi
+    log "building host mpc-${MPC_VSN}${SUFFIX}"
+    unpack_tarball "mpc-${MPC_VSN}"
+    rm -rf objdir-mpc
+    mkdir objdir-mpc
+    cd objdir-mpc
+    ${SOURCES_DIR}/mpc-${MPC_VSN}/configure \
+		--prefix="${HOST_TOOLS_DIR}/mpc-${MPC_VSN}${SUFFIX}" \
+		--with-gmp="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}" \
+		--with-mpfr="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}${SUFFIX}" \
+		--disable-shared
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-mpc
+}
+
+build_host_gcc() {
+    local SUFFIX="$1"
+    local MAKE_TARGET
+    local DISABLE_BOOTSTRAP
+    local GIT
+    local SOURCE_PATH
+    if [ -d "${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}${SUFFIX}" -o -d "${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}" ]; then
+	return
+    fi
+    log "building host gcc-${HOST_GCC_VSN}${SUFFIX}"
+    if [ -z "${SUFFIX}" ]; then
+	DISABLE_BOOTSTRAP=
+	MAKE_TARGET=bootstrap-lean
+    else
+	DISABLE_BOOTSTRAP="--disable-bootstrap"
+	MAKE_TARGET=
+    fi
+    GIT=`gitify_vsn_gcc "${HOST_GCC_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    rm -rf objdir-gcc
+    mkdir objdir-gcc
+    cd objdir-gcc
+    ${SOURCE_PATH}/configure \
+		--prefix="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}${SUFFIX}" \
+		--with-gmp="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}${SUFFIX}" \
+		--with-mpfr="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}${SUFFIX}" \
+		--with-mpc="${HOST_TOOLS_DIR}/mpc-${MPC_VSN}${SUFFIX}" \
+		--without-cloog \
+		--without-isl \
+		--disable-libgomp \
+		--disable-libmpx \
+		--disable-libmudflap \
+		--disable-libquadmath \
+		--disable-libsanitizer \
+		--disable-lto \
+		--disable-multilib \
+		--disable-nls \
+		--disable-plugin \
+		--disable-shared \
+		--enable-checking=release \
+		--enable-languages=c,c++ \
+		--enable-threads=posix \
+		${DISABLE_BOOTSTRAP}
+    make ${DASHJ} MAKEINFO=/bin/true ${MAKE_TARGET}
+    make MAKEINFO=/bin/true install
+    cd ..
+    rm -rf objdir-gcc
+}
+
+build_cross_gcc() {
+    local STAGE="$1"
+    local LIBC_CONFIGS
+    local LIBSSP_CONFIG
+    local MULTILIB_CONFIG
+    local MAKE_TARGET
+    local INSTALL_TARGET
+    local ENABLE_CHECKING
+    local ENABLE_OBSOLETE
+    local ENABLE_INITFINI_ARRAY
+    local BUILD_OR_HOST
+    local GIT
+    local SOURCE_PATH
+    local LANGUAGES
+    local SYSROOT="${CROSS_DIR}"
+    if [ -f "${CROSS_DIR}/.stage-gcc-${STAGE}" ]; then
+	return
+    fi
+    log "building cross-gcc ${GCC_VSN} ${STAGE}"
+    GIT=`gitify_vsn_gcc "${GCC_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    LIBC_CONFIGS="--enable-threads=posix"
+    LIBSSP_CONFIG="--enable-libssp"
+    MULTILIB_CONFIG="--enable-multilib"
+    ENABLE_OBSOLETE=
+    ENABLE_CHECKING="--enable-checking=release"
+    if [ -n "${GCC_WANTS_NO_ENABLE_CHECKING}" ]; then
+	ENABLE_CHECKING= # gcc < 4.0 from git
+    fi
+    ENABLE_OBSOLETE=
+    if [ -n "${GCC_WANTS_ENABLE_OBSOLETE}" ]; then
+	ENABLE_OBSOLETE="--enable-obsolete"
+    fi
+    ENABLE_INITFINI_ARRAY=
+    if [ -n "${GCC_WANTS_ENABLE_INITFINI_ARRAY}" ]; then
+	ENABLE_INITFINI_ARRAY="--enable-initfini-array"
+    fi
+    # when building older gcc versions from git we want to add generated files from
+    # the corresponding release tarballs, as regenerating them can be problematic
+    if [ -n "${GCC_WANTS_GENERATED_FILES}" ]; then
+	local GENERATED_FILES_PATH=`unpack_source "${GCC_GENERATED_FILES_VSN}"`
+	for f in c-parse.y c-parse.c tradcif.c ; do
+	    if [ -f "${GENERATED_FILES_PATH}/${GCC_WANTS_GENERATED_FILES}/gcc/$f" ]; then
+		cp "${GENERATED_FILES_PATH}/${GCC_WANTS_GENERATED_FILES}/gcc/$f" "${SOURCE_PATH}/gcc/$f"
+	    fi
+	done
+    fi
+    # ensure generated files are newer than their sources
+    for f in c-parse.y c-parse.c tradcif.c c-gperf.h ; do
+	if [ -f "${SOURCE_PATH}/gcc/$f" ]; then
+	    touch "${SOURCE_PATH}/gcc/$f"
+	fi
+    done
+    case "${TARGET_ARCH}" in
+	"6502")
+	    # 6502 libtinyc wants to install libc in this subdir
+	    SYSROOT="${CROSS_DIR}/6502"
+	    MULTILIB_CONFIG="${MULTILIB_CONFIG} --with-build-sysroot=${CROSS_DIR}/6502"
+	    # we have to hard-code the paths to as and ld
+	    MULTILIB_CONFIG="${MULTILIB_CONFIG} --with-as=${CROSS_DIR}/cc65/bin/ca65 --with-ld=${CROSS_DIR}/cc65/bin/ld65"
+	    # can't build these
+	    LIBC_CONFIGS="--disable-threads"
+	    LIBSSP_CONFIG="--disable-libssp"
+	    ;;
+	"aarch64")
+	    LIBSSP_CONFIG="--disable-libssp"
+	    MULTILIB_CONFIG="--disable-multilib"
+	    case "${TARGET_TRIPLE}" in
+		"aarch64-w64-mingw32")
+		    LIBC_CONFIGS="--enable-threads=win32"
+		    # fixincludes breakage
+		    if [ ! -d "${CROSS_DIR}/usr/." ]; then
+			ln -s mingw "${CROSS_DIR}/usr"
+		    fi
+		    ;;
+	    esac
+	    ;;
+	"arc")
+	    MULTILIB_CONFIG="--disable-multilib --with-cpu=hs38"
+	    ;;
+	"armv7l")
+	    MULTILIB_CONFIG="--disable-multilib --with-arch=armv7-a --with-tune=cortex-a9 --with-float=hard --with-fpu=vfpv3-d16"
+	    ;;
+	"avr32")
+	    # required fixes, do them in place to avoid needing a private fork of the repo
+	    # avr32-linux* incorrectly adds crti.o and crtn.o to EXTRA_MULTILIB_PARTS (c.f. avr32-uclinux)
+	    sed -i -e 's,tmake_file="t-linux avr32/t-avr32 avr32/t-elf",tmake_file="t-linux avr32/t-avr32-linux",g' "${SOURCE_PATH}/gcc/config.gcc"
+	    # avr32-linux-uclibc fails to remove crtbeginT.o from EXTRA_MULTILIB_PARTS (c.f. bfin-linux-uclibc)
+	    sed -i -e 's,^avr32-\*-\*),avr32-*-linux-uclibc*)\n\textra_parts="crtbegin.o crtbeginS.o crtend.o crtendS.o"\n\t;;\navr32-*-*),g' "${SOURCE_PATH}/libgcc/config.host"
+	    ;;
+	"csky")
+	    MULTILIB_CONFIG="--disable-multilib --with-endian=little"
+	    ;;
+	"d30v")
+	    # fixincludes requires /usr/include/ to exist, even if empty
+	    mkdir -p "${CROSS_DIR}/usr/include"
+	    ;;
+	"frv")
+	    LIBSSP_CONFIG="--disable-libssp"
+	    ;;
+	"hexagon")
+	    LIBSSP_CONFIG="--disable-libssp"
+	    ;;
+	"i960")
+	    # fixincludes requires /usr/include/ to exist, even if empty
+	    mkdir -p "${CROSS_DIR}/usr/include"
+	    ;;
+	"ia64")
+	    MULTILIB_CONFIG="--disable-multilib --with-system-libunwind=yes"
+	    ;;
+	"ip2k")
+	    # fixincludes requires /usr/include/ to exist, even if empty
+	    mkdir -p "${CROSS_DIR}/usr/include"
+	    ;;
+	"loongarch64")
+	    MULTILIB_CONFIG="--disable-multilib"
+	    ;;
+	"m1750")
+	    # gcc build requires libc and libm include files
+	    tar -C "${SOURCE_PATH}/../libc" -cf - include | tar -C "${CROSS_DIR}/${TARGET_TRIPLE}" -xv
+	    tar -C "${SOURCE_PATH}/../libm" -cf - include | tar -C "${CROSS_DIR}/${TARGET_TRIPLE}" -xv
+	    ;;
+	"m32c")
+	    MULTILIB_CONFIG="--disable-multilib"
+	    ;;
+	"m6809")
+	    MULTILIB_CONFIG="--enable-sjlj-exceptions"
+	    # the --with-as= and --with-ld= are critical, otherwise m6809-gcc will
+	    # use the _host_ assembler when building newlib, causing the build to fail
+	    MULTILIB_CONFIG="${MULTILIB_CONFIG} --with-as=${CROSS_DIR}/bin/${TARGET_TRIPLE}-as"
+	    MULTILIB_CONFIG="${MULTILIB_CONFIG} --with-ld=${CROSS_DIR}/bin/${TARGET_TRIPLE}-ld"
+	    ;;
+	"m88k")
+	    ENABLE_CHECKING=
+	    mkdir -p "${CROSS_DIR}/usr/include/sys"
+	    touch "${CROSS_DIR}/usr/include/sys/mman.h"
+	    echo "typedef unsigned long size_t;" > "${CROSS_DIR}/usr/include/sys/types.h"
+	    echo "#define FLT_MANT_DIG 24"  > "${CROSS_DIR}/usr/include/float.h"
+	    echo "#define DBL_MANT_DIG 53" >> "${CROSS_DIR}/usr/include/float.h"
+	    echo "extern void abort(void);" > "${CROSS_DIR}/usr/include/stddef.h"
+	    ;;
+	"maxq")
+	    # fixincludes requires /usr/include/ to exist, even if empty
+	    mkdir -p "${CROSS_DIR}/usr/include"
+	    # the compiler ICEs when building the mq10 multilib
+	    MULTILIB_CONFIG="--disable-multilib"
+	    ;;
+	"mep")
+	    mkdir -p "${CROSS_DIR}/usr/include/sys"
+	    touch "${CROSS_DIR}/usr/include/sys/types.h"
+	    touch "${CROSS_DIR}/usr/include/stdio.h"
+	    touch "${CROSS_DIR}/usr/include/errno.h"
+	    touch "${CROSS_DIR}/usr/include/string.h"
+	    touch "${CROSS_DIR}/usr/include/stdlib.h"
+	    touch "${CROSS_DIR}/usr/include/unistd.h"
+	    touch "${CROSS_DIR}/usr/include/time.h"
+	    ;;
+	"metag")
+	    MULTILIB_CONFIG="--disable-multilib --enable-meta-default"
+	    ;;
+	"nds32")
+	    MULTILIB_CONFIG="--disable-multilib --with-arch=v3 --with-cpu=n13"
+	    ;;
+	"ns32k")
+	    # fixincludes requires /usr/include/ to exist, even if empty
+	    # libgcc requires /usr/include/machine/ansi.h to exist, even if empty
+	    mkdir -p "${CROSS_DIR}/usr/include/machine"
+	    touch "${CROSS_DIR}/usr/include/machine/ansi.h"
+	    ;;
+	"ppc64le")
+	    # see https://sourceware.org/bugzilla/show_bug.cgi?id=26360#c4
+	    ENABLE_OBSOLETE="--with-long-double-128"
+	    LIBSSP_CONFIG="--disable-libssp"
+	    ;;
+	"riscv64")
+	    # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90419#c1
+	    MULTILIB_CONFIG="--enable-multilib --with-multilib-list=lp64d"
+	    ;;
+	"tilegx")
+	    MULTILIB_CONFIG="--disable-multilib"
+	    ;;
+	"tricore")
+	    # the git repo lost all executable flags
+	    chmod +x	"${SOURCE_PATH}/compile" \
+			"${SOURCE_PATH}/config.guess" \
+			"${SOURCE_PATH}/config.rpath" \
+			"${SOURCE_PATH}/config.sub" \
+			"${SOURCE_PATH}/configure" \
+			"${SOURCE_PATH}/depcomp" \
+			"${SOURCE_PATH}/fixincludes/configure" \
+			"${SOURCE_PATH}/fixincludes/genfixes" \
+			"${SOURCE_PATH}/fixincludes/mkfixinc.sh" \
+			"${SOURCE_PATH}/gcc/configure" \
+			"${SOURCE_PATH}/install-sh" \
+			"${SOURCE_PATH}/intl/configure" \
+			"${SOURCE_PATH}/libatomic/configure" \
+			"${SOURCE_PATH}/libbacktrace/configure" \
+			"${SOURCE_PATH}/libcpp/configure" \
+			"${SOURCE_PATH}/libdecnumber/configure" \
+			"${SOURCE_PATH}/libgcc/mkheader.sh" \
+			"${SOURCE_PATH}/libiberty/configure" \
+			"${SOURCE_PATH}/libquadmath/configure" \
+			"${SOURCE_PATH}/libtool-ldflags" \
+			"${SOURCE_PATH}/missing" \
+			"${SOURCE_PATH}/mkdep" \
+			"${SOURCE_PATH}/mkinstalldirs" \
+			"${SOURCE_PATH}/move-if-change" \
+			"${SOURCE_PATH}/symlink-tree" \
+			"${SOURCE_PATH}/ylwrap"
+	    # libgcc needs <stdint.h>
+	    mkdir -p "${CROSS_DIR}/${TARGET_TRIPLE}/include"
+	    cp "${SOURCE_PATH}/gcc/ginclude/stdint-gcc.h" "${CROSS_DIR}/${TARGET_TRIPLE}/include/stdint.h"
+	    ;;
+	"ubicom32")
+	    rm -f "${SOURCE_PATH}/libgloss"
+	    rm -f "${SOURCE_PATH}/newlib"
+	    ;;
+	"x86_64")
+	    case "${TARGET_TRIPLE}" in
+		"x86_64-w64-mingw32")
+		    MULTILIB_CONFIG="--enable-multilib --enable-64bit --with-dwarf"
+		    LIBC_CONFIGS="--enable-threads=win32"
+		    ;;
+		*)
+		    case "${STAGE}" in
+			"musl" | "uclibc")
+			    MULTILIB_CONFIG="--disable-multilib"
+			    ;;
+			*)
+			    MULTILIB_CONFIG="--enable-multilib --with-multilib-list=m64,m32,mx32"
+			    ;;
+		    esac
+		    ;;
+	    esac
+	    ;;
+	"zpu")
+	    MULTILIB_CONFIG="--enable-sjlj-exceptions --with-gnu-as --with-gnu-ld"
+	    # The repo incorrectly requires a number of newlib headers to be pre-installed
+	    # before libgcc can be built. It also force-builds newlib and libgloss, and
+	    # those too require pre-installed newlib headers.
+	    mkdir -p "${CROSS_DIR}/usr/include/machine"
+	    mkdir -p "${CROSS_DIR}/usr/include/sys"
+	    for f in _ansi errno newlib stdio stdlib string time unistd ; do
+		cp "${SOURCE_PATH}/newlib/libc/include/${f}.h" "${CROSS_DIR}/usr/include/"
+	    done
+	    for f in ieeefp stdlib time types ; do
+		cp "${SOURCE_PATH}/newlib/libc/include/machine/${f}.h" "${CROSS_DIR}/usr/include/machine/"
+	    done
+	    for f in _types config errno reent stat stdio types unistd ; do
+		cp "${SOURCE_PATH}/newlib/libc/include/sys/${f}.h" "${CROSS_DIR}/usr/include/sys/"
+	    done
+	    ;;
+    esac
+    MAKE_TARGET=
+    INSTALL_TARGET="install"
+    case "${STAGE}" in
+	"newlib")
+	    LIBC_CONFIGS="--with-newlib --disable-threads"
+	    LIBSSP_CONFIG="--disable-libssp"
+	    ;;
+	"mingw64-minimal")
+	    MAKE_TARGET="all-gcc"
+	    INSTALL_TARGET="install-gcc"
+	    ;;
+	"uclibc")
+	    if [ -z "${UCLIBC_WANTS_NPTL}" -a -z "${UCLIBC_WANTS_LINUXTHREADS}" ]; then
+		LIBC_CONFIGS="--disable-threads"
+	    fi
+	    if [ -z "${UCLIBC_WANTS_SSP}" ]; then
+		LIBSSP_CONFIG="--disable-libssp"
+	    fi
+	    ;;
+    esac
+    BUILD_OR_HOST="build"
+    if [ -n "${GCC_WANTS_HOST_NOT_BUILD}" ]; then
+	BUILD_OR_HOST="host"
+    fi
+    rm -rf objdir-gcc
+    mkdir objdir-gcc
+    cd objdir-gcc
+    ${SOURCE_PATH}/configure \
+		--target="${TARGET_TRIPLE}" ${ENABLE_OBSOLETE} \
+		--${BUILD_OR_HOST}="${BUILD_TRIPLE}" \
+		--prefix="${CROSS_DIR}" \
+		--with-sysroot="${SYSROOT}" \
+		--with-gmp="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}" \
+		--with-mpfr="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}" \
+		--with-mpc="${HOST_TOOLS_DIR}/mpc-${MPC_VSN}" \
+		--without-cloog \
+		--without-isl \
+		--disable-gcov \
+		--disable-libatomic \
+		--disable-libgomp \
+		--disable-libitm \
+		--disable-libmpx \
+		--disable-libmudflap \
+		--disable-libquadmath \
+		--disable-libsanitizer \
+		--disable-lto \
+		--disable-nls \
+		--disable-plugin \
+		--disable-shared \
+	        ${ENABLE_CHECKING} \
+		--enable-languages=c \
+		${MULTILIB_CONFIG} \
+		${LIBC_CONFIGS} ${LIBSSP_CONFIG} ${ENABLE_INITFINI_ARRAY}
+    LANGUAGES=
+    case "${TARGET_ARCH}" in
+	a29k)
+	    # gcc-2.95.3 needs LANGUAGES=c when building instead of --enable-languages=c when configuring.
+	    # Additionally it tries to build and install things it cannot.
+	    LANGUAGES="LANGUAGES=c"
+	    MAKE_TARGET="all-gcc"
+	    INSTALL_TARGET="install-gcc"
+	    ;;
+	d10v | z8k)
+	    # ecosSWtools: remove unneeded or unbuildable components
+	    rm -rf dejagnu diff expect gdb make mmalloc patch readline sim tcl texinfo tk utils
+	    # gcc-2.x needs LANGUAGES=c when building instead of --enable-languages=c when configuring
+	    LANGUAGES="LANGUAGES=c"
+	    ;;
+	m1750)
+	    # gcc-2.x needs LANGUAGES=c when building instead of --enable-languages=c when configuring
+	    # we also have to force it to use gcc not cc
+	    LANGUAGES="LANGUAGES=c CC=gcc"
+	    ;;
+	pj)
+	    # gcc-3.1.1 pretends to understand --enable-languages=c but it still tries
+	    # to build additional languages, and fails. Similarly it tries to build e.g.
+	    # libstdc++-v3 for the target, and fails.
+	    LANGUAGES="LANGUAGES=c"
+	    MAKE_TARGET="TARGET_CONFIGDIRS="
+	    INSTALL_TARGET="TARGET_CONFIGDIRS= install"
+	    ;;
+    esac
+    make ${DASHJ} MAKEINFO=/bin/true ${LANGUAGES} ${MAKE_TARGET}
+    case "${TARGET_ARCH}" in
+	a29k)
+	    # gcc-2.95.3 tries to install info files it did not build
+	    touch gcc/gcc.info
+	    ;;
+	d10v | z8k)
+	    # ecosSWtools: remove build-time tools we don't want to install
+	    rm -rf bison byacc flex
+	    ;;
+    esac
+    make MAKEINFO=/bin/true ${LANGUAGES} ${INSTALL_TARGET}
+    case "${TARGET_ARCH}" in
+	a29k)
+	    # gcc-2.95.3 forgets the target prefix when installing cpp
+	    mv "${CROSS_DIR}/bin/cpp" "${CROSS_DIR}/bin/a29k-unknown-coff-cpp"
+	    ;;
+    esac
+    touch "${CROSS_DIR}/.stage-gcc-${STAGE}"
+    cd ..
+    rm -rf objdir-gcc
+}
+
+build_cross_gcc_without_libc() {
+    if [ -n "${MINGW64_VSN}" ]; then
+	build_cross_gcc "mingw64-minimal"
+    else
+	build_cross_gcc "newlib"
+    fi
+}
+
+build_cross_gcc_with_libc() {
+    if [ -n "${GLIBC_VSN}" ]; then
+	build_cross_gcc "glibc"
+    elif [ -n "${UCLIBC_VSN}" ]; then
+	build_cross_gcc "uclibc"
+    elif [ -n "${MUSL_VSN}" ]; then
+	build_cross_gcc "musl"
+    elif [ -n "${MINGW64_VSN}" ]; then
+	 build_cross_gcc "mingw64-full"
+    elif [ -n "${GCC_6502_BITS_VSN}" ]; then
+	build_cross_gcc "libtinyc"
+    elif [ -n "${NEWLIB_VSN}" ]; then
+	: nothing to do
+    fi
+}
+
+build_cross_binutils() {
+    local ENABLE_TARGETS
+    local ENABLE_OBSOLETE
+    local DISABLE_WERROR
+    local BUILD_OR_HOST
+    local GIT
+    local SOURCE_PATH
+    local CFLAGS
+    if [ -x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-as" ]; then
+	return
+    fi
+    case "${TARGET_ARCH}" in
+	d10v | z8k)
+	    # it's an all-in-one build in build_cross_gcc()
+	    return
+	    ;;
+    esac
+    log "building cross-binutils ${BINUTILS_VSN}"
+    GIT=`gitify_vsn_binutils "${BINUTILS_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    ENABLE_TARGETS=
+    CFLAGS=
+    case "${TARGET_ARCH}" in
+	"hexagon")
+	    # hexagon binutils are broken when built in 64-bit mode
+	    CFLAGS="-O2 -m32"
+	    ;;
+	"tricore")
+	    # the git repo lost all executable flags
+	    chmod +x	"${SOURCE_PATH}/bfd/configure" \
+			"${SOURCE_PATH}/binutils/configure" \
+			"${SOURCE_PATH}/binutils/ranlib.sh" \
+			"${SOURCE_PATH}/binutils/sanity.sh" \
+			"${SOURCE_PATH}/compile" \
+			"${SOURCE_PATH}/config.guess" \
+			"${SOURCE_PATH}/config.rpath" \
+			"${SOURCE_PATH}/config.sub" \
+			"${SOURCE_PATH}/configure" \
+			"${SOURCE_PATH}/depcomp" \
+			"${SOURCE_PATH}/etc/configure" \
+			"${SOURCE_PATH}/gas/configure" \
+			"${SOURCE_PATH}/gold/configure" \
+			"${SOURCE_PATH}/gprof/configure" \
+			"${SOURCE_PATH}/install-sh" \
+			"${SOURCE_PATH}/intl/configure" \
+			"${SOURCE_PATH}/ld/configure" \
+			"${SOURCE_PATH}/ld/genscripts.sh" \
+			"${SOURCE_PATH}/libiberty/configure" \
+			"${SOURCE_PATH}/missing" \
+			"${SOURCE_PATH}/mkdep" \
+			"${SOURCE_PATH}/mkinstalldirs" \
+			"${SOURCE_PATH}/move-if-change" \
+			"${SOURCE_PATH}/opcodes/configure" \
+			"${SOURCE_PATH}/symlink-tree" \
+			"${SOURCE_PATH}/ylwrap"
+	    ;;
+	"ubicom32")
+	    touch ${SOURCE_PATH}/gcc/DEV-PHASE
+	    ;;
+	"x86_64")
+	    case "${TARGET_TRIPLE}" in
+		"x86_64-w64-mingw32")
+		    ENABLE_TARGETS="--enable-targets=x86_64-w64-mingw32,i686-w64-mingw32"
+		    ;;
+	    esac
+	    ;;
+    esac
+    ENABLE_OBSOLETE=
+    if [ -n "${BINUTILS_WANTS_ENABLE_OBSOLETE}" ]; then
+	ENABLE_OBSOLETE="--enable-obsolete"
+    fi
+    DISABLE_WERROR=
+    if [ -n "${BINUTILS_WANTS_DISABLE_WERROR}" ]; then
+	DISABLE_WERROR="--disable-werror"
+    fi
+    BUILD_OR_HOST="build"
+    if [ -n "${BINUTILS_WANTS_HOST_NOT_BUILD}" ]; then
+	BUILD_OR_HOST="host"
+    fi
+    rm -rf objdir-binutils
+    mkdir objdir-binutils
+    cd objdir-binutils
+    CFLAGS="${CFLAGS}" ${SOURCE_PATH}/configure \
+		--target="${TARGET_TRIPLE}" ${ENABLE_TARGETS} ${ENABLE_OBSOLETE} ${DISABLE_WERROR} \
+		--${BUILD_OR_HOST}="${BUILD_TRIPLE}" \
+		--prefix="${CROSS_DIR}" \
+		--with-sysroot="${CROSS_DIR}" \
+		--with-gmp="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}" \
+		--with-mpfr="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}" \
+		--with-mpc="${HOST_TOOLS_DIR}/mpc-${MPC_VSN}" \
+		--disable-cgen \
+		--disable-dejagnu \
+		--disable-elf2flt \
+		--disable-gcc \
+		--disable-gdb \
+		--disable-gold \
+		--disable-gprofng \
+		--disable-itcl \
+		--disable-libctf \
+		--disable-libdecnumber \
+		--disable-libgui \
+		--disable-newlib \
+		--disable-nls \
+		--disable-plugins \
+		--disable-rda \
+		--disable-readline \
+		--disable-sid \
+		--disable-sim \
+		--disable-tcl \
+		--disable-tk \
+		--disable-utils \
+		--disable-winsup
+    # Work around a bug in binutils-2.40 where a build from a tarball
+    # works but a build from git fails. Related to but different from
+    # <https://sourceware.org/bugzilla/show_bug.cgi?id=28909>.
+    mkdir -p gas/doc
+    make ${DASHJ} MAKEINFO=/bin/true
+    make MAKEINFO=/bin/true install
+    cd ..
+    rm -rf objdir-binutils
+}
+
+build_nvptx_tools() {
+    local SOURCE_PATH
+    if [ -x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-as" ]; then
+	return
+    fi
+    log "building nvptx-tools ${NVPTXTOOLS_VSN}"
+    SOURCE_PATH=`unpack_source "${NVPTXTOOLS_VSN}"`
+    mkdir objdir-nvptx-tools
+    cd objdir-nvptx-tools
+    ${SOURCE_PATH}/configure \
+	--target="${TARGET_TRIPLE}" \
+	--prefix="${CROSS_DIR}" \
+	--with-sysroot="${CROSS_DIR}"
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-nvptx-tools
+}
+
+build_cc65_tools() {
+    local SOURCE_PATH
+    local CC65_PATH="${CROSS_DIR}/cc65"
+    if [ -x "${CC65_PATH}/bin/ca65" ]; then
+	return
+    fi
+    log "building cc65 ${CC65_VSN}"
+    SOURCE_PATH=`unpack_source "${CC65_VSN}"`
+    # builds are done in the source directories
+    cd "${SOURCE_PATH}"
+    make PREFIX="${CC65_PATH}"
+    make PREFIX="${CC65_PATH}" install
+    log "installing binutils wrappers for ${TARGET_TRIPLE}"
+    # based on what gcc-6502-bits.git does but tweaked to avoid
+    # adding special-cases to the gcc configure and build
+    mkdir -p "${CROSS_DIR}/bin"
+    ln -s "${CC65_PATH}/bin/ca65" "${CROSS_DIR}/bin/${TARGET_TRIPLE}-as"
+    ln -s "${CC65_PATH}/bin/ld65" "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ld"
+    cat > "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ar" <<'EOF'
+#!/bin/sh
+ARG="$1"
+case "${ARG}" in
+  "rc" | "cr")
+    ARG="a"
+    ;;
+  *)
+    ;;
+esac
+shift
+exec @CC65_PATH@/bin/ar65 ${ARG} $@
+EOF
+    sed -i -e "s,@CC65_PATH@,${CC65_PATH},g" "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ar"
+    chmod +x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ar"
+    cat > "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ranlib" <<'EOF'
+#!/bin/sh
+exit 0
+EOF
+    chmod +x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ranlib"
+    git clean -ffdx
+    cd -
+}
+
+build_m6809_tools() {
+    local SOURCE_PATH
+    local AS_HOST=linux
+    local AS_VERSION=5.1.1
+    local AS_TARGETS="as6809 aslink aslib"
+    local prog
+    if [ -x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-as" ]; then
+	return
+    fi
+    log "building ASxxxx ${AS_VERSION} for ${TARGET_ARCH}"
+    # binary tools in the same repo as the gcc sources
+    SOURCE_PATH=`unpack_source "${GCC_VSN}"`
+    # builds are done in the source directories
+    cd "${SOURCE_PATH}"
+    make -C "${SOURCE_PATH}/as-${AS_VERSION}/asxmak/${AS_HOST}/build" ${AS_TARGETS} EXTRA_ASXXXX_CFLAGS="-I${SOURCE_PATH}/binutils"
+    mkdir -p "${CROSS_DIR}/${TARGET_TRIPLE}/bin"
+    for prog in ${AS_TARGETS}; do
+	cp "${SOURCE_PATH}/as-${AS_VERSION}/asxmak/${AS_HOST}/exe/${prog}" "${CROSS_DIR}/${TARGET_TRIPLE}/bin/${prog}"
+    done
+    log "building binutils wrappers for ${TARGET_TRIPLE}"
+    make -C "${SOURCE_PATH}/binutils"
+    mkdir -p "${CROSS_DIR}/bin"
+    cp "${SOURCE_PATH}/binutils/ranlib" "${CROSS_DIR}/bin/${TARGET_TRIPLE}-ranlib"
+    for prog in ar as ld; do
+	sed -e "s,@AS_PREFIX@,${CROSS_DIR}/${TARGET_TRIPLE},g" < "${SOURCE_PATH}/binutils/${prog}" > "${CROSS_DIR}/bin/${TARGET_TRIPLE}-${prog}"
+	chmod +x "${CROSS_DIR}/bin/${TARGET_TRIPLE}-${prog}"
+    done
+    git clean -ffdx
+    cd -
+}
+
+build_cross_binary_tools() {
+    if [ -n "${BINUTILS_VSN}" ]; then
+	build_cross_binutils
+    elif [ -n "${NVPTXTOOLS_VSN}" ]; then
+	build_nvptx_tools
+    elif [ -n "${CC65_VSN}" ]; then
+	build_cc65_tools
+    elif [ "${TARGET_ARCH}" = "m6809" ]; then
+	build_m6809_tools
+    fi
+}
+
+build_linux_headers() {
+    local KERNEL_ARCH
+    local GIT
+    local SOURCE_PATH
+    local CROSS_COMPILE="${TARGET_TRIPLE}-"
+    if [ -f "${CROSS_DIR}/usr/include/linux/version.h" ]; then
+	return
+    fi
+    log "building linux-headers ${LINUX_VSN}"
+    case "${TARGET_ARCH}" in
+	"aarch64") KERNEL_ARCH="arm64";;
+	"armv7l") KERNEL_ARCH="arm";;
+	"bfin") KERNEL_ARCH="blackfin";;
+	"hppa") KERNEL_ARCH="parisc";;
+	"loongarch64") KERNEL_ARCH="loongarch";;
+	"mips64") KERNEL_ARCH="mips";;
+	"or1k") KERNEL_ARCH="openrisc";;
+	ppc64*) KERNEL_ARCH="powerpc";;
+	"riscv64") KERNEL_ARCH="riscv";;
+	"s390x") KERNEL_ARCH="s390";;
+	"sh4") KERNEL_ARCH="sh";;
+	"sparc64") KERNEL_ARCH="sparc";;
+	"x86_64") KERNEL_ARCH="x86";;
+	*) KERNEL_ARCH="${TARGET_ARCH}"
+    esac
+    GIT=`gitify_vsn_linux "${LINUX_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    case "${TARGET_ARCH}" in
+	"v850")
+	    # fix glibc conflict in 2.6.26, upstream d15bd1067b1fcb2b7250d22bc0c7c7fea0b759f7
+	    sed -i -e 's,getline(,get_line(,g' "${SOURCE_PATH}/scripts/unifdef.c"
+	    ;;
+    esac
+    cd "${SOURCE_PATH}"
+    if [ -n "${LINUX_HEADERS_WANTS_MANUAL_INSTALL}" ]; then
+       # ancient kernel that predates 'make headers_install'
+       touch .config
+       make ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" CONFIG_UCLINUX=1 include/linux/version.h
+       mkdir -p "${CROSS_DIR}/usr/include"
+       tar -C include -cf - linux "asm-${KERNEL_ARCH}" | tar -C "${CROSS_DIR}/usr/include/" -xf -
+       touch "${CROSS_DIR}/usr/include/linux/autoconf.h"
+       rm -f "${CROSS_DIR}/usr/include/asm"
+       ln -s "asm-${KERNEL_ARCH}" "${CROSS_DIR}/usr/include/asm"
+    else
+	make ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" INSTALL_HDR_PATH="${CROSS_DIR}/usr" headers_install
+    fi
+    case "${TARGET_ARCH}" in
+	"hexagon")
+	    # fix broken __aligned(8) directive
+	    sed -i -e 's,__aligned(8);,__attribute__((__aligned__(8)));,g' "${CROSS_DIR}/usr/include/asm/sigcontext.h"
+	    ;;
+	"v850")
+	    # install additional headers needed by uClibc-ng
+	    for f in clinkage macrology asm ; do
+		cp "include/asm-v850/${f}.h" "${CROSS_DIR}/usr/include/asm/"
+	    done
+	    ;;
+    esac
+    case "${TARGET_ARCH}" in
+	"kvx")
+	    # drivers/soc/Makefile references directories not in the tree
+	    make CONFIG_SOC_KENDRYTE=n CONFIG_ARCH_ZX=n mrproper
+	    ;;
+        *)
+	    make ARCH="${KERNEL_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" mrproper
+    esac
+    cd -
+}
+
+build_mingw64_headers() {
+    local GIT
+    local SOURCE_PATH
+    if [ -f "${CROSS_DIR}/${TARGET_TRIPLE}/include/windows.h" ]; then
+	return
+    fi
+    log "building mingw-w64-headers ${MINGW64_VSN}"
+    GIT=`gitify_vsn_mingw64 "${MINGW64_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    rm -rf objdir-headers
+    mkdir objdir-headers
+    cd objdir-headers
+    ${SOURCE_PATH}/mingw-w64-headers/configure \
+		--prefix="${CROSS_DIR}/${TARGET_TRIPLE}" \
+		--host="${TARGET_TRIPLE}"
+    ln -sf "${TARGET_TRIPLE}" "${CROSS_DIR}/mingw"
+    make install
+    cd ..
+    rm -rf objdir-headers
+}
+
+build_glibc() {
+    local SOURCE_PATH="$1"
+    local TARGET_TRIPLE="$2"
+    local TARGET_CC="$3"
+    local DISABLE_WERROR
+    log "building glibc-${GLIBC_VSN} for ${TARGET_TRIPLE} ${TARGET_CC}"
+    DISABLE_WERROR=
+    if [ -n "${GLIBC_WANTS_DISABLE_WERROR}" ]; then
+	DISABLE_WERROR="--disable-werror"
+    fi
+    rm -rf "${TARGET_TRIPLE}"
+    mkdir "${TARGET_TRIPLE}"
+    cd "${TARGET_TRIPLE}"
+    ${SOURCE_PATH}/configure "${TARGET_CC}" ${DISABLE_WERROR} \
+		CXX=/bin/false \
+		--host="${TARGET_TRIPLE}" \
+		--build="${BUILD_TRIPLE}" \
+		--prefix=/usr \
+		--without-cvs \
+		--disable-profile
+    make ${DASHJ}
+    # override install_root instead of DESTDIR for compatibility with some old (e)glibcs
+    make install_root="${CROSS_DIR}" install
+    cd ..
+    rm -rf "${TARGET_TRIPLE}"
+}
+
+build_target_glibc() {
+    local TARGET_CC
+    local GIT
+    local SOURCE_PATH
+    GIT=`gitify_vsn_glibc "${GLIBC_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    rm -rf objdir-glibc
+    mkdir objdir-glibc
+    cd objdir-glibc
+    # build extra glibcs for alternative ABIs like -m32
+    case "${TARGET_ARCH}" in
+	"mips64")
+	    build_glibc "${SOURCE_PATH}" "mips-unknown-linux-gnu" "CC=mips64-unknown-linux-gnu-gcc -mabi=32"
+	    build_glibc "${SOURCE_PATH}" "mips-unknown-linux-gnu" "CC=mips64-unknown-linux-gnu-gcc -mabi=n32"
+	    TARGET_CC="CC=mips64-unknown-linux-gnu-gcc -mabi=64"
+	    ;;
+	"nds32")
+	    # -fcommon is needed to build nds32's glibc-2.27 with gcc >= 10
+	    TARGET_CC="CC=nds32le-unknown-linux-gnu-gcc -fcommon"
+	    ;;
+	"ppc64")
+	    build_glibc "${SOURCE_PATH}" "ppc-unknown-linux-gnu" "CC=ppc64-unknown-linux-gnu-gcc -m32"
+	    ;;
+	"s390x")
+	    build_glibc "${SOURCE_PATH}" "s390-unknown-linux-gnu" "CC=s390x-unknown-linux-gnu-gcc -m31"
+	    ;;
+	"sparc64")
+	    build_glibc "${SOURCE_PATH}" "sparcv9-unknown-linux-gnu" "CC=sparc64-unknown-linux-gnu-gcc -m32 -mcpu=ultrasparc"
+	    ;;
+	"x86_64")
+	    build_glibc "${SOURCE_PATH}" "i686-unknown-linux-gnu" "CC=x86_64-unknown-linux-gnu-gcc -m32"
+	    build_glibc "${SOURCE_PATH}" "x86_64-unknown-linux-gnu" "CC=x86_64-unknown-linux-gnu-gcc -mx32"
+	    ;;
+    esac
+    # build main glibc
+    build_glibc "${SOURCE_PATH}" "${TARGET_TRIPLE}" "${TARGET_CC}"
+    cd ..
+    rm -rf objdir-glibc
+}
+
+build_target_uclibc() {
+    local CROSS_COMPILE="${TARGET_TRIPLE}-"
+    local GIT
+    local SOURCE_PATH
+    local OLDDEFCONFIG
+    log "building uClibc ${UCLIBC_VSN} for ${TARGET_TRIPLE}"
+    GIT=`gitify_vsn_uclibc "${UCLIBC_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    cd "${SOURCE_PATH}"
+    make clean
+    # the lm32 defconfig is misplaced
+    if [ "${TARGET_ARCH}" = "lm32" -a -f "extra/Configs/defconfigs/lm32" ]; then
+	rm "extra/Configs/defconfigs/lm32"
+    fi
+    if [ \( ! -f "extra/Configs/defconfigs/${TARGET_ARCH}/defconfig" \) -a \
+         \( ! -f "extra/Configs/defconfigs/${TARGET_ARCH}" \) -a \
+         \( "${TARGET_ARCH}" != "ubicom32" \) ]; then
+	mkdir -p "extra/Configs/defconfigs/${TARGET_ARCH}"
+	echo "TARGET_${TARGET_ARCH}=y" > "extra/Configs/defconfigs/${TARGET_ARCH}/defconfig"
+    fi
+    make ARCH="${TARGET_ARCH}" TARGET_ARCH="${TARGET_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" defconfig
+    # Override uclibc defaults. For newer versions the last definition takes precedence,
+    # so it would be enough to >> .config. Unfortunately older version only honour the
+    # first definition. Therefore we collect the overrides in a separate file, and
+    # concatenate OVERRIDES; DEFCONFIG; OVERRIDES to form the new .config.
+    echo "KERNEL_HEADERS=\"${CROSS_DIR}/usr/include\"" >> .config.override
+    echo "RUNTIME_PREFIX=\"/\"" >> .config.override
+    echo "DEVEL_PREFIX=\"/usr\"" >> .config.override
+    echo "CROSS_COMPILER_PREFIX=\"${CROSS_COMPILE}\"" >> .config.override
+    case "${TARGET_ARCH}" in
+	"cris")
+	    echo 'CONFIG_CRISV32=y' >> .config.override
+	    ;;
+	"ubicom32")
+	    # switch from the default V3 to the MMU-capable V5
+	    echo 'CONFIG_UC_UBICOM32_V3=n' >> .config.override
+	    echo 'CONFIG_UC_UBICOM32_V5=y' >> .config.override
+	    # needed to avoid '#error "Unknown Ubicom32 Processor"' in syscalls.h
+	    echo 'UCLIBC_EXTRA_CFLAGS="-march=ubicom32v5 -DUBICOM32_ARCH_VERSION=5"' >> .config.override
+	    # needed to avoid compile error in ldso.c
+	    echo 'FORCE_SHAREABLE_TEXT_SEGMENTS=y' >> .config.override
+	    # needed to avoid undefined reference to scalb when linking libm.so
+	    echo 'UCLIBC_SUSV3_LEGACY=y' >> .config.override
+	    ;;
+    esac
+    if [ -n "${UCLIBC_WANTS_NPTL}" ]; then
+	echo 'UCLIBC_HAS_THREADS_NATIVE=y' >> .config.override
+    elif [ -n "${UCLIBC_WANTS_LINUXTHREADS}" ]; then
+	echo 'UCLIBC_HAS_LINUXTHREADS=y' >> .config.override
+    fi
+    if [ -n "${UCLIBC_WANTS_SSP}" ]; then
+	echo 'UCLIBC_HAS_SSP=y' >> .config.override
+    fi
+    if [ -n "${UCLIBC_WANTS_LITTLE_ENDIAN}" ]; then
+	echo 'ARCH_WANTS_BIG_ENDIAN=n' >> .config.override
+	echo 'ARCH_WANTS_LITTLE_ENDIAN=y' >> .config.override
+    elif [ -n "${UCLIBC_WANTS_BIG_ENDIAN}" ]; then
+	echo 'ARCH_WANTS_LITTLE_ENDIAN=n' >> .config.override
+	echo 'ARCH_WANTS_BIG_ENDIAN=y' >> .config.override
+    fi
+    if [ -n "${UCLIBC_WANTS_STATIC}" ]; then
+	echo 'HAVE_SHARED=n' >> .config.override
+    fi
+    if [ -n "${UCLIBC_WANTS_RESOLVER_SUPPORT}" ]; then
+	echo 'UCLIBC_HAS_RESOLVER_SUPPORT=y' >> .config.override
+    fi
+    cat .config.override .config .config.override > .config.new
+    mv -f .config.new .config
+    rm .config.override
+    OLDDEFCONFIG="olddefconfig"
+    if [ -n "${UCLIBC_WANTS_OLDCONFIG}" ]; then
+       # old versions of uclibc don't understand olddefconfig, which newer ones require
+       OLDDEFCONFIG="oldconfig"
+    fi
+    make ARCH="${TARGET_ARCH}" TARGET_ARCH="${TARGET_ARCH}" CROSS_COMPILE="${CROSS_COMPILE}" ${OLDDEFCONFIG}
+    make ${DASHJ}
+    make PREFIX="${CROSS_DIR}" install
+    cp .config "${CROSS_DIR}"
+    make clean
+    cd -
+}
+
+build_target_musl() {
+    local GIT
+    local SOURCE_PATH
+    log "building musl-${MUSL_VSN} for ${TARGET_TRIPLE}"
+    GIT=`gitify_vsn_musl "${MUSL_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    rm -rf objdir-musl
+    mkdir objdir-musl
+    cd objdir-musl
+    ${SOURCE_PATH}/configure \
+		--host="${TARGET_TRIPLE}" \
+		--build="${BUILD_TRIPLE}" \
+		--prefix=/usr \
+		--disable-wrapper
+    make ${DASHJ}
+    make DESTDIR="${CROSS_DIR}" install
+    # fix lib/ld-musl-*.so.1 -> /usr/lib/libc.so symlink
+    ln -sf ../usr/lib/libc.so ${CROSS_DIR}/lib/ld-musl-*.so.*
+    cd ..
+    rm -rf objdir-musl
+}
+
+build_target_mingw64crt() {
+    local GIT
+    local SOURCE_PATH
+    local CRT_CONFIG
+    log "building mingw-w64-crt ${MINGW64_VSN}"
+    GIT=`gitify_vsn_mingw64 "${MINGW64_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    rm -rf objdir-crt
+    mkdir objdir-crt
+    cd objdir-crt
+    case "${TARGET_TRIPLE}" in
+	"aarch64-w64-mingw32")
+	    CRT_CONFIG="--disable-lib32 --disable-lib64 --disable-libarm32 --enable-libarm64"
+	    ;;
+	"x86_64-w64-mingw32")
+	    CRT_CONFIG="--enable-lib32 --enable-lib64 --disable-libarm32 --disable-libarm64"
+	    ;;
+    esac
+
+    ${SOURCE_PATH}/mingw-w64-crt/configure \
+		--prefix="${CROSS_DIR}/${TARGET_TRIPLE}" \
+		${CRT_CONFIG} \
+		--host="${TARGET_TRIPLE}"
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-crt
+}
+
+build_target_newlib() {
+    local GIT
+    local SOURCE_PATH
+    local DISABLE_MULTILIB
+    log "building newlib ${NEWLIB_VSN} for ${TARGET_TRIPLE}"
+    GIT=`gitify_vsn_newlib "${NEWLIB_VSN}"`
+    SOURCE_PATH=`unpack_source "${GIT}"`
+    case "${TARGET_ARCH}" in
+	"tricore")
+	    # the git repo lost all executable flags
+	    chmod +x	"${SOURCE_PATH}/compile" \
+			"${SOURCE_PATH}/config.guess" \
+			"${SOURCE_PATH}/config.rpath" \
+			"${SOURCE_PATH}/config.sub" \
+			"${SOURCE_PATH}/configure" \
+			"${SOURCE_PATH}/depcomp" \
+			"${SOURCE_PATH}/etc/configure" \
+			"${SOURCE_PATH}/install-sh" \
+			"${SOURCE_PATH}/libgloss/configure" \
+			"${SOURCE_PATH}/libgloss/tricore/configure" \
+			"${SOURCE_PATH}/missing" \
+			"${SOURCE_PATH}/mkdep" \
+			"${SOURCE_PATH}/mkinstalldirs" \
+			"${SOURCE_PATH}/move-if-change" \
+			"${SOURCE_PATH}/newlib/configure" \
+			"${SOURCE_PATH}/newlib/doc/configure" \
+			"${SOURCE_PATH}/newlib/iconvdata/configure" \
+			"${SOURCE_PATH}/newlib/libc/configure" \
+			"${SOURCE_PATH}/newlib/libc/machine/configure" \
+			"${SOURCE_PATH}/newlib/libc/machine/tricore/configure" \
+			"${SOURCE_PATH}/newlib/libc/sys/configure" \
+			"${SOURCE_PATH}/newlib/libc/sys/tricore/configure" \
+			"${SOURCE_PATH}/newlib/libm/configure" \
+			"${SOURCE_PATH}/newlib/libm/machine/configure" \
+			"${SOURCE_PATH}/symlink-tree" \
+			"${SOURCE_PATH}/ylwrap"
+	    ;;
+    esac
+    DISABLE_MULTILIB=
+    if [ -n "${NEWLIB_WANTS_DISABLE_MULTILIB}" ]; then
+	DISABLE_MULTILIB="--disable-multilib"
+    fi
+    rm -rf objdir-newlib
+    mkdir objdir-newlib
+    cd objdir-newlib
+    ${SOURCE_PATH}/configure ${DISABLE_MULTILIB} \
+		--target="${TARGET_TRIPLE}" \
+		--build="${BUILD_TRIPLE}" \
+		--prefix="${CROSS_DIR}"
+    make ${DASHJ}
+    make install
+    cd ..
+    rm -rf objdir-newlib
+}
+
+build_target_6502_bits() {
+    local SOURCE_PATH
+    local CC65_PATH="${CROSS_DIR}/cc65/bin"
+    log "building libtinyc for ${TARGET_TRIPLE}"
+    SOURCE_PATH=`unpack_source "${GCC_6502_BITS_VSN}"`
+    # builds are done in the source directories
+    cd "${SOURCE_PATH}"
+    CC65_PATH="${CC65_PATH}" PREFIX="${CROSS_DIR}" libtinyc/compile.sh
+    mkdir -p "${CROSS_DIR}/6502/lib/cc65/cfg"
+    install ldscripts/semi65x.cfg "${CROSS_DIR}/6502/lib/cc65/cfg"
+    mkdir -p "${CROSS_DIR}/6502/bbcb/lib/cc65/cfg"
+    install ldscripts/bbcb.cfg "${CROSS_DIR}/6502/bbcb/lib/cc65/cfg"
+    mkdir -p "${CROSS_DIR}/6502/bbcm/lib/cc65/cfg"
+    install ldscripts/bbcmaster.cfg "${CROSS_DIR}/6502/bbcm/lib/cc65/cfg"
+    mkdir -p "${CROSS_DIR}/6502/c64/lib/cc65/cfg"
+    install ldscripts/c64.cfg "${CROSS_DIR}/6502/c64/lib/cc65/cfg"
+    git clean -ffdx
+    cd -
+}
+
+build_target_m1750_libc() {
+    local SOURCE_PATH
+    log "building m1750 libc for ${TARGET_TRIPLE}"
+    # libc sources in the same repo as the gcc sources
+    SOURCE_PATH=`unpack_source "${GCC_VSN}"`
+    # builds must be done in the source directories
+    cd "${SOURCE_PATH}/.."
+    git clean -ffdx
+    make -C libc prefix="${CROSS_DIR}"
+    make -C libc prefix="${CROSS_DIR}" install
+    make -C libm prefix="${CROSS_DIR}"
+    make -C libm prefix="${CROSS_DIR}" install
+    make -C libpthread prefix="${CROSS_DIR}"
+    make -C libpthread prefix="${CROSS_DIR}" install
+    git clean -ffdx
+    cd -
+}
+
+build_target_libc() {
+    if [ -n "${GLIBC_VSN}" ]; then
+	build_target_glibc
+    elif [ -n "${UCLIBC_VSN}" ]; then
+	 build_target_uclibc
+    elif [ -n "${MUSL_VSN}" ]; then
+	 build_target_musl
+    elif [ -n "${MINGW64_VSN}" ]; then
+	build_target_mingw64crt
+    elif [ -n "${NEWLIB_VSN}" ]; then
+	build_target_newlib
+    elif [ -n "${GCC_6502_BITS_VSN}" ]; then
+	build_target_6502_bits
+    elif [ "${TARGET_ARCH}" = "m1750" ]; then
+	build_target_m1750_libc
+    fi
+}
+
+log "buildcross ${VERSION} building toolchain for ${TARGET_ARCH} in ${CROSS_DIR}"
+
+#
+# Get Sources
+#
+
+if [ ! -d "${DOWNLOADS_DIR}" ]; then
+    mkdir -p "${DOWNLOADS_DIR}"
+fi
+if [ ! -d "${SOURCES_DIR}" ]; then
+    mkdir -p "${SOURCES_DIR}"
+fi
+if [ ! -d "${HOST_TOOLS_DIR}" ]; then
+    mkdir -p "${HOST_TOOLS_DIR}"
+fi
+
+get_sources
+
+cd ${BUILD_DIR}
+
+#
+# Build host libraries and GCC
+#
+
+if [ -z "${SKIP_HOST_GCC}" ]; then
+
+ORIG_PATH="${PATH}"
+
+# build preliminary host libraries and gcc using system cc
+build_host_gmp "-cc"
+build_host_mpfr "-cc"
+build_host_mpc "-cc"
+build_host_gcc "-cc"
+
+# update PATH to pick up our preliminary host gcc
+export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc/bin:${ORIG_PATH}"
+
+fi # SKIP_HOST_GCC
+
+# build final host libraries
+build_host_gmp
+build_host_mpfr
+build_host_mpc
+
+if [ -z "${SKIP_HOST_GCC}" ]; then
+
+# build final host gcc using preliminary host gcc
+build_host_gcc
+
+# remove preliminary host libraries and gcc
+rm -rf ${HOST_TOOLS_DIR}/gmp-${GMP_VSN}-cc
+rm -rf ${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}-cc
+rm -rf ${HOST_TOOLS_DIR}/mpc-${MPC_VSN}-cc
+rm -rf ${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc
+
+# update PATH to pick up our final host gcc
+export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}/bin:${ORIG_PATH}"
+
+fi # SKIP_HOST_GCC
+
+# determine BUILD_TRIPLE, ensure it differs from TARGET_TRIPLE
+if [ -z "${BUILD_TRIPLE}" ]; then
+    BUILD_TRIPLE=`gcc -v 2>&1 | grep '^Target:' | awk '{print $2}'`
+else
+    echo using BUILD_TRIPLE "${BUILD_TRIPLE}"
+fi
+if [ -z "${BUILD_TRIPLE}" ]; then
+    echo unable to determine build triple
+    exit 1
+fi
+if [ "${BUILD_TRIPLE}" = "${TARGET_TRIPLE}" ]; then
+    echo build triple "${BUILD_TRIPLE}" equals target triple
+    exit 1
+fi
+
+if [ -n "${MAKE_VSN}" ]; then
+    build_host_make
+    export PATH="${HOST_TOOLS_DIR}/make-${MAKE_VSN}/bin:${PATH}"
+fi
+
+#
+# Build Cross Tools and Libc
+#
+
+# build cross binary tools
+build_cross_binary_tools
+
+# update PATH to pick up our cross tools
+export PATH="${CROSS_DIR}/bin:${PATH}"
+
+# mingw-w64 needs headers early on
+[ -n "${MINGW64_VSN}" ] && build_mingw64_headers
+
+# build preliminary cross gcc without target libc
+build_cross_gcc_without_libc
+
+# build target kernel headers
+[ -n "${LINUX_VSN}" ] && build_linux_headers
+
+# build target libc
+build_target_libc
+
+# build final cross gcc with target libc
+build_cross_gcc_with_libc
+
+log "done"

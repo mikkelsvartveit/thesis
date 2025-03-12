@@ -82,13 +82,13 @@ cmake -G "Ninja" \
       -DLIBXML2_WITH_PYTHON=OFF \
       -DBOOST_RUNTIME_LINK=STATIC \
       -DJSONCPP_WITH_TESTS=OFF \
-      "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
+      "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}" || echo "Config failed!"
 
 echo "Building ${LIB_NAME}..."
-cmake --build . -j$(nproc)
+cmake --build . -j$(nproc) || echo "Build failed!"
 
 echo "Installing ${LIB_NAME} to ${OUTPUT_DIR}..."
-cmake --install .
+cmake --install . || echo "Installation failed!"
 
 echo "Build completed successfully!"
 echo "Library installed to ${OUTPUT_DIR}"

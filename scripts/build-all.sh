@@ -5,9 +5,11 @@ set -e
 
 # Architectures to build for
 ARCHITECTURES=(
-  "arm64"
-  "riscv64"
-  "xtensa"
+ # "arm64"
+ # "riscv64"
+ # "xtensa"
+ # "arcompact"
+  "m32c"
   # Add more architectures here
   # "ppc64le"
   # "s390x"
@@ -16,17 +18,17 @@ ARCHITECTURES=(
 
 # Libraries to build
 LIBRARIES=(
-  #  "zlib:1.3"
-  #  "libjpeg-turbo:3.1.0"
-  #  "libxml2:2.14"
-  #  "libpng:1.6.47"
-  #  "freetype:2.13.3"
-  #  "xzutils:1"
-  #  "harfbuzz:10.4.0"
-  #  "pcre2:10.45"
-  #  "libyaml:0.2.5"
+  "zlib:1.3"
+  #"libxml2:2.14"
+  # "libjpeg-turbo:3.1.0"
+  # "libpng:1.6.47"
+  # "freetype:2.13.3"
+  # "xzutils:1"
+  # "harfbuzz:10.4.0"
+  # "pcre2:10.45"
+  # "libyaml:0.2.5"
   # "jsoncpp:1.9.6"
-  "libwebp:1.5.0"
+  # "libwebp:1.5.0"
 )
 
 # Script directory
@@ -43,7 +45,7 @@ fi
 for arch in "${ARCHITECTURES[@]}"; do
   if ! docker image inspect "cross-compile-${arch}:latest" &>/dev/null; then
     echo "Building Docker image for ${arch}..."
-    docker build -t "cross-compile-${arch}:latest" \
+    docker build --no-cache -t "cross-compile-${arch}:latest" \
       -f "${PROJECT_ROOT}/architectures/Dockerfile.${arch}" "${PROJECT_ROOT}"
   fi
 done
@@ -86,8 +88,7 @@ for arch in "${ARCHITECTURES[@]}"; do
     lib_dir="${PROJECT_ROOT}/output/${arch}/${lib_name}/install/lib"
     # Check if any *.a file exists in the directory
     if [ -n "$(find "${lib_dir}" -name "*.a" -print -quit 2>/dev/null)" ]; then
-      echo "  - ${lib_name} ${lib_version}: SUCCESS"
-      echo "lib_size  : $(du -sh ${lib_dir})"
+      echo "  - ${lib_name} ${lib_version}: SUCCESS $(du -sh ${lib_dir})"
     else
       echo "  - ${lib_name} ${lib_version}: FAILED (no static library found)"
     fi

@@ -1,0 +1,31 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y gcc g++ gperf bison flex texinfo help2man make libncurses5-dev \
+python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 xz-utils unzip \
+patch libstdc++6 rsync git meson ninja-build
+
+# Download and install crosstool-ng
+#Version
+ENV CROSSTOOL_VERSION=1.27.0
+
+RUN wget http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-${CROSSTOOL_VERSION}.tar.bz2 && \
+tar -xf crosstool-ng-${CROSSTOOL_VERSION}.tar.bz2 && \
+cd crosstool-ng-${CROSSTOOL_VERSION} && \
+./configure --prefix=/opt/crosstool-ng && \
+make -j$(nproc) && make install && \
+cd .. && rm -rf crosstool-ng-${CROSSTOOL_VERSION} crosstool-ng-${CROSSTOOL_VERSION}.tar.bz2
+
+RUN useradd -m builder && \
+    apt-get update && apt-get install -y sudo && \
+    usermod -aG sudo builder 
+    
+# add /opt/crosstool-ng/bin to PATH
+ENV PATH="/opt/crosstool-ng/bin:${PATH}"
+
+
+# set up so that we can enter shell in container
+CMD ["bash"]
+
+# Make comment with command to do this
+# docker run -it --entrypoint /bin/bash <image-name>
+# docker run -it --entrypoint /bin/bash <image-name>
