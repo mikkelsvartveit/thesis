@@ -99,15 +99,18 @@ In our experiments, we train, evaluate, and compare the model architectures outl
 
 #### Simple 1D CNN
 
-This model is a small one-dimensional CNN. It has three convolution blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 139,834 trainable parameters. This model is hereby referred to as _Simple1d_.
+This model is a small one-dimensional CNN. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters. This model is hereby referred to as _Simple1d_.
 
 Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 | Layer                | Hyperparameters | Output Shape | Parameters |
 | -------------------- | --------------- | ------------ | ---------- |
-| Input                | –               | (512, 1)     | –          |
+| Input                | –               | (512,)       | –          |
 |                      |                 |              |            |
-| Convolution 1D       | k=3, s=1, p=1   | (512, 32)    | 128        |
+| Convolution 1D       | k=1, s=1, p=0   | (512, 128)   | 256        |
+| Dropout              | p=0.3           | (512, 128)   | –          |
+|                      |                 |              |            |
+| Convolution 1D       | k=3, s=1, p=1   | (512, 32)    | 12,320     |
 | Convolution 1D       | k=5, s=2, p=2   | (256, 32)    | 5,152      |
 | Max Pooling 1D       | k=2, s=2        | (128, 32)    | –          |
 | Dropout              | p=0.3           | (8, 128)     | –          |
@@ -133,7 +136,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by adding an embedding layer at the beginning of the model. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 172,474 trainable parameters. This model is hereby referred to as _Simple1dEmbedding_.
+This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1dEmbedding_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
@@ -170,7 +173,66 @@ Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
 #### Simple 2D CNN
 
+This model is a small two-dimensional CNN. The input size is 32x16x1, which is the result of the 2D encoding of a 512-byte sequence. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-2d-cnn-with-embedding-layer}. Then, the model consists of two convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-2d-cnn}. The model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple2d_.
+
+Table: Simple 2D CNN \label{table:simple-2d-cnn}
+
+| Layer           | Hyperparameters | Output Shape  | Parameters |
+| --------------- | --------------- | ------------- | ---------- |
+| Input           | –               | (32, 16, 1)   | –          |
+|                 |                 |               |            |
+| Convolution 2D  | k=1, s=1, p=0   | (32, 16, 128) | 256        |
+| Dropout         | p=0.3           | (32, 16, 128) | –          |
+|                 |                 |               |            |
+| Convolution 2D  | k=3, s=1, p=1   | (32, 16, 32)  | 36,896     |
+| Convolution 2D  | k=5, s=2, p=2   | (16, 8, 32)   | 25,632     |
+| Max Pooling 2D  | k=2, s=2        | (8, 4, 32)    | –          |
+| Dropout         | p=0.3           | (8, 4, 32)    | –          |
+|                 |                 |               |            |
+| Convolution 2D  | k=3, s=1, p=1   | (8, 4, 64)    | 18,496     |
+| Convolution 2D  | k=5, s=2, p=2   | (4, 2, 64)    | 102,464    |
+| Max Pooling 2D  | k=2, s=2        | (2, 1, 64)    | –          |
+| Dropout         | p=0.3           | (2, 1, 64)    | –          |
+|                 |                 |               |            |
+| Reshape         | –               | (128,)        | –          |
+|                 |                 |               |            |
+| Fully Connected | –               | (8,)          | 1,032      |
+| ReLU            | –               | (8,)          | –          |
+| Dropout         | p=0.3           | (8,)          | –          |
+| Fully Connected | –               | (2,)          | 18         |
+| Softmax         | –               | (2,)          | –          |
+
 #### 2D CNN with embedding layer
+
+This model builds on the the simple 2D CNN model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2dEmbedding_.
+
+Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
+
+| Layer           | Hyperparameters | Output Shape  | Parameters |
+| --------------- | --------------- | ------------- | ---------- |
+| Input           | –               | (512,)        | –          |
+|                 |                 |               |            |
+| Embedding       | v=256, d=128    | (512, 128)    | 32,768     |
+| Dropout         | p=0.3           | (512, 128)    | –          |
+| Reshape         | –               | (32, 16, 128) | –          |
+|                 |                 |               |            |
+| Convolution 2D  | k=3, s=1, p=1   | (32, 16, 32)  | 36,896     |
+| Convolution 2D  | k=5, s=2, p=2   | (16, 8, 32)   | 25,632     |
+| Max Pooling 2D  | k=2, s=2        | (8, 4, 32)    | –          |
+| Dropout         | p=0.3           | (8, 4, 32)    | –          |
+|                 |                 |               |            |
+| Convolution 2D  | k=3, s=1, p=1   | (8, 4, 64)    | 18,496     |
+| Convolution 2D  | k=5, s=2, p=2   | (4, 2, 64)    | 102,464    |
+| Max Pooling 2D  | k=2, s=2        | (2, 1, 64)    | –          |
+| Dropout         | p=0.3           | (2, 1, 64)    | –          |
+|                 |                 |               |            |
+| Reshape         | –               | (128,)        | –          |
+|                 |                 |               |            |
+| Fully Connected | –               | (8,)          | 1,032      |
+| ReLU            | –               | (8,)          | –          |
+| Dropout         | p=0.3           | (8,)          | –          |
+| Fully Connected | –               | (2,)          | 18         |
+| Softmax         | –               | (2,)          | –          |
 
 ### Target features
 
