@@ -41,6 +41,9 @@ class Simple1d(nn.Module):
             nn.MaxPool1d(kernel_size=2, stride=2),
         )
 
+        # Add adaptive average pooling to get fixed output size
+        self.adaptive_pool = nn.AdaptiveAvgPool1d(1)
+
         self.dense1 = nn.Linear(128, 8)
         self.relu = nn.ReLU()
 
@@ -62,6 +65,9 @@ class Simple1d(nn.Module):
 
         x = self.block3(x)
         x = self.dropout(x)
+
+        # Apply adaptive pooling to get fixed size output
+        x = self.adaptive_pool(x)
 
         # Reshape the tensor to match the expected input shape for dense1
         x = x.view(x.size(0), -1)  # Flatten all dimensions except batch
@@ -87,7 +93,6 @@ class Simple2d(nn.Module):
             nn.Conv2d(in_channels=1, out_channels=128, kernel_size=1, stride=1),
         )
 
-        # Block 1: Note the input channel is now 1 instead of 128.
         self.block1 = nn.Sequential(
             nn.Conv2d(
                 in_channels=128, out_channels=32, kernel_size=3, stride=1, padding=1
@@ -98,7 +103,6 @@ class Simple2d(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2),
         )
 
-        # Block 2
         self.block2 = nn.Sequential(
             nn.Conv2d(
                 in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1
@@ -112,7 +116,6 @@ class Simple2d(nn.Module):
         self.dense1 = nn.Linear(128, 8)
         self.relu = nn.ReLU()
         self.dense2 = nn.Linear(8, num_classes)
-        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.block0(x)
@@ -124,7 +127,7 @@ class Simple2d(nn.Module):
         x = self.block2(x)
         x = self.dropout(x)
 
-        x = x.view(x.size(0), -1)  # flatten -> (batch, 128)
+        x = x.reshape(x.size(0), -1)  # flatten -> (batch, 128)
 
         x = self.dense1(x)
         x = self.relu(x)

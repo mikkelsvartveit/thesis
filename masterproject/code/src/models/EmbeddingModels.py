@@ -114,7 +114,7 @@ class Simple2dEmbedding(nn.Module):
     def forward(self, x):
         x = self.embedding(x)
         x = self.dropout(x)
-        x = x.view(x.size(0), self.spatial_dim_h, self.spatial_dim_w, 128)
+        x = x.reshape(x.size(0), self.spatial_dim_h, self.spatial_dim_w, 128)
         x = x.permute(0, 3, 1, 2)
 
         x = self.block1(x)
@@ -122,7 +122,7 @@ class Simple2dEmbedding(nn.Module):
         x = self.block2(x)
         x = self.dropout(x)
 
-        x = x.view(x.size(0), -1)
+        x = x.reshape(x.size(0), -1)
 
         x = self.dense1(x)
         x = self.relu(x)

@@ -4,14 +4,14 @@ data:
     dataset_path: ISAdetect/ISAdetect_full_dataset/
     feature_csv_path: ISAdetect-features.csv
     per_architecture_limit: null
-    file_byte_read_limit: 1024
+    file_byte_read_limit: 512
     use_code_only: True
 
 transforms:
   name: GrayScaleImage
   params:
     dimx: 32
-    dimy: 32
+    dimy: 16
     normalize: True
     duplicate_to_n_channels: null
 

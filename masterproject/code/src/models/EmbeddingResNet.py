@@ -27,7 +27,7 @@ class ResNet50Embedding(nn.Module):
         self.dropout = nn.Dropout(p=dropout_rate)
 
         # Load ResNet50 model without pre-training
-        self.resnet = resnet50(pretrained=False)
+        self.resnet = resnet50()
 
         # Modify the first layer to accept our embedding dimension instead of 3 (RGB)
         self.resnet.conv1 = nn.Conv2d(
