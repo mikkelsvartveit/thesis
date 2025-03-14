@@ -1,0 +1,77 @@
+FROM buildcross-base:latest
+
+# Install dependencies needed for building GCC
+RUN apt-get update && apt-get install -y \
+    libgmp-dev \
+    libmpfr-dev \
+    libmpc-dev \
+    libzstd-dev \
+    libzstd1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create GCC build directory
+RUN mkdir -p /opt/gcc-build
+WORKDIR /opt/gcc-build
+
+# Download GCC 6.5.0 source
+RUN wget -q https://ftp.gnu.org/gnu/gcc/gcc-6.5.0/gcc-6.5.0.tar.xz \
+    && tar xf gcc-6.5.0.tar.xz
+
+# Download prerequisites (GMP, MPFR, MPC)
+WORKDIR /opt/gcc-build/gcc-6.5.0
+RUN ./contrib/download_prerequisites
+
+# Build and install GCC 6.5.0
+WORKDIR /opt/gcc-build
+RUN mkdir build-gcc6 \
+    && cd build-gcc6 \
+    && ../gcc-6.5.0/configure \
+        --prefix=/opt/gcc-6.5.0 \
+        --disable-multilib \
+        --enable-languages=c,c++ \
+        --disable-bootstrap \
+        --disable-libsanitizer \
+        --disable-libssp \
+        --disable-libquadmath \
+        --disable-libgomp \
+        --disable-libatomic \
+        --disable-nls \
+    && make -j$(nproc) \
+    && make install \
+    && cd /opt \
+    && rm -rf /opt/gcc-build
+
+# Add the GCC 6.5.0 to PATH when needed
+RUN echo '#!/bin/bash' > /usr/local/bin/use-gcc-6 \
+    && echo 'export PATH=/opt/gcc-6.5.0/bin:$PATH' >> /usr/local/bin/use-gcc-6 \
+    && echo 'export LD_LIBRARY_PATH=/opt/gcc-6.5.0/lib64:$LD_LIBRARY_PATH' >> /usr/local/bin/use-gcc-6 \
+    && echo 'exec "$@"' >> /usr/local/bin/use-gcc-6 \
+    && chmod +x /usr/local/bin/use-gcc-6
+
+# Create a helper script for building architectures requiring GCC 6
+RUN echo '#!/bin/bash' > /usr/local/bin/build-with-gcc6 \
+    && echo 'if [ -z "$1" ]; then' >> /usr/local/bin/build-with-gcc6 \
+    && echo '  echo "Usage: build-with-gcc6 <TARGET> [output_dir] [additional options]"' >> /usr/local/bin/build-with-gcc6 \
+    && echo '  echo "Example: build-with-gcc6 m32c /workspace/output/cross-m32c -j4"' >> /usr/local/bin/build-with-gcc6 \
+    && echo '  exit 1' >> /usr/local/bin/build-with-gcc6 \
+    && echo 'fi' >> /usr/local/bin/build-with-gcc6 \
+    && echo 'TARGET=$1' >> /usr/local/bin/build-with-gcc6 \
+    && echo 'shift' >> /usr/local/bin/build-with-gcc6 \
+    && echo 'use-gcc-6 /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} $TARGET "$@"' >> /usr/local/bin/build-with-gcc6 \
+    && chmod +x /usr/local/bin/build-with-gcc6
+
+
+# Return to workspace
+WORKDIR /workspace
+
+# Update welcome message
+RUN echo 'echo "To build targets requiring GCC 6, use:"' >> /root/.bashrc \
+    && echo 'echo "  build-with-gcc6 <TARGET> [output_dir] [options]"' >> /root/.bashrc \
+    && echo 'echo "  Example: build-with-gcc6 m32c /workspace/output/cross-m32c -j4"' >> /root/.bashrc \
+    && echo 'echo ""' >> /root/.bashrc \
+    && echo 'echo "To see which targets need GCC 6, run:"' >> /root/.bashrc \
+    && echo 'echo "  gcc6-targets.sh"' >> /root/.bashrc \
+    && echo 'echo ""' >> /root/.bashrc
+
+CMD ["/bin/bash"]

@@ -34,11 +34,6 @@ COPY scripts/build-lib.sh /usr/local/bin/build-lib
 COPY scripts/download-libs.sh /usr/local/bin/download-libs
 RUN chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
 
-RUN mkdir -p "/crosscompiler" && \
-    cd "/crosscompiler" && \
-    git clone git://sourceware.org/git/binutils-gdb.git && \
-    svn checkout svn://gcc.gnu.org/svn/gcc/trunk gcc
-
 # Set up volumes for input/output
 VOLUME ["/workspace/sources", "/workspace/output"]
 

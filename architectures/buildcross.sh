@@ -2416,14 +2416,18 @@ log "buildcross ${VERSION} building toolchain for ${TARGET_ARCH} in ${CROSS_DIR}
 #
 # Get Sources
 #
+echo "dirs:"
 
 if [ ! -d "${DOWNLOADS_DIR}" ]; then
+		echo "DOWNLOADS_DIR: ${DOWNLOADS_DIR}"
     mkdir -p "${DOWNLOADS_DIR}"
 fi
 if [ ! -d "${SOURCES_DIR}" ]; then
+		echo "SOURCES_DIR: ${SOURCES_DIR}"
     mkdir -p "${SOURCES_DIR}"
 fi
 if [ ! -d "${HOST_TOOLS_DIR}" ]; then
+		echo "HOST_TOOLS_DIR: ${HOST_TOOLS_DIR}"
     mkdir -p "${HOST_TOOLS_DIR}"
 fi
 

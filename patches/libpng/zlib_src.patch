@@ -10,19 +10,11 @@
  find_package(ZLIB REQUIRED)
  
  if(UNIX
-@@ -543,6 +546,7 @@
-     ${libpng_powerpc_sources}
-     ${libpng_loongarch_sources}
- )
-+
- set(pngtest_sources
-     pngtest.c
- )
+
 @@ -551,6 +555,7 @@
  )
  set(pngstest_sources
      contrib/libtests/pngstest.c
-+    xtensa_stubs.c
  )
  set(pngunknown_sources
      contrib/libtests/pngunknown.c
@@ -31,6 +23,7 @@
      contrib/tools/png-fix-itxt.c
  )
 +if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(xtensa)")
++  list(APPEND pngtest_sources xtensa_stubs.c)
 +  list(APPEND libpng_sources xtensa_stubs.c)
 +  list(APPEND pngstest_sources xtensa_stubs.c)
 +endif()

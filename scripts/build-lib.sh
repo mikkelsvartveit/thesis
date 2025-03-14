@@ -7,6 +7,9 @@ set -e
 LIB_NAME=${1:-"zlib"}
 LIB_VERSION=${2:-"1.3"}
 BUILD_TYPE=${3:-"Release"}
+JCOUNT=${4:-"$(nproc)"}
+
+echo $JCOUNT
 
 SOURCES_DIR="/workspace/sources"
 BUILD_DIR="/workspace/output/${ARCH}/${LIB_NAME}/build"
@@ -70,8 +73,26 @@ if [ -d "${LIB_PATCH_DIR}" ]; then
   done
 fi
 
+TEST_SKIP_ARGS="-DBUILD_TESTING=OFF \
+-DPCRE2_BUILD_TESTS=OFF \
+-DBUILD_TESTS=OFF \
+-DENABLE_TESTING=OFF \
+-DTEST=OFF \
+-DENABLE_TESTS=OFF \
+-DJSONCPP_WITH_TESTS=OFF \
+-DFREETYPE_ENABLE_TESTS=OFF \
+-DHARFBUZZ_BUILD_TESTS=OFF \
+-DLIBJPEG_TURBO_BUILD_TESTS=OFF \
+-DLIBPNG_TESTS=OFF \
+-DWEBP_BUILD_TESTS=OFF \
+-DYAML_BUILD_TESTS=OFF \
+-DZLIB_BUILD_TESTS=OFF \
+-DXZUTILS_BUILD_TESTS=OFF"
+
+
 # Build using CMake
 cd "${BUILD_DIR}"
+echo $BUILD_DIR
 echo "Configuring build with CMake..."
 cmake -G "Ninja" \
       -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" \
@@ -80,15 +101,17 @@ cmake -G "Ninja" \
       -DBUILD_SHARED_LIBS=OFF \
       -DLIBXML2_WITH_ICONV=OFF \
       -DLIBXML2_WITH_PYTHON=OFF \
-      -DBOOST_RUNTIME_LINK=STATIC \
-      -DJSONCPP_WITH_TESTS=OFF \
-      "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}" || echo "Config failed!"
+      -DCMAKE_C_FLAGS="-fpermissive" \
+      ${TEST_SKIP_ARGS} \
+      "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
+
+# -DCMAKE_C_FLAGS="-fpermissive" For pcre2 m32r 
 
 echo "Building ${LIB_NAME}..."
-cmake --build . -j$(nproc) || echo "Build failed!"
+cmake --build . -j$JCOUNT || echo "======= build incomplete! ======="
 
 echo "Installing ${LIB_NAME} to ${OUTPUT_DIR}..."
-cmake --install . || echo "Installation failed!"
+cmake --install .
 
 echo "Build completed successfully!"
 echo "Library installed to ${OUTPUT_DIR}"

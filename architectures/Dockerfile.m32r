@@ -1,0 +1,25 @@
+FROM buildcross-base:latest
+
+WORKDIR /
+
+ENV ARCH="m32r" \
+    TARGET="m32r-unknown-elf" \
+    TOOLCHAIN_FILE="/workspace/toolchains/m32r.cmake"
+
+RUN build.sh -j$(nproc) $ARCH
+
+ENV CROSS_PREFIX="/cross-${ARCH}" \
+    OUTPUT_PREFIX="/workspace/output/${ARCH}" \
+    SOURCE_PREFIX="/workspace/sources"
+
+ENV PATH="${CROSS_PREFIX}/bin:${PATH}" \
+    CC="${TARGET}-gcc" \
+    AR="${TARGET}-ar" \
+    RANLIB="${TARGET}-ranlib" \
+    CFLAGS="-g"
+
+ARG CACHEBUST=1
+WORKDIR /
+COPY toolchains/m32r.cmake /workspace/toolchains/m32r.cmake
+
+ENTRYPOINT [ "build-lib" ]

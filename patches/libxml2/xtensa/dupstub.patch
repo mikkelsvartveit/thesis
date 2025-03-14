@@ -1,4 +1,4 @@
---- a/CMakeLists.txt
+--- a/CMakeLists.old.txt
 +++ b/CMakeLists.txt
 @@ -247,6 +247,10 @@
  if(LIBXML2_WITH_C14N)

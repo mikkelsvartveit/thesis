@@ -5,11 +5,11 @@ set -e
 
 # Architectures to build for
 ARCHITECTURES=(
- # "arm64"
+ #"arm64"
  # "riscv64"
  # "xtensa"
  # "arcompact"
-  "m32c"
+  "m32r"
   # Add more architectures here
   # "ppc64le"
   # "s390x"
@@ -20,15 +20,15 @@ ARCHITECTURES=(
 LIBRARIES=(
   "zlib:1.3"
   #"libxml2:2.14"
-  # "libjpeg-turbo:3.1.0"
-  # "libpng:1.6.47"
-  # "freetype:2.13.3"
-  # "xzutils:1"
-  # "harfbuzz:10.4.0"
-  # "pcre2:10.45"
-  # "libyaml:0.2.5"
-  # "jsoncpp:1.9.6"
-  # "libwebp:1.5.0"
+  "libjpeg-turbo:3.1.0"
+  "libpng:1.6.47"
+  "freetype:2.13.3"
+  "xzutils:1"
+  "harfbuzz:10.4.0"
+  "pcre2:10.45"
+  "libyaml:0.2.5"
+  "jsoncpp:1.9.6"
+  "libwebp:1.5.0"
 )
 
 # Script directory
@@ -40,12 +40,16 @@ if ! docker image inspect cross-compile-base:latest &>/dev/null; then
   echo "Building base Docker image..."
   docker build -t cross-compile-base:latest -f "${PROJECT_ROOT}/Dockerfile.base" "${PROJECT_ROOT}"
 fi
+if ! docker image inspect buildcross-base:latest &>/dev/null; then
+  echo "Building base Docker image..."
+  docker build -t buildcross-base:latest -f "${PROJECT_ROOT}/Dockerfile.buildcross-base" "${PROJECT_ROOT}"
+fi
 
 # Build architecture-specific images
 for arch in "${ARCHITECTURES[@]}"; do
   if ! docker image inspect "cross-compile-${arch}:latest" &>/dev/null; then
     echo "Building Docker image for ${arch}..."
-    docker build --no-cache -t "cross-compile-${arch}:latest" \
+    docker build -t "cross-compile-${arch}:latest" \
       -f "${PROJECT_ROOT}/architectures/Dockerfile.${arch}" "${PROJECT_ROOT}"
   fi
 done
@@ -59,7 +63,6 @@ for lib_info in "${LIBRARIES[@]}"; do
   
   for arch in "${ARCHITECTURES[@]}"; do
     echo "Building ${lib_name} ${lib_version} for ${arch}..."
-    
     # Create output directory
     mkdir -p "${PROJECT_ROOT}/output/${arch}"
     
