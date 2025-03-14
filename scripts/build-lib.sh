@@ -99,6 +99,7 @@ cmake -G "Ninja" \
       -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
       -DCMAKE_INSTALL_PREFIX="${OUTPUT_DIR}" \
       -DBUILD_SHARED_LIBS=OFF \
+      -DENABLE_SHARED=OFF \
       -DLIBXML2_WITH_ICONV=OFF \
       -DLIBXML2_WITH_PYTHON=OFF \
       -DCMAKE_C_FLAGS="-fpermissive" \

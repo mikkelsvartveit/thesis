@@ -29,3 +29,4 @@ set(CMAKE_CXX_FLAGS_INIT "")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
 
 set(XZ_THREADS no)
+set(WEBP_USE_THREAD OFF)
