@@ -63,32 +63,39 @@ RUN mkdir -p /opt/buildcross/downloads \
              /opt/buildcross/host-tools
 
 # Download common components to avoid repetitive downloads
+ENV BUILDCROSS_DOWNLOADS="/opt/buildcross/downloads"
+ENV BUILDCROSS_SOURCES="/opt/buildcross/sources"
+ENV BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
 WORKDIR /opt/buildcross/downloads
 
 # Download GMP, MPFR, and MPC - these are required for all targets
-RUN wget -q https://ftpmirror.gnu.org/gmp/gmp-6.3.0.tar.xz \
-    && wget -q https://ftpmirror.gnu.org/mpfr/mpfr-4.2.1.tar.xz \
-    && wget -q https://ftpmirror.gnu.org/mpc/mpc-1.3.1.tar.gz
+# RUN wget -q https://ftpmirror.gnu.org/gmp/gmp-6.3.0.tar.xz \
+#     && wget -q https://ftpmirror.gnu.org/mpfr/mpfr-4.2.1.tar.xz \
+#     && wget -q https://ftpmirror.gnu.org/mpc/mpc-1.3.1.tar.gz
 
-# Clone common repositories
-RUN git clone https://github.com/gcc-mirror/gcc.git gcc-mirror-gcc
-RUN git clone https://github.com/mikpe/binutils-gdb.git mikpe-binutils-gdb 
-RUN git clone https://github.com/torvalds/linux.git torvalds-linux 
-RUN git clone https://github.com/mikpe/gcc-generated-files.git mikpe-gcc-generated-files
+# # Clone common repositories
+# RUN git clone https://github.com/gcc-mirror/gcc.git gcc-mirror-gcc
+# RUN git clone https://github.com/mikpe/binutils-gdb.git mikpe-binutils-gdb 
+# RUN git clone https://github.com/torvalds/linux.git torvalds-linux 
+# RUN git clone https://github.com/mikpe/gcc-generated-files.git mikpe-gcc-generated-files
 
 # Add script directory
 RUN mkdir -p /opt/buildcross/scripts
 COPY architectures/buildcross.sh /opt/buildcross/scripts/
 RUN chmod +x /opt/buildcross/scripts/buildcross.sh
+
+# Dryrun with downloads to get sources
+RUN /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
+--sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only X86_64
+RUN /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
+--sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only moxie
+
 # Add library compile scripts
 COPY scripts/build-lib.sh /usr/local/bin/build-lib
 COPY scripts/download-libs.sh /usr/local/bin/download-libs
 RUN chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
 
 # Set up environment variables
-ENV BUILDCROSS_DOWNLOADS="/opt/buildcross/downloads"
-ENV BUILDCROSS_SOURCES="/opt/buildcross/sources"
-ENV BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
 
 # Create a helper script to easily run buildcross with the right paths
 RUN echo '#!/bin/bash\n\

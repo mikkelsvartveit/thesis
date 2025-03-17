@@ -52,8 +52,8 @@ RUN echo '#!/bin/bash' > /usr/local/bin/use-gcc-6 \
 # Create a helper script for building architectures requiring GCC 6
 RUN echo '#!/bin/bash' > /usr/local/bin/build-with-gcc6 \
     && echo 'if [ -z "$1" ]; then' >> /usr/local/bin/build-with-gcc6 \
-    && echo '  echo "Usage: build-with-gcc6 <TARGET> [output_dir] [additional options]"' >> /usr/local/bin/build-with-gcc6 \
-    && echo '  echo "Example: build-with-gcc6 m32c /workspace/output/cross-m32c -j4"' >> /usr/local/bin/build-with-gcc6 \
+    && echo '  echo "Usage: build-with-gcc6 <TARGET> [additional options]"' >> /usr/local/bin/build-with-gcc6 \
+    && echo '  echo "Example: build-with-gcc6 m32c -j4"' >> /usr/local/bin/build-with-gcc6 \
     && echo '  exit 1' >> /usr/local/bin/build-with-gcc6 \
     && echo 'fi' >> /usr/local/bin/build-with-gcc6 \
     && echo 'TARGET=$1' >> /usr/local/bin/build-with-gcc6 \
@@ -62,13 +62,20 @@ RUN echo '#!/bin/bash' > /usr/local/bin/build-with-gcc6 \
     && chmod +x /usr/local/bin/build-with-gcc6
 
 
-# Return to workspace
-WORKDIR /workspace
+# Clean up
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Start in the root directory where builds are typically run
+WORKDIR /
 
 # Update welcome message
 RUN echo 'echo "To build targets requiring GCC 6, use:"' >> /root/.bashrc \
-    && echo 'echo "  build-with-gcc6 <TARGET> [output_dir] [options]"' >> /root/.bashrc \
-    && echo 'echo "  Example: build-with-gcc6 m32c /workspace/output/cross-m32c -j4"' >> /root/.bashrc \
+    && echo 'echo "  build-with-gcc6 <TARGET> [options]"' >> /root/.bashrc \
+    && echo 'echo "  Example: build-with-gcc6 m32c -j4"' >> /root/.bashrc \
+    && echo 'echo ""' >> /root/.bashrc \
+    && echo 'echo "The compiler will be in: ./<TARGET>"' >> /root/.bashrc \
+    && echo 'echo "Workspace directories for your source files: /workspace/sources and /workspace/output"' >> /root/.bashrc \
     && echo 'echo ""' >> /root/.bashrc \
     && echo 'echo "To see which targets need GCC 6, run:"' >> /root/.bashrc \
     && echo 'echo "  gcc6-targets.sh"' >> /root/.bashrc \
