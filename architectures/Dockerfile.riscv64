@@ -16,4 +16,4 @@ ENV ARCH="riscv64" \
     CROSS_COMPILE="riscv64-linux-gnu-" \
     TOOLCHAIN_FILE="/workspace/toolchains/riscv64.cmake"
 
-ENTRYPOINT ["build-lib"]
+WORKDIR /

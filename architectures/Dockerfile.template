@@ -1,5 +1,7 @@
-ARG ARCH="epiphany"
-ARG TARGET="epiphany-unknown-elf"
+# "m32r"
+# "m32r-unknown-elf"
+ARG ARCH=""
+ARG TARGET=""
 
 # Builder stage
 # -------------------------------------------------------------------

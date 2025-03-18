@@ -31,6 +31,9 @@
 #		Place built host tools in <HOST_TOOLS_DIR>.
 #		Default: <CWD>/host-tools
 #
+# --download-only | -do
+#   Download sources only, don't build anything.
+#
 #	-j<N>
 #		Pass -j<N> to make. Default: empty
 #
@@ -184,6 +187,7 @@ DOWNLOADS_DIR=
 HOST_TOOLS_DIR=
 SOURCES_DIR=
 TARGET_ARCH=
+DOWNLOAD_ONLY=
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -217,6 +221,9 @@ while [ $# -gt 0 ]; do
 	-s)
 	    shift
 	    SOURCES_DIR="$1"
+	    ;;
+	--download-only)
+		DOWNLOAD_ONLY=1
 	    ;;
 	--target=*)
 	    TARGET_ARCH=`echo "x$1" | sed 's,x--target=,,'`
@@ -2432,6 +2439,11 @@ if [ ! -d "${HOST_TOOLS_DIR}" ]; then
 fi
 
 get_sources
+
+if [ -n "${DOWNLOAD_ONLY}" ]; then
+    log "Download-only mode: sources downloaded to ${DOWNLOADS_DIR}"
+    exit 0
+fi
 
 cd ${BUILD_DIR}
 

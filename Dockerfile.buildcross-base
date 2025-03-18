@@ -103,9 +103,7 @@ RUN echo '#!/bin/bash\n\
 --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} "$@"' > /usr/local/bin/build.sh \
 && chmod +x /usr/local/bin/build.sh
 
-# Create workspace volumes for later use
 RUN mkdir -p /workspace/sources /workspace/output
-VOLUME ["/opt/buildcross/downloads", "/workspace/sources", "/workspace/output"]
 
 # Set up welcome message for bash
 RUN echo 'echo "Welcome to Buildcross Docker environment!"' >> /root/.bashrc \

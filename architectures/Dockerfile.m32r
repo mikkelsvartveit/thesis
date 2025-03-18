@@ -1,25 +1,42 @@
-FROM buildcross-base:latest
+ARG ARCH="m32r"
+ARG TARGET="m32r-unknown-elf"
+
+# Builder stage
+# -------------------------------------------------------------------
+FROM buildcross-base:latest AS builder
 
 WORKDIR /
 
-ENV ARCH="m32r" \
-    TARGET="m32r-unknown-elf" \
-    TOOLCHAIN_FILE="/workspace/toolchains/m32r.cmake"
+ENV ARCH=$ARCH \
+    TARGET=$TARGET \
+    TOOLCHAIN_FILE="/workspace/toolchains/${ARCH}.cmake"
+
 
 RUN build.sh -j$(nproc) $ARCH
 
-ENV CROSS_PREFIX="/cross-${ARCH}" \
-    OUTPUT_PREFIX="/workspace/output/${ARCH}" \
-    SOURCE_PREFIX="/workspace/sources"
+# -----------------------------------------------------------------------------
+# Second stage 
+FROM cross-compile-base:latest
 
+ARG CACHEBUST=1
+
+# Set up environment variables
+ENV ARCH=ARCH
+ENV TARGET=$TARGET
+ENV CROSS_PREFIX="/cross-${ARCH}" 
+ENV OUTPUT_PREFIX="/workspace/output/${ARCH}" 
+ENV SOURCE_PREFIX="/workspace/sources" 
+ENV TOOLCHAIN_FILE="/workspace/toolchains/$ARCH.cmake"
+
+# Copy only the compiled toolchain from the builder stage
+COPY --from=builder "/cross-${ARCH}" "/cross-${ARCH}"
+COPY "toolchains/${ARCH}.cmake" "/workspace/toolchains/${ARCH}.cmake"
+
+# Set up PATH and compiler environment variables
 ENV PATH="${CROSS_PREFIX}/bin:${PATH}" \
     CC="${TARGET}-gcc" \
     AR="${TARGET}-ar" \
     RANLIB="${TARGET}-ranlib" \
     CFLAGS="-g"
 
-ARG CACHEBUST=1
 WORKDIR /
-COPY toolchains/m32r.cmake /workspace/toolchains/m32r.cmake
-
-#ENTRYPOINT [ "build-lib" ]

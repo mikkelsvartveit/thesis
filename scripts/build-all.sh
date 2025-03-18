@@ -9,7 +9,7 @@ ARCHITECTURES=(
  # "riscv64"
  # "xtensa"
  # "arcompact"
-  #"m32r"
+  "m32r"
   "epiphany"
   # Add more architectures here
   # "ppc64le"
@@ -82,7 +82,7 @@ for arch in "${ARCHITECTURES[@]}"; do
     "cross-compile-${arch}:latest" \
       -c "for lib_info in ${LIB_ARRAY_STR}; do \
         IFS=':' read -r lib_name lib_version <<< \"\${lib_info}\"; \
-        build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"Failed to build ${lib_name}\"; \
+        build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \
       done"
   
   echo "Completed all builds for ${arch}"

@@ -16,4 +16,4 @@ ENV ARCH="arm64" \
     CROSS_COMPILE="aarch64-linux-gnu-" \
     TOOLCHAIN_FILE="/workspace/toolchains/arm64.cmake"
 
-ENTRYPOINT ["build-lib"]
+WORKDIR /

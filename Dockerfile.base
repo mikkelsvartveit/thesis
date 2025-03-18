@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as base
+FROM ubuntu:22.04 AS base
 
 # Install common build tools and dependencies
 RUN apt-get update && apt-get install -y \
@@ -34,7 +34,7 @@ COPY scripts/build-lib.sh /usr/local/bin/build-lib
 COPY scripts/download-libs.sh /usr/local/bin/download-libs
 RUN chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
 
-# Set up volumes for input/output
-VOLUME ["/workspace/sources", "/workspace/output"]
+
+RUN mkdir -p /workspace/sources /workspace/output
 
 CMD ["bash"]

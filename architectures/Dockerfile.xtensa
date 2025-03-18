@@ -22,4 +22,4 @@ ENV ARCH="xtensa" \
     CROSS_COMPILE="xtensa-esp32-elf-" \
     TOOLCHAIN_FILE="/workspace/toolchains/xtensa.cmake"
 
-ENTRYPOINT ["build-lib"]
+WORKDIR /
