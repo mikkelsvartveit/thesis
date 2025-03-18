@@ -7,10 +7,11 @@ FROM buildcross-base:latest AS builder
 
 WORKDIR /
 
+ARG ARCH
+ARG TARGET
 ENV ARCH=$ARCH \
     TARGET=$TARGET \
     TOOLCHAIN_FILE="/workspace/toolchains/${ARCH}.cmake"
-
 
 RUN build.sh -j$(nproc) $ARCH
 
@@ -18,15 +19,17 @@ RUN build.sh -j$(nproc) $ARCH
 # Second stage 
 FROM cross-compile-base:latest
 
+ARG ARCH
+ARG TARGET
 ARG CACHEBUST=1
 
 # Set up environment variables
-ENV ARCH=ARCH
+ENV ARCH=$ARCH
 ENV TARGET=$TARGET
 ENV CROSS_PREFIX="/cross-${ARCH}" 
 ENV OUTPUT_PREFIX="/workspace/output/${ARCH}" 
 ENV SOURCE_PREFIX="/workspace/sources" 
-ENV TOOLCHAIN_FILE="/workspace/toolchains/$ARCH.cmake"
+ENV TOOLCHAIN_FILE="/workspace/toolchains/${ARCH}.cmake"
 
 # Copy only the compiled toolchain from the builder stage
 COPY --from=builder "/cross-${ARCH}" "/cross-${ARCH}"
