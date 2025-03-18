@@ -10,42 +10,69 @@ This section evaluates and compares the performance the proposed \ac{CNN} models
 
 ### Simple 1D CNN
 
-TODO
+Table: Classifying endianness with Simple1d \label{table:logo-endianness-simple1d-results}
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| ppc64el      |         1.000 |              0.000 |
+| armel        |         1.000 |              0.000 |
+| powerpc      |         0.999 |              0.001 |
+| alpha        |         0.996 |              0.003 |
+| mips64el     |         0.995 |              0.004 |
+| sparc        |         0.994 |              0.012 |
+| x32          |         0.991 |              0.003 |
+| powerpcspe   |         0.988 |              0.007 |
+| amd64        |         0.979 |              0.016 |
+| i386         |         0.970 |              0.021 |
+| sparc64      |         0.949 |              0.032 |
+| armhf        |         0.946 |              0.023 |
+| mipsel       |         0.866 |              0.079 |
+| ppc64        |         0.861 |              0.128 |
+| arm64        |         0.777 |              0.251 |
+| ia64         |         0.604 |              0.488 |
+| s390x        |         0.532 |              0.331 |
+| hppa         |         0.491 |              0.312 |
+| riscv64      |         0.426 |              0.165 |
+| sh4          |         0.243 |              0.281 |
+| mips         |         0.178 |              0.189 |
+| m68k         |         0.174 |              0.315 |
+| s390         |         0.010 |              0.030 |
+| **Overall**  |     **0.717** |          **0.055** |
 
 ### Simple 1D CNN with embedding layer
 
 This subsection presents the results of applying the Simple1dEmbedding model specified in \autoref{simple-1d-cnn-with-embedding-layer} to endianness classification.
 
-We run \acf{LOGO CV} on ISADetect, repeating the process 20 times with different random seeds. The per-\ac{ISA} results are aggregated across the 20 runs. The results are shown in \autoref{table:logo-endianness-simple1dembedding-results} and \autoref{fig:logo-endianness-simple1dembedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 91.3% and a standard deviation of 1.9% across all \acp{ISA}.
+We run \acf{LOGO CV} on ISADetect, repeating the process 10 times with different random seeds. The per-\ac{ISA} results are aggregated across the 10 runs. The results are shown in \autoref{table:logo-endianness-simple1dembedding-results} and \autoref{fig:logo-endianness-simple1dembedding-results}. The bars represent the mean accuracy, and the error markers show one standard deviation above and below the mean. We observe an overall mean accuracy of 91.3% and a standard deviation of 1.9% across all \acp{ISA}.
 
 Table: Classifying endianness with Simple1dEmbedding \label{table:logo-endianness-simple1dembedding-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
-| ppc64el      |         1.000 |              0.000 |
-| powerpcspe   |         1.000 |              0.000 |
 | s390x        |         1.000 |              0.000 |
+| ppc64el      |         1.000 |              0.000 |
 | powerpc      |         1.000 |              0.000 |
-| x32          |         1.000 |              0.000 |
-| sparc        |         1.000 |              0.000 |
-| mipsel       |         0.999 |              0.002 |
-| s390         |         0.998 |              0.003 |
-| amd64        |         0.997 |              0.007 |
-| i386         |         0.994 |              0.008 |
-| alpha        |         0.990 |              0.020 |
-| armel        |         0.989 |              0.021 |
-| sh4          |         0.980 |              0.026 |
-| sparc64      |         0.969 |              0.017 |
-| armhf        |         0.968 |              0.022 |
-| riscv64      |         0.958 |              0.059 |
-| ppc64        |         0.949 |              0.081 |
-| mips64el     |         0.939 |              0.101 |
-| mips         |         0.934 |              0.068 |
-| ia64         |         0.885 |              0.036 |
-| hppa         |         0.817 |              0.145 |
-| arm64        |         0.645 |              0.310 |
-| m68k         |         0.065 |              0.123 |
-| **Overall**  |     **0.913** |          **0.019** |
+| powerpcspe   |         1.000 |              0.000 |
+| sparc        |         0.999 |              0.001 |
+| x32          |         0.999 |              0.001 |
+| mips64el     |         0.998 |              0.002 |
+| i386         |         0.998 |              0.003 |
+| s390         |         0.997 |              0.005 |
+| mipsel       |         0.996 |              0.007 |
+| amd64        |         0.995 |              0.010 |
+| armel        |         0.992 |              0.009 |
+| armhf        |         0.985 |              0.015 |
+| sparc64      |         0.976 |              0.010 |
+| mips         |         0.972 |              0.035 |
+| alpha        |         0.954 |              0.051 |
+| sh4          |         0.861 |              0.221 |
+| ppc64        |         0.844 |              0.151 |
+| ia64         |         0.792 |              0.283 |
+| arm64        |         0.791 |              0.207 |
+| riscv64      |         0.777 |              0.287 |
+| hppa         |         0.717 |              0.261 |
+| m68k         |         0.094 |              0.202 |
+| **Overall**  |     **0.897** |          **0.028** |
 
 ![Classifying endianness with Simple1dEmbedding \label{fig:logo-endianness-simple1dembedding-results}](./images/logo-endianness-simple1dembedding-results.png)
 
@@ -53,36 +80,69 @@ Table: Classifying endianness with Simple1dEmbedding \label{table:logo-endiannes
 
 TODO
 
+Table: Classifying endianness with Simple2dCNN \label{table:logo-endianness-simple2d-results}
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| armel        |         1.000 |              0.000 |
+| alpha        |         1.000 |              0.000 |
+| mips64el     |         1.000 |              0.000 |
+| ppc64el      |         1.000 |              0.000 |
+| powerpc      |         0.998 |              0.002 |
+| powerpcspe   |         0.982 |              0.013 |
+| x32          |         0.981 |              0.010 |
+| armhf        |         0.981 |              0.013 |
+| i386         |         0.978 |              0.023 |
+| amd64        |         0.944 |              0.015 |
+| ppc64        |         0.905 |              0.129 |
+| mipsel       |         0.766 |              0.073 |
+| sparc64      |         0.723 |              0.098 |
+| sparc        |         0.460 |              0.308 |
+| arm64        |         0.365 |              0.134 |
+| mips         |         0.352 |              0.143 |
+| riscv64      |         0.246 |              0.182 |
+| sh4          |         0.199 |              0.221 |
+| s390x        |         0.133 |              0.240 |
+| hppa         |         0.121 |              0.042 |
+| ia64         |         0.060 |              0.070 |
+| s390         |         0.004 |              0.001 |
+| m68k         |         0.000 |              0.000 |
+| **Overall**  |     **0.589** |          **0.024** |
+
+![Classifying endianness with Simple2dCNN \label{fig:logo-endianness-simple2d-results}](./images/logo-endianness-simple2d-results.png)
+
 ### Simple 2D CNN with embedding layer
 
 TODO
+
+Table: Classifying endianness with Simple2dEmbedding \label{table:logo-endianness-simple2dembedding-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
 | powerpc      |         1.000 |              0.000 |
 | ppc64el      |         1.000 |              0.000 |
 | powerpcspe   |         1.000 |              0.000 |
-| s390x        |         1.000 |              0.000 |
-| sparc        |         0.999 |              0.002 |
-| x32          |         0.999 |              0.002 |
-| mipsel       |         0.998 |              0.002 |
-| amd64        |         0.997 |              0.003 |
-| mips64el     |         0.996 |              0.007 |
-| s390         |         0.996 |              0.006 |
-| i386         |         0.996 |              0.005 |
-| armel        |         0.993 |              0.009 |
-| alpha        |         0.987 |              0.023 |
-| armhf        |         0.975 |              0.022 |
-| mips         |         0.969 |              0.054 |
-| sparc64      |         0.952 |              0.020 |
-| sh4          |         0.814 |              0.302 |
-| ppc64        |         0.810 |              0.215 |
-| hppa         |         0.662 |              0.212 |
-| riscv64      |         0.636 |              0.340 |
-| ia64         |         0.584 |              0.439 |
-| arm64        |         0.539 |              0.328 |
-| m68k         |         0.041 |              0.089 |
-| **Overall**  |     **0.861** |          **0.041** |
+| x32          |         1.000 |              0.000 |
+| mipsel       |         0.999 |              0.002 |
+| sparc        |         0.999 |              0.001 |
+| mips64el     |         0.999 |              0.001 |
+| amd64        |         0.998 |              0.004 |
+| i386         |         0.997 |              0.005 |
+| s390         |         0.995 |              0.008 |
+| armel        |         0.985 |              0.019 |
+| armhf        |         0.978 |              0.020 |
+| alpha        |         0.949 |              0.056 |
+| mips         |         0.946 |              0.071 |
+| sparc64      |         0.945 |              0.016 |
+| s390x        |         0.909 |              0.233 |
+| sh4          |         0.729 |              0.357 |
+| hppa         |         0.729 |              0.146 |
+| ppc64        |         0.682 |              0.294 |
+| ia64         |         0.662 |              0.423 |
+| riscv64      |         0.585 |              0.346 |
+| arm64        |         0.581 |              0.287 |
+| m68k         |         0.014 |              0.038 |
+| **Overall**  |     **0.851** |          **0.036** |
 
 ![Classifying endianness with Simple2dEmbedding \label{fig:logo-endianness-simple2dembedding-results}](./images/logo-endianness-simple2dembedding-results.png)
 
@@ -90,7 +150,7 @@ TODO
 
 TODO
 
-Table: Classifying endianness with ResNet50 \label{table:resnet50-endianness-results}
+Table: Classifying endianness with ResNet50 \label{table:logo-endianness-resnet50-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
@@ -119,13 +179,46 @@ Table: Classifying endianness with ResNet50 \label{table:resnet50-endianness-res
 | m68k         |         0.024 |              0.017 |
 | **Overall**  |     **0.622** |          **0.019** |
 
-![Classifying endianness with ResNet50 \label{fig:logo-endianness-resnet-results}](./images/logo-endianness-resnet-results.png)
+![Classifying endianness with ResNet50 \label{fig:logo-endianness-resnet50-results}](./images/logo-endianness-resnet50-results.png)
 
 ### ResNet50 with embedding layer
 
 TODO
 
+Table: Classifying endianness with ResNet50Embedding \label{table:logo-endianness-resnet50embedding-results}
+
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| powerpc      |         1.000 |              0.001 |
+| x32          |         0.999 |              0.001 |
+| powerpcspe   |         0.999 |              0.002 |
+| ppc64el      |         0.998 |              0.004 |
+| amd64        |         0.995 |              0.005 |
+| mipsel       |         0.989 |              0.009 |
+| armel        |         0.985 |              0.017 |
+| i386         |         0.977 |              0.016 |
+| armhf        |         0.976 |              0.018 |
+| alpha        |         0.974 |              0.046 |
+| mips64el     |         0.963 |              0.055 |
+| s390         |         0.951 |              0.032 |
+| sparc        |         0.912 |              0.117 |
+| sparc64      |         0.837 |              0.185 |
+| s390x        |         0.751 |              0.212 |
+| riscv64      |         0.730 |              0.359 |
+| mips         |         0.673 |              0.180 |
+| sh4          |         0.644 |              0.165 |
+| hppa         |         0.591 |              0.207 |
+| arm64        |         0.547 |              0.309 |
+| ia64         |         0.494 |              0.327 |
+| ppc64        |         0.395 |              0.315 |
+| m68k         |         0.013 |              0.015 |
+| **Overall**  |     **0.799** |          **0.044** |
+
+![Classifying endianness with ResNet50Embedding \label{fig:logo-endianness-resnet50embedding-results}](./images/logo-endianness-resnet50embedding-results.png)
+
 ### Summary
+
+TODO
 
 ## Instruction width type
 
@@ -141,28 +234,28 @@ Table: Classifying instruction width type with Simple1dCNN \label{table:logo-ins
 | ------------ | ------------: | -----------------: |
 | armel        |         1.000 |              0.000 |
 | powerpc      |         1.000 |              0.000 |
-| powerpcspe   |         1.000 |              0.001 |
-| mips         |         0.984 |              0.018 |
-| mips64el     |         0.983 |              0.020 |
-| armhf        |         0.983 |              0.023 |
-| x32          |         0.978 |              0.008 |
-| sparc        |         0.972 |              0.077 |
-| m68k         |         0.944 |              0.218 |
-| mipsel       |         0.934 |              0.055 |
-| amd64        |         0.930 |              0.028 |
-| i386         |         0.915 |              0.054 |
-| alpha        |         0.879 |              0.203 |
-| ppc64        |         0.872 |              0.131 |
-| sparc64      |         0.866 |              0.147 |
-| arm64        |         0.858 |              0.160 |
-| sh4          |         0.848 |              0.214 |
-| s390         |         0.430 |              0.375 |
-| hppa         |         0.201 |              0.100 |
-| s390x        |         0.185 |              0.256 |
-| ppc64el      |         0.142 |              0.312 |
-| riscv64      |         0.097 |              0.105 |
-| ia64         |         0.009 |              0.002 |
-| **Overall**  |     **0.730** |          **0.030** |
+| powerpcspe   |         1.000 |              0.000 |
+| sparc        |         0.996 |              0.005 |
+| armhf        |         0.994 |              0.008 |
+| m68k         |         0.993 |              0.008 |
+| mips64el     |         0.987 |              0.012 |
+| mips         |         0.987 |              0.009 |
+| alpha        |         0.982 |              0.057 |
+| x32          |         0.973 |              0.005 |
+| ppc64        |         0.957 |              0.050 |
+| amd64        |         0.928 |              0.023 |
+| mipsel       |         0.918 |              0.048 |
+| sparc64      |         0.903 |              0.095 |
+| sh4          |         0.897 |              0.206 |
+| i386         |         0.897 |              0.050 |
+| arm64        |         0.856 |              0.141 |
+| s390         |         0.427 |              0.342 |
+| hppa         |         0.206 |              0.071 |
+| s390x        |         0.186 |              0.265 |
+| riscv64      |         0.161 |              0.125 |
+| ppc64el      |         0.144 |              0.308 |
+| ia64         |         0.011 |              0.003 |
+| **Overall**  |     **0.747** |          **0.034** |
 
 ![Classifying instruction width type with Simple1dCNN \label{fig:logo-instructionwidthtype-simple1d-results}](./images/logo-instructionwidthtype-simple1d-results.png)
 
@@ -177,29 +270,29 @@ Table: Classifying instruction width type with Simple1dEmbedding \label{table:lo
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
 | powerpc      |         1.000 |              0.000 |
+| riscv64      |         1.000 |              0.000 |
+| sparc        |         1.000 |              0.000 |
 | powerpcspe   |         1.000 |              0.000 |
-| amd64        |         0.999 |              0.001 |
-| sparc        |         0.999 |              0.002 |
 | x32          |         0.999 |              0.001 |
-| i386         |         0.993 |              0.014 |
-| mips64el     |         0.993 |              0.015 |
-| armel        |         0.985 |              0.014 |
-| riscv64      |         0.981 |              0.035 |
-| armhf        |         0.964 |              0.017 |
-| sparc64      |         0.959 |              0.061 |
-| mips         |         0.959 |              0.030 |
-| mipsel       |         0.938 |              0.075 |
-| sh4          |         0.932 |              0.174 |
-| s390x        |         0.925 |              0.125 |
-| s390         |         0.892 |              0.195 |
-| m68k         |         0.764 |              0.370 |
-| ppc64el      |         0.737 |              0.384 |
-| hppa         |         0.712 |              0.360 |
-| ia64         |         0.621 |              0.384 |
-| ppc64        |         0.438 |              0.298 |
-| arm64        |         0.383 |              0.394 |
-| alpha        |         0.209 |              0.048 |
-| **Overall**  |     **0.852** |          **0.058** |
+| mips64el     |         0.997 |              0.005 |
+| i386         |         0.997 |              0.004 |
+| armel        |         0.996 |              0.004 |
+| amd64        |         0.995 |              0.008 |
+| s390x        |         0.986 |              0.027 |
+| s390         |         0.983 |              0.034 |
+| armhf        |         0.980 |              0.012 |
+| sparc64      |         0.960 |              0.038 |
+| mipsel       |         0.946 |              0.066 |
+| sh4          |         0.920 |              0.165 |
+| m68k         |         0.856 |              0.305 |
+| mips         |         0.851 |              0.261 |
+| hppa         |         0.846 |              0.249 |
+| ppc64el      |         0.823 |              0.366 |
+| ppc64        |         0.642 |              0.208 |
+| ia64         |         0.556 |              0.398 |
+| arm64        |         0.484 |              0.299 |
+| alpha        |         0.248 |              0.065 |
+| **Overall**  |     **0.878** |          **0.043** |
 
 ![Classifying instruction width type with Simple1dEmbedding \label{fig:logo-instructionwidthtype-simple1dembedding-results}](./images/logo-instructionwidthtype-simple1dembedding-results.png)
 
@@ -212,29 +305,29 @@ Table: Classifying instruction width type with Simple2dCNN \label{table:logo-ins
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
 | powerpc      |         1.000 |              0.000 |
-| mips64el     |         0.999 |              0.001 |
-| armel        |         0.999 |              0.003 |
-| powerpcspe   |         0.998 |              0.004 |
-| arm64        |         0.995 |              0.010 |
-| mipsel       |         0.988 |              0.013 |
-| x32          |         0.984 |              0.007 |
-| alpha        |         0.983 |              0.054 |
-| mips         |         0.979 |              0.064 |
-| i386         |         0.951 |              0.050 |
-| amd64        |         0.938 |              0.036 |
-| armhf        |         0.926 |              0.037 |
-| ppc64        |         0.903 |              0.133 |
-| riscv64      |         0.794 |              0.173 |
-| sh4          |         0.759 |              0.215 |
-| sparc64      |         0.716 |              0.140 |
-| ppc64el      |         0.713 |              0.294 |
-| sparc        |         0.608 |              0.167 |
-| hppa         |         0.436 |              0.253 |
-| m68k         |         0.217 |              0.337 |
-| s390         |         0.195 |              0.272 |
-| s390x        |         0.086 |              0.173 |
-| ia64         |         0.006 |              0.003 |
-| **Overall**  |     **0.729** |          **0.036** |
+| armel        |         1.000 |              0.000 |
+| powerpcspe   |         0.999 |              0.001 |
+| arm64        |         0.997 |              0.005 |
+| mips         |         0.996 |              0.009 |
+| sh4          |         0.993 |              0.020 |
+| mipsel       |         0.993 |              0.006 |
+| mips64el     |         0.992 |              0.009 |
+| x32          |         0.986 |              0.003 |
+| armhf        |         0.928 |              0.022 |
+| amd64        |         0.912 |              0.036 |
+| i386         |         0.896 |              0.060 |
+| ppc64        |         0.839 |              0.161 |
+| sparc64      |         0.782 |              0.077 |
+| riscv64      |         0.774 |              0.280 |
+| ppc64el      |         0.708 |              0.386 |
+| ia64         |         0.603 |              0.477 |
+| alpha        |         0.492 |              0.239 |
+| sparc        |         0.402 |              0.185 |
+| hppa         |         0.230 |              0.102 |
+| s390x        |         0.161 |              0.309 |
+| s390         |         0.094 |              0.135 |
+| m68k         |         0.072 |              0.143 |
+| **Overall**  |     **0.720** |          **0.052** |
 
 ![Classifying instruction width type with Simple2dCNN \label{fig:logo-instructionwidthtype-simple2d-results}](./images/logo-instructionwidthtype-simple2d-results.png)
 
@@ -242,38 +335,42 @@ Table: Classifying instruction width type with Simple2dCNN \label{table:logo-ins
 
 TODO
 
+Table: Classifying instruction width type with Simple2dEmbedding \label{table:logo-instructionwidthtype-simple2dembedding-results}
+
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
 | powerpc      |         1.000 |              0.000 |
-| sparc        |         1.000 |              0.000 |
 | powerpcspe   |         1.000 |              0.000 |
 | riscv64      |         1.000 |              0.000 |
-| sh4          |         1.000 |              0.000 |
-| x32          |         0.998 |              0.001 |
-| amd64        |         0.998 |              0.002 |
-| armel        |         0.991 |              0.014 |
-| i386         |         0.991 |              0.009 |
-| sparc64      |         0.985 |              0.010 |
-| mips64el     |         0.984 |              0.034 |
-| armhf        |         0.974 |              0.013 |
-| m68k         |         0.947 |              0.091 |
-| mips         |         0.912 |              0.080 |
-| mipsel       |         0.895 |              0.156 |
-| s390         |         0.869 |              0.267 |
-| hppa         |         0.819 |              0.200 |
-| ppc64el      |         0.767 |              0.336 |
-| s390x        |         0.751 |              0.402 |
-| arm64        |         0.345 |              0.342 |
-| ppc64        |         0.297 |              0.310 |
-| alpha        |         0.270 |              0.131 |
-| ia64         |         0.233 |              0.406 |
-| **Overall**  |     **0.837** |          **0.031** |
+| sparc        |         1.000 |              0.000 |
+| sh4          |         1.000 |              0.001 |
+| x32          |         0.999 |              0.001 |
+| amd64        |         0.999 |              0.001 |
+| s390x        |         0.997 |              0.003 |
+| armel        |         0.994 |              0.008 |
+| i386         |         0.989 |              0.014 |
+| armhf        |         0.981 |              0.013 |
+| sparc64      |         0.965 |              0.027 |
+| m68k         |         0.944 |              0.164 |
+| mips64el     |         0.925 |              0.141 |
+| mipsel       |         0.924 |              0.107 |
+| s390         |         0.833 |              0.341 |
+| mips         |         0.806 |              0.139 |
+| hppa         |         0.722 |              0.334 |
+| ppc64el      |         0.682 |              0.419 |
+| arm64        |         0.467 |              0.327 |
+| ppc64        |         0.301 |              0.206 |
+| alpha        |         0.239 |              0.071 |
+| ia64         |         0.164 |              0.345 |
+| **Overall**  |     **0.831** |          **0.035** |
 
 ![Classifying instruction width type with Simple2dEmbedding \label{fig:logo-instructionwidthtype-simple2dembedding-results}](./images/logo-instructionwidthtype-simple2dembedding-results.png)
 
 ### ResNet50
 
 TODO
+
+Table: Classifying instruction width type with ResNet50 \label{table:logo-instructionwidthtype-resnet-results}
 
 | Architecture | Mean Accuracy | Standard Deviation |
 | ------------ | ------------: | -----------------: |
