@@ -403,6 +403,33 @@ Table: Classifying instruction width type with ResNet50 \label{table:logo-instru
 
 ### ResNet50 with embedding layer
 
-TODO
+| Architecture | Mean Accuracy | Standard Deviation |
+| ------------ | ------------: | -----------------: |
+| powerpcspe   |         1.000 |              0.000 |
+| powerpc      |         1.000 |              0.001 |
+| ppc64el      |         0.999 |              0.001 |
+| sh4          |         0.998 |              0.003 |
+| riscv64      |         0.997 |              0.004 |
+| sparc        |         0.997 |              0.005 |
+| armel        |         0.994 |              0.005 |
+| x32          |         0.993 |              0.005 |
+| sparc64      |         0.993 |              0.008 |
+| mipsel       |         0.992 |              0.009 |
+| arm64        |         0.987 |              0.004 |
+| armhf        |         0.984 |              0.012 |
+| amd64        |         0.978 |              0.014 |
+| mips         |         0.945 |              0.070 |
+| i386         |         0.935 |              0.035 |
+| mips64el     |         0.935 |              0.090 |
+| ppc64        |         0.871 |              0.119 |
+| hppa         |         0.754 |              0.362 |
+| m68k         |         0.684 |              0.349 |
+| s390x        |         0.399 |              0.433 |
+| ia64         |         0.284 |              0.318 |
+| alpha        |         0.247 |              0.128 |
+| s390         |         0.078 |              0.118 |
+| **Overall**  |     **0.818** |          **0.030** |
+
+![Classifying instruction width type with ResNet50Embedding \label{fig:logo-instructionwidthtype-resnet50embedding-results}](./images/logo-instructionwidthtype-resnet50embedding-results.png)
 
 ### Summary
