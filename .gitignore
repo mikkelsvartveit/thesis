@@ -2,7 +2,12 @@ sources/*
 output/*
 
 slurm-scripts/logs
+slurm-scripts/cross-compiler-images
 slurm-scripts/submitscripts
 base-images/*
 
 compiled-toolchain
+
+/example_program
+
+*.def
