@@ -41,7 +41,7 @@ Table: Endianness classification performance. \label{table:logo-endianness-resul
 
 ![Endianness classification performance by model \label{fig:logo-endianness-by-model}](./images/logo-endianness-by-model.png)
 
-![Endianness classification performance by architecture \label{fig:logo-endianness-by-architecture}](./images/logo-endianness-by-architecture.png)
+![Endianness classification performance by \ac{ISA} \label{fig:logo-endianness-by-isa}](./images/logo-endianness-by-isa.png)
 
 ## Instruction width type
 
@@ -82,4 +82,4 @@ Table: Instruction width type classification performance. \label{table:logo-inst
 
 ![Instruction width type classification performance by model \label{fig:logo-instructionwidthtype-by-model}](./images/logo-instructionwidthtype-by-model.png)
 
-![Instruction width type classification performance by architecture \label{fig:logo-instructionwidthtype-by-architecture}](./images/logo-instructionwidthtype-by-architecture.png)
+![Instruction width type classification performance by \ac{ISA} \label{fig:logo-instructionwidthtype-by-isa}](./images/logo-instructionwidthtype-by-isa.png)
