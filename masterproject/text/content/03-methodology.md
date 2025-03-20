@@ -136,7 +136,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1dEmbedding_.
+This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1d-E_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
@@ -202,9 +202,9 @@ Table: Simple 2D CNN \label{table:simple-2d-cnn}
 | Fully Connected | –               | (2,)          | 18         |
 | Softmax         | –               | (2,)          | –          |
 
-#### 2D CNN with embedding layer
+#### Simple 2D CNN with embedding layer
 
-This model builds on the the simple 2D CNN model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2dEmbedding_.
+This model builds on the the simple 2D CNN model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2d-E_.
 
 Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 
