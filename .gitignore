@@ -4,3 +4,5 @@ output/*
 slurm-scripts/logs
 slurm-scripts/submitscripts
 base-images/*
+
+compiled-toolchain

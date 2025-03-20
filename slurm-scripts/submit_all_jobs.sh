@@ -7,8 +7,8 @@
 
 # Submit all jobs
 echo "Submitting all build jobs..."
-cd ./submitscripts
-for script in build_*.sh; do
+SCRIPT_DIR="./slurm-scripts/submitscripts"
+for script in $SCRIPT_DIR/build_*.slurm; do
     echo "Submitting $script..."
     sbatch "$script"
 done
