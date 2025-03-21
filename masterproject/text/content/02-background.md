@@ -75,7 +75,7 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 
 ### Instruction width
 
-TODO
+The instruction width refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_. This means that each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits.
 
 ### Compilers
 
@@ -84,13 +84,13 @@ Software developers employ tools like compilers and interpreters to convert prog
 The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted.
 
 <!--
-As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
+TODO: As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
  -->
 
 ## Software reverse engineering
 
-<!-- What is it, why is it useful -->
-<!-- An Observational Investigation of Reverse Engineers’ Processes (veldig nice paper) -->
+<!-- TODO: What is it, why is it useful -->
+<!-- TODO: An Observational Investigation of Reverse Engineers’ Processes (veldig nice paper) -->
 
 Software reverse engineering is a systematic process of analyzing and understanding how a program works without access to its original source code or internal documentation. At its core, reverse engineering involves working backwards from a compiled program to comprehend its functionality, architecture, and behavior - the opposite direction of traditional software development. Reverse engineering has its origins in hardware reverse engineering, where analysis of competitors designs was used to gain a competitive advantage. Software reverse engineering is primarily used today for understanding program behavior instead of replication. Whether investigating potentially malicious code or maintenance of legacy systems, software reverse engineering provides insights when source code and documentation are unavailable [@Chikofsky1990] [@Qasem2022].
 
@@ -113,7 +113,11 @@ An Observational Investigation of Reverse Engineers’ Processes (veldig nice pa
 Helping Johnny to Analyze Malware A Usability-Optimized Decompiler and Malware Analysis User Study
  -->
 
+TODO
+
 ### What is needed to reverse engineer
+
+TODO
 
 - Explain what ISA features are needed for reverse engineering
 
