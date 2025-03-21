@@ -5,7 +5,7 @@
 
   "customizations": {
     "vscode": {
-      "extensions": ["James-Yu.latex-workshop"]
+      "extensions": ["james-yu.latex-workshop", "esbenp.prettier-vscode"]
     }
   }
 }

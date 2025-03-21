@@ -1,20 +1,17 @@
 {
-  "latex-citations.customPatterns": ["[@"],
   "python.defaultInterpreterPath": "./masterproject/code/.venv",
+  "editor.formatOnSave": true,
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true
+    "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "notebook.formatOnSave.enabled": true,
-  "files.exclude": {
-    "**/__pycache__": true
-  },
-  "PandocCiter.DefaultBibs": ["./masterproject/text/content/bibliography.bib"],
   "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
       "strings": false
     }
-  }
+  },
+  "PandocCiter.DefaultBibs": ["./masterproject/text/content/bibliography.bib"]
 }
