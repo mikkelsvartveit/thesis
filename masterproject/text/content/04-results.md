@@ -4,7 +4,7 @@ This chapter presents the results of the experiments described in \autoref{metho
 
 ## Endianness
 
-This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the endianness of binary files.
+This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the endianness of binary files. \autoref{table:logo-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -41,11 +41,15 @@ Table: Endianness classification performance. \label{table:logo-endianness-resul
 
 ![Endianness classification performance by model \label{fig:logo-endianness-by-model}](./images/logo-endianness-by-model.png)
 
+\autoref{fig:logo-endianness-by-model} aggregates the results across \acp{ISA}, allowing for comparison of the overall performance of each model. We see that the _Simple1d-E_ model performs the best, with a mean overall accuracy of 89.7% and a standard deviation of 5.5%.
+
 ![Endianness classification performance by \ac{ISA} \label{fig:logo-endianness-by-isa}](./images/logo-endianness-by-isa.png)
+
+\autoref{fig:logo-endianness-by-isa} aggregates results across the different models, painting a picture of which \acp{ISA} are easier to classify. We observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds. Lastly, the _m68k_ binaries are systematically misclassified by every model architecture.
 
 ## Instruction width type
 
-This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the instruction width type of binary files.
+This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the instruction width type of binary files. \autoref{table:logo-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -82,4 +86,8 @@ Table: Instruction width type classification performance. \label{table:logo-inst
 
 ![Instruction width type classification performance by model \label{fig:logo-instructionwidthtype-by-model}](./images/logo-instructionwidthtype-by-model.png)
 
+\autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, allowing for comparison of the overall performance of each model. We see that the _Simple1d-E_ model performs the best, with a mean overall accuracy of 87.8% and a standard deviation of 4.3%.
+
 ![Instruction width type classification performance by \ac{ISA} \label{fig:logo-instructionwidthtype-by-isa}](./images/logo-instructionwidthtype-by-isa.png)
+
+\autoref{fig:logo-instructionwidthtype-by-isa} aggregates results across the different models, painting a picture of which \acp{ISA} are easier to classify. We observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds.
