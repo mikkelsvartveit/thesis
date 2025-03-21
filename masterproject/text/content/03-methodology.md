@@ -33,8 +33,8 @@ TODO
 
 For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@Idun]. The following hardware configuration was used for all experiments:
 
-- CPU: Intel Xeon or AMD EPYC, 12 cores enabled
-- GPU: NVIDIA A100 (40 GB or 80 GB VRAM)
+- CPU:  Intel Xeon E5-2695 v4 (12 cores enabled)
+- GPU: NVIDIA A100 40GB
 - RAM: 16 GB
 
 We use the PyTorch framework for building and training our models. The following software versions were used:
@@ -233,6 +233,29 @@ Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 | Dropout         | p=0.3           | (8,)          | –          |
 | Fully Connected | –               | (2,)          | 18         |
 | Softmax         | –               | (2,)          | –          |
+
+#### ResNet50
+
+ResNet is a common \ac{CNN} architecture that utilize _residual blocks_, which are groups of convolutional layers with skip connections [@ResNet]. ResNet comes in several variants, and we choose to use the variant with 50 weighted layers, commonly referred to as ResNet50. 
+
+The overall architecture of ResNet50 has:
+
+- 1 convolutional layer
+- 16 residual blocks, each containing 3 convolutional layers
+- 1 average pooling layer
+- 1 fully connected layer
+
+To preprocess our data for ResNet50, we use the 2D image encoding described in \autoref{two-dimensional-byte-level-encoding}, with a 32x32 image size. However, since ResNet expects a three-channel (RGB) image, we duplicate the pixel values to all three channels, which essentially results in a grayscale image.
+
+#### ResNet50 with embedding layer
+
+This model architecture builds on the ResNet50 model described in \autoref{resnet50}, but modifies it to include an initial embedding layer. Specifically, the following modifications are made to the standard ResNet50 model:
+
+- Added an embedding layer with vocabulary size 256 and dimension size 128 as the first layer
+
+- Modified the first convolution layer to accept 128 channels instead of 3
+
+The model takes a vector of length 1024 as input, which is reshaped to 32x32 after the embedding layer. This model is hereby referred to as _ResNet50-E_.
 
 ### Target features
 
