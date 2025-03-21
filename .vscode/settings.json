@@ -13,5 +13,8 @@
       "strings": false
     }
   },
+  "[bibtex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop"
+  },
   "PandocCiter.DefaultBibs": ["./masterproject/text/content/bibliography.bib"]
 }
