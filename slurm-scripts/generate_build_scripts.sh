@@ -62,6 +62,8 @@ ARCH_TARGET_LIST=(
     "xtensa:xtensa-unknown-linux-uclibc"
 )
 
+rm -rf ./slurm-scripts/submitscripts/*
+
 # For each architecture, generate a Slurm submission script and Singularity definition file
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     # Split the string by colon

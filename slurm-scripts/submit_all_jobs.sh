@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Script to submit all cross-compiler build jobs
 # Place this in ./slurm-scripts/
 

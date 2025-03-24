@@ -1,7 +1,7 @@
 arch=$1
 
 echo "Running container for $arch"
-singularity shell --overlay my-overlay.img \
+singularity shell \
       --bind "./sources:/workspace/sources" \
       --bind "./output/${arch}:/workspace/output/${arch}" \
       --bind "./patches:/workspace/patches" \
