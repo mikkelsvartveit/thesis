@@ -10,17 +10,126 @@ This thesis utilizes two primary datasets: ISAdetect and CpuRec, both sourced fr
 
 #### ISADetect
 
-The ISAdetect dataset is the product of a masters thesis by Sami Kairajärvi and the resulting paper: "ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code" [@Kairajarvi2020]. A part of their contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All of their program binaries are collected from Debian Linux repositories, selected due to the Debian distribution being a trusted project and ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on tackling the dataset imbalances seen in Clemens' work, and each architecture contains around 3000 binary program samples [@Kairajarvi2020] [@Clemens2015].
+The ISAdetect dataset is the product of a masters thesis by Sami Kairajärvi and the resulting paper: "ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code" [@Kairajarvi2020]. A part of their contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All of their program binaries are collected from Debian Linux repositories, selected due to the Debian distribution being a trusted project and ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on tackling the dataset imbalances seen in Clemens' work, and each architecture contains around 3000 binary program samples [@Kairajarvi2020] [@Clemens2015]. \autoref{table:isadetect} lists the \acp{ISA} present in ISADetect and their architectural features.
 
-The ISAdetect dataset is publicly available through etsin.fairdata.fi [@Kairajarvi_dataset2020]. Our study utilizes the most recent version, Version 6, released March 29. 2020. The dataset is distributed as a compressed archive (new_new_dataset/ISAdetect_full_dataset.tar.gz) containing both complete program binaries and code-only sections for each architecture. Additionally, all of \ac{ISA} folder contains a JSON file with detailed metadata for each individual binary, including properties such as endianness and wordsize. This dataset was used for the same purpouse by Andressaen in his masters thesis, and we referred to his table in Appendix A for additional labeling of instruction width type (fixed/variable) and instruction width ranges [@Andreassen_Morrison_2024].
+Table: \acp{ISA} present in ISADetect dataset \label{table:isadetect}
+
+| ISA        | Endianness | Word size | Instruction width |
+| ---------- | ---------- | --------- | ----------------- |
+| alpha      | little     | 64        | 32                |
+| amd64      | little     | 64        | variable          |
+| arm64      | little     | 64        | 32                |
+| armel      | little     | 32        | 32                |
+| armhf      | little     | 32        | 32                |
+| hppa       | big        | 32        | 32                |
+| i386       | little     | 32        | variable          |
+| ia64       | little     | 64        | variable          |
+| m68k       | big        | 32        | variable          |
+| mips       | big        | 32        | 32                |
+| mips64el   | little     | 64        | 32                |
+| mipsel     | little     | 32        | 32                |
+| powerpc    | big        | 32        | 32                |
+| powerpcspe | big        | 32        | 32                |
+| ppc64      | big        | 64        | 32                |
+| ppc64el    | little     | 64        | 32                |
+| riscv64    | little     | 64        | 32                |
+| s390       | big        | 32        | variable          |
+| s390x      | big        | 64        | variable          |
+| sh4        | little     | 32        | 16                |
+| sparc      | big        | 32        | 32                |
+| sparc64    | big        | 64        | 32                |
+| x32        | little     | 32        | variable          |
+
+The ISAdetect dataset is publicly available through etsin.fairdata.fi [@Kairajarvi_dataset2020]. Our study utilizes the most recent version, Version 6, released March 29th 2020. The dataset is distributed as a compressed archive (new_new_dataset/ISAdetect_full_dataset.tar.gz) containing both complete program binaries and code-only sections for each architecture. Additionally, all of \ac{ISA} folder contains a JSON file with detailed metadata for each individual binary, including properties such as endianness and wordsize. This dataset was used for the same purpouse by Andressaen in his masters thesis, and we referred to his table in Appendix A for additional labeling of instruction width type (fixed/variable) and instruction width ranges [@Andreassen_Morrison_2024].
 
 <!-- TODO: more specific dataset stats based on how we handle the imbalance -->
 
 #### CpuRec
 
-The CpuRec dataset is a collection of executable code-only sections extracted from binaries of 72 different architectures, developed by Louis Granboulan for use with the cpu_rec tool. The cpu_rec uses Markov-chains and Kullback-Leibler divergence with the dataset in order to classify the ISA of an input binary [@Granboulan_paper2020]. Even though only one binary per architecture is provided, which is likely insufficient for training a deep learning model on its own, the diversity of ISAs represented makes the dataset an excellent test set for evaluating our model.
+The CpuRec dataset is a collection of executable code-only sections extracted from binaries of 72 different architectures, developed by Louis Granboulan for use with the cpu_rec tool. The cpu_rec uses Markov-chains and Kullback-Leibler divergence with the dataset in order to classify the ISA of an input binary [@Granboulan_paper2020]. Even though only one binary per architecture is provided, which is likely insufficient for training a deep learning model on its own, the diversity of ISAs represented makes the dataset an excellent test set for evaluating our model. \autoref{table:cpurec} lists the \acp{ISA} present in CpuRec and their architectural features.
 
-The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation open-source projects using a gcc cross-compiler [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset.
+Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec}
+
+| architecture | endianness | wordsize | instruction width |
+| ------------ | ---------- | -------- | ----------------- |
+| X86          | little     | 32       | variable          |
+| X86-64       | little     | 64       | variable          |
+| ARM64        | little     | 64       | 32                |
+| Alpha        | little     | 64       | 32                |
+| ARMel        | little     | 32       | 32                |
+| ARMhf        | little     | 32       | 32                |
+| MIPSeb       | big        | 32       | 32                |
+| MIPSel       | little     | 32       | 32                |
+| PPCeb        | big        | 32       | 32                |
+| PPCel        | little     | 64       | 32                |
+| HP-PA        | big        | 32       | 32                |
+| IA-64        | little     | 64       | variable          |
+| M68k         | big        | 32       | variable          |
+| RISC-V       | little     | 64       | 32                |
+| S-390        | big        | 64       | variable          |
+| SuperH       | little     | 32       | 16                |
+| SPARC        | big        | unknown  | 32                |
+| ARC32el      | little     | 32       | variable          |
+| AxisCris     | little     | 32       | 16                |
+| Epiphany     | little     | 32       | variable          |
+| M88k         | big        | 32       | 32                |
+| MMIX         | big        | 64       | 32                |
+| PDP-11       | middle     | 16       | variable          |
+| Stormy16     | bi         | 32       | variable          |
+| V850         | little     | 32       | variable          |
+| Xtensa       | bi         | 32       | variable          |
+| 6502         | little     | 8        | variable          |
+| ARcompact    | little     | 32       | variable          |
+| Blackfin     | little     | 32       | variable          |
+| FR30         | big        | 32       | 16                |
+| i860         | bi         | 32       | 32                |
+| MCore        | big        | 32       | 16                |
+| MN10300      | little     | 32       | unknown           |
+| PIC10        | n/a        | 8        | 12                |
+| RL78         | little     | unknown  | unknown           |
+| VAX          | little     | 32       | variable          |
+| XtensaEB     | big        | 32       | variable          |
+| 68HC08       | big        | 8        | variable          |
+| Cell-SPU     | bi         | 64       | unknown           |
+| FR-V         | unknown    | 32       | 32                |
+| Mico32       | big        | 32       | 32                |
+| Moxie        | bi         | 32       | variable          |
+| PIC16        | n/a        | 8        | 14                |
+| ROMP         | big        | 32       | variable          |
+| TILEPro      | unknown    | 32       | variable          |
+| Visium       | unknown    | unknown  | unknown           |
+| Z80          | little     | 8        | variable          |
+| 68HC11       | big        | 8        | variable          |
+| ARMeb        | big        | 32       | 32                |
+| CLIPPER      | little     | 32       | variable          |
+| FT32         | unknown    | 32       | unknown           |
+| IQ2000       | big        | 32       | unknown           |
+| MicroBlaze   | big        | 32       | 32                |
+| MSP430       | little     | 16       | variable          |
+| PIC18        | n/a        | 8        | 16                |
+| RX           | little     | 32       | variable          |
+| TLCS-90      | n/a        | 8        | variable          |
+| 8051         | n/a        | 8        | variable          |
+| CompactRISC  | little     | 16       | variable          |
+| H8-300       | n/a        | 8        | variable          |
+| M32C         | little     | 32       | variable          |
+| MIPS16       | bi         | 16       | 16                |
+| NDS32        | little     | 32       | variable          |
+| PIC24        | little     | 16       | 24                |
+| TMS320C2x    | unknown    | 16/32    | variable          |
+| WE32000      | n/a        | 32       | unknown           |
+| Cray         | n/a        | 64       | variable          |
+| H8S          | unknown    | 16       | variable          |
+| M32R         | bi         | 32       | variable          |
+| NIOS-II      | little     | 32       | 32                |
+| TMS320C6x    | bi         | 32       | 32                |
+| ARC32eb      | little     | 32       | variable          |
+| AVR          | n/a        | 8        | variable          |
+| HP-Focus     | n/a        | 32       | variable          |
+| STM8         | n/a        | 8        | variable          |
+| TriMedia     | unknown    | 32       | unknown           |
+
+The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation open-source projects using a gcc cross-compiler [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset. 
 
 <!-- Keep this info for discussion? Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
@@ -33,7 +142,7 @@ TODO
 
 For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@Idun]. The following hardware configuration was used for all experiments:
 
-- CPU:  Intel Xeon E5-2695 v4 (12 cores enabled)
+- CPU: Intel Xeon E5-2695 v4 (12 cores enabled)
 - GPU: NVIDIA A100 40GB
 - RAM: 16 GB
 
@@ -236,7 +345,7 @@ Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 
 #### ResNet50
 
-ResNet is a common \ac{CNN} architecture that utilize _residual blocks_, which are groups of convolutional layers with skip connections [@ResNet]. ResNet comes in several variants, and we choose to use the variant with 50 weighted layers, commonly referred to as ResNet50. 
+ResNet is a common \ac{CNN} architecture that utilize _residual blocks_, which are groups of convolutional layers with skip connections [@ResNet]. ResNet comes in several variants, and we choose to use the variant with 50 weighted layers, commonly referred to as ResNet50.
 
 The overall architecture of ResNet50 has:
 
