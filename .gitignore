@@ -1,9 +1,10 @@
-sources/*
-output/*
+sources
+output
 
 slurm-scripts/logs
 slurm-scripts/cross-compiler-images
 slurm-scripts/submitscripts
+slurm-scripts/singularity-definitions
 base-images/*
 
 compiled-toolchain

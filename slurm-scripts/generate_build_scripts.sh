@@ -7,6 +7,7 @@ set -e
 mkdir -p ./slurm-scripts/submitscripts
 mkdir -p ./slurm-scripts/logs
 mkdir -p ./slurm-scripts/cross-compiler-images
+mkdir -p ./slurm-scripts/singularity-definitions
 
 # Create base images for building and cross-compiling
 # buildcross-base.tar and cross-compile-base.tar should be created beforehand using 
@@ -62,15 +63,69 @@ ARCH_TARGET_LIST=(
     "xtensa:xtensa-unknown-linux-uclibc"
 )
 
+# First, generate all Singularity definition files
+echo "Generating Singularity definition files..."
+for arch_target in "${ARCH_TARGET_LIST[@]}"; do
+    # Split the string by colon
+    arch=$(echo "$arch_target" | cut -d':' -f1)
+    target=$(echo "$arch_target" | cut -d':' -f2)
+    def_file="./slurm-scripts/singularity-definitions/${arch}.def"
+    
+    echo "Generating definition file for ${arch}..."
+    
+    # Create the Singularity definition file
+    cat > "${def_file}" << EOF
+Bootstrap: localimage
+From: ./base-images/buildcross-base.sif
+Stage: builder
+
+%environment
+    export ARCH=${arch}
+    export TARGET=${target}
+    export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
+
+%post
+    ARCH=${arch}
+    TARGET=${target}
+    build.sh -j\$(nproc) \$ARCH
+
+# Second stage
+Bootstrap: localimage
+From: ./base-images/cross-compile-base.sif
+Stage: final
+
+%files from builder
+    /cross-${arch} /cross-${arch}
+
+%environment
+    export ARCH=${arch}
+    export TARGET=${target}
+    export CROSS_PREFIX="/cross-${arch}" 
+    export OUTPUT_PREFIX="/workspace/output/${arch}" 
+    export SOURCE_PREFIX="/workspace/sources" 
+    export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
+    export PATH="\${CROSS_PREFIX}/bin:\${PATH}"
+    export CC="${target}-gcc"
+    export AR="${target}-ar"
+    export RANLIB="${target}-ranlib"
+    export CFLAGS="-g"
+
+%post
+    echo "Container built for ${arch} architecture"
+EOF
+    
+    echo "Generated definition file for ${arch}"
+done
+
+# Now generate all SLURM submission scripts
+echo "Generating SLURM submission scripts..."
 rm -rf ./slurm-scripts/submitscripts/*
 
-# For each architecture, generate a Slurm submission script and Singularity definition file
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
     submit_script="./slurm-scripts/submitscripts/build_${arch}.slurm"
-    def_file="./singularity-architectures/${arch}.def"
     
     echo "Generating submission script for ${arch}..."
     
@@ -92,53 +147,10 @@ mkdir -p ./slurm-scripts/logs/${arch}
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
 
-# No need to convert the base images since they already exist as SIF files
-# For Singularity, we need to create a definition file instead of using Dockerfile directly
-echo "Creating Singularity definition file..."
-cat > ./singularity-architectures/${arch}.def <<DEFEOF
-Bootstrap: localimage
-From: ./base-images/buildcross-base.sif
-Stage: builder
-
-%environment
-    export ARCH=${arch}
-    export TARGET=${target}
-    export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
-
-%post
-    ARCH=${arch}
-    TARGET=${target}
-    build.sh -j\\\$(nproc) \\\$ARCH
-
-# Second stage
-Bootstrap: localimage
-From: ./base-images/cross-compile-base.sif
-Stage: final
-
-%files from builder
-    /cross-${arch} /cross-${arch}
-
-%environment
-    export ARCH=${arch}
-    export TARGET=${target}
-    export CROSS_PREFIX="/cross-${arch}" 
-    export OUTPUT_PREFIX="/workspace/output/${arch}" 
-    export SOURCE_PREFIX="/workspace/sources" 
-    export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
-    export PATH="\\\${CROSS_PREFIX}/bin:\\\${PATH}"
-    export CC="${target}-gcc"
-    export AR="${target}-ar"
-    export RANLIB="${target}-ranlib"
-    export CFLAGS="-g"
-
-%post
-    echo "Container built for ${arch} architecture"
-DEFEOF
-
 # Build the Singularity container using the definition file
 echo "Building Singularity container..."
 mkdir -p ./slurm-scripts/cross-compiler-images/
-singularity build --fakeroot ./slurm-scripts/cross-compiler-images/cross-compiler-${arch}.sif ./singularity-architectures/${arch}.def
+singularity build --fakeroot ./slurm-scripts/cross-compiler-images/cross-compiler-${arch}.sif ./slurm-scripts/singularity-definitions/${arch}.def
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
 EOF
@@ -152,5 +164,6 @@ EOF
     echo "Generated script for ${arch}"
 done
 
-echo "All submission scripts generated. You can submit them with:"
+echo "All Singularity definition files and submission scripts generated."
+echo "You can submit the SLURM jobs with:"
 echo "cd ./slurm-scripts/submitscripts && for f in build_*.slurm; do sbatch \$f; done"

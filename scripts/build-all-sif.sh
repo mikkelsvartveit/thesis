@@ -9,15 +9,15 @@ ONLY_ARCH=${1:-""}
 
 # Libraries to build
 LIBRARIES=(
-   "zlib:1.3"
+  "zlib:1.3"
   "libxml2:2.14"
-   "libjpeg-turbo:3.1.0"
-   "libpng:1.6.47"
-   "freetype:2.13.3"
-   "xzutils:1"
-   "pcre2:10.45"
+  "libjpeg-turbo:3.1.0"
+  "libpng:1.6.47"
+  "freetype:2.13.3"
+  "xzutils:1"
+  "pcre2:10.45"
   "libyaml:0.2.5"
-   "libwebp:1.5.0"
+  "libwebp:1.5.0"
   # C++ required
   #"jsoncpp:1.9.6"
   #"harfbuzz:10.4.0"
