@@ -149,6 +149,7 @@ cmake -G "Ninja" \
       -DENABLE_SHARED=OFF \
       -DLIBXML2_WITH_ICONV=OFF \
       -DLIBXML2_WITH_PYTHON=OFF \
+      -DWITH_TURBOJPEG=OFF \
       ${TEST_SKIP_ARGS} \
       "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
 
@@ -164,12 +165,6 @@ rm -f "${TMP_TOOLCHAIN_FILE}"
 
 echo "Build completed successfully!"
 echo "Library installed to ${OUTPUT_DIR}"
-
-# Print information about the built library
-echo "Library information:"
-if [ -f "${OUTPUT_DIR}/lib/libz.a" ]; then
-  ${CROSS_COMPILE}readelf -h "${OUTPUT_DIR}/lib/libz.a" | grep -E "Class|Machine|Version"
-fi
 
 # Return to workspace
 cd /workspace

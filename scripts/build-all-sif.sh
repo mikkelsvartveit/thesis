@@ -10,7 +10,6 @@ ONLY_ARCH=${1:-""}
 # Libraries to build
 LIBRARIES=(
   "zlib:1.3"
-  "libxml2:2.14"
   "libjpeg-turbo:3.1.0"
   "libpng:1.6.47"
   "freetype:2.13.3"
@@ -18,6 +17,7 @@ LIBRARIES=(
   "pcre2:10.45"
   "libyaml:0.2.5"
   "libwebp:1.5.0"
+  # "libxml2:2.14"
   # C++ required
   #"jsoncpp:1.9.6"
   #"harfbuzz:10.4.0"
@@ -31,7 +31,7 @@ chmod +x "${PROJECT_ROOT}/scripts/"*
 
 # Process each architecture
 for SIF_image in $SIF_IMAGES; do
-  continue
+  
   # Extract architecture name from SIF image filename (cross-compiler-ARCH.sif)
   arch=$(basename "${SIF_image}" .sif | sed 's/cross-compiler-//')
   if [ -n "${ONLY_ARCH}" ] && [ "${arch}" != "${ONLY_ARCH}" ]; then
