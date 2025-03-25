@@ -32,7 +32,7 @@ for arch_dir in output/*/; do
         # Pass the COPIED file to the extract script, not the original
         singularity exec \
           "$SCRIPT_DIR/slurm-scripts/cross-compiler-images/cross-compiler-${arch}.sif" \
-          bash ./scripts/extract_library.sh "$SCRIPT_DIR/results/library_files/$arch/$filename" "$arch" "$filename" &
+          bash ./scripts/result-gen/extract_library.sh "$SCRIPT_DIR/results/library_files/$arch/$filename" "$arch" "$filename" &
     done
 done
 

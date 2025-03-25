@@ -62,7 +62,7 @@ for SIF_image in $SIF_IMAGES; do
       IFS=':' read -r lib_name lib_version <<< \"\${lib_info}\"; \
       rm -rf /workspace/output/${arch}/\${lib_name}; \
       build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \
-    done" &
+    done"
   
   echo "Completed all builds for ${arch}"
 done
