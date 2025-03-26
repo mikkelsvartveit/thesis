@@ -79,7 +79,7 @@
 # ia64		ia64-unknown-linux-gnu
 # ip2k		ip2k-unknown-elf (no libc) (2)
 # iq2000	iq2000-unknown-elf
-# kvx		kvx-unknown-uclibc
+# kvx		kvx-unknown-linux-uclibc
 # lm32		lm32-uclinux-uclibc
 # loongarch64	loongarch64-unknown-linux-gnu
 # m1750		m1750-coff (custom libc) (3)

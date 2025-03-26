@@ -28,7 +28,7 @@ add_definitions(-DHAVE_CONFIG_H -DPCRE2_STATIC)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections")
 
 # Disable threading for libraries that might use it
-set(XZ_THREADS OFF CACHE BOOL "Disable threads in XZ" FORCE)
+set(XZ_THREADS no CACHE BOOL "Disable threads in XZ" FORCE)
 set(WEBP_USE_THREAD OFF CACHE BOOL "Disable threads in WebP" FORCE)
 
 # Library specific settings

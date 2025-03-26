@@ -127,7 +127,7 @@ EOF
     -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
     -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY \
     -DCMAKE_POSITION_INDEPENDENT_CODE=OFF \
-    -DXZ_THREADS=OFF \
+    -DXZ_THREADS=no \
     -DWEBP_USE_THREAD=OFF"
 else
   # Using existing toolchain file, no need for extra args

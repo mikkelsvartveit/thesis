@@ -39,7 +39,7 @@ ARCH_TARGET_LIST=(
     "ft32:ft32-unknown-elf"
     "h8300:h8300-unknown-linux-uclibc"
     "iq2000:iq2000-unknown-elf"
-    "kvx:kvx-unknown-uclibc"
+    "kvx:kvx-unknown-linux-uclibc"
     "lm32:lm32-uclinux-uclibc"
     "m32r:m32r-unknown-elf"
     "m68k-elf:m68k-unknown-elf"
@@ -50,7 +50,6 @@ ARCH_TARGET_LIST=(
     "moxie:moxie-unknown-elf"
     "msp430:msp430-unknown-elf"
     "nds32:nds32le-unknown-linux-gnu"
-    "nvptx:nvptx-none"
     "pdp11:pdp11-unknown-aout"
     "pru:pru-unknown-elf"
     "rl78:rl78-unknown-elf"
@@ -61,6 +60,7 @@ ARCH_TARGET_LIST=(
     "visium:visium-unknown-elf"
     "xstormy16:xstormy16-unknown-elf"
     "xtensa:xtensa-unknown-linux-uclibc"
+    # "nvptx:nvptx-none" nvidia parallel thread execution, jitcompiled by nvidia driver, not proper arch
 )
 
 # First, generate all Singularity definition files
