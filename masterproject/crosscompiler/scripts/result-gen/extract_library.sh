@@ -2,6 +2,25 @@ file=$1
 arch=$2
 filename=$3
 
+get_code_sections() {
+    local arch_name=$1
+    local sections=""
+
+    case $arch_name in
+        "rx")
+            sections="P"
+            ;;
+        "ft32")
+            sections=".text*"
+            ;;
+        *)
+            sections=".text .text.*"
+            ;;
+    esac
+    
+    echo "$sections"
+}
+
 # Create a temporary directory for object extraction
 TEMP_DIR=$(mktemp -d)
 
@@ -26,17 +45,38 @@ for obj in $TEMP_DIR/*.o $TEMP_DIR/*.obj; do
         # Get just the object filename
         objname=$(basename "$obj")
 
-        # Extract .text section to binary
-        ${TARGET}-objcopy -O binary --only-section=.text "$obj" "$TEMP_DIR/${objname%.o}.bin" 2>/dev/null
+        # Get code sections for this architecture
+        code_sections=$(get_code_sections "$arch")
+        
+        # Create a temporary file for this object's binary
+        obj_bin="$TEMP_DIR/${objname%.o}.bin"
+        touch "$obj_bin"
+        
+        # Extract each code section to the same binary file
+        for section in $code_sections; do
+            temp_section_bin="$TEMP_DIR/$objname-$section.bin"
+            
+            # Extract section to temporary file
+            if ${TARGET}-objcopy -O binary --only-section="$section" "$obj" "$temp_section_bin" 2>/dev/null; then
+                if [ -s "$temp_section_bin" ]; then
+                    cat "$temp_section_bin" >> "$obj_bin"
+                fi
+            fi
+
+            if ${TARGET}-objcopy -S --only-section="$section" "$obj" "$temp_section_bin" 2>/dev/null; then
+                if [ -s "$temp_section_bin" ]; then
+                    ${TARGET}-objdump -d "$temp_section_bin" >> "results/text_asm/$arch/$filename.asm"
+                fi
+            fi
+            
+            # Clean up temporary section file
+            rm -f "$temp_section_bin"
+        done
 
         # Concatenate to the combined binary
-        if [ -f "$TEMP_DIR/${objname%.o}.bin" ]; then
-            cat "$TEMP_DIR/${objname%.o}.bin" >> "$TEMP_DIR/combined.bin"
+        if [ -s "$obj_bin" ]; then
+            cat "$obj_bin" >> "$TEMP_DIR/combined.bin"
         fi
-
-        # Add disassembly to the combined asm file
-        echo -e "\n ======== OBJECT: $objname ======== \n" >> "results/text_asm/$arch/$filename.asm"
-        ${TARGET}-objdump -d -j .text "$obj" 2>/dev/null >> "results/text_asm/$arch/$filename.asm"
     fi
 done
 
