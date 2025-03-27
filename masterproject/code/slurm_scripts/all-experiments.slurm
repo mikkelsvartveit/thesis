@@ -12,7 +12,7 @@
 #SBATCH --job-name=all-experiments
 #SBATCH --time=1-00:00:00
 WANDB_PROJECT_NAME="all-experiments-$SLURM_JOB_ID"
-TARGET_FEATURES=("endianness" "instructionwidth_type" "instructionwidth")
+TARGET_FEATURES=("endianness" "instructionwidth_type")
 
 module load Python/3.12.3-GCCcore-13.3.0
 
