@@ -11,6 +11,7 @@ class ISAdetectDataset(Dataset):
         self,
         dataset_path: PathLike,
         feature_csv_path,
+        target_feature: str,
         transform=None,
         per_architecture_limit=None,
         file_byte_read_limit: int | None = 2**10,  # 1 KB
@@ -22,7 +23,6 @@ class ISAdetectDataset(Dataset):
         self.file_byte_offset = []
         self.metadata = []
         self.file_byte_read_limit = file_byte_read_limit
-
         self.use_code_only = use_code_only
 
         # Collect files
@@ -34,6 +34,12 @@ class ISAdetectDataset(Dataset):
 
                 if not metadata:
                     metadata_errors.append(isa.name)
+                    continue
+
+                if (
+                    target_feature == "instructionwidth"
+                    and metadata["instructionwidth_type"] == "variable"
+                ):
                     continue
 
                 for file_path in isa.glob("*.code"):
@@ -76,7 +82,7 @@ class ISAdetectDataset(Dataset):
     def __getitem__(self, idx) -> tuple[torch.Tensor, dict, str]:
         file_path = str(self.file_paths[idx])
         labels = self.metadata[idx].copy()
-        labels['file_path'] = file_path
+        labels["file_path"] = file_path
 
         # Read binary file
         with open(file_path, "rb") as f:

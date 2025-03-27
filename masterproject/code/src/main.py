@@ -90,7 +90,10 @@ def main():
     # Get dataset and transforms
     transforms = get_transform(**config["transforms"])
     dataset = get_dataset(
-        transform=transforms, dataset_base_path=DATASET_BASE_PATH, **config["data"]
+        transform=transforms,
+        dataset_base_path=DATASET_BASE_PATH,
+        target_feature=config["target_feature"],
+        **config["data"],
     )
     model = get_model(**config["model"])
 
