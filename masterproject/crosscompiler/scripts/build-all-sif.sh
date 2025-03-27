@@ -61,9 +61,8 @@ for SIF_image in $SIF_IMAGES; do
     bash -c "for lib_info in ${LIB_ARRAY_STR}; do \
       IFS=':' read -r lib_name lib_version <<< \"\${lib_info}\"; \
       rm -rf /workspace/output/${arch}/\${lib_name}; \
-      build-lib \"\${lib_name}\" \"\${lib_version}\" Release || echo \"====== Failed to build ${lib_name} ======\"; \
+      build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \
     done"
-  
   echo "Completed all builds for ${arch}"
 done
 wait

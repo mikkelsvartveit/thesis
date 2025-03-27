@@ -6,8 +6,7 @@ set -e
 # Default values
 LIB_NAME=${1:-"zlib"}
 LIB_VERSION=${2:-"1.3"}
-BUILD_TYPE=${3:-"Release"}
-JCOUNT=${4:-"$(nproc)"}
+JCOUNT=${3:-"$(nproc)"}
 
 echo $JCOUNT
 
@@ -143,7 +142,7 @@ echo "Configuring build with CMake..."
 cmake -G "Ninja" \
       -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" \
       ${CMAKE_TOOLCHAIN_ARGS} \
-      -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
+      -DCMAKE_BUILD_TYPE="" \
       -DCMAKE_INSTALL_PREFIX="${OUTPUT_DIR}" \
       -DBUILD_SHARED_LIBS=OFF \
       -DENABLE_SHARED=OFF \
@@ -151,10 +150,9 @@ cmake -G "Ninja" \
       -DLIBXML2_WITH_PYTHON=OFF \
       -DWITH_TURBOJPEG=OFF \
       -DPCRE2_BUILD_PCRE2GREP=OFF \
+      -DCMAKE_C_FLAGS="-O0 -g0 -DNDEBUG" \
       ${TEST_SKIP_ARGS} \
       "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"
-
-# -DCMAKE_C_FLAGS="-fpermissive" For pcre2 m32r 
 
 
 echo "Building ${LIB_NAME}..."

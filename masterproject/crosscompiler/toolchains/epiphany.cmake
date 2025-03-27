@@ -22,10 +22,8 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-
-set(CMAKE_C_FLAGS_INIT "-O1")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ")
-set(CMAKE_CXX_FLAGS_INIT "")
+# force O3, compiler broken at O0 and O1
+set(CMAKE_C_FLAGS "-O3 -g0 -DNDEBUG" CACHE STRING "C compiler flags" FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
 
