@@ -12,7 +12,7 @@
 #SBATCH --job-name=all-experiments
 #SBATCH --time=1-00:00:00
 WANDB_PROJECT_NAME="all-experiments-$SLURM_JOB_ID"
-TARGET_FEATURES=("endianness" "instructionwidth_type")
+TARGET_FEATURES=("endianness" "instructionwidth_type" "instructionwidth")
 
 module load Python/3.12.3-GCCcore-13.3.0
 
@@ -34,10 +34,10 @@ run_experiment() {
 cd src
 
 for target_feature in "${TARGET_FEATURES[@]}"; do
-    run_experiment "$target_feature" "configs/logo/Simple1d.yml" 10
-    run_experiment "$target_feature" "configs/logo/Simple1dEmbedding.yml" 10
-    run_experiment "$target_feature" "configs/logo/Simple2d.yml" 10
-    run_experiment "$target_feature" "configs/logo/Simple2dEmbedding.yml" 10
+    run_experiment "$target_feature" "configs/logo/Simple1d.yml" 5
+    run_experiment "$target_feature" "configs/logo/Simple1dEmbedding.yml" 5
+    run_experiment "$target_feature" "configs/logo/Simple2d.yml" 5
+    run_experiment "$target_feature" "configs/logo/Simple2dEmbedding.yml" 5
     run_experiment "$target_feature" "configs/logo/ResNet50.yml" 5
     run_experiment "$target_feature" "configs/logo/ResNet50Embedding.yml" 5
 done

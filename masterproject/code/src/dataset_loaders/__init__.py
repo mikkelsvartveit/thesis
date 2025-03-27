@@ -22,6 +22,7 @@ def get_dataset(
     elif dataset_name == "ISAdetectDataset":
         return ISAdetectDataset(
             transform=transform,
+            target_feature=target_feature,
             **params,
         )
     elif dataset_name == "CpuRecDataset":

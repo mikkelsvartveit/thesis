@@ -147,7 +147,7 @@ def LOGO_architecture_wandb(
             with torch.no_grad():
                 for images, labels in test_loader:
                     images = images.to(device)
-                    file_paths = labels['file_path']
+                    file_paths = labels["file_path"]
                     encoded_labels = torch.from_numpy(
                         label_encoder.transform(labels[config["target_feature"]])
                     ).to(device)
@@ -165,7 +165,9 @@ def LOGO_architecture_wandb(
                     chunk_true_labels.extend(batch_true_labels)
 
                     # Store predictions by parent file for majority voting
-                    for pred, true_label, file_path in zip(batch_predictions, batch_true_labels, file_paths):
+                    for pred, true_label, file_path in zip(
+                        batch_predictions, batch_true_labels, file_paths
+                    ):
                         if file_path not in file_predictions_map:
                             file_predictions_map[file_path] = []
                             file_true_labels_map[file_path] = true_label
@@ -175,7 +177,9 @@ def LOGO_architecture_wandb(
             avg_test_loss = total_test_loss / len(test_loader)
 
             # Calculate chunk-level accuracy
-            chunk_accuracy = np.mean(np.array(chunk_predictions) == np.array(chunk_true_labels))
+            chunk_accuracy = np.mean(
+                np.array(chunk_predictions) == np.array(chunk_true_labels)
+            )
 
             # Calculate majority voting accuracy
             file_level_predictions = []
@@ -183,10 +187,12 @@ def LOGO_architecture_wandb(
             for file_path in file_predictions_map:
                 # Get majority vote for this file
                 chunk_predictions_for_file = file_predictions_map[file_path]
-                vote_distribution = np.bincount(chunk_predictions_for_file, minlength=len(label_encoder.classes_))
+                vote_distribution = np.bincount(
+                    chunk_predictions_for_file, minlength=len(label_encoder.classes_)
+                )
                 file_prediction = vote_distribution.argmax()
                 file_true_label = file_true_labels_map[file_path]
-                
+
                 file_level_predictions.append(file_prediction)
                 file_level_true_labels.append(file_true_label)
 
@@ -210,7 +216,9 @@ def LOGO_architecture_wandb(
                 }
             )
 
-        accuracies[group_left_out] = file_level_accuracy  # Use file-level accuracy for final results
+        accuracies[group_left_out] = (
+            file_level_accuracy  # Use file-level accuracy for final results
+        )
         all_predictions.extend(file_level_predictions)
         all_true_labels.extend(file_level_true_labels)
 
