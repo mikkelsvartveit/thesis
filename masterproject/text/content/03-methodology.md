@@ -134,10 +134,6 @@ The cpu_rec tool-suite is available on GitHub, and the binaries used in the thes
 <!-- Keep this info for discussion? Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
 
-#### Custom dataset
-
-TODO
-
 ### Technical configuration
 
 For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@Idun]. The following hardware configuration was used for all experiments:
@@ -177,6 +173,10 @@ The AdamW optimizer is an improved version of Adam that implements weight decay 
 A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We make this conservative choice due to early observations showing that small learning rates still cause the AdamW optimizer to reach convergence rather quickly for our dataset. Considering our vast amounts of computational resources, we want to err on the side of slower training rather than risking convergence issues.
 
 A weight decay of 0.01 provides moderate regularization strength, and provides a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
+
+## Developing a custom dataset
+
+TODO
 
 ## Experiments
 
