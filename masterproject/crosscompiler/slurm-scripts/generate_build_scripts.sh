@@ -43,7 +43,6 @@ ARCH_TARGET_LIST=(
     "lm32:lm32-uclinux-uclibc"
     "m32r:m32r-unknown-elf"
     "m68k-elf:m68k-unknown-elf"
-    "m68k-uclibc:m68k-unknown-linux-uclibc"
     "mcore:mcore-unknown-elf"
     "mmix:mmix-knuth-mmixware"
     "mn10300:mn10300-unknown-elf"

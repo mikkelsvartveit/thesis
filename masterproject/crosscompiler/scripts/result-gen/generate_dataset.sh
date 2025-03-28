@@ -146,11 +146,6 @@ instruction_width_map() {
             width_type="mixed"
             comment=""
             ;;
-        "m68k-uclibc")
-            width="16/32/48"
-            width_type="mixed"
-            comment=""
-            ;;
         "mcore")
             width="16"
             width_type="fixed"
@@ -184,6 +179,11 @@ instruction_width_map() {
         "pdp11")
             width=""
             width_type=""
+            comment=""
+            ;;
+        "pru")
+            width="32"
+            width_type="fixed"
             comment=""
             ;;
         "rl78")
@@ -226,13 +226,9 @@ instruction_width_map() {
             width_type="variable"
             comment="either 16 or 24 bits, does not align to a single boundary"
             ;;
-        *)
-            echo "Unknown architecture: $arch"
-            exit 1
-            ;;
     esac
 
-    echo "$width;$width_type;$comment;"
+    echo "$width;$width_type;$comment"
 }
 
 analyze_elf() {
@@ -318,10 +314,9 @@ for arch_dir in results/text_bin/*/; do
     echo ""
 
     # Extract endianness and wordsize
-    arch_name=$(echo $arch | sed 's/-.*//')
     elf_file=$(ls results/library_files/$arch/*.a | head -1)
-    endian_wordsize=$(analyze_elf $elf_file $arch_name)
-    instr_w=$(instruction_width_map $arch_name)
+    endian_wordsize=$(analyze_elf $elf_file $arch)
+    instr_w=$(instruction_width_map $arch)
     echo "$arch;$endian_wordsize$instr_w" >> $csv_labels
 done
 

@@ -3,6 +3,7 @@ from .utils import *
 from .ISAdetectDataset import *
 from .ISAdetectEndiannessCounts import *
 from .CpuRecDataset import *
+from BuildCrossDataset import *
 
 
 def get_dataset(
@@ -27,6 +28,12 @@ def get_dataset(
         )
     elif dataset_name == "CpuRecDataset":
         return CpuRecDataset(
+            transform=transform,
+            target_feature=target_feature,
+            **params,
+        )
+    elif dataset_name == "BuildCrossDataset":
+        return BuildCrossDataset(
             transform=transform,
             target_feature=target_feature,
             **params,
