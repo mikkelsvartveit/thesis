@@ -21,7 +21,7 @@ model:
     num_classes: 2
 
 validator:
-  name: LOGO_architecture_wandb
+  name: logo_cv
   wandb_project_name: ResNet50
 
 training:

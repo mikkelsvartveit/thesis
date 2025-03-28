@@ -28,10 +28,8 @@ model:
     dropout_rate: 0.3
 
 validator:
-  name: ISAdetect_train_cpu_rec_test
+  name: train_test_separate_datasets
   wandb_project_name: Simple1dEmbedding
-  test_split: 0.2
-  validation_split: 0.2
 
 training:
   optimizer: AdamW

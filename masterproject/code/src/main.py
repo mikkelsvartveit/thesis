@@ -15,9 +15,8 @@ load_dotenv()
 from src.dataset_loaders import get_dataset
 from src.models import get_model
 from src.validators import (
-    ISAdetect_train_cpu_rec_test,
-    LOGO_architecture,
-    LOGO_architecture_wandb,
+    train_test_separate_datasets,
+    logo_cv,
 )
 from transforms import get_transform
 
@@ -99,24 +98,21 @@ def main():
 
     validator_name = config["validator"]["name"]
 
-    if validator_name == "LOGO_architecture":
-        print("LOGO_architecture")
-        LOGO_architecture(config, dataset, model, device)
-    elif validator_name == "LOGO_architecture_wandb":
-        print("LOGO_architecture_wandb")
-        LOGO_architecture_wandb(config, dataset, model, device)
-    elif validator_name == "ISAdetect_train_cpu_rec_test":
-        validator_dataset = get_dataset(
+    if validator_name == "logo_cv":
+        print("Running validator 'logo_cv'")
+        logo_cv(config, dataset, model, device)
+    elif validator_name == "train_test_separate_datasets":
+        testing_dataset = get_dataset(
             transform=transforms,
             dataset_base_path=DATASET_BASE_PATH,
             target_feature=config["target_feature"],
             **config["testing_data"],
         )
-        print("Testing on ISAdetect_train_cpu_rec_test")
-        ISAdetect_train_cpu_rec_test(
+        print("Running validator 'train_test_separate_datasets'")
+        train_test_separate_datasets(
             config,
-            ISAdetectDataset=dataset,
-            CpuRecDataset=validator_dataset,
+            training_dataset=dataset,
+            testing_dataset=testing_dataset,
             device=device,
             model_class=model,
         )

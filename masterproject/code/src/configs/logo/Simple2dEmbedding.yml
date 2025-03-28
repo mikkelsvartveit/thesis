@@ -20,7 +20,7 @@ model:
     dropout_rate: 0.3
 
 validator:
-  name: LOGO_architecture_wandb
+  name: logo_cv
   wandb_project_name: Simple2dEmbedding
 
 training:

@@ -21,7 +21,7 @@ model:
     vocab_size: 256
 
 validator:
-  name: LOGO_architecture_wandb
+  name: logo_cv
   wandb_project_name: ResNet50Embedding
 
 training:

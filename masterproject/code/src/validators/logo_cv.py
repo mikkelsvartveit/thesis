@@ -10,9 +10,7 @@ from tqdm import tqdm
 from .train_test_utils import set_seed
 
 
-def LOGO_architecture_wandb(
-    config, dataset: Dataset, model_class: nn.Module.__class__, device
-):
+def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
     if "wandb_project_name" not in config["validator"]:
         raise ValueError("wandb_project_name not specified in config")
 
