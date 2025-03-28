@@ -1,0 +1,41 @@
+data:
+  name: ISAdetectDataset
+  params:
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 1024
+    use_code_only: True
+
+testing_data:
+  name: CpuRecDataset
+  params:
+    dataset_path: cpu_rec/cpu_rec_corpus
+    feature_csv_path: cpu_rec-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 1024
+
+transforms:
+  name: GrayScaleImage
+  params:
+    dimx: 32
+    dimy: 32
+    normalize: True
+    duplicate_to_n_channels: 3
+
+model:
+  name: ResNet50
+  params:
+    num_classes: 2
+
+validator:
+  name: train_test_separate_datasets
+  wandb_project_name: ResNet50
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2
