@@ -1,5 +1,6 @@
 dataset/cpu_rec
 dataset/ISAdetect
+dataset/buildcross
 
 .env
 .venv
