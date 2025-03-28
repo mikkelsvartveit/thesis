@@ -1,0 +1,31 @@
+architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
+bfin;little;32;16/32;mixed;Blackfin
+c6x;big;32;32;fixed;
+cr16;little;32;16/32;mixed;
+cris;little;32;16/32;mixed;
+csky;little;32;16/32;mixed;
+epiphany;little;32;16/32;mixed;
+fr30;big;32;16/32;mixed;
+frv;big;32;32;fixed;
+ft32;little;32;32;fixed;disassembled in both little and big, even though compiled for little
+h8300;big;32;16/32;mixed;
+iq2000;big;32;32;fixed;
+kvx;little;64;16/32;mixed;
+lm32;big;32;32;fixed;
+m32r;big;32;32;fixed;
+m68k-elf;big;32;16/32/48;mixed;
+mcore;little;32;16;fixed;Says 32 in elf header, but instructions are 16-bit? investigate
+mmix;big;64;32;fixed;
+mn10300;little;32;na;variable;
+moxie;big;32;16/32;mixed;
+msp430;little;32;16/32;mixed;
+nds32;little;32;16/32;mixed;
+pru;little;32;;;
+rl78;little;32;na;variable;
+rx;little;32;na;variable;
+tilegx;little;64;64;fixed;Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word
+tricore;little;32;16/32;mixed;
+v850;little;32;16/32;mixed;
+visium;big;32;32;fixed;
+xstormy16;little;32;16/32;mixed;
+xtensa;big;32;na;variable;either 16 or 24 bits, does not align to a single boundary

@@ -12,4 +12,7 @@ compiled-toolchain
 /example_program
 
 *.def
-results
+results/*
+!results/report*
+!results/*.csv
+!results/text_bin.tar.gz

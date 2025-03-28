@@ -109,6 +109,9 @@ set(CMAKE_AR ${TARGET}-ar)
 set(CMAKE_RANLIB ${TARGET}-ranlib)
 set(CMAKE_STRIP ${TARGET}-strip)
 
+add_compile_options(-mbig-endian)
+add_link_options(-mbig-endian)
+
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
 
 # Disable PIC for platforms that don't support it
@@ -156,7 +159,7 @@ cmake -G "Ninja" \
 
 
 echo "Building ${LIB_NAME}..."
-cmake --build . -j$JCOUNT || echo "======= build incomplete! ======="
+cmake --build . -j$JCOUNT -v || echo "======= build incomplete! ======="
 
 echo "Installing ${LIB_NAME} to ${OUTPUT_DIR}..."
 cmake --install .

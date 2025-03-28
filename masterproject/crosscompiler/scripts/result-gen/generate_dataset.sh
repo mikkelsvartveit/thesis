@@ -320,4 +320,18 @@ for arch_dir in results/text_bin/*/; do
     echo "$arch;$endian_wordsize$instr_w" >> $csv_labels
 done
 
+echo "Report generated in $report_file"
+echo "CSV report generated in $csv_report"
+echo "CSV labels generated in $csv_labels"
+
+echo "Compressing dataset results"
+cd results
+tar --sort=name \
+    --owner=0 --group=0 --numeric-owner \
+    --mtime='1970-01-01 00:00Z' \
+    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+    -c text_bin/ | gzip -n > text_bin.tar.gz
+cd ..
+
+
 
