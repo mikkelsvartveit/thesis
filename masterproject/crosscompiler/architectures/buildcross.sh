@@ -119,7 +119,8 @@
 # score		score-unknown-elf (no libc) (1)
 # sh4		sh4-unknown-linux-gnu
 # sparc64	sparc64-unknown-linux-gnu with -m64 and -m32 support
-# tilegx	tilegx-unknown-linux-gnu
+# tilegxel	tilegxel-unknown-linux-gnu (little-endian)
+# tilegxeb	tilegxeb-unknown-linux-gnu (big-endian)
 # tms9900	tms9900-unknown-elf (no libc) (1)
 # tricore	tricore-unknown-elf
 # ubicom32	ubicom32-linux-uclibc (1)
@@ -780,12 +781,22 @@ case "${TARGET_ARCH}" in
 	# https://sourceware.org/bugzilla/show_bug.cgi?id=32700
 	BINUTILS_VSN=2.43.1 # score fails to build with binutils-2.44
 	;;
-    "tilegx")
-	BINUTILS_VSN=2.28.1 # later versions cannot build glibc
-	GCC_VSN=7.5.0 # later versions cannot build glibc
-	GLIBC_VSN=2.25 # later versions do not build
-	LINUX_VSN=4.16 # tile was removed in linux-4.17
-	;;
+    "tilegx" | "tilegxel")
+    TARGET_ARCH="tilegxel"
+    TARGET_TRIPLE="tilegxel-unknown-linux-gnu"
+    BINUTILS_VSN=2.28.1 # later versions cannot build glibc
+    GCC_VSN=7.5.0 # later versions cannot build glibc
+    GLIBC_VSN=2.25 # later versions do not build
+    LINUX_VSN=4.16 # tile was removed in linux-4.17
+    ;;
+	"tilegxeb")
+    TARGET_ARCH="tilegxeb"
+    TARGET_TRIPLE="tilegxeb-unknown-linux-gnu"
+    BINUTILS_VSN=2.28.1 # later versions cannot build glibc
+    GCC_VSN=7.5.0 # later versions cannot build glibc
+    GLIBC_VSN=2.25 # later versions do not build
+    LINUX_VSN=4.16 # tile was removed in linux-4.17
+    ;;
     "tms9900")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
 	BINUTILS_VSN="git;https://github.com/mikpe/binutils-gdb.git;-;binutils-2_19_1-tms9900;HEAD;mikpe"
@@ -1587,9 +1598,12 @@ build_cross_gcc() {
 	    # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90419#c1
 	    MULTILIB_CONFIG="--enable-multilib --with-multilib-list=lp64d"
 	    ;;
-	"tilegx")
-	    MULTILIB_CONFIG="--disable-multilib"
-	    ;;
+	"tilegxle")
+        MULTILIB_CONFIG="--disable-multilib --with-endian=little"
+        ;;
+    "tilegxbe")
+        MULTILIB_CONFIG="--disable-multilib --with-endian=big"
+        ;;
 	"tricore")
 	    # the git repo lost all executable flags
 	    chmod +x	"${SOURCE_PATH}/compile" \
@@ -1857,6 +1871,12 @@ build_cross_binutils() {
 		    ;;
 	    esac
 	    ;;
+	"tilegxel")
+        BINUTILS_CONFIG="--enable-targets=tilegxel-unknown-linux-gnu --with-endian=little"
+        ;;
+    "tilegxeb")
+        BINUTILS_CONFIG="--enable-targets=tilegxeb-unknown-linux-gnu --with-endian=big"
+        ;;
     esac
     ENABLE_OBSOLETE=
     if [ -n "${BINUTILS_WANTS_ENABLE_OBSOLETE}" ]; then
@@ -1874,6 +1894,7 @@ build_cross_binutils() {
     mkdir objdir-binutils
     cd objdir-binutils
     CFLAGS="${CFLAGS}" ${SOURCE_PATH}/configure \
+		${BINUTILS_CONFIG} \
 		--target="${TARGET_TRIPLE}" ${ENABLE_TARGETS} ${ENABLE_OBSOLETE} ${DISABLE_WERROR} \
 		--${BUILD_OR_HOST}="${BUILD_TRIPLE}" \
 		--prefix="${CROSS_DIR}" \
@@ -2040,6 +2061,7 @@ build_linux_headers() {
 	"sh4") KERNEL_ARCH="sh";;
 	"sparc64") KERNEL_ARCH="sparc";;
 	"x86_64") KERNEL_ARCH="x86";;
+	"tilegxel" | "tilegxeb") KERNEL_ARCH="tilegx";;
 	*) KERNEL_ARCH="${TARGET_ARCH}"
     esac
     GIT=`gitify_vsn_linux "${LINUX_VSN}"`
@@ -2117,11 +2139,23 @@ build_glibc() {
     if [ -n "${GLIBC_WANTS_DISABLE_WERROR}" ]; then
 	DISABLE_WERROR="--disable-werror"
     fi
+	case "${TARGET_TRIPLE}" in
+        *tilegxle*)
+            GLIBC_ENDIAN_OPTION="--with-endian=little"
+            ;;
+        *tilegxbe*)
+            GLIBC_ENDIAN_OPTION="--with-endian=big"
+            ;;
+        *)
+            GLIBC_ENDIAN_OPTION=""
+            ;;
+    esac
     rm -rf "${TARGET_TRIPLE}"
     mkdir "${TARGET_TRIPLE}"
     cd "${TARGET_TRIPLE}"
     ${SOURCE_PATH}/configure "${TARGET_CC}" ${DISABLE_WERROR} \
 		CXX=/bin/false \
+		${GLIBC_ENDIAN_OPTION} \
 		--host="${TARGET_TRIPLE}" \
 		--build="${BUILD_TRIPLE}" \
 		--prefix=/usr \
@@ -2138,6 +2172,7 @@ build_target_glibc() {
     local TARGET_CC
     local GIT
     local SOURCE_PATH
+	local GLIBC_ENDIAN_OPTION
     GIT=`gitify_vsn_glibc "${GLIBC_VSN}"`
     SOURCE_PATH=`unpack_source "${GIT}"`
     rm -rf objdir-glibc
