@@ -8,4 +8,4 @@ docker run -it --entrypoint /bin/bash \
       -v "./toolchains:/workspace/toolchains" \
       -v "./scripts/build-lib.sh:/usr/local/bin/build-lib" \
       -v "./scripts/download-libs.sh:/usr/local/bin/download-libs" \
-      "cross-compile-${arch}:latest"
+      "cross-compiler-${arch}:latest"

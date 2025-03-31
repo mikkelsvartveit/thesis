@@ -54,6 +54,7 @@ ARCH_TARGET_LIST=(
     "rl78:rl78-unknown-elf"
     "rx:rx-unknown-elf"
     "tilegx:tilegx-unknown-linux-gnu"
+    "tilegxbe:tilegxbe-unknown-linux-gnu"
     "tricore:tricore-unknown-elf"
     "v850:v850e-uclinux-uclibc"
     "visium:visium-unknown-elf"

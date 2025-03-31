@@ -15,6 +15,10 @@ ENV ARCH=$ARCH \
     TARGET=$TARGET \
     TOOLCHAIN_FILE="/workspace/toolchains/${ARCH}.cmake"
 
+RUN rm -f /opt/buildcross/scripts/buildcross.sh
+COPY architectures/buildcross.sh /opt/buildcross/scripts/
+RUN chmod +x /opt/buildcross/scripts/buildcross.sh
+
 RUN build.sh -j$(nproc) $ARCH
 
 # -----------------------------------------------------------------------------
@@ -35,7 +39,7 @@ ENV TOOLCHAIN_FILE="/workspace/toolchains/${ARCH}.cmake"
 
 # Copy only the compiled toolchain from the builder stage
 COPY --from=builder "/cross-${ARCH}" "/cross-${ARCH}"
-COPY "toolchains/${ARCH}.cmake" "/workspace/toolchains/${ARCH}.cmake"
+COPY toolchains/${ARCH}.* "/workspace/toolchains/"
 
 # Set up PATH and compiler environment variables
 ENV PATH="${CROSS_PREFIX}/bin:${PATH}" \
