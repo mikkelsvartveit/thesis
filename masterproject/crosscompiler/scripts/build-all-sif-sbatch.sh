@@ -12,7 +12,7 @@ declare -a JOB_IDS
 # Launch a job for each SIF image
 for SIF_image in $SIF_IMAGES; do
     # Extract architecture name from SIF image filename
-    arch=$(basename "${SIF_image}" .sif | sed 's/cross-compiler-//')
+    arch=$(basename "${SIF_image}" .sif | sed 's/crosscompiler-//')
     
     # Submit the job and capture the job ID
     JOB_ID=$(sbatch --parsable \

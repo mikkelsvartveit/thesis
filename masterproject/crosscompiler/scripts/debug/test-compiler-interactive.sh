@@ -7,4 +7,4 @@ docker run -it --entrypoint /bin/bash \
       -v "./patches:/workspace/patches" \
       -v "./toolchains:/workspace/toolchains" \
       -v "./scripts:/workspace/scripts" \
-      "cross-compiler-${arch}:latest"
+      "crosscompiler-${arch}:latest"

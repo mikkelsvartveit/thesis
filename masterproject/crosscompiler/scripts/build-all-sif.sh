@@ -32,8 +32,8 @@ chmod +x "${PROJECT_ROOT}/scripts/"*
 # Process each architecture
 for SIF_image in $SIF_IMAGES; do
   
-  # Extract architecture name from SIF image filename (cross-compiler-ARCH.sif)
-  arch=$(basename "${SIF_image}" .sif | sed 's/cross-compiler-//')
+  # Extract architecture name from SIF image filename (crosscompiler-ARCH.sif)
+  arch=$(basename "${SIF_image}" .sif | sed 's/crosscompiler-//')
   if [ -n "${ONLY_ARCH}" ] && [ "${arch}" != "${ONLY_ARCH}" ]; then
     continue
   fi
@@ -73,7 +73,7 @@ echo -e "\nBuild Summary:"
 for SIF_image in $SIF_IMAGES; do
     temp_res=$(mktemp)
     # Extract architecture name from SIF image filename
-    arch=$(basename "${SIF_image}" .sif | sed 's/cross-compiler-//')
+    arch=$(basename "${SIF_image}" .sif | sed 's/crosscompiler-//')
     if [ -z "${ONLY_ARCH}" ] || [ "${arch}" == "${ONLY_ARCH}" ]; then
       echo "Architecture: ${arch}" >> "${temp_res}"
       TOTAL_SIZE=0
