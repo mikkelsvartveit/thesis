@@ -35,13 +35,10 @@ SBATCH_AVAILABLE      := $(shell which sbatch 2>/dev/null)
 .PHONY: all help prepare baseimages crosscompilers clean build_scripts build_all build_all_sbatch dataset
 
 #--------------------------------------------------------------
-# Default and Help Targets
+# Help Targets
 #--------------------------------------------------------------
-all: prepare baseimages crosscompilers
-
 help:
 	@echo "Available targets:"
-	@echo "  all            - Build everything (default)"
 	@echo "  help           - Display this help message"
 	@echo "  prepare        - Create directories and extract sources"
 	@echo "  baseimages     - Build base Singularity images needed for crosscompiler images"
@@ -49,14 +46,16 @@ help:
 	@echo "  build_all      - Build libraries using SIF containers and library list in build-all-sif.sh"
 	@echo "  build_all_sbatch - Build all libraries using Slurm batch jobs"
 	@echo "  dataset        - Generate dataset from built libraries"
-	@echo "  clean          - Remove built images"
+	@echo "  clean          - Removes intermediate image build files and output from crosscompilers"
+	@echo "  cleanall       - clean, but also removes sif-images"
 
 #--------------------------------------------------------------
 # Preparation Target
 #--------------------------------------------------------------
 prepare:
 	@echo "Creating directories and extracting sources..."
-	@mkdir -p $(OUTPUT_DIR) $(CROSSCOMPILER_DEFS) $(CROSSCOMPILER_IMAGES)
+	@mkdir -p $(OUTPUT_DIR) $(CROSSCOMPILER_DEFS) $(CROSSCOMPILER_IMAGES) 
+	@mkdir -p $(RESULT_DIR)/library_files $(RESULT_DIR)/text_asm $(RESULT_DIR)/text_bin
 	@cd sources && tar xf sources.tar.gz && cd ..
 
 #--------------------------------------------------------------
@@ -76,7 +75,7 @@ $(SINGULARITY_DIR)/%.sif: $(SINGULARITY_DIR)/%.def
 # Generate the build scripts an singularity .def for cross-compilers
 build_scripts:
 	@echo "Generating build scripts..."
-	@$(SLURM_SCRIPTS_DIR)/generate_build_scripts.sh
+	./scripts/generate_build_scripts.sh
 
 crosscompilers: baseimages build_scripts 
 	$(eval CROSSCOMPILER_DEFS_FILES := $(wildcard $(CROSSCOMPILER_DEFS)/*.def))
@@ -126,7 +125,17 @@ dataset:
 # Cleanup
 #--------------------------------------------------------------
 clean:
+	@echo "Cleaning up intermediate files and results"
+	rm -rf $(OUTPUT_DIR)/*
+	rm -rf ./slurm-scripts/logs
+	rm -rf ./slurm-scripts/submitscripts
+	rm -rf $(CROSSCOMPILER_DEFS)
+	rm -rf $(RESULT_DIR)/library_files
+	rm -rf $(RESULT_DIR)/text_asm
+	rm -rf $(RESULT_DIR)/text_bin
+
+
+cleanall: clean
 	@echo "Cleaning up built images..."
-	rm -f $(BASE_SIF_FILES)
-	rm -rf $(CROSSCOMPILER_SIF_FILES)
-	@echo "Cleanup complete"
+	rm -rf $(SINGULARITY_DIR)/*.sif
+	rm -rf $(CROSSCOMPILER_IMAGES)

@@ -4,7 +4,7 @@ set -e
 # Place this in ./slurm-scripts/
 
 # First make sure all scripts are generated
-./slurm-scripts/generate_build_scripts.sh
+./scripts/generate_build_scripts.sh
 
 # Submit all jobs
 echo "Submitting all build jobs..."
