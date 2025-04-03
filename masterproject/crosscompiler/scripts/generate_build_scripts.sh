@@ -61,6 +61,7 @@ ARCH_TARGET_LIST=(
     "moxie:moxie-unknown-elf"
     "msp430:msp430-unknown-elf"
     "nds32:nds32le-unknown-linux-gnu"
+    "nds32be:nds32be-unknown-elf"
     "pdp11:pdp11-unknown-aout"
     "pru:pru-unknown-elf"
     "rl78:rl78-unknown-elf"

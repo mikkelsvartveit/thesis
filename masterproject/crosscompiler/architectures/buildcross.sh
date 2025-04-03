@@ -103,6 +103,7 @@
 # msp430	msp430-unknown-elf
 # mt		mt-unknown-elf (3)
 # nds32		nds32le-unknown-linux-gnu
+# nds32be		nds32be-unknown-elf
 # nios2		nios2-unknown-linux-gnu
 # ns32k		ns32k-unknown-netbsd (no libc) (2)
 # nvptx		nvptx-none with newlib
@@ -712,6 +713,10 @@ case "${TARGET_ARCH}" in
 	GLIBC_WANTS_DISABLE_WERROR=1
 	GCC_VSN=12.4.0 # gcc-13.x triggers a linkage error in glibc
 	LINUX_VSN=5.17 # nds32 was removed in linux-5.18
+	;;
+    "nds32be")
+	TARGET_TRIPLE="nds32be-unknown-elf"
+	ENDIANNESS="big"
 	;;
     "nios2")
 	GCC_WANTS_ENABLE_OBSOLETE=1 # gcc-14 marks nios2 as obsolete
