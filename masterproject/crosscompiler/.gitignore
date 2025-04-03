@@ -12,6 +12,8 @@ compiled-toolchain
 /example_program
 
 *.def
+!*base.def
+*.sif
 results/*
 !results/report*
 !results/*.csv

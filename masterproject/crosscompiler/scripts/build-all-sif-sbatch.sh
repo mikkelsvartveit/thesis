@@ -4,7 +4,7 @@
 mkdir -p ./output/logs
 
 # Get all SIF images
-SIF_IMAGES="./slurm-scripts/cross-compiler-images/*.sif"
+SIF_IMAGES="./singularity-images/crosscompiler-images/*.sif"
 
 # Array to store job IDs
 declare -a JOB_IDS

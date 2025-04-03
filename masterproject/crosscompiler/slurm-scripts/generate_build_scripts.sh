@@ -6,22 +6,22 @@ set -e
 # Create needed directories
 mkdir -p ./slurm-scripts/submitscripts
 mkdir -p ./slurm-scripts/logs
-mkdir -p ./slurm-scripts/cross-compiler-images
-mkdir -p ./slurm-scripts/singularity-definitions
+mkdir -p ./singularity-images/crosscompiler-images
+mkdir -p ./singularity-images/crosscompiler-definitions
 
 # Create base images for building and cross-compiling
-# buildcross-base.tar and cross-compile-base.tar should be created beforehand using 
+# buildcross-base.tar and crosscompiler-base.tar should be created beforehand using 
 #   docker save -o
-if [ ! -f ./base-images/buildcross-base.sif ]; then
-    singularity build ./base-images/buildcross-base.sif docker-archive://./base-images/buildcross-base.tar
+if [ ! -f ./singularity-images/buildcross-base.sif ]; then
+    singularity build ./singularity-images/buildcross-base.sif docker-archive://./singularity-images/buildcross-base.tar
 else
     echo "buildcross-base.sif file already exists, skipping build"
 fi
 
-if [ ! -f ./base-images/cross-compile-base.sif ]; then
-    singularity build ./base-images/cross-compile-base.sif docker-archive://./base-images/cross-compile-base.tar
+if [ ! -f ./singularity-images/crosscompiler-base.sif ]; then
+    singularity build ./singularity-images/crosscompiler-base.sif docker-archive://./singularity-images/crosscompiler-base.tar
 else
-    echo "cross-compile-base.sif file already exists, skipping build"
+    echo "crosscompiler-base.sif file already exists, skipping build"
 fi
 
 # List of supported architectures and their targets as colon-separated items
@@ -69,14 +69,14 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
-    def_file="./slurm-scripts/singularity-definitions/${arch}.def"
+    def_file="./singularity-images/crosscompiler-definitions/${arch}.def"
     
     echo "Generating definition file for ${arch}..."
     
     # Create the Singularity definition file
     cat > "${def_file}" << EOF
 Bootstrap: localimage
-From: ./base-images/buildcross-base.sif
+From: ./singularity-images/buildcross-base.sif
 Stage: builder
 
 %environment
@@ -91,7 +91,7 @@ Stage: builder
 
 # Second stage
 Bootstrap: localimage
-From: ./base-images/cross-compile-base.sif
+From: ./singularity-images/crosscompiler-base.sif
 Stage: final
 
 %files from builder
@@ -149,8 +149,8 @@ echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
 
 # Build the Singularity container using the definition file
 echo "Building Singularity container..."
-mkdir -p ./slurm-scripts/cross-compiler-images/
-singularity build --fakeroot ./slurm-scripts/cross-compiler-images/cross-compiler-${arch}.sif ./slurm-scripts/singularity-definitions/${arch}.def
+mkdir -p ./singularity-images/crosscompiler-images/
+singularity build --fakeroot ./singularity-images/crosscompiler-images/cross-compiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
 EOF

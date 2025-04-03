@@ -23,7 +23,7 @@ RUN build.sh -j$(nproc) $ARCH
 
 # -----------------------------------------------------------------------------
 # Second stage 
-FROM cross-compile-base:latest
+FROM crosscompiler-base:latest
 
 ARG ARCH
 ARG TARGET

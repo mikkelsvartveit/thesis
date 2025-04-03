@@ -4,7 +4,7 @@
 set -e
 
 # Architectures to build for
-SIF_IMAGES="./slurm-scripts/cross-compiler-images/*.sif"
+SIF_IMAGES="./singularity-images/crosscompiler-images/*.sif"
 ONLY_ARCH=${1:-}
 
 # Libraries to build

@@ -38,20 +38,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "${SCRIPT_DIR}")"
 
 # Build base image if it doesn't exist
-if ! docker image inspect cross-compile-base:latest &>/dev/null; then
+if ! docker image inspect crosscompiler-base:latest &>/dev/null; then
   echo "Building base Docker image..."
-  docker build -t cross-compile-base:latest -f "${PROJECT_ROOT}/Dockerfile.base" "${PROJECT_ROOT}"
+  docker build -t crosscompiler-base:latest -f "${PROJECT_ROOT}/singularity-images/Dockerfile.base" "${PROJECT_ROOT}"
 fi
 if ! docker image inspect buildcross-base:latest &>/dev/null; then
   echo "Building base Docker image..."
-  docker build -t buildcross-base:latest -f "${PROJECT_ROOT}/Dockerfile.buildcross-base" "${PROJECT_ROOT}"
+  docker build -t buildcross-base:latest -f "${PROJECT_ROOT}/singularity-images/Dockerfile.buildcross-base" "${PROJECT_ROOT}"
 fi
 
 # Build architecture-specific images
 for arch in "${ARCHITECTURES[@]}"; do
-  if ! docker image inspect "cross-compile-${arch}:latest" &>/dev/null; then
+  if ! docker image inspect "crosscompiler-${arch}:latest" &>/dev/null; then
     echo "Building Docker image for ${arch}..."
-    docker build -t "cross-compile-${arch}:latest" \
+    docker build -t "crosscompiler-${arch}:latest" \
       -f "${PROJECT_ROOT}/architectures/Dockerfile.${arch}" "${PROJECT_ROOT}"
   fi
 done
@@ -79,7 +79,7 @@ for arch in "${ARCHITECTURES[@]}"; do
     -v "${PROJECT_ROOT}/toolchains:/workspace/toolchains" \
     -v "${PROJECT_ROOT}/scripts/build-lib.sh:/usr/local/bin/build-lib" \
     -v "${PROJECT_ROOT}/scripts/download-libs.sh:/usr/local/bin/download-libs" \
-    "cross-compile-${arch}:latest" \
+    "crosscompiler-${arch}:latest" \
       -c "for lib_info in ${LIB_ARRAY_STR}; do \
         IFS=':' read -r lib_name lib_version <<< \"\${lib_info}\"; \
         build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \

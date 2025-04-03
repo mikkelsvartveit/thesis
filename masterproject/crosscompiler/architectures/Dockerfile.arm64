@@ -1,4 +1,4 @@
-FROM cross-compile-base:latest
+FROM crosscompiler-base:latest
 
 # Install ARM64 cross-compiler toolchain
 RUN apt-get update && apt-get install -y \
