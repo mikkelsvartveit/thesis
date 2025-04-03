@@ -12,17 +12,29 @@ mkdir -p ./singularity-images/crosscompiler-definitions
 # Create base images for building and cross-compiling
 # buildcross-base.tar and crosscompiler-base.tar should be created beforehand using 
 #   docker save -o
-if [ ! -f ./singularity-images/buildcross-base.sif ]; then
-    singularity build ./singularity-images/buildcross-base.sif docker-archive://./singularity-images/buildcross-base.tar
-else
-    echo "buildcross-base.sif file already exists, skipping build"
-fi
+# if [ ! -f ./singularity-images/buildcross-base.sif ]; then
+#     if [ -f ./singularity-images/buildcross-base.def ]; then 
+#         singularity build --fakeroot ./singularity-images/buildcross-base.sif ./singularity-images/buildcross-base.def
+#     elif [ -f ./singularity-images/buildcross-base.tar ]; then
+#         singularity build ./singularity-images/buildcross-base.sif docker-archive://./singularity-images/buildcross-base.tar
+#     else
+#         echo "Could not find files to build buildcross-base image from"
+#     fi
+# else
+#     echo "buildcross-base.sif file already exists, skipping build"
+# fi
 
-if [ ! -f ./singularity-images/crosscompiler-base.sif ]; then
-    singularity build ./singularity-images/crosscompiler-base.sif docker-archive://./singularity-images/crosscompiler-base.tar
-else
-    echo "crosscompiler-base.sif file already exists, skipping build"
-fi
+# if [ ! -f ./singularity-images/crosscompiler-base.sif ]; then
+#     if [ -f ./singularity-images/crosscompiler-base.def ]; then 
+#         singularity build --fakeroot ./singularity-images/crosscompiler-base.sif ./singularity-images/crosscompiler-base.def
+#     elif [ -f ./singularity-images/crosscompiler-base.tar ]; then
+#         singularity build ./singularity-images/crosscompiler-base.sif docker-archive://./singularity-images/crosscompiler-base.tar
+#     else
+#         echo "Could not find files to build crosscompiler-base image from"
+#     fi
+# else
+#     echo "crosscompiler-base.sif file already exists, skipping build"
+# fi
 
 # List of supported architectures and their targets as colon-separated items
 # Format: "arch:target"
@@ -65,13 +77,14 @@ ARCH_TARGET_LIST=(
 
 # First, generate all Singularity definition files
 echo "Generating Singularity definition files..."
+rm -rf ./singularity-images/crosscompiler-definitions/*
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
     def_file="./singularity-images/crosscompiler-definitions/${arch}.def"
     
-    echo "Generating definition file for ${arch}..."
+    echo "  Generating definition file for ${arch}..."
     
     # Create the Singularity definition file
     cat > "${def_file}" << EOF
@@ -113,8 +126,6 @@ Stage: final
 %post
     echo "Container built for ${arch} architecture"
 EOF
-    
-    echo "Generated definition file for ${arch}"
 done
 
 # Now generate all SLURM submission scripts
@@ -127,7 +138,7 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     target=$(echo "$arch_target" | cut -d':' -f2)
     submit_script="./slurm-scripts/submitscripts/build_${arch}.slurm"
     
-    echo "Generating submission script for ${arch}..."
+    echo "  Generating submission script for ${arch}..."
     
     # Create the Slurm submission script
     cat > "${submit_script}" << EOF
@@ -150,7 +161,7 @@ echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
 # Build the Singularity container using the definition file
 echo "Building Singularity container..."
 mkdir -p ./singularity-images/crosscompiler-images/
-singularity build --fakeroot ./singularity-images/crosscompiler-images/cross-compiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def
+singularity build --fakeroot ./singularity-images/crosscompiler-images/crosscompiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
 EOF
@@ -160,10 +171,4 @@ EOF
     
     # Create the log directory for this architecture
     mkdir -p "./slurm-scripts/logs/${arch}"
-    
-    echo "Generated script for ${arch}"
 done
-
-echo "All Singularity definition files and submission scripts generated."
-echo "You can submit the SLURM jobs with:"
-echo "cd ./slurm-scripts/submitscripts && for f in build_*.slurm; do sbatch \$f; done"
