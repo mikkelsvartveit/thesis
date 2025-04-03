@@ -12,7 +12,7 @@ echo $JCOUNT
 
 # Define architecture pairs
 # Format: "primary:alternate"
-ARCH_PAIRS=("moxie:moxieel")
+ARCH_PAIRS=("moxie:moxieel" "mcore:mcoreeb" "rx:rxeb")
 
 SOURCES_DIR="/workspace/sources"
 ARCH_PATCH_DIR="/workspace/patches/${LIB_NAME}/${ARCH}"
@@ -97,6 +97,7 @@ build_lib_for_arch () {
   -DXZUTILS_BUILD_TESTS=OFF"
 
   CMAKE_TOOLCHAIN_ARGS=""
+  TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
   TMP_TOOLCHAIN_FILE="/tmp/toolchain-${arch}.cmake"
 
   # If original toolchain file doesn't exist, create a minimal temporary one
