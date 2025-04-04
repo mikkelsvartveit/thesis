@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-all.sh - Build libraries for all architectures
+# compile_all.sh - Build libraries for all architectures
 
 set -e
 
@@ -55,13 +55,14 @@ for SIF_image in $SIF_IMAGES; do
       --bind "${PROJECT_ROOT}/output:/workspace/output" \
       --bind "${PROJECT_ROOT}/patches:/workspace/patches" \
       --bind "${PROJECT_ROOT}/toolchains:/workspace/toolchains" \
-      --bind "${PROJECT_ROOT}/scripts/build-lib.sh:/usr/local/bin/build-lib" \
+      --bind "${PROJECT_ROOT}/scripts:/workspace/scripts" \
+      --bind "${PROJECT_ROOT}/scripts/compile_lib.sh:/usr/local/bin/build-lib" \
       --bind "${PROJECT_ROOT}/scripts/download-libs.sh:/usr/local/bin/download-libs" \
       "${SIF_image}" \
       bash -c "for lib_info in ${LIB_ARRAY_STR}; do \
         IFS=':' read -r lib_name lib_version <<< \"\${lib_info}\"; \
         rm -rf /workspace/output/${arch}/\${lib_name}; \
-        build-lib \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \
+        /workspace/scripts/compile_lib.sh \"\${lib_name}\" \"\${lib_version}\" || echo \"====== Failed to build ${lib_name} ======\"; \
       done" > "${PROJECT_ROOT}/output/${arch}/build.log" 2>&1 
     echo "Done building ${arch}"
   ) &

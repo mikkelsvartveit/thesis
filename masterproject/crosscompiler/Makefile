@@ -32,7 +32,7 @@ SBATCH_AVAILABLE      := $(shell which sbatch 2>/dev/null)
 #--------------------------------------------------------------
 # Phony Targets
 #--------------------------------------------------------------
-.PHONY: help prepare baseimages baseimages_sbatch crosscompilers clean build_scripts build_all build_all_sbatch dataset
+.PHONY: help baseimages baseimagessbatch crosscompilers clean crosscompilerscripts compileall compileallsbatch dataset
 
 #--------------------------------------------------------------
 # Help Targets
@@ -43,8 +43,8 @@ help:
 	@echo "  prepare        - Create directories and extract sources"
 	@echo "  baseimages     - Build base Singularity images needed for crosscompiler images"
 	@echo "  crosscompilers - Build cross-compiler images from list in generate_build_scripts.sh"
-	@echo "  build_all      - Build libraries using SIF containers and library list in build-all-sif.sh"
-	@echo "  build_all_sbatch - Build all libraries using Slurm batch jobs"
+	@echo "  compileall      - Build libraries using SIF containers and library list in compile_all_sif.sh"
+	@echo "  compileallsbatch - Build all libraries using Slurm batch jobs"
 	@echo "  dataset        - Generate dataset from built libraries"
 	@echo "  clean          - Removes intermediate image build files and output from crosscompilers"
 	@echo "  cleanall       - clean, but also removes sif-images"
@@ -52,11 +52,19 @@ help:
 #--------------------------------------------------------------
 # Preparation Target
 #--------------------------------------------------------------
-prepare:
+
+# Add this to your directory configuration
+PREPARE_STAMP := .prepare_complete
+
+# Modify your prepare target
+prepare: $(PREPARE_STAMP)
+
+$(PREPARE_STAMP):
 	@echo "Creating directories and extracting sources..."
 	@mkdir -p $(OUTPUT_DIR) $(CROSSCOMPILER_DEFS) $(CROSSCOMPILER_IMAGES) 
 	@mkdir -p $(RESULT_DIR)/library_files $(RESULT_DIR)/text_asm $(RESULT_DIR)/text_bin
 	@cd sources && tar xf sources.tar.gz && cd ..
+	@touch $(PREPARE_STAMP)
 
 #--------------------------------------------------------------
 # Base Image Building
@@ -64,7 +72,7 @@ prepare:
 baseimages: $(BASE_SIF_FILES)
 	@echo "All base images built successfully"
 
-baseimagessbatch: prepare
+baseimagessbatch: $(PREPARE_STAMP)
 	sbatch \
 		--account="share-ie-idi" \
 		--time="00:45:00" \
@@ -78,7 +86,7 @@ baseimagessbatch: prepare
 		--wrap="make $(BASE_SIF_FILES)"
 
 # Rule to build base SIF files from DEF files
-$(SINGULARITY_DIR)/%.sif: prepare $(SINGULARITY_DIR)/%.def
+$(SINGULARITY_DIR)/%.sif: $(SINGULARITY_DIR)/%.def | $(PREPARE_STAMP)
 	@echo "Building base image: $@"
 	singularity build --fakeroot $@ $<
 
@@ -86,7 +94,7 @@ $(SINGULARITY_DIR)/%.sif: prepare $(SINGULARITY_DIR)/%.def
 # Cross-compiler Building
 #--------------------------------------------------------------
 # Generate the build scripts an singularity .def for cross-compilers
-crosscompilerscripts: prepare
+crosscompilerscripts: | $(PREPARE_STAMP)
 	@echo "Generating build scripts..."
 	./scripts/generate_build_scripts.sh
 
@@ -98,7 +106,7 @@ crosscompilers: baseimages crosscompilerscripts
 
 
 # Build cross-compiler images using Slurm or locally
-$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: prepare crosscompilerscripts
+$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: crosscompilerscripts | $(PREPARE_STAMP)
 	@if [ ! -f "$@" ]; then \
 		echo "Building cross-compiler image: $@"; \
 		if command -v sbatch >/dev/null 2>&1; then \
@@ -116,22 +124,22 @@ $(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: prepare crosscompilerscripts
 # Library-compiling
 #--------------------------------------------------------------
 
-compileall: prepare
-	./scripts/build-all-sif.sh
+compileall: | $(PREPARE_STAMP)
+	./scripts/compile_all_sif.sh
 
-compileallsbatch: prepare
-	./scripts/build-all-sif-sbatch.sh
+compileallsbatch: | $(PREPARE_STAMP)
+	./scripts/compile_all_sif_sbatch.sh
 
 $(OUTPUT_DIR)/%: $(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif
 	@echo "Generating libraries for architecture: $*"
 	@mkdir -p $@
-	./scripts/build-all-sif.sh $*
+	./scripts/compile_all_sif.sh $*
 
 #--------------------------------------------------------------
 # Dataset building
 #--------------------------------------------------------------
 
-dataset: prepare
+dataset: | $(PREPARE_STAMP)
 	./scripts/result_gen/generate_dataset.sh
 
 #--------------------------------------------------------------

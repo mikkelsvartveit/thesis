@@ -80,7 +80,7 @@ RUN /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS
 --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only moxie
 
 # Add library compile scripts
-COPY scripts/build-lib.sh /usr/local/bin/build-lib
+COPY scripts/compile_lib.sh /usr/local/bin/build-lib
 COPY scripts/download-libs.sh /usr/local/bin/download-libs
 RUN chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
 

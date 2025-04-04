@@ -41,7 +41,7 @@ mkdir -p ./singularity-images/crosscompiler-definitions
 # You can modify this list as needed
 ARCH_TARGET_LIST=(
     "arc:arc-unknown-linux-gnu" # ARCompact v2 basicallly (ARCv2)
-    "arceb:arceb-unknown-linux-gnu" 
+    "arceb:arceb-unknown-elf" 
     "bfin:bfin-unknown-linux-uclibc"
     "c6x:c6x-unknown-uclinux"
     "cr16:cr16-unknown-elf"
@@ -108,9 +108,14 @@ Stage: builder
     export TARGET=${target}
     export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
 
+%files
+    architectures/buildcross.sh /opt/buildcross/scripts/buildcross.sh
+
 %post
     ARCH=${arch}
     TARGET=${target}
+
+    chmod +x /opt/buildcross/scripts/buildcross.sh
     build.sh -j\$(nproc) \$ARCH
 
 # Second stage
@@ -127,12 +132,10 @@ Stage: final
     export CROSS_PREFIX="/cross-${arch}" 
     export OUTPUT_PREFIX="/workspace/output/${arch}" 
     export SOURCE_PREFIX="/workspace/sources" 
-    export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
     export PATH="\${CROSS_PREFIX}/bin:\${PATH}"
     export CC="${target}-gcc"
     export AR="${target}-ar"
     export RANLIB="${target}-ranlib"
-    export CFLAGS="-g"
 
 %post
     echo "Container built for ${arch} architecture"

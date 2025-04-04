@@ -374,6 +374,9 @@ case "${TARGET_ARCH}" in
 	GCC_VSN="git;https://github.com/Windows-on-ARM-Experiments/gcc-woarm64.git;-;woarm64;HEAD;-"
 	MINGW64_VSN="git;https://github.com/Windows-on-ARM-Experiments/mingw-woarm64.git;-;woarm64;HEAD;-"
 	;;
+		"arceb")
+	TARGET_TRIPLE="arceb-unknown-elf"
+		;;
     "armv7l")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-linux-gnueabi"
 	;;
@@ -2063,6 +2066,7 @@ build_linux_headers() {
 	"bfin") KERNEL_ARCH="blackfin";;
 	"hppa") KERNEL_ARCH="parisc";;
 	"loongarch64") KERNEL_ARCH="loongarch";;
+	"microblazeel") KERNEL_ARCH="microblaze";;
 	"mips64") KERNEL_ARCH="mips";;
 	"or1k") KERNEL_ARCH="openrisc";;
 	ppc64*) KERNEL_ARCH="powerpc";;

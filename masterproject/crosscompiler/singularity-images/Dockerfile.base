@@ -37,7 +37,7 @@ WORKDIR /workspace
 RUN mkdir -p /workspace/sources /workspace/output
 
 # Add scripts
-COPY scripts/build-lib.sh /usr/local/bin/build-lib
+COPY scripts/compile_lib.sh /usr/local/bin/build-lib
 COPY scripts/download-libs.sh /usr/local/bin/download-libs
 RUN chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
 

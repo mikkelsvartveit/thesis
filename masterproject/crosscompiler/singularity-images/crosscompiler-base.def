@@ -10,7 +10,7 @@ From: ubuntu:22.04
 %files
     # Copy files from host to container
     # Make sure these files exist in the current directory when building
-    scripts/build-lib.sh /usr/local/bin/build-lib
+    scripts/compile_lib.sh /usr/local/bin/build-lib
     scripts/download-libs.sh /usr/local/bin/download-libs
 
 %post

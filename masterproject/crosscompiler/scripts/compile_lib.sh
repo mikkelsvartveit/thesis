@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-lib.sh - Build a library for a specific architecture
+# compile_lib.sh - Build a library for a specific architecture
 
 set -e
 

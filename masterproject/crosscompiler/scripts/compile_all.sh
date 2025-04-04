@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-all.sh - Build libraries for all architectures
+# compile_all.sh - Build libraries for all architectures
 
 set -e
 
@@ -77,7 +77,7 @@ for arch in "${ARCHITECTURES[@]}"; do
     -v "${PROJECT_ROOT}/output/${arch}:/workspace/output/${arch}" \
     -v "${PROJECT_ROOT}/patches:/workspace/patches" \
     -v "${PROJECT_ROOT}/toolchains:/workspace/toolchains" \
-    -v "${PROJECT_ROOT}/scripts/build-lib.sh:/usr/local/bin/build-lib" \
+    -v "${PROJECT_ROOT}/scripts/compile_lib.sh:/usr/local/bin/build-lib" \
     -v "${PROJECT_ROOT}/scripts/download-libs.sh:/usr/local/bin/download-libs" \
     "crosscompiler-${arch}:latest" \
       -c "for lib_info in ${LIB_ARRAY_STR}; do \

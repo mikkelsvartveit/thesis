@@ -12,12 +12,7 @@ From: ubuntu:22.04
     export BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
 
 %files
-    # Copy files from host to container
-    # Make sure these files exist in the current directory when building
-    # Format: <path-on-host> <path-in-container>
     architectures/buildcross.sh /opt/buildcross/scripts/buildcross.sh
-    scripts/build-lib.sh /usr/local/bin/build-lib
-    scripts/download-libs.sh /usr/local/bin/download-libs
 
 %post
     # Fix permissions for temporary directory
@@ -92,8 +87,6 @@ From: ubuntu:22.04
 
     # Make scripts executable
     chmod +x /opt/buildcross/scripts/buildcross.sh
-    chmod +x /usr/local/bin/build-lib
-    chmod +x /usr/local/bin/download-libs
 
     # Create a helper script to easily run buildcross with the right paths
     echo '#!/bin/bash
@@ -101,7 +94,7 @@ From: ubuntu:22.04
 --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} "$@"' > /usr/local/bin/build.sh \
     && chmod +x /usr/local/bin/build.sh
 
-    mkdir -p /workspace/sources /workspace/output
+    mkdir -p /workspace
 
     # Set up welcome message for bash
     echo 'echo "Welcome to Buildcross Singularity environment!"' >> /etc/bash.bashrc \
@@ -114,7 +107,6 @@ From: ubuntu:22.04
         && echo 'echo ""' >> /etc/bash.bashrc
 
 
-
     echo "Downloading toolchain components..."
     # Try to run the download commands, but don't fail the build if they don't work
     /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
@@ -122,6 +114,10 @@ From: ubuntu:22.04
     
     /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
     --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only moxie || echo "Download for moxie failed, will download at runtime"
+
+    # Remove to enforce not using stale buildcross.sh scripts when developing
+    # Needs to be re-included when building the toolchains
+    rm -f /opt/buildcross/script/buildcross.sh
 
 
 %startscript
