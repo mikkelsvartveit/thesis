@@ -32,7 +32,7 @@ SBATCH_AVAILABLE      := $(shell which sbatch 2>/dev/null)
 #--------------------------------------------------------------
 # Phony Targets
 #--------------------------------------------------------------
-.PHONY: all help prepare baseimages crosscompilers clean build_scripts build_all build_all_sbatch dataset
+.PHONY: help prepare baseimages baseimages_sbatch crosscompilers clean build_scripts build_all build_all_sbatch dataset
 
 #--------------------------------------------------------------
 # Help Targets
@@ -64,8 +64,21 @@ prepare:
 baseimages: $(BASE_SIF_FILES)
 	@echo "All base images built successfully"
 
+baseimagessbatch: prepare
+	sbatch \
+		--account="share-ie-idi" \
+		--time="00:45:00" \
+		--nodes="1" \
+		--cpus-per-task="16" \
+		--mem="16G" \
+		--partition="CPUQ" \
+		--job-name="base-images" \
+		--output="./slurm-scripts/compilelogs/base-images-%j.out" \
+		--error="./slurm-scripts/compilelogs/base-images-%j.err" \
+		--wrap="make $(BASE_SIF_FILES)"
+
 # Rule to build base SIF files from DEF files
-$(SINGULARITY_DIR)/%.sif: $(SINGULARITY_DIR)/%.def
+$(SINGULARITY_DIR)/%.sif: prepare $(SINGULARITY_DIR)/%.def
 	@echo "Building base image: $@"
 	singularity build --fakeroot $@ $<
 
@@ -73,11 +86,11 @@ $(SINGULARITY_DIR)/%.sif: $(SINGULARITY_DIR)/%.def
 # Cross-compiler Building
 #--------------------------------------------------------------
 # Generate the build scripts an singularity .def for cross-compilers
-build_scripts:
+crosscompilerscripts: prepare
 	@echo "Generating build scripts..."
 	./scripts/generate_build_scripts.sh
 
-crosscompilers: baseimages build_scripts 
+crosscompilers: baseimages crosscompilerscripts 
 	$(eval CROSSCOMPILER_DEFS_FILES := $(wildcard $(CROSSCOMPILER_DEFS)/*.def))
 	$(eval CROSSCOMPILER_SIF_FILES := $(patsubst $(CROSSCOMPILER_DEFS)/%.def,$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif,$(CROSSCOMPILER_DEFS_FILES)))
 	$(MAKE) $(CROSSCOMPILER_SIF_FILES)
@@ -85,7 +98,7 @@ crosscompilers: baseimages build_scripts
 
 
 # Build cross-compiler images using Slurm or locally
-$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: build_scripts
+$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: prepare crosscompilerscripts
 	@if [ ! -f "$@" ]; then \
 		echo "Building cross-compiler image: $@"; \
 		if command -v sbatch >/dev/null 2>&1; then \
@@ -100,13 +113,13 @@ $(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif: build_scripts
 	fi
 
 #--------------------------------------------------------------
-# Library-building
+# Library-compiling
 #--------------------------------------------------------------
 
-build_all: 
+compileall: prepare
 	./scripts/build-all-sif.sh
 
-build_all_sbatch:
+compileallsbatch: prepare
 	./scripts/build-all-sif-sbatch.sh
 
 $(OUTPUT_DIR)/%: $(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif
@@ -115,10 +128,10 @@ $(OUTPUT_DIR)/%: $(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif
 	./scripts/build-all-sif.sh $*
 
 #--------------------------------------------------------------
-# make dataset
+# Dataset building
 #--------------------------------------------------------------
 
-dataset:
+dataset: prepare
 	./scripts/result_gen/generate_dataset.sh
 
 #--------------------------------------------------------------

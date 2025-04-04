@@ -53,7 +53,8 @@
 # aarch64	aarch64-unknown-linux-gnu
 # aarch64-mingw64	aarch64-w64-mingw32
 # alpha		alpha-unknown-linux-gnu
-# arc		arc-unknown-linux-gnu
+# arc		arc-unknown-linux-gnu (ARCompact v2 (ARCv2))
+# arceb		arceb-unknown-linux-gnu
 # armv7l	armv7l-unknown-linux-gnueabi
 # avr		avr-unknown-elf (no libc)
 # avr32		avr32-unknown-linux-uclibc (1)
@@ -93,13 +94,16 @@
 # m88k		m88k-unknown-openbsd (elf, no libc) (1)
 # maxq		maxq-unknown-coff (no libc) (1)
 # mcore		mcore-unknown-elf
+# mcoreeb		mcore-unknown-elf (add_compile_options("-mbig-endian") add_link_options("-mbig-endian"))
 # mep		mep-unknown-elf (no libc) (1)
 # metag		metag-unknown-linux-uclibc (1)
 # microblaze	microblaze-unknown-linux-gnu
+# microblazeel	microblazeel-unknown-linux-gnu
 # mips64	mips64-unknown-linux-gnu with -mabi=64, -mabi=n32, and -mabi=32 support
 # mmix		mmix-knuth-mmixware with newlib
 # mn10300	mn10300-unknown-elf
 # moxie		moxie-unknown-elf
+# moxieel		moxie-unknown-elf (add_compile_options(-mel -Wa,-EL) add_link_options(-mel -Wa,-EL))
 # msp430	msp430-unknown-elf
 # mt		mt-unknown-elf (3)
 # nds32		nds32le-unknown-linux-gnu
@@ -116,6 +120,7 @@
 # rl78		rl78-unknown-elf
 # riscv64	riscv64-unknown-linux-gnu (no 32-bit support)
 # rx		rx-unknown-elf
+# rxeb		rx-unknown-elf (add_compile_options(-mbig-endian-data) add_link_options(-mbig-endian-data))
 # s390x		s390x-unknown-linux-gnu with -m64 and -m31 support
 # score		score-unknown-elf (no libc) (1)
 # sh4		sh4-unknown-linux-gnu
@@ -604,6 +609,10 @@ case "${TARGET_ARCH}" in
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
 	NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-m32r;HEAD;mikpe"
 	;;
+    "m32rle")
+	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+	# NEWLIB_VSN="git;https://github.com/mikpe/newlib.git;-;newlib-4.5.0-m32r;HEAD;mikpe"
+	;;
     "m6809")
 	# This toolchain uses the 6809 port to gcc-4.3.6 with ASxxxx and newlib.
 	# There is also a port to gcc-4.6.4 with LWTOOLS (www.lwtools.ca), which is recommended by Fuzix,
@@ -657,8 +666,9 @@ case "${TARGET_ARCH}" in
 	# set PATH to select gcc-4.x (4.0.4 to 4.9.4 are known to work)
 	SKIP_HOST_GCC=1
 	;;
-    "mcore")
-	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+    "mcore" | "mcoreeb")
+	TARGET_ARCH="mcore"
+	TARGET_TRIPLE="mcore-unknown-elf"
 	;;
     "mep")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
@@ -681,8 +691,9 @@ case "${TARGET_ARCH}" in
     "mn10300")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
 	;;
-    "moxie")
-	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+    "moxie" | "moxieel")
+	TARGET_ARCH="moxie"
+	TARGET_TRIPLE="moxie-unknown-elf"
 	;;
     "msp430")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
@@ -775,8 +786,9 @@ case "${TARGET_ARCH}" in
     "rl78")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
 	;;
-    "rx")
-	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"
+    "rx" | "rxeb")
+	TARGET_ARCH="rx"
+	TARGET_TRIPLE="rx-unknown-elf"
 	;;
     "score")
 	TARGET_TRIPLE="${TARGET_ARCH}-unknown-elf"

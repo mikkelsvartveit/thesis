@@ -8,6 +8,7 @@ set(CMAKE_RANLIB rx-unknown-elf-ranlib)
 set(CMAKE_STRIP rx-unknown-elf-strip)
 
 add_compile_options(-mbig-endian-data)
+add_link_options(-mbig-endian-data)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
 

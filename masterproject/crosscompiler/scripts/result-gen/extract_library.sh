@@ -2,12 +2,12 @@ file=$1
 arch=$2
 filename=$3
 
-get_code_sections() {
+get_code_section_headers() {
     local arch_name=$1
     local sections=""
 
     case $arch_name in
-        "rx")
+        "rx"|"rxeb")
             sections="P"
             ;;
         "ft32")
@@ -46,7 +46,7 @@ for obj in $TEMP_DIR/*.o $TEMP_DIR/*.obj; do
         objname=$(basename "$obj")
 
         # Get code sections for this architecture
-        code_sections=$(get_code_sections "$arch")
+        code_sections=$(get_code_section_headers "$arch")
         
         # Create a temporary file for this object's binary
         obj_bin="$TEMP_DIR/${objname%.o}.bin"

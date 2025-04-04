@@ -10,10 +10,6 @@ JCOUNT=${3:-"$(nproc)"}
 
 echo $JCOUNT
 
-# Define architecture pairs
-# Format: "primary:alternate"
-ARCH_PAIRS=("moxie:moxieel" "mcore:mcoreeb" "rx:rxeb")
-
 SOURCES_DIR="/workspace/sources"
 ARCH_PATCH_DIR="/workspace/patches/${LIB_NAME}/${ARCH}"
 LIB_PATCH_DIR="/workspace/patches/${LIB_NAME}"
@@ -178,20 +174,6 @@ EOF
 }
 
 build_lib_for_arch $ARCH
-
-for pair in "${ARCH_PAIRS[@]}"; do
-  primary=$(echo $pair | cut -d':' -f1)
-  alternate=$(echo $pair | cut -d':' -f2)
-  
-  if [ "$primary" = "$ARCH" ]; then
-    echo ""
-    echo "====================================================="
-    echo "Building alternate architecture version: $alternate"
-    echo "====================================================="
-    echo ""
-    build_lib_for_arch $alternate
-  fi
-done
 
 # Return to workspace
 cd /workspace

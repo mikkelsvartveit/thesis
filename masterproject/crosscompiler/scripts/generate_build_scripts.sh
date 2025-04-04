@@ -40,6 +40,8 @@ mkdir -p ./singularity-images/crosscompiler-definitions
 # Format: "arch:target"
 # You can modify this list as needed
 ARCH_TARGET_LIST=(
+    "arc:arc-unknown-linux-gnu" # ARCompact v2 basicallly (ARCv2)
+    "arceb:arceb-unknown-linux-gnu" 
     "bfin:bfin-unknown-linux-uclibc"
     "c6x:c6x-unknown-uclinux"
     "cr16:cr16-unknown-elf"
@@ -53,19 +55,28 @@ ARCH_TARGET_LIST=(
     "iq2000:iq2000-unknown-elf"
     "kvx:kvx-unknown-linux-uclibc"
     "lm32:lm32-uclinux-uclibc"
+    "loongarch64:loongarch64-unknown-linux-gnu"
     "m32r:m32r-unknown-elf"
+    "m32rle:m32rle-unknown-elf"
     "m68k-elf:m68k-unknown-elf"
     "mcore:mcore-unknown-elf"
+    "mcoreeb:mcore-unknown-elf"
+    "microblaze:microblaze-unknown-linux-gnu"
+    "microblazeel:microblazeel-unknown-linux-gnu"
     "mmix:mmix-knuth-mmixware"
     "mn10300:mn10300-unknown-elf"
     "moxie:moxie-unknown-elf"
+    "moxieel:moxie-unknown-elf"
     "msp430:msp430-unknown-elf"
     "nds32:nds32le-unknown-linux-gnu"
     "nds32be:nds32be-unknown-elf"
-    "pdp11:pdp11-unknown-aout"
+    "nios2:nios2-unknown-linux-gnu"
+    "or1k:or1k-unknown-linux-gnu"
+    "pdp11:pdp11-unknown-aout" # (unlikely to work)
     "pru:pru-unknown-elf"
     "rl78:rl78-unknown-elf"
     "rx:rx-unknown-elf"
+    "rxeb:rx-unknown-elf"
     "tilegx:tilegx-unknown-linux-gnu"
     "tilegxbe:tilegxbe-unknown-linux-gnu"
     "tricore:tricore-unknown-elf"
@@ -73,7 +84,6 @@ ARCH_TARGET_LIST=(
     "visium:visium-unknown-elf"
     "xstormy16:xstormy16-unknown-elf"
     "xtensa:xtensa-unknown-linux-uclibc"
-    # "nvptx:nvptx-none" nvidia parallel thread execution, jitcompiled by nvidia driver, not proper arch
 )
 
 # First, generate all Singularity definition files

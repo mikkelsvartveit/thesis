@@ -52,7 +52,7 @@ for SIF_image in $SIF_IMAGES; do
     echo "Spinning up Singularity container"
     singularity exec \
       --bind "${PROJECT_ROOT}/sources:/workspace/sources" \
-      --bind "${PROJECT_ROOT}/output/${arch}:/workspace/output/${arch}" \
+      --bind "${PROJECT_ROOT}/output:/workspace/output" \
       --bind "${PROJECT_ROOT}/patches:/workspace/patches" \
       --bind "${PROJECT_ROOT}/toolchains:/workspace/toolchains" \
       --bind "${PROJECT_ROOT}/scripts/build-lib.sh:/usr/local/bin/build-lib" \
