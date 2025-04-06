@@ -1,3 +1,32 @@
+Architecture: arc
+  Library: libfreetype.a, Text Size 632.766 KB
+  Library: libjpeg.a, Text Size 191.941 KB
+  Library: liblibpng16.a, Text Size 174.25 KB
+  Library: liblzma.a, Text Size 149.59 KB
+  Library: libpcre2-8.a, Text Size 288.977 KB
+  Library: libsharpyuv.a, Text Size 10.543 KB
+  Library: libwebp.a, Text Size 259.562 KB
+  Library: libwebpdecoder.a, Text Size 107.594 KB
+  Library: libwebpdemux.a, Text Size 6.17969 KB
+  Library: libwebpmux.a, Text Size 18.3828 KB
+  Library: libyaml.a, Text Size 113.043 KB
+  Library: libzlib.a, Text Size 73.4531 KB
+  Total text size: 2026 KB
+
+Architecture: arceb
+  Library: libfreetype.a, Text Size 632.578 KB
+  Library: libjpeg.a, Text Size 188.191 KB
+  Library: liblibpng16.a, Text Size 173.727 KB
+  Library: liblzma.a, Text Size 149.512 KB
+  Library: libsharpyuv.a, Text Size 9.96875 KB
+  Library: libwebp.a, Text Size 259.008 KB
+  Library: libwebpdecoder.a, Text Size 106.043 KB
+  Library: libwebpdemux.a, Text Size 6.19141 KB
+  Library: libwebpmux.a, Text Size 18.9219 KB
+  Library: libyaml.a, Text Size 113.043 KB
+  Library: libzlib.a, Text Size 72.7031 KB
+  Total text size: 1729 KB
+
 Architecture: bfin
   Library: libfreetype.a, Text Size 516.688 KB
   Library: libjpeg.a, Text Size 213.836 KB
@@ -154,6 +183,21 @@ Architecture: lm32
   Library: libzlib.a, Text Size 107.875 KB
   Total text size: 3392 KB
 
+Architecture: loongarch64
+  Library: libfreetype.a, Text Size 847.723 KB
+  Library: libjpeg.a, Text Size 390.141 KB
+  Library: liblibpng16.a, Text Size 242.543 KB
+  Library: liblzma.a, Text Size 205.906 KB
+  Library: libpcre2-8.a, Text Size 446.07 KB
+  Library: libsharpyuv.a, Text Size 23.168 KB
+  Library: libwebp.a, Text Size 440.047 KB
+  Library: libwebpdecoder.a, Text Size 213.496 KB
+  Library: libwebpdemux.a, Text Size 10.8398 KB
+  Library: libwebpmux.a, Text Size 31.8945 KB
+  Library: libyaml.a, Text Size 161.562 KB
+  Library: libzlib.a, Text Size 100.746 KB
+  Total text size: 3114 KB
+
 Architecture: m32r
   Library: libfreetype.a, Text Size 697.98 KB
   Library: libjpeg.a, Text Size 232.57 KB
@@ -190,6 +234,45 @@ Architecture: mcore
   Library: libyaml.a, Text Size 128.656 KB
   Library: libzlib.a, Text Size 64.6953 KB
   Total text size: 1268 KB
+
+Architecture: mcoreeb
+  Library: libfreetype.a, Text Size 572.645 KB
+  Library: libjpeg.a, Text Size 192.852 KB
+  Library: liblibpng16.a, Text Size 163.65 KB
+  Library: liblzma.a, Text Size 146.264 KB
+  Library: libyaml.a, Text Size 128.656 KB
+  Library: libzlib.a, Text Size 64.6953 KB
+  Total text size: 1268 KB
+
+Architecture: microblaze
+  Library: libfreetype.a, Text Size 999.312 KB
+  Library: libjpeg.a, Text Size 441.531 KB
+  Library: liblibpng16.a, Text Size 274.508 KB
+  Library: liblzma.a, Text Size 248.262 KB
+  Library: libpcre2-8.a, Text Size 538.078 KB
+  Library: libsharpyuv.a, Text Size 22.543 KB
+  Library: libwebp.a, Text Size 681.66 KB
+  Library: libwebpdecoder.a, Text Size 319.758 KB
+  Library: libwebpdemux.a, Text Size 16.1523 KB
+  Library: libwebpmux.a, Text Size 46.9258 KB
+  Library: libyaml.a, Text Size 166.676 KB
+  Library: libzlib.a, Text Size 108.684 KB
+  Total text size: 3864 KB
+
+Architecture: microblazeel
+  Library: libfreetype.a, Text Size 999.309 KB
+  Library: libjpeg.a, Text Size 440.41 KB
+  Library: liblibpng16.a, Text Size 274.73 KB
+  Library: liblzma.a, Text Size 247.789 KB
+  Library: libpcre2-8.a, Text Size 538.082 KB
+  Library: libsharpyuv.a, Text Size 22.5391 KB
+  Library: libwebp.a, Text Size 667.023 KB
+  Library: libwebpdecoder.a, Text Size 318.48 KB
+  Library: libwebpdemux.a, Text Size 15.0508 KB
+  Library: libwebpmux.a, Text Size 45.2227 KB
+  Library: libyaml.a, Text Size 166.676 KB
+  Library: libzlib.a, Text Size 108.684 KB
+  Total text size: 3843 KB
 
 Architecture: mmix
   Library: libfreetype.a, Text Size 1369.55 KB
@@ -230,6 +313,20 @@ Architecture: moxie
   Library: libzlib.a, Text Size 84.5566 KB
   Total text size: 2236 KB
 
+Architecture: moxieel
+  Library: libfreetype.a, Text Size 751.039 KB
+  Library: libjpeg.a, Text Size 277.029 KB
+  Library: liblibpng16.a, Text Size 202.967 KB
+  Library: liblzma.a, Text Size 190.615 KB
+  Library: libsharpyuv.a, Text Size 14.4062 KB
+  Library: libwebp.a, Text Size 370.611 KB
+  Library: libwebpdecoder.a, Text Size 150.604 KB
+  Library: libwebpdemux.a, Text Size 9.16406 KB
+  Library: libwebpmux.a, Text Size 27.1465 KB
+  Library: libyaml.a, Text Size 151.828 KB
+  Library: libzlib.a, Text Size 84.5566 KB
+  Total text size: 2229 KB
+
 Architecture: msp430
   Library: libsharpyuv.a, Text Size 25.5781 KB
   Library: libyaml.a, Text Size 119.193 KB
@@ -250,6 +347,50 @@ Architecture: nds32
   Library: libyaml.a, Text Size 103.689 KB
   Library: libzlib.a, Text Size 57.4688 KB
   Total text size: 1795 KB
+
+Architecture: nds32be
+  Library: libfreetype.a, Text Size 462.219 KB
+  Library: libjpeg.a, Text Size 183.133 KB
+  Library: liblibpng16.a, Text Size 126.904 KB
+  Library: liblzma.a, Text Size 113.314 KB
+  Library: libsharpyuv.a, Text Size 10.1836 KB
+  Library: libwebp.a, Text Size 256.023 KB
+  Library: libwebpdecoder.a, Text Size 104.633 KB
+  Library: libwebpdemux.a, Text Size 6.8125 KB
+  Library: libwebpmux.a, Text Size 19.4531 KB
+  Library: libyaml.a, Text Size 94.9531 KB
+  Library: libzlib.a, Text Size 53.5293 KB
+  Total text size: 1431 KB
+
+Architecture: nios2
+  Library: libfreetype.a, Text Size 793.773 KB
+  Library: libjpeg.a, Text Size 268.418 KB
+  Library: liblibpng16.a, Text Size 213.297 KB
+  Library: liblzma.a, Text Size 196.422 KB
+  Library: libpcre2-8.a, Text Size 384.41 KB
+  Library: libsharpyuv.a, Text Size 20.3633 KB
+  Library: libwebp.a, Text Size 394.293 KB
+  Library: libwebpdecoder.a, Text Size 155.699 KB
+  Library: libwebpdemux.a, Text Size 10.4141 KB
+  Library: libwebpmux.a, Text Size 33.4531 KB
+  Library: libyaml.a, Text Size 153.922 KB
+  Library: libzlib.a, Text Size 90.5391 KB
+  Total text size: 2715 KB
+
+Architecture: or1k
+  Library: libfreetype.a, Text Size 1030.59 KB
+  Library: libjpeg.a, Text Size 313.094 KB
+  Library: liblibpng16.a, Text Size 276.676 KB
+  Library: liblzma.a, Text Size 258.281 KB
+  Library: libpcre2-8.a, Text Size 515.992 KB
+  Library: libsharpyuv.a, Text Size 21.4805 KB
+  Library: libwebp.a, Text Size 429.617 KB
+  Library: libwebpdecoder.a, Text Size 172.473 KB
+  Library: libwebpdemux.a, Text Size 12.5078 KB
+  Library: libwebpmux.a, Text Size 35.6914 KB
+  Library: libyaml.a, Text Size 198.922 KB
+  Library: libzlib.a, Text Size 114.926 KB
+  Total text size: 3380 KB
 
 Architecture: pdp11
 No libraries found
@@ -284,6 +425,19 @@ Architecture: rx
   Library: libzlib.a, Text Size 59.2578 KB
   Total text size: 1486 KB
 
+Architecture: rxeb
+  Library: libfreetype.a, Text Size 507.024 KB
+  Library: liblibpng16.a, Text Size 136.641 KB
+  Library: liblzma.a, Text Size 120.112 KB
+  Library: libsharpyuv.a, Text Size 9.51758 KB
+  Library: libwebp.a, Text Size 241.579 KB
+  Library: libwebpdecoder.a, Text Size 98.3672 KB
+  Library: libwebpdemux.a, Text Size 6.28125 KB
+  Library: libwebpmux.a, Text Size 18.4297 KB
+  Library: libyaml.a, Text Size 103.43 KB
+  Library: libzlib.a, Text Size 59.1641 KB
+  Total text size: 1300 KB
+
 Architecture: tilegx
   Library: libfreetype.a, Text Size 2575.66 KB
   Library: libjpeg.a, Text Size 461.203 KB
@@ -298,6 +452,21 @@ Architecture: tilegx
   Library: libyaml.a, Text Size 471.789 KB
   Library: libzlib.a, Text Size 293.312 KB
   Total text size: 7053 KB
+
+Architecture: tilegxbe
+  Library: libfreetype.a, Text Size 2576.78 KB
+  Library: libjpeg.a, Text Size 461.68 KB
+  Library: liblibpng16.a, Text Size 680.484 KB
+  Library: liblzma.a, Text Size 590.961 KB
+  Library: libpcre2-8.a, Text Size 1107.91 KB
+  Library: libsharpyuv.a, Text Size 20.6641 KB
+  Library: libwebp.a, Text Size 565.789 KB
+  Library: libwebpdecoder.a, Text Size 225.922 KB
+  Library: libwebpdemux.a, Text Size 15.7891 KB
+  Library: libwebpmux.a, Text Size 48.7891 KB
+  Library: libyaml.a, Text Size 471.789 KB
+  Library: libzlib.a, Text Size 293.883 KB
+  Total text size: 7060 KB
 
 Architecture: tricore
   Library: libfreetype.a, Text Size 639.676 KB
@@ -332,9 +501,10 @@ Architecture: visium
   Total text size: 3481 KB
 
 Architecture: xstormy16
+  Library: libsharpyuv.a, Text Size 31.5898 KB
   Library: libyaml.a, Text Size 124.633 KB
   Library: libzlib.a, Text Size 95.1816 KB
-  Total text size: 219 KB
+  Total text size: 251 KB
 
 Architecture: xtensa
   Library: libfreetype.a, Text Size 487.474 KB

@@ -71,6 +71,11 @@ instruction_width_map() {
     
     case "$arch" in
         # x86 architectures - variable instruction width
+        "arc" | "arceb")
+            width="16/32"
+            width_type="mixed"
+            comment="16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians"
+            ;;
         "bfin")
             width="16/32"
             width_type="mixed"
@@ -136,6 +141,11 @@ instruction_width_map() {
             width_type="fixed"
             comment=""
             ;;
+        "loongarch64")
+            width="64"
+            width_type="fixed"
+            comment=""
+            ;;
         "m32r")
             width="32"
             width_type="fixed"
@@ -146,10 +156,15 @@ instruction_width_map() {
             width_type="mixed"
             comment=""
             ;;
-        "mcore")
+        "mcore" | "mcoreeb")
             width="16"
             width_type="fixed"
-            comment="Says 32 in elf header, but instructions are 16-bit? investigate"
+            comment="16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf"
+            ;;
+        "microblaze" | "microblazeel")
+            width="64"
+            width_type="fixed"
+            comment=""
             ;;
         "mmix")
             width="32"
@@ -161,7 +176,7 @@ instruction_width_map() {
             width_type="variable"
             comment=""
             ;;
-        "moxie")
+        "moxie" | "moxieel")
             width="16/32"
             width_type="mixed"
             comment=""
@@ -171,9 +186,19 @@ instruction_width_map() {
             width_type="mixed"
             comment=""
             ;;
-        "nds32")
+        "nds32" | "nds32be")
             width="16/32"
             width_type="mixed"
+            comment=""
+            ;;
+        "nios2")
+            width="64"
+            width_type="fixed"
+            comment=""
+            ;;
+        "or1k")
+            width="64"
+            width_type="fixed"
             comment=""
             ;;
         "pdp11")
@@ -191,12 +216,12 @@ instruction_width_map() {
             width_type="variable"
             comment=""
             ;;
-        "rx")
+        "rx" | "rxeb")
             width="na"
             width_type="variable"
             comment=""
             ;;
-        "tilegx")
+        "tilegx" | "tilegxbe")
             width="64"
             width_type="fixed"
             comment="Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word"
