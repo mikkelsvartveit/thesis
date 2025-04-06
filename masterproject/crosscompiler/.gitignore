@@ -1,19 +1,16 @@
-sources
+sources/*
+!sources/sources.tar.gz
 output
 
-slurm-scripts/logs
-slurm-scripts/cross-compiler-images
-slurm-scripts/submitscripts
-slurm-scripts/singularity-definitions
-base-images/*
+slurm-logs
+*.log
 
-compiled-toolchain
+singularity-images/submit-scripts
+singularity-images/crosscompiler-definitions
+singularity-images/crosscompiler-images
 
-/example_program
-
-*.def
-!*base.def
 *.sif
+
 results/*
 !results/report*
 !results/*.csv

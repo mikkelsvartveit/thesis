@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Create logs directory if it doesn't exist
-mkdir -p ./output/logs
-
 # Get all SIF images
 SIF_IMAGES="./singularity-images/crosscompiler-images/*.sif"
 
@@ -23,8 +20,8 @@ for SIF_image in $SIF_IMAGES; do
         --mem="16G" \
         --partition="CPUQ" \
         --job-name="${arch}" \
-        --output="./slurm-scripts/compilelogs/${arch}/%j.out" \
-        --error="./slurm-scripts/compilelogs/${arch}/%j.err" \
+        --output="./slurm-logs/compilelogs/${arch}/%j.out" \
+        --error="./slurm-logs/compilelogs/${arch}/%j.err" \
         --wrap="./scripts/compile_all_sif.sh $arch")
     
     # Store the job ID
@@ -45,8 +42,8 @@ sbatch \
     --mem="16G" \
     --partition="CPUQ" \
     --job-name="dataset-generation" \
-    --output="./slurm-scripts/compilelogs/dataset-generation-%j.out" \
-    --error="./slurm-scripts/compilelogs/dataset-generation-%j.err" \
+    --output="./slurm-logs/compilelogs/dataset-generation-%j.out" \
+    --error="./slurm-logs/compilelogs/dataset-generation-%j.err" \
     --dependency=afterany:$DEPEND_STR \
     --wrap="./scripts/result-gen/generate_dataset.sh"
 

@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 # Master script to generate Slurm submission scripts for all architectures using Singularity
-# Place this in ./slurm-scripts/
+# Place this in ./slurm-logs/
 
 # Create needed directories
-mkdir -p ./slurm-scripts/submitscripts
-mkdir -p ./slurm-scripts/logs
+mkdir -p ./singularity-images/submit-scripts
+mkdir -p ./slurm-logs/logs
 mkdir -p ./singularity-images/crosscompiler-images
 mkdir -p ./singularity-images/crosscompiler-definitions
 
@@ -144,13 +144,13 @@ done
 
 # Now generate all SLURM submission scripts
 echo "Generating SLURM submission scripts..."
-rm -rf ./slurm-scripts/submitscripts/*
+rm -rf ./singularity-images/submit-scripts/*
 
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
-    submit_script="./slurm-scripts/submitscripts/build_${arch}.slurm"
+    submit_script="./singularity-images/submit-scripts/build_${arch}.slurm"
     
     echo "  Generating submission script for ${arch}..."
     
@@ -158,8 +158,8 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     cat > "${submit_script}" << EOF
 #!/bin/bash
 #SBATCH --job-name=${arch}_crosscompiler
-#SBATCH --output=./slurm-scripts/logs/${arch}/%j.out
-#SBATCH --error=./slurm-scripts/logs/${arch}/%j.err
+#SBATCH --output=./slurm-logs/logs/${arch}/%j.out
+#SBATCH --error=./slurm-logs/logs/${arch}/%j.err
 #SBATCH --time=1:30:00
 #SBATCH --nodes=1
 #SBATCH --mem=16G
@@ -168,7 +168,7 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
 #SBATCH --partition="CPUQ"
 
 # Create log directory
-mkdir -p ./slurm-scripts/logs/${arch}
+mkdir -p ./slurm-logs/logs/${arch}
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
 
@@ -184,5 +184,5 @@ EOF
     chmod +x "${submit_script}"
     
     # Create the log directory for this architecture
-    mkdir -p "./slurm-scripts/logs/${arch}"
+    mkdir -p "./slurm-logs/logs/${arch}"
 done
