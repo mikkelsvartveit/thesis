@@ -15,3 +15,5 @@ results/*
 !results/report*
 !results/*.csv
 !results/text_bin.tar.gz
+
+.prepare_complete

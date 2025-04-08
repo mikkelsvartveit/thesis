@@ -116,7 +116,10 @@ Stage: builder
     TARGET=${target}
 
     chmod +x /opt/buildcross/scripts/buildcross.sh
-    build.sh -j\$(nproc) \$ARCH
+    (build.sh -j\$(nproc) \$ARCH) || \\
+        (echo "Failed with precompiled host-gcc..." && \\
+        echo "Removing precompiled host-gcc and trying again" && \\
+        rm -rf \$BUILDCROSS_HOST_TOOLS/* && build.sh -j\$(nproc) \$ARCH)
 
 # Second stage
 Bootstrap: localimage
@@ -158,31 +161,31 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
     cat > "${submit_script}" << EOF
 #!/bin/bash
 #SBATCH --job-name=${arch}_crosscompiler
-#SBATCH --output=./slurm-logs/logs/${arch}/%j.out
-#SBATCH --error=./slurm-logs/logs/${arch}/%j.err
-#SBATCH --time=1:30:00
+#SBATCH --output=./slurm-logs/imagebuildlogs/${arch}/%j.log
+#SBATCH --error=./slurm-logs/imagebuildlogs/${arch}/%j.err
+#SBATCH --time=1:00:00
 #SBATCH --nodes=1
 #SBATCH --mem=16G
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=24
 #SBATCH --account="share-ie-idi"
 #SBATCH --partition="CPUQ"
 
 # Create log directory
-mkdir -p ./slurm-logs/logs/${arch}
+mkdir -p ./slurm-logs/imagebuildlogs/${arch}
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
 
 # Build the Singularity container using the definition file
 echo "Building Singularity container..."
 mkdir -p ./singularity-images/crosscompiler-images/
-singularity build --fakeroot ./singularity-images/crosscompiler-images/crosscompiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def
+(singularity build --fakeroot ./singularity-images/crosscompiler-images/crosscompiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def) || \\
+    (echo "Failed to build Singularity container for ${arch}, exiting..." && \\
+    echo "[FAILED] ${arch}" >> ./slurm-logs/imagebuildlogs/build-summary.txt && exit 1)
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
+echo "[SUCCESS] ${arch}" >> ./slurm-logs/imagebuildlogs/build-summary.txt
 EOF
 
     # Make the script executable
     chmod +x "${submit_script}"
-    
-    # Create the log directory for this architecture
-    mkdir -p "./slurm-logs/logs/${arch}"
 done

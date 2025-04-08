@@ -260,6 +260,11 @@ if [ -z "${TARGET_ARCH}" ]; then
     exit 1
 fi
 
+if [ -z "${DASHJ}" ]; then
+	DASHJ="-j$(nproc)"
+	echo "Setting DASHJ option to nproc: $DASHJ"
+fi
+
 BUILD_DIR=`realpath .`
 
 if [ -z "${DOWNLOADS_DIR}" ]; then
@@ -2472,11 +2477,13 @@ build_target_libc() {
 
 log "buildcross ${VERSION} building toolchain for ${TARGET_ARCH} in ${CROSS_DIR}"
 log "ENDIANNESS=${ENDIANNESS}"
+if [ -n "${DOWNLOAD_ONLY}" ]; then
+    log "Download-only mode: downloading sources ${DOWNLOADS_DIR} and building host gcc"
+fi
 
 #
 # Get Sources
 #
-echo "dirs:"
 
 if [ ! -d "${DOWNLOADS_DIR}" ]; then
 		echo "DOWNLOADS_DIR: ${DOWNLOADS_DIR}"
@@ -2493,12 +2500,27 @@ fi
 
 get_sources
 
-if [ -n "${DOWNLOAD_ONLY}" ]; then
-    log "Download-only mode: sources downloaded to ${DOWNLOADS_DIR}"
-    exit 0
-fi
-
 cd ${BUILD_DIR}
+
+# Check if complete host toolchain is already built
+HOST_GCC_BIN="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}/bin/gcc"
+HOST_GMP_LIB="${HOST_TOOLS_DIR}/gmp-${GMP_VSN}/lib"
+HOST_MPFR_LIB="${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}/lib"
+HOST_MPC_LIB="${HOST_TOOLS_DIR}/mpc-${MPC_VSN}/lib"
+
+if [ -x "${HOST_GCC_BIN}" ] && [ -d "${HOST_GMP_LIB}" ] && [ -d "${HOST_MPFR_LIB}" ] && [ -d "${HOST_MPC_LIB}" ]; then
+    log "Complete host toolchain already built"
+else
+	echo "Building host toolchain "
+	echo "Combined check failed. Testing each condition:"
+    [ -x "${HOST_GCC_BIN}" ] && echo "${HOST_GCC_BIN} passed" || echo "${HOST_GCC_BIN} failed"
+    [ -d "${HOST_GMP_LIB}" ] && echo "${HOST_GMP_LIB} passed" || echo "${HOST_GMP_LIB} failed"
+    [ -d "${HOST_MPFR_LIB}" ] && echo "${HOST_MPFR_LIB} passed" || echo "${HOST_MPFR_LIB} failed"
+    [ -d "${HOST_MPC_LIB}" ] && echo "${HOST_MPC_LIB} passed" || echo "${HOST_MPC_LIB} failed"
+    HOST_TOOLCHAIN_ALREADY_BUILT=0
+	echo "Removing old host tools for a fresh install"
+	rm -rf ${HOST_TOOLS_DIR}/*
+fi
 
 #
 # Build host libraries and GCC
@@ -2506,37 +2528,37 @@ cd ${BUILD_DIR}
 
 if [ -z "${SKIP_HOST_GCC}" ]; then
 
-ORIG_PATH="${PATH}"
-
-# build preliminary host libraries and gcc using system cc
-build_host_gmp "-cc"
-build_host_mpfr "-cc"
-build_host_mpc "-cc"
-build_host_gcc "-cc"
-
-# update PATH to pick up our preliminary host gcc
-export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc/bin:${ORIG_PATH}"
+	ORIG_PATH="${PATH}"
+    
+    # build preliminary host libraries and gcc using system cc
+    build_host_gmp "-cc"
+    build_host_mpfr "-cc"
+    build_host_mpc "-cc"
+    build_host_gcc "-cc"
+    
+    # update PATH to pick up our preliminary host gcc
+    export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc/bin:${ORIG_PATH}"
 
 fi # SKIP_HOST_GCC
 
-# build final host libraries
+    # build final host libraries
 build_host_gmp
 build_host_mpfr
 build_host_mpc
 
 if [ -z "${SKIP_HOST_GCC}" ]; then
 
-# build final host gcc using preliminary host gcc
-build_host_gcc
-
-# remove preliminary host libraries and gcc
-rm -rf ${HOST_TOOLS_DIR}/gmp-${GMP_VSN}-cc
-rm -rf ${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}-cc
-rm -rf ${HOST_TOOLS_DIR}/mpc-${MPC_VSN}-cc
-rm -rf ${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc
-
-# update PATH to pick up our final host gcc
-export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}/bin:${ORIG_PATH}"
+    # build final host gcc using preliminary host gcc
+    build_host_gcc
+    
+    # remove preliminary host libraries and gcc
+    rm -rf ${HOST_TOOLS_DIR}/gmp-${GMP_VSN}-cc
+    rm -rf ${HOST_TOOLS_DIR}/mpfr-${MPFR_VSN}-cc
+    rm -rf ${HOST_TOOLS_DIR}/mpc-${MPC_VSN}-cc
+    rm -rf ${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}-cc
+    
+    # update PATH to pick up our final host gcc
+    export PATH="${HOST_TOOLS_DIR}/gcc-${HOST_GCC_VSN}/bin:${ORIG_PATH}"
 
 fi # SKIP_HOST_GCC
 
@@ -2558,6 +2580,11 @@ fi
 if [ -n "${MAKE_VSN}" ]; then
     build_host_make
     export PATH="${HOST_TOOLS_DIR}/make-${MAKE_VSN}/bin:${PATH}"
+fi
+
+if [ -n "${DOWNLOAD_ONLY}" ]; then
+    log "Download-only mode: sources downloaded to ${DOWNLOADS_DIR}"
+    exit 0
 fi
 
 #

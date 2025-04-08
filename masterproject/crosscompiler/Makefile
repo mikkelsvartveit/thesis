@@ -39,12 +39,15 @@ help:
 	@echo "  baseimages         - Build base Singularity images locally"
 	@echo "  baseimagessbatch   - Build base Singularity images using Slurm"
 	@echo "  crosscompilerscripts - Generate scripts for crosscompiler images"
-	@echo "  crosscompilers     - Build cross-compiler images from list in generate_build_scripts.sh"
-	@echo "  compileall         - Build libraries using SIF containers and library list in compile_all_sif.sh"
+	@echo "  crosscompilers     - Build cross-compiler images from list in ./scripts/generate_build_scripts.sh"
+	@echo "  compileall         - Build libraries using SIF containers and library list in ./scripts/compile_all_sif.sh"
 	@echo "  compileallsbatch   - Build all libraries using Slurm batch jobs"
 	@echo "  dataset            - Generate dataset from built libraries"
 	@echo "  clean              - Removes intermediate files and output from crosscompilers"
 	@echo "  cleanall           - clean, but also removes sif-images"
+	@echo -e "\nDependency outline:"
+	@echo -e "    baseimages <- crosscompilerscripts <- crosscompilers <- compileall/dataset\n"
+
 
 #--------------------------------------------------------------
 # Preparation Target
@@ -61,7 +64,7 @@ $(PREPARE_STAMP):
 	@mkdir -p $(OUTPUT_DIR) $(CROSSCOMPILER_DEFS) $(CROSSCOMPILER_IMAGES)
 	@mkdir -p $(SUBMIT_SCRIPTS_DIR)
 	@mkdir -p $(RESULT_DIR)/library_files $(RESULT_DIR)/text_asm $(RESULT_DIR)/text_bin
-	@mkdir -p $(SLURM_LOGS_DIR)/logs $(SLURM_LOGS_DIR)/compilelogs $(SUBMIT_SCRIPTS_DIR)
+	@mkdir -p $(SLURM_LOGS_DIR)/logs $(SLURM_LOGS_DIR)/compilelogs $(SLURM_LOGS_DIR)/imagebuildlogs $(SUBMIT_SCRIPTS_DIR)
 	@cd sources && tar xf sources.tar.gz && cd ..
 	@touch $(PREPARE_STAMP)
 
@@ -73,7 +76,7 @@ baseimages: $(BASE_SIF_FILES)
 
 baseimagessbatch: $(PREPARE_STAMP)
 	@echo "Submitting base image build to Slurm..."
-	@mkdir -p $(SLURM_LOGS_DIR)/compilelogs
+	@mkdir -p $(SLURM_LOGS_DIR)/imagebuildlogs
 	sbatch \
 		--account="share-ie-idi" \
 		--time="00:45:00" \
@@ -82,8 +85,8 @@ baseimagessbatch: $(PREPARE_STAMP)
 		--mem="16G" \
 		--partition="CPUQ" \
 		--job-name="base-images" \
-		--output="$(SLURM_LOGS_DIR)/compilelogs/base-images-%j.out" \
-		--error="$(SLURM_LOGS_DIR)/compilelogs/base-images-%j.err" \
+		--output="$(SLURM_LOGS_DIR)/imagebuildlogs/base-images-%j.log" \
+		--error="$(SLURM_LOGS_DIR)/imagebuildlogs/base-images-%j.err" \
 		--wrap="make baseimages"
 	@echo "Base image build job submitted to Slurm"
 
@@ -158,6 +161,7 @@ clean:
 	rm -rf $(OUTPUT_DIR)/*
 	rm -rf $(SLURM_LOGS_DIR)/logs/*
 	rm -rf $(SLURM_LOGS_DIR)/compilelogs/*
+	rm -rf $(SLURM_LOGS_DIR)/imagebuildlogs/*
 	rm -rf $(SUBMIT_SCRIPTS_DIR)/*
 	rm -rf $(RESULT_DIR)/library_files
 	rm -rf $(RESULT_DIR)/text_asm

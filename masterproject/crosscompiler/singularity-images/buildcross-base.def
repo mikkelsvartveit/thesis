@@ -115,7 +115,7 @@ From: ubuntu:22.04
     /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
     --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only moxie || echo "Download for moxie failed, will download at runtime"
 
-    # Remove to enforce not using stale buildcross.sh scripts when developing
+    # Remove script to enforce not using stale buildcross.sh scripts when developing
     # Needs to be re-included when building the toolchains
     rm -f /opt/buildcross/script/buildcross.sh
 

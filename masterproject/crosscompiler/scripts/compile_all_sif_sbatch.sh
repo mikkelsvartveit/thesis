@@ -20,7 +20,7 @@ for SIF_image in $SIF_IMAGES; do
         --mem="16G" \
         --partition="CPUQ" \
         --job-name="${arch}" \
-        --output="./slurm-logs/compilelogs/${arch}/%j.out" \
+        --output="./slurm-logs/compilelogs/${arch}/%j.log" \
         --error="./slurm-logs/compilelogs/${arch}/%j.err" \
         --wrap="./scripts/compile_all_sif.sh $arch")
     
@@ -42,7 +42,7 @@ sbatch \
     --mem="16G" \
     --partition="CPUQ" \
     --job-name="dataset-generation" \
-    --output="./slurm-logs/compilelogs/dataset-generation-%j.out" \
+    --output="./slurm-logs/compilelogs/dataset-generation-%j.log" \
     --error="./slurm-logs/compilelogs/dataset-generation-%j.err" \
     --dependency=afterany:$DEPEND_STR \
     --wrap="./scripts/result-gen/generate_dataset.sh"

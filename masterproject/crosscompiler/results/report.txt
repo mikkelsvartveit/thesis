@@ -501,10 +501,9 @@ Architecture: visium
   Total text size: 3481 KB
 
 Architecture: xstormy16
-  Library: libsharpyuv.a, Text Size 31.5898 KB
   Library: libyaml.a, Text Size 124.633 KB
   Library: libzlib.a, Text Size 95.1816 KB
-  Total text size: 251 KB
+  Total text size: 219 KB
 
 Architecture: xtensa
   Library: libfreetype.a, Text Size 487.474 KB
