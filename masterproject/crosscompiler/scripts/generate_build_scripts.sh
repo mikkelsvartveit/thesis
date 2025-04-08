@@ -1,7 +1,5 @@
 #!/bin/bash
 set -e
-# Master script to generate Slurm submission scripts for all architectures using Singularity
-# Place this in ./slurm-logs/
 
 # Create needed directories
 mkdir -p ./singularity-images/submit-scripts
@@ -9,36 +7,8 @@ mkdir -p ./slurm-logs/logs
 mkdir -p ./singularity-images/crosscompiler-images
 mkdir -p ./singularity-images/crosscompiler-definitions
 
-# Create base images for building and cross-compiling
-# buildcross-base.tar and crosscompiler-base.tar should be created beforehand using 
-#   docker save -o
-# if [ ! -f ./singularity-images/buildcross-base.sif ]; then
-#     if [ -f ./singularity-images/buildcross-base.def ]; then 
-#         singularity build --fakeroot ./singularity-images/buildcross-base.sif ./singularity-images/buildcross-base.def
-#     elif [ -f ./singularity-images/buildcross-base.tar ]; then
-#         singularity build ./singularity-images/buildcross-base.sif docker-archive://./singularity-images/buildcross-base.tar
-#     else
-#         echo "Could not find files to build buildcross-base image from"
-#     fi
-# else
-#     echo "buildcross-base.sif file already exists, skipping build"
-# fi
-
-# if [ ! -f ./singularity-images/crosscompiler-base.sif ]; then
-#     if [ -f ./singularity-images/crosscompiler-base.def ]; then 
-#         singularity build --fakeroot ./singularity-images/crosscompiler-base.sif ./singularity-images/crosscompiler-base.def
-#     elif [ -f ./singularity-images/crosscompiler-base.tar ]; then
-#         singularity build ./singularity-images/crosscompiler-base.sif docker-archive://./singularity-images/crosscompiler-base.tar
-#     else
-#         echo "Could not find files to build crosscompiler-base image from"
-#     fi
-# else
-#     echo "crosscompiler-base.sif file already exists, skipping build"
-# fi
-
 # List of supported architectures and their targets as colon-separated items
 # Format: "arch:target"
-# You can modify this list as needed
 ARCH_TARGET_LIST=(
     "arc:arc-unknown-linux-gnu" # ARCompact v2 basicallly (ARCv2)
     "arceb:arceb-unknown-elf" 
@@ -86,18 +56,15 @@ ARCH_TARGET_LIST=(
     "xtensa:xtensa-unknown-linux-uclibc"
 )
 
-# First, generate all Singularity definition files
 echo "Generating Singularity definition files..."
 rm -rf ./singularity-images/crosscompiler-definitions/*
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
-    # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
     def_file="./singularity-images/crosscompiler-definitions/${arch}.def"
     
     echo "  Generating definition file for ${arch}..."
     
-    # Create the Singularity definition file
     cat > "${def_file}" << EOF
 Bootstrap: localimage
 From: ./singularity-images/buildcross-base.sif
@@ -109,7 +76,7 @@ Stage: builder
     export TOOLCHAIN_FILE="/workspace/toolchains/${arch}.cmake"
 
 %files
-    architectures/buildcross.sh /opt/buildcross/scripts/buildcross.sh
+    ./buildcross.sh /opt/buildcross/scripts/buildcross.sh
 
 %post
     ARCH=${arch}
@@ -145,19 +112,16 @@ Stage: final
 EOF
 done
 
-# Now generate all SLURM submission scripts
 echo "Generating SLURM submission scripts..."
 rm -rf ./singularity-images/submit-scripts/*
 
 for arch_target in "${ARCH_TARGET_LIST[@]}"; do
-    # Split the string by colon
     arch=$(echo "$arch_target" | cut -d':' -f1)
     target=$(echo "$arch_target" | cut -d':' -f2)
     submit_script="./singularity-images/submit-scripts/build_${arch}.slurm"
     
-    echo "  Generating submission script for ${arch}..."
+    echo "  Generating slurm submission script for ${arch}..."
     
-    # Create the Slurm submission script
     cat > "${submit_script}" << EOF
 #!/bin/bash
 #SBATCH --job-name=${arch}_crosscompiler
@@ -186,6 +150,5 @@ echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
 echo "[SUCCESS] ${arch}" >> ./slurm-logs/imagebuildlogs/build-summary.txt
 EOF
 
-    # Make the script executable
     chmod +x "${submit_script}"
 done

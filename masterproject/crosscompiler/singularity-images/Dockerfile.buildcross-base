@@ -70,7 +70,7 @@ WORKDIR /opt/buildcross/downloads
 
 # Add script directory
 RUN mkdir -p /opt/buildcross/scripts
-COPY architectures/buildcross.sh /opt/buildcross/scripts/
+COPY buildcross.sh /opt/buildcross/scripts/
 RUN chmod +x /opt/buildcross/scripts/buildcross.sh
 
 # Dryrun with downloads to get sources

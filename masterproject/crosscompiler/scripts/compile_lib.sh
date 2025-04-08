@@ -3,7 +3,6 @@
 
 set -e
 
-# Default values
 LIB_NAME=${1:-"zlib"}
 LIB_VERSION=${2:-"1.3"}
 JCOUNT=${3:-"$(nproc)"}
@@ -14,12 +13,10 @@ SOURCES_DIR="/workspace/sources"
 ARCH_PATCH_DIR="/workspace/patches/${LIB_NAME}/${ARCH}"
 LIB_PATCH_DIR="/workspace/patches/${LIB_NAME}"
 
-# Print build information
 echo "Building ${LIB_NAME} ${LIB_VERSION} for ${ARCH} architecture"
 echo "Using toolchain: ${TOOLCHAIN_FILE}"
 echo "Output directory: ${OUTPUT_DIR}"
 
-# Check if the library source exists
 if [ ! -d "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}" ]; then
   echo "ERROR: Source directory ${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION} not found!"
   echo "Please manually download and extract the source code before building."
@@ -101,13 +98,10 @@ build_lib_for_arch () {
     echo "Toolchain file not found: ${TOOLCHAIN_FILE}"
     echo "Generating minimal toolchain file for ${arch}..."
     
-    # Generate minimal toolchain file with exact paths
     cat > "${TMP_TOOLCHAIN_FILE}" << EOF
-# Minimal auto-generated toolchain file for ${arch}
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR ${arch})
 
-# Specify full paths to cross compilers and tools
 set(CMAKE_C_COMPILER ${TARGET}-gcc)
 set(CMAKE_CXX_COMPILER ${TARGET}-g++)
 set(CMAKE_AR ${TARGET}-ar)
@@ -122,8 +116,8 @@ EOF
 
     echo "Created temporary toolchain file: ${TMP_TOOLCHAIN_FILE}"
     TOOLCHAIN_FILE="${TMP_TOOLCHAIN_FILE}"
-    
-    # Since we're using a minimal toolchain, we need to add the other settings as args
+
+    # Set additional CMake arguments for cross-compilation
     CMAKE_TOOLCHAIN_ARGS=" \
       -DCMAKE_FIND_ROOT_PATH='/cross-${arch}' \
       -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="" \

@@ -8,8 +8,6 @@ From: ubuntu:22.04
     export DEBIAN_FRONTEND=noninteractive
 
 %files
-    # Copy files from host to container
-    # Make sure these files exist in the current directory when building
     scripts/compile_lib.sh /usr/local/bin/build-lib
     scripts/download-libs.sh /usr/local/bin/download-libs
 
@@ -70,10 +68,4 @@ From: ubuntu:22.04
 
 %help
     This container provides a build environment with common tools and dependencies.
-    
-    Usage:
-    $ singularity run --bind /path/to/host/dir:/workspace buildenv-base.sif
-    
-    Helper scripts:
-    - build-lib: Script to build libraries
-    - download-libs: Script to download libraries
+    Use with buildcross-base to create croscompilers

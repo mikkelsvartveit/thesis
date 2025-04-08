@@ -12,14 +12,13 @@ From: ubuntu:22.04
     export BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
 
 %files
-    architectures/buildcross.sh /opt/buildcross/scripts/buildcross.sh
+    ./buildcross.sh /opt/buildcross/scripts/buildcross.sh
 
 %post
     # Fix permissions for temporary directory
     mkdir -p /tmp
     chmod 1777 /tmp
 
-    # Set timezone to UTC
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 
     # Install common build dependencies and tools
@@ -96,19 +95,17 @@ From: ubuntu:22.04
 
     mkdir -p /workspace
 
-    # Set up welcome message for bash
     echo 'echo "Welcome to Buildcross Singularity environment!"' >> /etc/bash.bashrc \
         && echo 'echo ""' >> /etc/bash.bashrc \
         && echo 'echo "To build a cross-compiler, use:"' >> /etc/bash.bashrc \
         && echo 'echo "  build.sh [options] <TARGET>"' >> /etc/bash.bashrc \
         && echo 'echo ""' >> /etc/bash.bashrc \
-        && echo 'echo "The compiler will be in: ./<TARGET>"' >> /etc/bash.bashrc \
+        && echo 'echo "The compiler will be in: ./cross-<TARGET>"' >> /etc/bash.bashrc \
         && echo 'echo "Workspace directories for your source files: /workspace/sources and /workspace/output"' >> /etc/bash.bashrc \
         && echo 'echo ""' >> /etc/bash.bashrc
 
 
     echo "Downloading toolchain components..."
-    # Try to run the download commands, but don't fail the build if they don't work
     /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
     --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only X86_64 || echo "Download for X86_64 failed, will download at runtime"
     
