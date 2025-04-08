@@ -3,7 +3,7 @@ from .utils import *
 from .ISAdetectDataset import *
 from .ISAdetectEndiannessCounts import *
 from .CpuRecDataset import *
-from BuildCrossDataset import *
+from .BuildCrossDataset import *
 
 
 def get_dataset(
