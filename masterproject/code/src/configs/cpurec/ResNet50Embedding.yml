@@ -16,12 +16,9 @@ testing_data:
     file_byte_read_limit: 1024
 
 transforms:
-  name: GrayScaleImage
+  name: Vector1D
   params:
-    dimx: 32
-    dimy: 32
-    normalize: True
-    duplicate_to_n_channels: 3
+    length: 1024
 
 model:
   name: ResNet50Embedding

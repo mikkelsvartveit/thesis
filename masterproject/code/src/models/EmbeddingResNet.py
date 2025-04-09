@@ -7,7 +7,7 @@ from torchvision.models import resnet50
 class ResNet50Embedding(nn.Module):
     def __init__(
         self,
-        input_length=512,
+        input_length=1024,
         num_classes=2,
         dropout_rate=0.0,
         embedding_dim=128,

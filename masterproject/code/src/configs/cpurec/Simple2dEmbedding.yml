@@ -16,12 +16,9 @@ testing_data:
     file_byte_read_limit: 512
 
 transforms:
-  name: GrayScaleImage
+  name: Vector1D
   params:
-    dimx: 32
-    dimy: 16
-    normalize: True
-    duplicate_to_n_channels: null
+    length: 512
 
 model:
   name: Simple2dEmbedding

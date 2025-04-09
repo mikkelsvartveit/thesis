@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:a100:1           # GPU resources requested
 
 #SBATCH --job-name=cpurec-all
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 WANDB_PROJECT_NAME="cpurec-all-$SLURM_JOB_ID"
 TARGET_FEATURES=("endianness" "instructionwidth_type")
 
