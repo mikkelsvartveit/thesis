@@ -8,6 +8,7 @@ mkdir -p results/library_files
 mkdir -p results/text_bin
 mkdir -p results/text_asm
 
+# Remove duplicate libs
 lib_filters=(
     libpng.a
     liblibpng16_static.a
@@ -50,7 +51,7 @@ for arch_dir in output/*/; do
         
         # Pass the COPIED file to the extract script, not the original
         singularity exec \
-          "$SCRIPT_DIR/slurm-scripts/cross-compiler-images/cross-compiler-${arch}.sif" \
+          "$SCRIPT_DIR/singularity-images/crosscompiler-images/crosscompiler-${arch}.sif" \
           bash ./scripts/result-gen/extract_library.sh "$SCRIPT_DIR/results/library_files/$arch/$filename" "$arch" "$filename" &
     done
 done
@@ -71,6 +72,11 @@ instruction_width_map() {
     
     case "$arch" in
         # x86 architectures - variable instruction width
+        "arc" | "arceb")
+            width="16/32"
+            width_type="mixed"
+            comment="16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians"
+            ;;
         "bfin")
             width="16/32"
             width_type="mixed"
@@ -136,6 +142,11 @@ instruction_width_map() {
             width_type="fixed"
             comment=""
             ;;
+        "loongarch64")
+            width="64"
+            width_type="fixed"
+            comment=""
+            ;;
         "m32r")
             width="32"
             width_type="fixed"
@@ -146,10 +157,15 @@ instruction_width_map() {
             width_type="mixed"
             comment=""
             ;;
-        "mcore")
+        "mcore" | "mcoreeb")
             width="16"
             width_type="fixed"
-            comment="Says 32 in elf header, but instructions are 16-bit? investigate"
+            comment="16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf"
+            ;;
+        "microblaze" | "microblazeel")
+            width="64"
+            width_type="fixed"
+            comment=""
             ;;
         "mmix")
             width="32"
@@ -161,7 +177,7 @@ instruction_width_map() {
             width_type="variable"
             comment=""
             ;;
-        "moxie")
+        "moxie" | "moxieel")
             width="16/32"
             width_type="mixed"
             comment=""
@@ -171,9 +187,19 @@ instruction_width_map() {
             width_type="mixed"
             comment=""
             ;;
-        "nds32")
+        "nds32" | "nds32be")
             width="16/32"
             width_type="mixed"
+            comment=""
+            ;;
+        "nios2")
+            width="64"
+            width_type="fixed"
+            comment=""
+            ;;
+        "or1k")
+            width="64"
+            width_type="fixed"
             comment=""
             ;;
         "pdp11")
@@ -191,12 +217,12 @@ instruction_width_map() {
             width_type="variable"
             comment=""
             ;;
-        "rx")
+        "rx" | "rxeb")
             width="na"
             width_type="variable"
             comment=""
             ;;
-        "tilegx")
+        "tilegx" | "tilegxbe")
             width="64"
             width_type="fixed"
             comment="Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word"
@@ -331,6 +357,11 @@ tar --sort=name \
     --mtime='1970-01-01 00:00Z' \
     --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
     -c text_bin/ | gzip -n > text_bin.tar.gz
+tar --sort=name \
+    --owner=0 --group=0 --numeric-owner \
+    --mtime='1970-01-01 00:00Z' \
+    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+    -c text_bin/ text_asm/ library_files/ result.csv labels.csv report.txt | gzip -n > buildcross_dataset.tar.gz
 cd ..
 
 

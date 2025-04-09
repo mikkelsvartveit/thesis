@@ -1,0 +1,132 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%labels
+    Maintainer "Your Name <your.email@example.com>"
+    Description "Base image for buildcross cross-compiler toolchains"
+
+%environment
+    export DEBIAN_FRONTEND=noninteractive
+    export BUILDCROSS_DOWNLOADS="/opt/buildcross/downloads"
+    export BUILDCROSS_SOURCES="/opt/buildcross/sources"
+    export BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
+
+%files
+    ./buildcross.sh /opt/buildcross/scripts/buildcross.sh
+
+%post
+    # Fix permissions for temporary directory
+    mkdir -p /tmp
+    chmod 1777 /tmp
+
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+
+    # Install common build dependencies and tools
+    # Making sure apt can work properly
+    apt-get update -y || (rm -rf /var/lib/apt/lists/* && apt-get update -y)
+    apt-get install -y --no-install-recommends ca-certificates
+    
+    # Main package installation
+    apt-get install -y \
+        build-essential \
+        bison \
+        flex \
+        git \
+        wget \
+        curl \
+        texinfo \
+        help2man \
+        gawk \
+        libtool-bin \
+        autoconf \
+        automake \
+        libgmp-dev \
+        libmpfr-dev \
+        libmpc-dev \
+        libexpat1-dev \
+        zlib1g-dev \
+        python3 \
+        python-is-python3 \
+        ninja-build \
+        rsync \
+        pkg-config \
+        libncurses-dev \
+        libisl-dev \
+        file \
+        cmake \
+        unzip \
+        gettext \
+        libssl-dev \
+        ca-certificates \
+        xz-utils \
+        less \
+        vim \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Add 32-bit support for architectures that need it
+    dpkg --add-architecture i386 \
+        && apt-get update -y \
+        && apt-get install -y \
+            libc6:i386 \
+            libstdc++6:i386 \
+            libncurses5:i386 \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Set environment variables for the build phase (these will also be available at runtime via %environment)
+    export BUILDCROSS_DOWNLOADS="/opt/buildcross/downloads"
+    export BUILDCROSS_SOURCES="/opt/buildcross/sources"
+    export BUILDCROSS_HOST_TOOLS="/opt/buildcross/host-tools"
+
+    # Create directories for buildcross
+    mkdir -p ${BUILDCROSS_DOWNLOADS} \
+             ${BUILDCROSS_SOURCES} \
+             ${BUILDCROSS_HOST_TOOLS}
+
+    # Make scripts executable
+    chmod +x /opt/buildcross/scripts/buildcross.sh
+
+    # Create a helper script to easily run buildcross with the right paths
+    echo '#!/bin/bash
+/opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
+--sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} "$@"' > /usr/local/bin/build.sh \
+    && chmod +x /usr/local/bin/build.sh
+
+    mkdir -p /workspace
+
+    echo 'echo "Welcome to Buildcross Singularity environment!"' >> /etc/bash.bashrc \
+        && echo 'echo ""' >> /etc/bash.bashrc \
+        && echo 'echo "To build a cross-compiler, use:"' >> /etc/bash.bashrc \
+        && echo 'echo "  build.sh [options] <TARGET>"' >> /etc/bash.bashrc \
+        && echo 'echo ""' >> /etc/bash.bashrc \
+        && echo 'echo "The compiler will be in: ./cross-<TARGET>"' >> /etc/bash.bashrc \
+        && echo 'echo "Workspace directories for your source files: /workspace/sources and /workspace/output"' >> /etc/bash.bashrc \
+        && echo 'echo ""' >> /etc/bash.bashrc
+
+
+    echo "Downloading toolchain components..."
+    /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
+    --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only X86_64 || echo "Download for X86_64 failed, will download at runtime"
+    
+    /opt/buildcross/scripts/buildcross.sh --downloads-dir=${BUILDCROSS_DOWNLOADS} \
+    --sources-dir=${BUILDCROSS_SOURCES} --host-tools-dir=${BUILDCROSS_HOST_TOOLS} --download-only moxie || echo "Download for moxie failed, will download at runtime"
+
+    # Remove script to enforce not using stale buildcross.sh scripts when developing
+    # Needs to be re-included when building the toolchains
+    rm -f /opt/buildcross/script/buildcross.sh
+
+
+%startscript
+    exec /bin/bash
+
+%help
+    This container provides the buildcross environment for cross-compiler toolchains.
+    
+    Usage:
+    $ singularity run --bind /path/to/workspace:/workspace buildcross.sif
+    
+    Inside the container, use:
+    $ build.sh [options] <TARGET>
+    
+    The compiler will be built in ./<TARGET>

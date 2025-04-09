@@ -1,0 +1,71 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%labels
+    Description "Base environment with common build tools and dependencies"
+
+%environment
+    export DEBIAN_FRONTEND=noninteractive
+
+%files
+    scripts/compile_lib.sh /usr/local/bin/build-lib
+    scripts/download-libs.sh /usr/local/bin/download-libs
+
+%post
+    # Fix permissions for temporary directory
+    mkdir -p /tmp
+    chmod 1777 /tmp
+
+    # Install common build tools and dependencies
+    apt-get update && apt-get install -y \
+        build-essential \
+        make \
+        cmake \
+        git \
+        subversion \
+        wget \
+        python3 \
+        python3-dev \
+        pkg-config \
+        autoconf \
+        libtool \
+        ninja-build \
+        ccache \
+        file \
+        unzip \
+        libgmp-dev \
+        libmpfr-dev \
+        libmpc-dev \
+        texinfo \
+        bison \
+        flex \
+        libfl-dev \
+        libssl-dev \
+        libxml2-dev \
+        liblzma-dev \
+        libzstd-dev \
+        ca-certificates \
+        --no-install-recommends \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Set up workspace directories
+    mkdir -p /workspace/sources /workspace/output
+
+    # Make scripts executable
+    chmod +x /usr/local/bin/build-lib /usr/local/bin/download-libs
+
+    # Set up welcome message
+    echo 'echo "Welcome to the Build Environment Container"' >> /etc/bash.bashrc
+    echo 'echo "Workspace directories: /workspace/sources and /workspace/output"' >> /etc/bash.bashrc
+    echo 'echo "Available helper scripts: build-lib, download-libs"' >> /etc/bash.bashrc
+
+%runscript
+    exec /bin/bash "$@"
+
+%startscript
+    exec /bin/bash
+
+%help
+    This container provides a build environment with common tools and dependencies.
+    Use with buildcross-base to create croscompilers

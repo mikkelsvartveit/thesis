@@ -1,4 +1,6 @@
 architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
+arc;little;32;16/32;mixed;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
+arceb;big;32;16/32;mixed;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
 bfin;little;32;16/32;mixed;Blackfin
 c6x;big;32;32;fixed;
 cr16;little;32;16/32;mixed;
@@ -12,18 +14,28 @@ h8300;big;32;16/32;mixed;
 iq2000;big;32;32;fixed;
 kvx;little;64;16/32;mixed;
 lm32;big;32;32;fixed;
+loongarch64;little;64;64;fixed;
 m32r;big;32;32;fixed;
 m68k-elf;big;32;16/32/48;mixed;
-mcore;little;32;16;fixed;Says 32 in elf header, but instructions are 16-bit? investigate
+mcore;little;32;16;fixed;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
+mcoreeb;big;32;16;fixed;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
+microblaze;big;32;64;fixed;
+microblazeel;little;32;64;fixed;
 mmix;big;64;32;fixed;
 mn10300;little;32;na;variable;
 moxie;big;32;16/32;mixed;
+moxieel;little;32;16/32;mixed;
 msp430;little;32;16/32;mixed;
 nds32;little;32;16/32;mixed;
-pru;little;32;;;
+nds32be;big;32;16/32;mixed;
+nios2;little;32;64;fixed;
+or1k;big;32;64;fixed;
+pru;little;32;32;fixed;
 rl78;little;32;na;variable;
 rx;little;32;na;variable;
+rxeb;big;32;na;variable;
 tilegx;little;64;64;fixed;Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word
+tilegxbe;big;64;64;fixed;Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word
 tricore;little;32;16/32;mixed;
 v850;little;32;16/32;mixed;
 visium;big;32;32;fixed;
