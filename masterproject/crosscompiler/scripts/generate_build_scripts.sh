@@ -42,7 +42,6 @@ ARCH_TARGET_LIST=(
     "nds32be:nds32be-unknown-elf"
     "nios2:nios2-unknown-linux-gnu"
     "or1k:or1k-unknown-linux-gnu"
-    "pdp11:pdp11-unknown-aout" # (unlikely to work)
     "pru:pru-unknown-elf"
     "rl78:rl78-unknown-elf"
     "rx:rx-unknown-elf"
@@ -129,25 +128,43 @@ for arch_target in "${ARCH_TARGET_LIST[@]}"; do
 #SBATCH --error=./slurm-logs/imagebuildlogs/${arch}/%j.err
 #SBATCH --time=1:00:00
 #SBATCH --nodes=1
-#SBATCH --mem=16G
-#SBATCH --cpus-per-task=24
+#SBATCH --mem=24G
+#SBATCH --cpus-per-task=16
 #SBATCH --account="share-ie-idi"
 #SBATCH --partition="CPUQ"
+#SBATCH --nodelist="idun-03-[01-48],idun-04-[01-36],idun-05-[01-32]"
+
 
 # Create log directory
 mkdir -p ./slurm-logs/imagebuildlogs/${arch}
 
 echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Starting build for ${arch} (${target})"
+start_seconds=\$(date +%s)
 
 # Build the Singularity container using the definition file
 echo "Building Singularity container..."
 mkdir -p ./singularity-images/crosscompiler-images/
-(singularity build --fakeroot ./singularity-images/crosscompiler-images/crosscompiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def) || \\
-    (echo "Failed to build Singularity container for ${arch}, exiting..." && \\
-    echo "[FAILED] ${arch}" >> ./slurm-logs/imagebuildlogs/build-summary.txt && exit 1)
+singularity build --fakeroot ./singularity-images/crosscompiler-images/crosscompiler-${arch}.sif ./singularity-images/crosscompiler-definitions/${arch}.def
+exit_status=\$?
 
-echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed"
-echo "[SUCCESS] ${arch}" >> ./slurm-logs/imagebuildlogs/build-summary.txt
+# Calculate time difference
+end_seconds=\$(date +%s)
+diff=\$((end_seconds - start_seconds))
+
+# Convert to minutes and seconds
+minutes=\$((diff / 60))
+seconds=\$((diff % 60))
+build_time="\$minutes m \$seconds s"
+
+if [ \$exit_status -eq 0 ]; then
+    echo "Singularity container for ${arch} built successfully"
+    echo "[SUCCESS] ${arch} \$build_time" >> ./slurm-logs/imagebuildlogs/build-summary.txt
+else
+    echo "Failed to build Singularity container for ${arch}, exiting..."
+    echo "[FAILED] ${arch} \$build_time" >> ./slurm-logs/imagebuildlogs/build-summary.txt && exit 1
+fi
+
+echo "[\$(date '+%Y-%m-%d %H:%M:%S')] Build for ${arch} completed in \$minutes minutes and \$seconds seconds"
 EOF
 
     chmod +x "${submit_script}"

@@ -8,6 +8,7 @@ mkdir -p results/library_files
 mkdir -p results/text_bin
 mkdir -p results/text_asm
 
+# Remove duplicate libs
 lib_filters=(
     libpng.a
     liblibpng16_static.a
@@ -356,6 +357,11 @@ tar --sort=name \
     --mtime='1970-01-01 00:00Z' \
     --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
     -c text_bin/ | gzip -n > text_bin.tar.gz
+tar --sort=name \
+    --owner=0 --group=0 --numeric-owner \
+    --mtime='1970-01-01 00:00Z' \
+    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+    -c text_bin/ text_asm/ library_files/ result.csv labels.csv report.txt | gzip -n > buildcross_dataset.tar.gz
 cd ..
 
 

@@ -81,7 +81,7 @@ baseimagessbatch: $(PREPARE_STAMP)
 		--account="share-ie-idi" \
 		--time="00:45:00" \
 		--nodes="1" \
-		--cpus-per-task="16" \
+		--cpus-per-task="32" \
 		--mem="16G" \
 		--partition="CPUQ" \
 		--job-name="base-images" \
@@ -104,6 +104,7 @@ crosscompilerscripts: | $(PREPARE_STAMP)
 	./scripts/generate_build_scripts.sh
 
 crosscompilers: baseimages crosscompilerscripts 
+	rm -f $(SLURM_LOGS_DIR)/imagebuildlogs/build-summary.txt
 	$(eval CROSSCOMPILER_DEFS_FILES := $(wildcard $(CROSSCOMPILER_DEFS)/*.def))
 	$(eval CROSSCOMPILER_SIF_FILES := $(patsubst $(CROSSCOMPILER_DEFS)/%.def,$(CROSSCOMPILER_IMAGES)/crosscompiler-%.sif,$(CROSSCOMPILER_DEFS_FILES)))
 	$(MAKE) $(CROSSCOMPILER_SIF_FILES)
@@ -159,17 +160,19 @@ dataset: | $(PREPARE_STAMP)
 clean:
 	@echo "Cleaning up intermediate files and results"
 	rm -rf $(OUTPUT_DIR)/*
-	rm -rf $(SLURM_LOGS_DIR)/logs/*
-	rm -rf $(SLURM_LOGS_DIR)/compilelogs/*
-	rm -rf $(SLURM_LOGS_DIR)/imagebuildlogs/*
 	rm -rf $(SUBMIT_SCRIPTS_DIR)/*
 	rm -rf $(RESULT_DIR)/library_files
 	rm -rf $(RESULT_DIR)/text_asm
 	rm -rf $(RESULT_DIR)/text_bin
 	rm -f $(PREPARE_STAMP)
 
+cleanlogs:
+	@echo "Cleaning up built logs..."
+	rm -rf $(SLURM_LOGS_DIR)/logs/*
+	rm -rf $(SLURM_LOGS_DIR)/compilelogs/*
+	rm -rf $(SLURM_LOGS_DIR)/imagebuildlogs/*
 
-cleanall: clean
+cleanall: clean cleanlogs
 	@echo "Cleaning up built images..."
 	rm -rf $(SINGULARITY_DIR)/*.sif
 	rm -rf $(CROSSCOMPILER_DEFS)/*

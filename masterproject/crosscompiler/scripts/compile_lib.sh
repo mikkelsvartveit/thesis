@@ -126,7 +126,6 @@ EOF
       -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
       -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY \
       -DCMAKE_POSITION_INDEPENDENT_CODE=OFF \
-      -DXZ_THREADS=no \
       -DWEBP_USE_THREAD=OFF"
   else
     # Using existing toolchain file, no need for extra args
@@ -150,6 +149,10 @@ EOF
         -DLIBXML2_WITH_PYTHON=OFF \
         -DWITH_TURBOJPEG=OFF \
         -DPCRE2_BUILD_PCRE2GREP=OFF \
+        -DXZ_THREADS=no \
+        -DUSE_HTTPS=OFF \
+        -DUSE_THREADS=OFF \
+        -DUSE_XDIFF=OFF -DNO_NETWORK=ON \
         -DCMAKE_C_FLAGS="-O0 -g0 -DNDEBUG" \
         ${TEST_SKIP_ARGS} \
         "${SOURCES_DIR}/${LIB_NAME}-${LIB_VERSION}"

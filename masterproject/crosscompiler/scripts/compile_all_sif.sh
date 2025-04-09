@@ -16,10 +16,8 @@ LIBRARIES=(
   "pcre2:10.45"
   "libyaml:0.2.5"
   "libwebp:1.5.0"
-  "harfbuzz:10.4.0"
+  "libgit2:1.9.0"
   # "libxml2:2.14"
-  # C++ required
-  #"jsoncpp:1.9.6"
 )
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

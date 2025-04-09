@@ -1,5 +1,6 @@
 Architecture,Libraries,Text_Size
 arc,libfreetype.a,632.766 KB
+arc,libgit2.a,1273.53 KB
 arc,libjpeg.a,191.941 KB
 arc,liblibpng16.a,174.25 KB
 arc,liblzma.a,149.59 KB
@@ -23,6 +24,7 @@ arceb,libwebpmux.a,18.9219 KB
 arceb,libyaml.a,113.043 KB
 arceb,libzlib.a,72.7031 KB
 bfin,libfreetype.a,516.688 KB
+bfin,libgit2.a,1070.19 KB
 bfin,libjpeg.a,213.836 KB
 bfin,liblibpng16.a,150.203 KB
 bfin,liblzma.a,128.992 KB
@@ -35,7 +37,8 @@ bfin,libwebpmux.a,20.3242 KB
 bfin,libyaml.a,115.082 KB
 bfin,libzlib.a,59.6641 KB
 c6x,libfreetype.a,1346.09 KB
-c6x,liblzma.a,379.406 KB
+c6x,libgit2.a,2624.75 KB
+c6x,liblzma.a,329.469 KB
 c6x,libpcre2-8.a,692.5 KB
 c6x,libsharpyuv.a,19.3125 KB
 c6x,libyaml.a,259.781 KB
@@ -48,6 +51,7 @@ cr16,libsharpyuv.a,17.3301 KB
 cr16,libyaml.a,114.057 KB
 cr16,libzlib.a,62.9297 KB
 cris,libfreetype.a,786.324 KB
+cris,libgit2.a,1554.04 KB
 cris,libjpeg.a,233.504 KB
 cris,liblibpng16.a,213.16 KB
 cris,liblzma.a,186.336 KB
@@ -60,6 +64,7 @@ cris,libwebpmux.a,22.707 KB
 cris,libyaml.a,156.203 KB
 cris,libzlib.a,88.2344 KB
 csky,libfreetype.a,851.461 KB
+csky,libgit2.a,1717.88 KB
 csky,libjpeg.a,186.787 KB
 csky,liblibpng16.a,233.814 KB
 csky,liblzma.a,198.645 KB
@@ -82,6 +87,7 @@ fr30,liblzma.a,253.543 KB
 fr30,libyaml.a,201.316 KB
 fr30,libzlib.a,122.602 KB
 frv,libfreetype.a,910.719 KB
+frv,libgit2.a,2010.69 KB
 frv,libjpeg.a,296.016 KB
 frv,liblibpng16.a,251.219 KB
 frv,liblzma.a,222.312 KB
@@ -105,6 +111,7 @@ ft32,libzlib.a,21.1602 KB
 h8300,libfreetype.a,954.949 KB
 h8300,libjpeg.a,335.113 KB
 h8300,liblibpng16.a,253.115 KB
+h8300,liblzma.a,242.238 KB
 h8300,libpcre2-8.a,464.037 KB
 h8300,libyaml.a,175.756 KB
 h8300,libzlib.a,111.809 KB
@@ -116,6 +123,7 @@ iq2000,libsharpyuv.a,19.8477 KB
 iq2000,libyaml.a,226.355 KB
 iq2000,libzlib.a,131.898 KB
 kvx,libfreetype.a,848.734 KB
+kvx,libgit2.a,1691.18 KB
 kvx,libjpeg.a,459.215 KB
 kvx,liblibpng16.a,237.316 KB
 kvx,liblzma.a,192.289 KB
@@ -140,6 +148,7 @@ lm32,libwebpmux.a,36.8555 KB
 lm32,libyaml.a,166.508 KB
 lm32,libzlib.a,107.875 KB
 loongarch64,libfreetype.a,847.723 KB
+loongarch64,libgit2.a,1700.09 KB
 loongarch64,libjpeg.a,390.141 KB
 loongarch64,liblibpng16.a,242.543 KB
 loongarch64,liblzma.a,205.906 KB
@@ -186,6 +195,7 @@ mcoreeb,liblzma.a,146.264 KB
 mcoreeb,libyaml.a,128.656 KB
 mcoreeb,libzlib.a,64.6953 KB
 microblaze,libfreetype.a,999.312 KB
+microblaze,libgit2.a,1998.21 KB
 microblaze,libjpeg.a,441.531 KB
 microblaze,liblibpng16.a,274.508 KB
 microblaze,liblzma.a,248.262 KB
@@ -198,6 +208,7 @@ microblaze,libwebpmux.a,46.9258 KB
 microblaze,libyaml.a,166.676 KB
 microblaze,libzlib.a,108.684 KB
 microblazeel,libfreetype.a,999.309 KB
+microblazeel,libgit2.a,1990.91 KB
 microblazeel,libjpeg.a,440.41 KB
 microblazeel,liblibpng16.a,274.73 KB
 microblazeel,liblzma.a,247.789 KB
@@ -254,15 +265,12 @@ msp430,libsharpyuv.a,25.5781 KB
 msp430,libyaml.a,119.193 KB
 msp430,libzlib.a,78.2852 KB
 nds32,libfreetype.a,502.324 KB
+nds32,libgit2.a,1112.39 KB
 nds32,libjpeg.a,186.078 KB
 nds32,liblibpng16.a,142.582 KB
 nds32,liblzma.a,123.281 KB
 nds32,libpcre2-8.a,266.441 KB
 nds32,libsharpyuv.a,13.4883 KB
-nds32,libwebp.a,266.035 KB
-nds32,libwebpdecoder.a,105.5 KB
-nds32,libwebpdemux.a,6.19531 KB
-nds32,libwebpmux.a,22.4258 KB
 nds32,libyaml.a,103.689 KB
 nds32,libzlib.a,57.4688 KB
 nds32be,libfreetype.a,462.219 KB
@@ -277,6 +285,7 @@ nds32be,libwebpmux.a,19.4531 KB
 nds32be,libyaml.a,94.9531 KB
 nds32be,libzlib.a,53.5293 KB
 nios2,libfreetype.a,793.773 KB
+nios2,libgit2.a,1584.59 KB
 nios2,libjpeg.a,268.418 KB
 nios2,liblibpng16.a,213.297 KB
 nios2,liblzma.a,196.422 KB
@@ -289,6 +298,7 @@ nios2,libwebpmux.a,33.4531 KB
 nios2,libyaml.a,153.922 KB
 nios2,libzlib.a,90.5391 KB
 or1k,libfreetype.a,1030.59 KB
+or1k,libgit2.a,2160.76 KB
 or1k,libjpeg.a,313.094 KB
 or1k,liblibpng16.a,276.676 KB
 or1k,liblzma.a,258.281 KB
@@ -332,6 +342,7 @@ rxeb,libwebpmux.a,18.4297 KB
 rxeb,libyaml.a,103.43 KB
 rxeb,libzlib.a,59.1641 KB
 tilegx,libfreetype.a,2575.66 KB
+tilegx,libgit2.a,4911.53 KB
 tilegx,libjpeg.a,461.203 KB
 tilegx,liblibpng16.a,680.414 KB
 tilegx,liblzma.a,590.922 KB
@@ -344,6 +355,7 @@ tilegx,libwebpmux.a,48.2656 KB
 tilegx,libyaml.a,471.789 KB
 tilegx,libzlib.a,293.312 KB
 tilegxbe,libfreetype.a,2576.78 KB
+tilegxbe,libgit2.a,4909.84 KB
 tilegxbe,libjpeg.a,461.68 KB
 tilegxbe,liblibpng16.a,680.484 KB
 tilegxbe,liblzma.a,590.961 KB
@@ -363,6 +375,8 @@ tricore,libpcre2-8.a,314.096 KB
 tricore,libyaml.a,122.318 KB
 tricore,libzlib.a,76.9609 KB
 v850,libfreetype.a,760.895 KB
+v850,libgit2.a,1625.63 KB
+v850,liblzma.a,197.453 KB
 v850,libpcre2-8.a,340.752 KB
 v850,libsharpyuv.a,13.873 KB
 v850,libyaml.a,145.523 KB
@@ -381,6 +395,7 @@ visium,libzlib.a,130.879 KB
 xstormy16,libyaml.a,124.633 KB
 xstormy16,libzlib.a,95.1816 KB
 xtensa,libfreetype.a,487.474 KB
+xtensa,libgit2.a,987.537 KB
 xtensa,libjpeg.a,167.199 KB
 xtensa,liblibpng16.a,135.921 KB
 xtensa,liblzma.a,122.469 KB
