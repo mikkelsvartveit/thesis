@@ -3,10 +3,12 @@ SCRIPT_DIR=$(pwd)
 set -e
 
 # Create main results directories
-rm -rf results
 mkdir -p results/library_files
 mkdir -p results/text_bin
 mkdir -p results/text_asm
+rm -rf results/library_files/*
+rm -rf results/text_bin/*
+rm -rf results/text_asm/*
 
 # Remove duplicate libs
 lib_filters=(
@@ -18,46 +20,58 @@ lib_filters=(
 
 # First loop through all architecture directories
 for arch_dir in output/*/; do
-    # Extract just the architecture name
-    arch=$(basename "$arch_dir")
-    echo "arch_dir: $arch_dir"
+        # Extract just the architecture name
+        arch=$(basename "$arch_dir")
+        echo "arch_dir: $arch_dir"
+            
+        # Create architecture-specific result directories
+        mkdir -p "results/library_files/$arch"
+        mkdir -p "results/text_bin/$arch"
+        mkdir -p "results/text_asm/$arch"
         
-    # Create architecture-specific result directories
-    mkdir -p "results/library_files/$arch"
-    mkdir -p "results/text_bin/$arch"
-    mkdir -p "results/text_asm/$arch"
+        mapfile -t lib_files < <(find "$arch_dir" -path "*install*" -name "*.a" | sort)
     
-    # Find all .a files in install directories for this architecture
-    find "$arch_dir" -path "*install*" -name "*.a" | sort | while read file; do
-        # Get just the filename without the path
-        filename=$(basename "$file")
+        for file in "${lib_files[@]}"; do
+        (
+            # Get just the filename without the path
+            filename=$(basename "$file")
 
-        skip=0
-        for excluded in "${lib_filters[@]}"; do
-            if [[ "$filename" == "$excluded" ]]; then
-                echo "  $arch: skipping excluded library $filename"
-                skip=1
-                break
+            skip=0
+            for excluded in "${lib_filters[@]}"; do
+                if [[ "$filename" == "$excluded" ]]; then
+                    echo "  $arch: skipping excluded library $filename"
+                    skip=1
+                    break
+                fi
+            done
+            if [ $skip -eq 0 ]; then
+                
+            
+                echo "  $arch: processing library $filename"
+                
+                # Copy the library file with full path
+                cp "$file" "results/library_files/$arch/$filename"
+
+                # Pass the file to the extract script
+                singularity exec \
+                "$SCRIPT_DIR/singularity-images/crosscompiler-images/crosscompiler-${arch}.sif" \
+                bash ./scripts/result-gen/extract_library.sh "$SCRIPT_DIR/$file" "$arch" "$filename"
             fi
+        ) &
         done
-        if [ $skip -eq 1 ]; then
-            continue
-        fi
-        
-        echo "  $arch: processing library $filename, file: $file"
-        
-        # Copy the library file with full path
-        cp "$file" "results/library_files/$arch/$filename"
-        
-        # Pass the COPIED file to the extract script, not the original
-        singularity exec \
-          "$SCRIPT_DIR/singularity-images/crosscompiler-images/crosscompiler-${arch}.sif" \
-          bash ./scripts/result-gen/extract_library.sh "$SCRIPT_DIR/results/library_files/$arch/$filename" "$arch" "$filename" &
-    done
+    wait
+    echo "  $arch: processing complete"
 done
 
-# Wait for all background processes to complete
+echo "Waiting for all background processes to complete"
 wait
+
+echo "Waiting for file system to update"
+for i in {10..1}; do
+    echo -ne "\r${i}s  "
+    sleep 1
+done
+
 echo ""
 echo "===== All processing complete ====="
 echo ""
@@ -254,7 +268,7 @@ instruction_width_map() {
             ;;
     esac
 
-    echo "$width;$width_type;$comment"
+    echo "$width_type;$width;$comment"
 }
 
 analyze_elf() {
@@ -294,11 +308,6 @@ report_file="results/report.txt"
 rm -f $report_file
 touch $report_file
 
-echo "Waiting for file system to update"
-for i in {10..1}; do
-    echo -ne "\r${i}s  "
-    sleep 1
-done
 echo -e "\rWait complete!          "
 # Loop through all architecture directories
 for arch_dir in results/text_bin/*/; do
@@ -352,17 +361,23 @@ echo "CSV labels generated in $csv_labels"
 
 echo "Compressing dataset results"
 cd results
-tar --sort=name \
-    --owner=0 --group=0 --numeric-owner \
-    --mtime='1970-01-01 00:00Z' \
-    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-    -c text_bin/ | gzip -n > text_bin.tar.gz
-tar --sort=name \
-    --owner=0 --group=0 --numeric-owner \
-    --mtime='1970-01-01 00:00Z' \
-    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-    -c text_bin/ text_asm/ library_files/ result.csv labels.csv report.txt | gzip -n > buildcross_dataset.tar.gz
+(
+    tar --sort=name \
+        --owner=0 --group=0 --numeric-owner \
+        --mtime='1970-01-01 00:00Z' \
+        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+        -c text_bin/ | gzip -n > text_bin.tar.gz 
+) &
+(
+    tar --sort=name \
+        --owner=0 --group=0 --numeric-owner \
+        --mtime='1970-01-01 00:00Z' \
+        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+        -c text_bin/ text_asm/ library_files/ report.csv labels.csv report.txt | gzip -n > buildcross_dataset.tar.gz
+) &
+wait
+echo "Binary files compressed to text_bin.tar.gz"
+echo "Dataset compressed to buildcross_dataset.tar.gz"
 cd ..
 
-
-
+echo "done"

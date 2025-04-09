@@ -109,6 +109,7 @@ ft32,libwebpmux.a,7.50391 KB
 ft32,libyaml.a,26.8359 KB
 ft32,libzlib.a,21.1602 KB
 h8300,libfreetype.a,954.949 KB
+h8300,libgit2.a,1859.79 KB
 h8300,libjpeg.a,335.113 KB
 h8300,liblibpng16.a,253.115 KB
 h8300,liblzma.a,242.238 KB

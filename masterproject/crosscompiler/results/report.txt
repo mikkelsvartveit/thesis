@@ -142,13 +142,14 @@ Architecture: ft32
 
 Architecture: h8300
   Library: libfreetype.a, Text Size 954.949 KB
+  Library: libgit2.a, Text Size 1859.79 KB
   Library: libjpeg.a, Text Size 335.113 KB
   Library: liblibpng16.a, Text Size 253.115 KB
   Library: liblzma.a, Text Size 242.238 KB
   Library: libpcre2-8.a, Text Size 464.037 KB
   Library: libyaml.a, Text Size 175.756 KB
   Library: libzlib.a, Text Size 111.809 KB
-  Total text size: 2537 KB
+  Total text size: 4396 KB
 
 Architecture: iq2000
   Library: libfreetype.a, Text Size 1172.7 KB
