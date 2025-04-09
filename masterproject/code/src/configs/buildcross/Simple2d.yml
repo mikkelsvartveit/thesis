@@ -1,0 +1,43 @@
+data:
+  name: ISAdetectDataset
+  params:
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    use_code_only: True
+
+testing_data:
+  name: BuildCrossDataset
+  params:
+    dataset_path: buildcross/text_bin
+    feature_csv_path: buildcross/labels.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    max_file_splits: 10000
+
+transforms:
+  name: GrayScaleImage
+  params:
+    dimx: 32
+    dimy: 16
+    normalize: True
+    duplicate_to_n_channels: null
+
+model:
+  name: Simple2d
+  params:
+    num_classes: 2
+    dropout_rate: 0.3
+
+validator:
+  name: train_test_separate_datasets
+  wandb_project_name: Simple2d-BuildCross
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2
