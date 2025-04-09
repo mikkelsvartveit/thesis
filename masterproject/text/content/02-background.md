@@ -73,7 +73,7 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 \end{table}
 ```
 
-### Instruction width
+#### Instruction width
 
 The instruction width refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_. This means that each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits.
 
@@ -81,11 +81,28 @@ The instruction width refers to the size, typically measured in bits, of a singl
 
 Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like the C compiler) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many different computer architectures.
 
-The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted.
+The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. However, this portability has required greater abstractions away from the binary programs themselves, and this combined with other transformations done by compilers increasingly widened the gap between the original source code and the binary executable. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted, at the cost of making it more difficult to understand what a binary program does.
 
 <!--
 TODO: As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
  -->
+
+#### Embedded targets and cross compilation
+
+- Embedded systems def, why they are useful
+  - Usually specialized machines, optimized for specific tasks. (usually aims for power efficiency)
+  - Everything from refrigerators to routers to dings and bums
+  - Embedded and bare metal
+  - limitations (leading to cross compilation)
+- Cross compilation
+  - Host, Build, Target
+  - Toolchain
+
+#### GNU Compiler Collection
+
+- GCC and binutils
+- important components, how they fit together (gcc ld ar as )
+- target triple
 
 ## Software reverse engineering
 
@@ -98,7 +115,7 @@ Software reverse engineering serves many purposes in the digital landscape of to
 
 ### Tools and challenges
 
-Software targeted by reverse engineers can come in different levels, like raw binaries, assembler-code, decompiled code etc. and reverse engineers use a multitude of different tools to overcome the challenges at each level. At the lowest level, when presented with a binary of unknown origin, REs use _disassemblers_ like objdumb, angr and IDA Pro along with obtained knowledge of the ISA to translate the binary into assembly instructions. The main challenges at this level is figuring out the ISA if it is unknown or undocumented, as well as identifying code sections, program entry point and function boundaries so that execution can be followed. Some binaries are also be compressed or encrypted, also inhibiting disassembly [@GorkeSteensland2024] [@Kairajarvi2020] [@Nicolao2018] [@Qasem2022].
+Software targeted by reverse engineers can come in different levels, like raw binaries, assembler-code, decompiled code etc. and reverse engineers use a multitude of different tools to overcome the challenges at each level. At the lowest level, when presented with a binary of unknown origin, REs use _disassemblers_ like objdump, angr and IDA Pro along with obtained knowledge of the ISA to translate the binary into assembly instructions. The main challenges at this level is figuring out the ISA if it is unknown or undocumented, as well as identifying code sections, program entry point and function boundaries so that execution can be followed. Some binaries are also be compressed or encrypted, also inhibiting disassembly [@GorkeSteensland2024] [@Kairajarvi2020] [@Nicolao2018] [@Qasem2022].
 
 While assembly captures the semantic meaning of a program in a more human-readable manner and smaller pieces of code can be analyzed by REs, larger software systems are often too complex for meaningful information to be extracted purely through disassembly. _Decompilers_ are one such tool to aid in obtaining higher level understanding of the software. Decompilers like IDA Pro and Ghidra use assembly to reconstruct the program in a higher level language like C to improve human readability and make program semantics easier to understand. However, inherent limitations with information loss during compilation makes it virtually impossible to reconstruct the original source from assembly. Software developers rely on variable names and code comments to document data structures and code, which are lost during compilation. Modern compilers also perform performance or memory optimizations like loop unrolling, function inlining, changing arithmetic operands and control flow optimizations that can significantly transform the original code structure, making it even more challenging to map between source code and the resulting assembly [@GorkeSteensland2024; @Qasem2022; @Votipka2020].
 

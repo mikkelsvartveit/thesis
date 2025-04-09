@@ -1,5 +1,8 @@
-.PHONY: wordcount watch worddiff
-pdf:
+.PHONY: wordcount watch worddiff pdf
+
+pdf: ../../output/master-thesis.pdf
+
+../../output/master-thesis.pdf: content/*.md 
 	@echo "\nCompiling PDF..."
 	mkdir -p ../../output
 	pandoc content/*.md \
@@ -9,7 +12,7 @@ pdf:
 		--pdf-engine=xelatex \
 		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
 		--to=latex \
-		--output=../../output/master-thesis.pdf
+		--output=$@
 	@echo "Finished compiling PDF."
 
 watch:

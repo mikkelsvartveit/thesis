@@ -129,9 +129,9 @@ Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec}
 | STM8         | n/a        | 8        | variable          |
 | TriMedia     | unknown    | 32       | unknown           |
 
-The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation open-source projects using a gcc cross-compiler [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset. 
+The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation open-source projects using a gcc cross-compiler [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset.
 
-<!-- Keep this info for discussion? Dataset quality
+<!-- Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
 
 ### Technical configuration
@@ -176,7 +176,79 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 ## Developing a custom dataset
 
-TODO
+In this thesis we present the **BuildCross** dataset, a part of our contributions to the field. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream ISA's. We believe this dataset alone will not provide a representative group when aiming to develop models that are supposed to be architecture agnostic. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertancies with labeling of the dataset makes it unsuited to train larger ML models on. We developed the BuildCross dataset with the goal of bridging the gap between ISAdetect and CpuRec, aiming to generate a larger volume of binary code for the underrepresented less popular architectures.
+
+We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of CpuRec and ISAdetect [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this and to produce a well documented, correctly labeled dataset we decided to compile binary programs for these exotic architectures using cross compilation with GNU Compiler Collection (GCC) and GNU Binutils. In this section we
+
+### Pipeline for devoloping toolchains
+
+- Not all toolchains are publically available
+- Exists systems for building toolchains, our choice landed on BuildCross.sh
+- containerized for portability, size optim and reproducebility
+-
+
+### Configuring toolchains and gathering library sources (why libraries)
+
+- CMAKE, Ease of consistant configuring of programs before compilation
+- Easily add compiler flags, architecture specific tweaks
+- these toolchain configs can be consistent across libraries, one config for all libraries, allows better scaling for volume.
+- Easelly add more libraries down the line
+
+### Gathering results
+
+- Compile toolchains, install and get .a Files
+- Use objdump and objcopy from the compiled toolchains to exract code sections, and disassemble code
+- Get architectural features from elf header, manually create features for instruction width based off of assembly
+- Create lables.csv, report.csv/txt and tar.gz with dataset
+
+### Results:
+
+- Table with architectures and features, nice.
+
+| architecture | endianness | wordsize | instructionwidth_type | instructionwidth | total size (kb) |
+| ------------ | ---------- | -------- | --------------------- | ---------------- | --------------- |
+| arc          | little     | 32       | mixed                 | 16/32            | 3299            |
+| arceb        | big        | 32       | mixed                 | 16/32            | 1729            |
+| bfin         | little     | 32       | mixed                 | 16/32            | 2942            |
+| c6x          | big        | 32       | fixed                 | 32               | 5271            |
+| cr16         | little     | 32       | mixed                 | 16/32            | 1583            |
+| cris         | little     | 32       | mixed                 | 16/32            | 4070            |
+| csky         | little     | 32       | mixed                 | 16/32            | 4244            |
+| epiphany     | little     | 32       | mixed                 | 16/32            | 334             |
+| fr30         | big        | 32       | mixed                 | 16/32            | 2215            |
+| frv          | big        | 32       | fixed                 | 32               | 5033            |
+| ft32         | little     | 32       | fixed                 | 32               | 445             |
+| h8300        | big        | 32       | mixed                 | 16/32            | 4396            |
+| iq2000       | big        | 32       | fixed                 | 32               | 2459            |
+| kvx          | little     | 64       | mixed                 | 16/32            | 5012            |
+| lm32         | big        | 32       | fixed                 | 32               | 3392            |
+| loongarch64  | little     | 64       | fixed                 | 64               | 4814            |
+| m32r         | big        | 32       | fixed                 | 32               | 1997            |
+| m68k-elf     | big        | 32       | mixed                 | 16/32/48         | 1866            |
+| mcore        | little     | 32       | fixed                 | 16               | 1268            |
+| mcoreeb      | big        | 32       | fixed                 | 16               | 1268            |
+| microblaze   | big        | 32       | fixed                 | 64               | 5862            |
+| microblazeel | little     | 32       | fixed                 | 64               | 5834            |
+| mmix         | big        | 64       | fixed                 | 32               | 4305            |
+| mn10300      | little     | 32       | variable              | na               | 1251            |
+| moxie        | big        | 32       | mixed                 | 16/32            | 2236            |
+| moxieel      | little     | 32       | mixed                 | 16/32            | 2229            |
+| msp430       | little     | 32       | mixed                 | 16/32            | 223             |
+| nds32        | little     | 32       | mixed                 | 16/32            | 2507            |
+| nds32be      | big        | 32       | mixed                 | 16/32            | 1431            |
+| nios2        | little     | 32       | fixed                 | 64               | 4299            |
+| or1k         | big        | 32       | fixed                 | 64               | 5541            |
+| pru          | little     | 32       | fixed                 | 32               | 2435            |
+| rl78         | little     | 32       | variable              | na               | 338             |
+| rx           | little     | 32       | variable              | na               | 1486            |
+| rxeb         | big        | 32       | variable              | na               | 1300            |
+| tilegx       | little     | 64       | fixed                 | 64               | 11964           |
+| tilegxbe     | big        | 64       | fixed                 | 64               | 11970           |
+| tricore      | little     | 32       | mixed                 | 16/32            | 1644            |
+| v850         | little     | 32       | mixed                 | 16/32            | 3171            |
+| visium       | big        | 32       | fixed                 | 32               | 3481            |
+| xstormy16    | little     | 32       | mixed                 | 16/32            | 219             |
+| xtensa       | big        | 32       | variable              | na               | 2671            |
 
 ## Experiments
 
