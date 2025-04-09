@@ -169,12 +169,16 @@ def train_test_separate_datasets(
 
         # Calculate testing metrics
         testing_accuracies = {}
+        instance_counts = {}
         for arch in architecture_predictions:
             arch_accuracy = np.mean(
                 np.array(architecture_predictions[arch])
                 == np.array(architecture_true_labels[arch])
             )
+
             testing_accuracies[arch] = arch_accuracy
+            instance_counts[arch] = len(architecture_predictions[arch])
+
             print(f"{arch} Accuracy: {100*arch_accuracy:.2f}%")
 
         avg_testing_loss = total_testing_loss / len(test_loader)
@@ -191,6 +195,8 @@ def train_test_separate_datasets(
         }
         for arch, acc in testing_accuracies.items():
             wandb_log_data[f"test_accuracy_{arch}"] = acc
+        for arch, count in instance_counts.items():
+            wandb_log_data[f"instance_count_{arch}"] = count
 
         wandb_run.log(wandb_log_data)
 
