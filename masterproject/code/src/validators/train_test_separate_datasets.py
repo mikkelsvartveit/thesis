@@ -182,14 +182,17 @@ def train_test_separate_datasets(
             np.array(testing_predictions) == np.array(testing_true_labels)
         )
 
-        wandb_run.log(
-            {
-                "epoch": epoch,
-                "train_loss": avg_training_loss,
-                "test_loss": avg_testing_loss,
-                "test_accuracy": testing_total_accuracy,
-            }
-        )
+        # Prepare per-architecture accuracy data for logging
+        wandb_log_data = {
+            "epoch": epoch,
+            "train_loss": avg_training_loss,
+            "test_loss": avg_testing_loss,
+            "test_accuracy": testing_total_accuracy,
+        }
+        for arch, acc in testing_accuracies.items():
+            wandb_log_data[f"test_accuracy_{arch}"] = acc
+
+        wandb_run.log(wandb_log_data)
 
     # ======== REPORT FINAL RESULTS ========
     wandb_run.log(
