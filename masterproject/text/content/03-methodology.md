@@ -279,6 +279,16 @@ Similar to the 2D approach, we treat each byte as an integer. The values are pla
 
 This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019] [@Pizzolotto2021].
 
+#### Input size and file splitting
+
+Since the size of the files in our datasets vary greatly, we need a way to handle varying file sizes. When training our model, we want each data instance to be of a fixed size. We want to use an input size as small as possible for efficiency reasons, while being large enough to capture enough information. In addition, picking an input size as small as possible ensures that most of our files are large enough to fill the entire input vector without padding.
+
+For the one-dimensional models, we pick an input size of 512 bytes. We choose this number based on preliminary testing, which revealed that input sizes larger than 512 bytes did not improve model performance.
+
+For the small two-dimensional models, we use an input size of 32x16. This matches the 512-byte input size for the one-dimensional models. In addition, we hypothesize that using a width of 32 bytes might improve the models' ability to detect repeating patterns, since many programs use an instruction width of 32. For the models based on ResNet, we use an input size of 32x32 (which gives 1024 bytes), since this architecture is designed for square images.
+
+For the few files that are smaller than the pre-determined input size, we choose to exclude them from training instead of padding them to fit the input size. For files larger than the input size $I$, only the first $I$ bytes from the file is used. For the custom dataset we developed, which contains few, but rather large files, we also use file splitting to increase the number of training instances. Given a file of size $F$ and a model input size of $I$, each file is divided into $\lfloor F/I \rfloor$ instances.
+
 ### Model architectures
 
 In our experiments, we train, evaluate, and compare the model architectures outlined in this subsection.
