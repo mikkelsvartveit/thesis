@@ -108,9 +108,6 @@ set(CMAKE_AR ${TARGET}-ar)
 set(CMAKE_RANLIB ${TARGET}-ranlib)
 set(CMAKE_STRIP ${TARGET}-strip)
 
-#add_compile_options(-mel -Wa,-EL)
-#add_link_options(-mel -Wa,-EL)
-
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-shlib-undefined -Wl,--unresolved-symbols=ignore-all")
 EOF
 

@@ -26,6 +26,13 @@ content = re.sub(r'<!--[\s\S]*?-->', '', content)
 # 3. Followed by zero or more data rows
 content = re.sub(r'^(?:[ \t]*)(\|.+\|)[ \t]*(?:\r?\n|\r)(?:[ \t]*)(\|[-:| ]+\|)[ \t]*(?:\r?\n|\r)(?:(?:[ \t]*)(?:\|.+\|)[ \t]*(?:\r?\n|\r))*', '', content, flags=re.MULTILINE)
 
+# Remove LaTeX table environments
+# Remove everything between \begin{longtable} and \end{longtable}
+content = re.sub(r'begin\{longtable\}[\s\S]*?end\{longtable\}', '', content)
+
+# Remove everything between \begin{table} and \end{table}
+content = re.sub(r'begin\{table\}[\s\S]*?end\{table\}', '', content)
+
 # Count and print words 
 print(len(content.split()))
 "
