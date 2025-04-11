@@ -9,10 +9,27 @@
 # Function to get word count for a file
 get_word_count() {
     local file="$1"
-    #wc -w "$file" | awk '{print $1}'
-    python3 -c "import re; print(len(re.sub(r'<!--[\s\S]*?-->', '', open('$file').read()).split()))"
-}
+    python3 -c "
+import re
 
+# Read the file
+with open('$file') as f:
+    content = f.read()
+
+# Remove HTML comments
+content = re.sub(r'<!--[\s\S]*?-->', '', content)
+
+# Remove markdown tables
+# This pattern matches:
+# 1. A line starting with optional whitespace followed by a pipe-delimited row
+# 2. Followed by a line with the separator row (pipes, hyphens, colons)
+# 3. Followed by zero or more data rows
+content = re.sub(r'^(?:[ \t]*)(\|.+\|)[ \t]*(?:\r?\n|\r)(?:[ \t]*)(\|[-:| ]+\|)[ \t]*(?:\r?\n|\r)(?:(?:[ \t]*)(?:\|.+\|)[ \t]*(?:\r?\n|\r))*', '', content, flags=re.MULTILINE)
+
+# Count and print words 
+print(len(content.split()))
+"
+}
 # Go to content directory
 cd content || exit 1
 

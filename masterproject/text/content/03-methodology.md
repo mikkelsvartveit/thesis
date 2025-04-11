@@ -176,30 +176,35 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 ## Developing a custom dataset
 
-In this thesis we present the **BuildCross** dataset, a part of our contributions to the field. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream ISA's. We believe this dataset alone will not provide a representative group when aiming to develop models that are supposed to be architecture agnostic. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertancies with labeling of the dataset makes it unsuited to train larger ML models on. We developed the BuildCross dataset with the goal of bridging the gap between ISAdetect and CpuRec, aiming to generate a larger volume of binary code for the underrepresented less popular architectures.
+In this thesis we present the **BuildCross** dataset, a part of our contributions to the field. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream ISA's. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume from each one and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. We developed the BuildCross dataset with the goal of bridging the gap between ISAdetect and CpuRec, aiming to generate a larger volume of binary code for the underrepresented less popular architectures.
 
-We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of CpuRec and ISAdetect [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this and to produce a well documented, correctly labeled dataset we decided to compile binary programs for these exotic architectures using cross compilation with GNU Compiler Collection (GCC) and GNU Binutils. In this section we
+We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of CpuRec and ISAdetect [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with GNU Compiler Collection (GCC) and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
-### Pipeline for devoloping toolchains
+### Pipeline for developing toolchains
 
-- Not all toolchains are publically available
-- Exists systems for building toolchains, our choice landed on BuildCross.sh
-- containerized for portability, size optim and reproducebility
--
+- Not all toolchains are publicly available
+- Exists systems for building toolchains, our choice landed on BuildCross.
+- containerized for portability, size optim and reproducibility
+
+In order to generate binary programs for specific ISA, we need a cross compiler that can run on our host system and target that architecture. While common targets like x86, arm and mips systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to get working properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on the GNU Compiler Collection and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
+
+A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of GCC, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by the user mikpe on github, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures. We expanded the script with support for additional architectures, and the buildcross project was used as a base for our own toolchain building scripts.
+
+The BuildCross project uses singularity images to create a containerized, reproducible and portable cross compilation environments for the supported architectures. The GCC source code suite with its extensions is ~15GB, and in order to reduce build space and time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate image of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
 
-- CMAKE, Ease of consistant configuring of programs before compilation
+- CMAKE, Ease of consistent configuring of programs before compilation
 - Easily add compiler flags, architecture specific tweaks
 - these toolchain configs can be consistent across libraries, one config for all libraries, allows better scaling for volume.
-- Easelly add more libraries down the line
+- Easily add more libraries down the line
 
 ### Gathering results
 
 - Compile toolchains, install and get .a Files
-- Use objdump and objcopy from the compiled toolchains to exract code sections, and disassemble code
+- Use objdump and objcopy from the compiled toolchains to extract code sections, and disassemble code
 - Get architectural features from elf header, manually create features for instruction width based off of assembly
-- Create lables.csv, report.csv/txt and tar.gz with dataset
+- Create labels.csv, report.csv/txt and tar.gz with dataset
 
 ### Results:
 

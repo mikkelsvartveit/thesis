@@ -89,20 +89,64 @@ TODO: As portabilitiy increased, so did abstraction away from executables. witho
 
 #### Embedded targets and cross compilation
 
-- Embedded systems def, why they are useful
-  - Usually specialized machines, optimized for specific tasks. (usually aims for power efficiency)
-  - Everything from refrigerators to routers to dings and bums
-  - Embedded and bare metal
-  - limitations (leading to cross compilation)
-- Cross compilation
-  - Host, Build, Target
-  - Toolchain
+Embedded systems are specialized computing devices integrated within larger systems to perform dedicated functions. Unlike general-purpose computers, embedded systems are designed for specific tasks and are typically optimized for reliability, power efficiency, and cost-effectiveness. These systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of Internet of Things (IoT) devices.
 
-#### GNU Compiler Collection
+Most embedded systems are characterized by:
 
-- GCC and binutils
-- important components, how they fit together (gcc ld ar as )
-- target triple
+- **Resource constraints**: Limited memory, processing power, and energy capacity
+- **Real-time requirements**: Strict timing constraints for task completion
+- **Limited or no user interface**: Often headless systems controlled programmatically
+- **Specialized hardware**: Custom processors and peripherals optimized for specific tasks
+
+These specialized systems frequently use architectures different from standard desktop or server computers, which presents unique challenges for software development. Due to these constraints, it's often impractical or impossible to compile code directly on the target device, necessitating cross-compilation.
+
+##### Cross-compilation
+
+Cross-compilation is the process of generating executable code for a platform (target) different from the one running the compiler (host). This approach allows developers to use powerful development systems to create software for resource-constrained target devices.
+
+In cross-compilation terminology:
+
+- **Host system**: The computer system where compilation occurs
+- **Target system**: The system where the compiled code will eventually run
+- **Build system**: The system where the compiler itself was built (often the same as the host system)
+
+A cross-compiler toolchain is a collection of software tools necessary to build executables for a target system. A complete toolchain typically includes:
+
+- **Compiler**: Converts source code to machine code (e.g., GCC or Clang)
+- **Binary utilities (Binutils)**: Tools for creating and managing binary files
+- **C/C++ standard library**: Provides standard functions and data structures
+- **Debugger**: Helps identify and fix issues in the compiled program
+
+##### GNU Compiler Collection and Binutils
+
+The GNU Compiler Collection (GCC) is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. GCC can generate code for a wide range of processor architectures, making it particularly valuable for cross-compilation.
+
+GNU Binutils is a collection of binary tools that work alongside compilers to create and manage executables. Key components include:
+
+- **as**: The GNU assembler, which converts assembly language to machine code
+- **ld**: The GNU linker, which combines object files into executables or libraries
+- **ar**: Creates, modifies, and extracts from archives (static libraries)
+- **objcopy**: Copies and translates object files between formats
+- **objdump**: Displays information about object files, including disassembly
+- **readelf**: Displays information about ELF format files
+
+##### Binary file formats and structures
+
+Understanding binary file formats is essential for reverse engineering and dataset creation:
+
+- **ELF (Executable and Linkable Format)**: The standard file format for executables, object files, shared libraries, and core dumps on Unix-like systems. ELF provides a structured way to organize code, data, and metadata.
+
+- **Code sections**: Binary executables separate different types of content into sections:
+
+  - **.text**: Contains the executable code (machine instructions)
+  - **.data**: Contains initialized global variables
+  - **.bss**: Contains uninitialized global variables
+  - **.rodata**: Contains read-only data like string literals
+  - **.symtab**: Symbol table with function and variable names
+
+- **Object files**: Compiled source code files that contain machine code but are not yet executable. They must be linked together to create complete programs.
+
+- **Static libraries (.a files)**: Collections of object files bundled together for easier reuse and distribution. When a program is linked against a static library, the necessary object code is copied into the final executable.
 
 ## Software reverse engineering
 
