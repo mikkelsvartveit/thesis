@@ -48,6 +48,8 @@ header-includes:
   - \usepackage{array}
   - \usepackage[all]{nowidow}
   - \usepackage[nohyperlinks]{acronym}
+  - \usepackage{dirtree}
+  - \usepackage{xcolor}
 ---
 
 # Acronyms {-}

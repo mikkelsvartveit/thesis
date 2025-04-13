@@ -178,17 +178,17 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 This thesis introduces BuildCross, a toolset and dataset representing a significant contribution to the field. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream ISA's. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance aiming to generate a larger volume of binary code for the underrepresented less popular architectures.
 
-We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of CpuRec and ISAdetect [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with GNU Compiler Collection (GCC) and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
+We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with GNU Compiler Collection (GCC) and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
 \begin{longtable}[c]{p{2cm}p{1.5cm}p{12cm}}
 \caption{Source libraries used to compile and generate the BuildCross dataset \label{table:buildcross-dataset-libraries}} \\
 \toprule
 Library & Version & Description \\
 \midrule
-\endhead
+\endfirsthead
 
 \bottomrule
-\endfoot
+\endlastfoot
 
 freetype & 2.13.3 & A software library for rendering fonts. It's widely used for high-quality text rendering in applications, providing support for TrueType, OpenType, and other font formats. \\
 
@@ -228,19 +228,56 @@ When using the compiled toolchains, we have to overcome the challenge of configu
 
 The libraries we selected for our dataset are widely used and have a large codebase, which provides a good representation of real-world code. By compiling these libraries, we can ensure that the generated binaries are representative of actual software applications. This is important for training and evaluating our models, as it allows us to assess their performance on realistic data. Additionally, using well-known libraries helps us avoid potential issues with licensing and distribution, as these libraries are commonly used in open-source projects. By compiling these libraries for the target architectures, we can create a diverse dataset that covers a wide range of instruction sets and architectural features. With the only requirement that the libraries support CMake, the BuildCross suite supports adding more libraries to the dataset in the future.
 
-The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and manually patching the libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Missing symbol information and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. However not all libraries could be compiled for all architectures, which explains the discrepancies in the amount of data between the architectures.
+The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and manually patching the libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in a reasonable time frame, which explains the discrepancies in the amount of data between the architectures.
 
 <!-- - CMAKE, Ease of consistent configuring of programs before compilation
 - Easily add compiler flags, architecture specific tweaks
 - these toolchain configs can be consistent across libraries, one config for all libraries, allows better scaling for volume.
 - Easily add more libraries down the line -->
 
-### Gathering results
-
-- Compile toolchains, install and get .a Files
+<!-- - Compile toolchains, install and get .a Files
 - Use objdump and objcopy from the compiled toolchains to extract code sections, and disassemble code
 - Get architectural features from elf header, manually create features for instruction width based off of assembly
-- Create labels.csv, report.csv/txt and tar.gz with dataset
+- Create labels.csv, report.csv/txt and tar.gz with dataset -->
+
+### Gathering results
+
+The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in ELF format, providing functions utilities other programs can link to.
+
+Using the GNU Binutils toolkit from our compiled toolchains, we employed the archiver (ar) to extract individual object files, objcopy to isolate code sections from these objects, and objdump to generate disassembly. This process yielded our core dataset of compiled code sections across all target architectures.
+
+For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's ELF headers. However, determining instruction width proved more challenging due to inconsistent documentation across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
+
+The final dataset spans X architectures with approximately Y MB of binary code. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
+
+The dataset is distributed as a tar.gz file with the following structure:
+
+```{=latex}
+\begin{figure}[h]
+\begin{minipage}{\textwidth}
+\dirtree{%
+.1 \textbf{buildcross\_dataset.tar.gz.}.
+.2 library\_files/ (Full compiled libraries).
+.3 arc/.
+.3 bfin/.
+.3 (\ldots).
+.2 text\_asm/ (Decompiled code sections of libraries).
+.3 arc/.
+.3 bfin/.
+.3 (\ldots).
+.2 text\_bin/ (Raw binary of code sections).
+.3 arc/.
+.3 bfin/.
+.3 (\ldots).
+.2 labels.csv (Dataset labels for endianness, wordsize and instruction width).
+.2 report.csv (Code section file-sizes for each library in csv format).
+.2 report.txt (Code section file-sizes for each library in text format).
+}
+\end{minipage}
+\end{figure}
+```
+
+The labels.csv file contains architecture metadata including endianness, wordsize and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries.
 
 ### Results:
 

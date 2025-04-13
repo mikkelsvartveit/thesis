@@ -56,13 +56,14 @@ for obj in $TEMP_DIR/*.o $TEMP_DIR/*.obj; do
         for section in $code_sections; do
             temp_section_bin="$TEMP_DIR/$objname-$section.bin"
             
-            # Extract section to temporary file
+            # Extract raw binary data from the section, if the section exists
             if ${TARGET}-objcopy -O binary --only-section="$section" "$obj" "$temp_section_bin" 2>/dev/null; then
                 if [ -s "$temp_section_bin" ]; then
                     cat "$temp_section_bin" >> "$obj_bin"
                 fi
             fi
-
+            
+            # Disassemble the section and append to the assembly file
             if ${TARGET}-objcopy -S --only-section="$section" "$obj" "$temp_section_bin" 2>/dev/null; then
                 if [ -s "$temp_section_bin" ]; then
                     ${TARGET}-objdump -d "$temp_section_bin" >> "results/text_asm/$arch/$filename.asm"
