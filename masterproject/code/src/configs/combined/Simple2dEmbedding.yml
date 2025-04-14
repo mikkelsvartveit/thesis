@@ -1,0 +1,43 @@
+data:
+  name: CombinedDataset
+  params:
+    isadetect_dataset_path: ISAdetect/ISAdetect_full_dataset/
+    buildcross_dataset_path: buildcross/text_bin
+    isadetect_feature_csv_path: ISAdetect-features.csv
+    buildcross_feature_csv_path: buildcross/labels.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    use_code_only: True
+    isadetect_max_file_splits: 1
+    buildcross_max_file_splits: 10000
+
+testing_data:
+  name: CpuRecDataset
+  params:
+    dataset_path: cpu_rec/cpu_rec_corpus
+    feature_csv_path: cpu_rec-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+
+transforms:
+  name: Vector1D
+  params:
+    length: 512
+
+model:
+  name: Simple2dEmbedding
+  params:
+    num_classes: 2
+    dropout_rate: 0.3
+
+validator:
+  name: train_test_separate_datasets
+  wandb_project_name: Simple2dEmbedding
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2

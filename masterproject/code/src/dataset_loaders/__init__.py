@@ -4,6 +4,7 @@ from .ISAdetectDataset import *
 from .ISAdetectEndiannessCounts import *
 from .CpuRecDataset import *
 from .BuildCrossDataset import *
+from .CombinedDataset import *
 
 
 def get_dataset(
@@ -12,11 +13,11 @@ def get_dataset(
     dataset_name = kwargs["name"]
 
     params = kwargs["params"].copy()
-    params["dataset_path"] = Path(dataset_base_path) / Path(params["dataset_path"])
-    if "feature_csv_path" in params:
-        params["feature_csv_path"] = Path(dataset_base_path) / Path(
-            params.get("feature_csv_path")
-        )
+
+    # Prepend dataset_base_path to all relevant paths
+    for key in list(params.keys()):
+        if key.endswith("dataset_path") or key.endswith("csv_path"):
+            params[key] = Path(dataset_base_path) / Path(params[key])
 
     if dataset_name == "MipsMipselDataset":
         return MipsMipselDataset(transform=transform, **params)
@@ -34,6 +35,12 @@ def get_dataset(
         )
     elif dataset_name == "BuildCrossDataset":
         return BuildCrossDataset(
+            transform=transform,
+            target_feature=target_feature,
+            **params,
+        )
+    elif dataset_name == "CombinedDataset":
+        return CombinedDataset(
             transform=transform,
             target_feature=target_feature,
             **params,
