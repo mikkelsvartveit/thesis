@@ -13,6 +13,7 @@ ARCH_TARGET_LIST=(
     "arc:arc-unknown-linux-gnu" # ARCompact v2 basicallly (ARCv2)
     "arceb:arceb-unknown-elf" 
     "bfin:bfin-unknown-linux-uclibc"
+    "bpf:bpf-unknown-none"
     "c6x:c6x-unknown-uclinux"
     "cr16:cr16-unknown-elf"
     "cris:crisv32-unknown-linux-uclibc"

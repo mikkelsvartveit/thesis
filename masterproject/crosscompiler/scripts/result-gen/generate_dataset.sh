@@ -24,13 +24,21 @@ for arch_dir in output/*/; do
         arch=$(basename "$arch_dir")
         echo "arch_dir: $arch_dir"
             
+        mapfile -t lib_files < <(find "$arch_dir" -path "*install*" -name "*.a" | sort)
+    
+        # Skip if no library files found
+        if [ ${#lib_files[@]} -eq 0 ]; then
+            echo "  $arch: no library files found, skipping..."
+            # Log the failed architecture with timestamp and reason
+            echo -e "$arch:\n\tNo library files found in $arch_dir\n" >> "results/failed_architectures.txt"
+            continue
+        fi
+        
         # Create architecture-specific result directories
         mkdir -p "results/library_files/$arch"
         mkdir -p "results/text_bin/$arch"
         mkdir -p "results/text_asm/$arch"
         
-        mapfile -t lib_files < <(find "$arch_dir" -path "*install*" -name "*.a" | sort)
-    
         for file in "${lib_files[@]}"; do
         (
             # Get just the filename without the path
@@ -45,7 +53,6 @@ for arch_dir in output/*/; do
                 fi
             done
             if [ $skip -eq 0 ]; then
-                
             
                 echo "  $arch: processing library $filename"
                 
@@ -95,6 +102,11 @@ instruction_width_map() {
             width="16/32"
             width_type="mixed"
             comment="Blackfin"
+            ;;
+        "bpf")
+            width="64"
+            width_type="fixed"
+            comment="Only exampleprogram, little data"
             ;;
         "c6x")
             width="32"

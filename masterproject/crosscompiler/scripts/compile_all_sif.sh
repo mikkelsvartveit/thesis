@@ -17,6 +17,7 @@ LIBRARIES=(
   "libyaml:0.2.5"
   "libwebp:1.5.0"
   "libgit2:1.9.0"
+  "exampleprograms:1"
   # "libxml2:2.14"
 )
 

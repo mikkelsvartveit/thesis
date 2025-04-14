@@ -2,6 +2,7 @@ architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
 arc;little;32;mixed;16/32;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
 arceb;big;32;mixed;16/32;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
 bfin;little;32;mixed;16/32;Blackfin
+bpf;little;64;fixed;64;Only exampleprogram, little data
 c6x;big;32;fixed;32;
 cr16;little;32;mixed;16/32;
 cris;little;32;mixed;16/32;
