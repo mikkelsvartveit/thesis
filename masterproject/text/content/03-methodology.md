@@ -223,6 +223,7 @@ A full cross-compiler toolchain have a lot of moving parts, and since a lot of a
 The BuildCross project uses singularity images to create containerized, reproducible and portable cross compilation environments for the supported architectures. The GCC suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
+<!-- TODO: should we cite CMake? -->
 
 When using the compiled toolchains, we have to overcome the challenge of configuring each library for compilation to the target architecture. Instead of manually configuring each library for each architecture, we used the build system CMake and toolchain configuration files to automate the process. CMake is a widely used build system that simplifies the process of configuring and generating build files for different platforms and compilers. It allows us to specify the target architecture, compiler, linker, and other build options in a platform-independent way, only requiring one toolchain file per architecture. While most architectures could use a common template toolchain file, CMake made it straightforward to implement the specific configurations needed for architectures with unique requirements.
 
@@ -230,16 +231,6 @@ The libraries we selected for our dataset are widely used and have a large codeb
 
 The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
 
-<!-- - CMAKE, Ease of consistent configuring of programs before compilation
-- TODO: should we cite CMake?
-- Easily add compiler flags, architecture specific tweaks
-- these toolchain configs can be consistent across libraries, one config for all libraries, allows better scaling for volume.
-- Easily add more libraries down the line -->
-
-<!-- - Compile toolchains, install and get .a Files
-- Use objdump and objcopy from the compiled toolchains to extract code sections, and disassemble code
-- Get architectural features from elf header, manually create features for instruction width based off of assembly
-- Create labels.csv, report.csv/txt and tar.gz with dataset -->
 
 ### Gathering results
 

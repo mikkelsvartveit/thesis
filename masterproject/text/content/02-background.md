@@ -81,43 +81,27 @@ The instruction width refers to the size, typically measured in bits, of a singl
 
 Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like the C compiler) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many different computer architectures.
 
-The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. However, this portability has required greater abstractions away from the binary programs themselves, and this combined with other transformations done by compilers increasingly widened the gap between the original source code and the binary executable. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted, at the cost of making it more difficult to understand what a binary program does.
+The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. However, this combined with other transformations done by compilers increasingly widened the gap between the original source code and the binary executable. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted, at the cost of making it more difficult to understand what a binary program does.
 
 <!--
 TODO: As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
  -->
 
-#### Embedded targets and cross compilation
+### Embedded targets and cross-compilation
 
-Embedded systems are specialized computing devices integrated within larger systems to perform dedicated functions. Unlike general-purpose computers, embedded systems are designed for specific tasks and are typically optimized for reliability, power efficiency, and cost-effectiveness. These systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of Internet of Things (IoT) devices.
+Embedded systems are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Unlike general-purpose computers, embedded systems designed for specific tasks ARE therefore typically optimized for reliability, power efficiency, and cost-effectiveness. These embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of Internet of Things (IoT) devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface, operating as headless systems controlled programmatically.
 
-Most embedded systems are characterized by:
+Since these specialized systems frequently use custom hardware with \acp{ISA} different from standard desktop or server computers, they present unique challenges for software development. Unlike general-purpose computers, which are often used to create programs for the same platform it is built on, it's often impractical or impossible to compile code directly on the target device. Developers typically have to use a technique called cross-compilation to build software for embedded systems.
 
-- **Resource constraints**: Limited memory, processing power, and energy capacity
-- **Real-time requirements**: Strict timing constraints for task completion
-- **Limited or no user interface**: Often headless systems controlled programmatically
-- **Specialized hardware**: Custom processors and peripherals optimized for specific tasks
-
-These specialized systems frequently use architectures different from standard desktop or server computers, which presents unique challenges for software development. Due to these constraints, it's often impractical or impossible to compile code directly on the target device, necessitating cross-compilation.
-
-##### Cross-compilation
+#### Cross-compilation
 
 Cross-compilation is the process of generating executable code for a platform (target) different from the one running the compiler (host). This approach allows developers to use powerful development systems to create software for resource-constrained target devices.
 
-In cross-compilation terminology:
+In cross-compilation terminology, three distinct systems are involved in the process. The host system is the computer system where compilation of programs occurs, providing the computational resources needed for the build process. The target system is where the compiled code will eventually run, often with limited resources that would make direct compilation impractical. The build system refers to the system where the compiler itself was built, which is frequently the same as the host system in most development scenarios.
 
-- **Host system**: The computer system where compilation occurs
-- **Target system**: The system where the compiled code will eventually run
-- **Build system**: The system where the compiler itself was built (often the same as the host system)
+A cross-compiler toolchain is a collection of software tools necessary to build executables for a target system. A complete toolchain consists of several key components working together. The compiler, such as GCC or Clang, serves as the core tool that converts source code to machine code appropriate for the target architecture. Binary utilities (like Binutils) provide essential tools for creating and managing binary files across different architectures. The C/C++ standard library supplies standard functions and data structures optimized for the target system, while a debugger helps identify and fix issues in the compiled program, often supporting remote debugging capabilities for target hardware.
 
-A cross-compiler toolchain is a collection of software tools necessary to build executables for a target system. A complete toolchain typically includes:
-
-- **Compiler**: Converts source code to machine code (e.g., GCC or Clang)
-- **Binary utilities (Binutils)**: Tools for creating and managing binary files
-- **C/C++ standard library**: Provides standard functions and data structures
-- **Debugger**: Helps identify and fix issues in the compiled program
-
-##### GNU Compiler Collection and Binutils
+#### GNU Compiler Collection and Binutils
 
 The GNU Compiler Collection (GCC) is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. GCC can generate code for a wide range of processor architectures, making it particularly valuable for cross-compilation.
 
@@ -130,7 +114,7 @@ GNU Binutils is a collection of binary tools that work alongside compilers to cr
 - **objdump**: Displays information about object files, including disassembly
 - **readelf**: Displays information about ELF format files
 
-##### Binary file formats and structures
+#### Binary file formats and structures
 
 Understanding binary file formats is essential for reverse engineering and dataset creation:
 
