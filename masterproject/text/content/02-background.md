@@ -101,18 +101,24 @@ In cross-compilation terminology, three distinct systems are involved in the pro
 
 A cross-compiler toolchain is a collection of software tools necessary to build executables for a target system. A complete toolchain consists of several key components working together. The compiler, such as GCC or Clang, serves as the core tool that converts source code to machine code appropriate for the target architecture. Binary utilities (like Binutils) provide essential tools for creating and managing binary files across different architectures. The C/C++ standard library supplies standard functions and data structures optimized for the target system, while a debugger helps identify and fix issues in the compiled program, often supporting remote debugging capabilities for target hardware.
 
-#### GNU Compiler Collection and Binutils
+#### GNU Compiler Collection and GNU Binutils
 
-The GNU Compiler Collection (GCC) is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. GCC can generate code for a wide range of processor architectures, making it particularly valuable for cross-compilation.
+The GNU Compiler Collection (GCC) is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. GCC started out as the GNU C Compiler in 1987, but was later renamed as it expanded to support more languages. GCC is designed to be highly portable, and can be built to run on various operating systems and hardware architectures. It features a modular design, with different front ends for different programming languages and backends to generate code for a wide range of \acp{ISA}. GCC by itself takes in an input file in supported languages like C and outputs assembly for the target architecture. Each instance of a GCC compiler is configured to target a specific architecture, and this flexibility allows developers compile versions of GCC to build software for different platforms.
 
-GNU Binutils is a collection of binary tools that work alongside compilers to create and manage executables. Key components include:
+GCC is not able to create working executables by itself however, as behind the scenes GCC sets up a pipeline consisting of different tools in order to create executable programs. A common pairing to set up this pipeline with the core GCC is GNU Binutils, which is a collection of binary program tools that is designed to work alongside compilers to create and manage executables. Some key components of Binutils include:
 
 - **as**: The GNU assembler, which converts assembly language to machine code
-- **ld**: The GNU linker, which combines object files into executables or libraries
-- **ar**: Creates, modifies, and extracts from archives (static libraries)
+- **ld**: The GNU linker, which combines machine code files into executables or libraries
+- **ar**: Creates, modifies, and extracts from archive files (static libraries)
 - **objcopy**: Copies and translates object files between formats
 - **objdump**: Displays information about object files, including disassembly
 - **readelf**: Displays information about ELF format files
+
+When invoking GCC to create a final executable, the compiler automatically calls the appropriate Binutils tools to create the final executable. An illustration of this can be seen in \autoref{fig:gcc-binutils-pipeline}. Since the final executable depends on the target system, the GCC compiler and Binutils tools must be configured to target the same architecture. This is typically done by specifying the target architecture when building the toolchain, after which the GCC compiler will then the appropriate Binutils tools to generate the final executable for that architecture.
+
+![Illustration of how the GCC with binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/gnu-gcc-binutils-pipeline.svg)
+
+All of The GNU Projects are distributed under the GNU General Public License (GPL), which allows users to freely use, modify, and distribute the software. This has made GCC and Binutils widely adopted in open-source projects and embedded systems development.
 
 #### Binary file formats and structures
 

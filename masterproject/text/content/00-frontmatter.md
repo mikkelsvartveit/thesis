@@ -54,6 +54,7 @@ header-includes:
 
 # Acronyms {-}
 
+```{=latex}
 \begin{acronym}
 \acro{CISC}[CISC]{Complex Instruction Set Computing}
 \acro{CNN}[CNN]{Convolutional Neural Network}
@@ -65,3 +66,4 @@ header-includes:
 \acro{NTNU}[NTNU]{the Norwegian University of Science and Technology}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}
 \end{acronym}
+```

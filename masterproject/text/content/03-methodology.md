@@ -180,6 +180,7 @@ This thesis introduces BuildCross, a toolset and dataset representing a signific
 
 We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with GNU Compiler Collection (GCC) and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
+```{=latex}
 \begin{longtable}[c]{p{2cm}p{1.5cm}p{12cm}}
 \caption{Source libraries used to compile and generate the BuildCross dataset \label{table:buildcross-dataset-libraries}} \\
 \toprule
@@ -209,6 +210,7 @@ xzutils & 1 & A set of compression utilities based on the LZMA algorithm. The XZ
 zlib & 1.3 & A software library used for data compression. It provides lossless data-compression functions and is widely used in many software applications for compressing data, including PNG image processing. \\
 
 \end{longtable}
+```
 
 ### Pipeline for developing toolchains
 
@@ -223,6 +225,7 @@ A full cross-compiler toolchain have a lot of moving parts, and since a lot of a
 The BuildCross project uses singularity images to create containerized, reproducible and portable cross compilation environments for the supported architectures. The GCC suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
+
 <!-- TODO: should we cite CMake? -->
 
 When using the compiled toolchains, we have to overcome the challenge of configuring each library for compilation to the target architecture. Instead of manually configuring each library for each architecture, we used the build system CMake and toolchain configuration files to automate the process. CMake is a widely used build system that simplifies the process of configuring and generating build files for different platforms and compilers. It allows us to specify the target architecture, compiler, linker, and other build options in a platform-independent way, only requiring one toolchain file per architecture. While most architectures could use a common template toolchain file, CMake made it straightforward to implement the specific configurations needed for architectures with unique requirements.
@@ -231,18 +234,17 @@ The libraries we selected for our dataset are widely used and have a large codeb
 
 The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
 
-
 ### Gathering results
 
 The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in ELF format, providing functions utilities other programs can link to.
 
 Using the GNU Binutils toolkit from our compiled toolchains, we employed the archiver (ar) to extract individual object files, objcopy to isolate code sections from these objects, and objdump to generate disassembly. This process yielded our core dataset of compiled code sections across all target architectures.
 
-For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's ELF headers. However, determining instruction width proved more challenging due to inconsistent documentation across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
+For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's ELF headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
 
 ### Results
 
-The final dataset spans X architectures with approximately Y MB of binary code. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
+The final dataset spans X architectures with approximately Y MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
 
 The dataset is distributed as a tar.gz file with the following structure:
 
@@ -271,9 +273,9 @@ The dataset is distributed as a tar.gz file with the following structure:
 \end{figure}
 ```
 
-The labels.csv file contains architecture metadata including endianness, wordsize and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries. A copy of the labels.csv file is included in \autoref{table:buildcross-dataset-labels}.
+The labels.csv file contains architecture metadata including endianness, wordsize and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries. The data from the labels.csv file is presented in \autoref{table:buildcross-dataset-labels}.
 
-Table: Labels for BuildCross dataset, in addition to code section sizes extracted for each architecture \label{table:buildcross-dataset-labels}
+Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented feature values for endianness, wordsize, instructionswidth_type and instructionswidth. Also includes code section sizes extracted for each architecture \label{table:buildcross-dataset-labels}
 
 | architecture | endianness | wordsize | instructionwidth_type | instructionwidth | total size (kb) |
 | ------------ | ---------- | -------- | --------------------- | ---------------- | --------------- |
