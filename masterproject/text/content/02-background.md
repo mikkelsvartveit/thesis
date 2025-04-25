@@ -14,7 +14,7 @@ All computer software boils down to a series of bytes readable by the CPU. The b
 
 ### Instruction set architectures
 
-An \ac{ISA} is a contract between hardware and software on how binary code should be run a given computer. In the early days, every new computer system were created with a new \ac{ISA}, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the \ac{ISA} as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all System/360 computers could run the same programs as they shared a common \ac{ISA}. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established \acp{ISA}, ensuring cross generational program compatibility.
+An \ac{ISA} is a contract between hardware and software on how binary code should be run on a given computer. In the early days, every new computer system was created with a new \ac{ISA}, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the \ac{ISA} as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all System/360 computers could run the same programs as they shared a common \ac{ISA}. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established \acp{ISA}, ensuring cross generational program compatibility.
 
 In addition to defining an instruction set, the \ac{ISA} gives a complete specification about how software interfaces with hardware, including how instructions can be combined, memory organization and addressing, supported data types, memory consistency models, and interrupt handling. Examples of well‐known \ac{ISA} families are x86, ARM, and RISC-V. Compilers can typically target multiple \acp{ISA}, allowing the same high‐level source code to be executed on different architectures through appropriate translation to the target instruction set.
 
@@ -28,9 +28,13 @@ An important part of all \acp{ISA} is the instruction set, which defines the bin
 
 #### Word size
 
+<!-- TODO: Elaborate how it is not clearly defined, could be reffering to register width, addressable memory space size, datapath width in the cpu, ALU input width. In earlier architectures, likely used in marketing aswell -->
+
 A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities.
 
 #### Endianness {#background-endianness}
+
+<!-- TODO: explain different types of endianness seen in diff archs -->
 
 The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{tab:endianness}.
 
@@ -79,17 +83,14 @@ The instruction width refers to the size, typically measured in bits, of a singl
 
 ### Compilers
 
-Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like the C compiler) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many different computer architectures.
+Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like the C compiler) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many computer architectures.
 
 The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. However, this combined with other transformations done by compilers increasingly widened the gap between the original source code and the binary executable. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted, at the cost of making it more difficult to understand what a binary program does.
 
-<!--
-TODO: As portabilitiy increased, so did abstraction away from executables. without access to the original source code, it is dificult to understand waht a binary program does. Hint at motivation behind reverse engineering.
- -->
 
 ### Embedded targets and cross-compilation
 
-Embedded systems are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Unlike general-purpose computers, embedded systems designed for specific tasks ARE therefore typically optimized for reliability, power efficiency, and cost-effectiveness. These embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of Internet of Things (IoT) devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface, operating as headless systems controlled programmatically.
+Embedded systems are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Unlike general-purpose computers, embedded systems designed for specific tasks are therefore typically optimized for reliability, power efficiency, and cost-effectiveness. These embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of \ac{IoT} devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface, operating as headless systems controlled programmatically.
 
 Since these specialized systems frequently use custom hardware with \acp{ISA} different from standard desktop or server computers, they present unique challenges for software development. Unlike general-purpose computers, which are often used to create programs for the same platform it is built on, it's often impractical or impossible to compile code directly on the target device. Developers typically have to use a technique called cross-compilation to build software for embedded systems.
 
@@ -103,9 +104,9 @@ A cross-compiler toolchain is a collection of software tools necessary to build 
 
 #### GNU Compiler Collection and GNU Binutils
 
-The GNU Compiler Collection (GCC) is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. GCC started out as the GNU C Compiler in 1987, but was later renamed as it expanded to support more languages. GCC is designed to be highly portable, and can be built to run on various operating systems and hardware architectures. It features a modular design, with different front ends for different programming languages and backends to generate code for a wide range of \acp{ISA}. GCC by itself takes in an input file in supported languages like C and outputs assembly for the target architecture. Each instance of a GCC compiler is configured to target a specific architecture, and this flexibility allows developers compile versions of GCC to build software for different platforms.
+The \ac{GCC} is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. \ac{GCC} started out as the GNU C Compiler in 1987, but was later renamed as it expanded to support more languages. \ac{GCC} is designed to be highly portable, and can be built to run on various operating systems and hardware architectures. It features a modular design, with different front ends for different programming languages and backends to generate code for a wide range of \acp{ISA}. \ac{GCC} by itself takes in an input file in supported languages like C and outputs assembly for the target architecture. Each instance of a \ac{GCC} compiler is configured to target a specific architecture, and this flexibility allows developers compile versions of \ac{GCC} to build software for different platforms.
 
-GCC is not able to create working executables by itself however, as behind the scenes GCC sets up a pipeline consisting of different tools in order to create executable programs. A common pairing to set up this pipeline with the core GCC is GNU Binutils, which is a collection of binary program tools that is designed to work alongside compilers to create and manage executables. Some key components of Binutils include:
+\ac{GCC} is not able to create working executables by itself however, as behind the scenes \ac{GCC} sets up a pipeline consisting of different tools in order to create executable programs. A common pairing to set up this pipeline with the core \ac{GCC} is GNU Binutils, which is a collection of binary program tools that is designed to work alongside compilers to create and manage executables. Some key components of Binutils include:
 
 - **as**: The GNU assembler, which converts assembly language to machine code
 - **ld**: The GNU linker, which combines machine code files into executables or libraries
@@ -114,29 +115,33 @@ GCC is not able to create working executables by itself however, as behind the s
 - **objdump**: Displays information about object files, including disassembly
 - **readelf**: Displays information about ELF format files
 
-When invoking GCC to create a final executable, the compiler automatically calls the appropriate Binutils tools to create the final executable. An illustration of this can be seen in \autoref{fig:gcc-binutils-pipeline}. Since the final executable depends on the target system, the GCC compiler and Binutils tools must be configured to target the same architecture. This is typically done by specifying the target architecture when building the toolchain, after which the GCC compiler will then the appropriate Binutils tools to generate the final executable for that architecture.
+When invoking \ac{GCC} to create a final executable, the compiler automatically calls the appropriate Binutils tools to create the final executable, and an illustration of this pipeline can be seen in \autoref{fig:gcc-binutils-pipeline}. Since the final executable depends on the target system, the \ac{GCC} compiler and Binutils tools must be configured to target the same architecture. This is typically done by specifying the target architecture when building the toolchain, after which the \ac{GCC} compiler will use the appropriate Binutils tools to generate the final executable for that architecture.
 
-![Illustration of how the GCC with binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/gnu-gcc-binutils-pipeline.svg)
+![Illustration of how the \ac{GCC} with Binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/gnu-gcc-binutils-pipeline.svg)
 
-All of The GNU Projects are distributed under the GNU General Public License (GPL), which allows users to freely use, modify, and distribute the software. This has made GCC and Binutils widely adopted in open-source projects and embedded systems development.
+All of the GNU projects are distributed under the \ac{GPL}, which allows users to freely use, modify, and distribute the software. This has made \ac{GCC} and Binutils widely adopted in open-source projects and embedded systems development.
 
 #### Binary file formats and structures
 
-Understanding binary file formats is essential for reverse engineering and dataset creation:
+Binary files come in different formats, each with its own structure and purpose, and understanding these formats is necessary for working with compiled code. In order for a program to be interpreted or executed by a computer it must be stored in a way that the CPU can read and understand. One way of doing this in to include a header at the beginning of the file, that contains metadata about the executable. While different file formats exists, like Portable Executable for Windows and Mach Object (Mach-O) for macOS, the most common binary file format for Unix-like systems and many embedded devices is the \ac{ELF}. Since \ac{ELF} format is the most commonly seen in cross-compilation and embedded systems, it is the focus of this section.
 
-- **ELF (Executable and Linkable Format)**: The standard file format for executables, object files, shared libraries, and core dumps on Unix-like systems. ELF provides a structured way to organize code, data, and metadata.
+The \ac{ELF} format is a flexible and extensible binary file format that can be used for executables, object code, shared libraries et cetera. The \ac{ELF} header contains information about the file type, \ac{ISA}, entry point address for where to start execution, and section headers. It also includes support for debugging information, symbol tables, and relocation entries, making it easier to analyze and debug programs. 
 
-- **Code sections**: Binary executables separate different types of content into sections:
+\ac{ELF} files are organized into what is called sections, which are contiguous blocks of information within the binary file serving different purposes. The section names are conventionally prefixed with a period (.), and common sections in \ac{ELF} files include:
 
-  - **.text**: Contains the executable code (machine instructions)
-  - **.data**: Contains initialized global variables
-  - **.bss**: Contains uninitialized global variables
-  - **.rodata**: Contains read-only data like string literals
-  - **.symtab**: Symbol table with function and variable names
+- **.text**: Contains the executable code (machine instructions). Sometimes referred to as the code section.
+- **.data**: Contains initialized global variables
+- **.bss**: Contains uninitialized global variables
+- **.rodata**: Contains read-only data like strings
+- **.symtab**: Symbol table with function and variable 
 
-- **Object files**: Compiled source code files that contain machine code but are not yet executable. They must be linked together to create complete programs.
+File formats like \ac{ELF} provides a standardized way to represent the structure of a binary file, including sections for code, data, and metadata. When cross-compiling using the \ac{GCC}/Binutils suite, \ac{ELF} files are typically the default file format when targeting embedded targets. Therefore, \ac{ELF} headers are typically found in binary files that serve different purposes in the creation of an executable program:
 
-- **Static libraries (.a files)**: Collections of object files bundled together for easier reuse and distribution. When a program is linked against a static library, the necessary object code is copied into the final executable.
+- **Object files**: Compiled source code files that contain machine code but are not yet executable. They must be linked together to create complete programs, as illustrated in \autoref{fig:gcc-binutils-pipeline}.
+
+- **Executable files**: The final output of the compilation process that can be directly run by the operating system. These files contain the complete program with all dependencies resolved by the linker.
+
+- **Archive files/Static libraries**: Static libraries are bundled as archive files, which are collections of object files grouped together for easy reuse and distribution. Archive files have a global header with additional metadata, followed by the \ac{ELF}-formatted object files. When a program is linked against a static library, the necessary object code is copied into the final executable.
 
 ## Software reverse engineering
 
@@ -294,7 +299,7 @@ Fine-tuning involves taking a pre-trained model and then training it further on 
 
 #### Feature extraction
 
-Instead of updating the model's weights, we can use the pre-trained model as a feature extractor. In this case, we typically remove the final classification layers of the pre-trained model, and feed the remaining layers into a new classifier that is trained on our own data. The pre-trained layers remain completely frozen during training.
+Instead of updating the model's weights, we can use the pre-trained model as a feature extractor. In this case, we typically remove the final classification layers of the pre-trained model and feed the remaining layers into a new classifier that is trained on our own data. The pre-trained layers remain completely frozen during training.
 
 ## Related work
 

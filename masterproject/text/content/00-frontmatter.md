@@ -58,8 +58,12 @@ header-includes:
 \begin{acronym}
 \acro{CISC}[CISC]{Complex Instruction Set Computing}
 \acro{CNN}[CNN]{Convolutional Neural Network}
+\acro{ELF}[ELF]{Executable and Linkable Format}
+\acro{GCC}[GCC]{GNU Compiler Collection}
+\acro{GPL}[GPL]{GNU General Public License}
 \acro{GPU}[GPU]{Graphics Processing Unit}
 \acro{HPC}[HPC]{High Performance Computing}
+\acro{IoT}[IoT]{Internet of Things}
 \acro{ISA}[ISA]{Instruction Set Architecture}
 \acro{LOGO CV}{Leave-One-Group-Out Cross-Validation}
 \acro{MMCC}[MMCC]{Microsoft Malware Classification Challenge}
