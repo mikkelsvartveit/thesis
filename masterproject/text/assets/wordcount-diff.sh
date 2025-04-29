@@ -9,34 +9,9 @@
 # Function to get word count for a file
 get_word_count() {
     local file="$1"
-    python3 -c "
-import re
-
-# Read the file
-with open('$file') as f:
-    content = f.read()
-
-# Remove HTML comments
-content = re.sub(r'<!--[\s\S]*?-->', '', content)
-
-# Remove markdown tables
-# This pattern matches:
-# 1. A line starting with optional whitespace followed by a pipe-delimited row
-# 2. Followed by a line with the separator row (pipes, hyphens, colons)
-# 3. Followed by zero or more data rows
-content = re.sub(r'^(?:[ \t]*)(\|.+\|)[ \t]*(?:\r?\n|\r)(?:[ \t]*)(\|[-:| ]+\|)[ \t]*(?:\r?\n|\r)(?:(?:[ \t]*)(?:\|.+\|)[ \t]*(?:\r?\n|\r))*', '', content, flags=re.MULTILINE)
-
-# Remove LaTeX table environments
-# Remove everything between \begin{longtable} and \end{longtable}
-content = re.sub(r'begin\{longtable\}[\s\S]*?end\{longtable\}', '', content)
-
-# Remove everything between \begin{table} and \end{table}
-content = re.sub(r'begin\{table\}[\s\S]*?end\{table\}', '', content)
-
-# Count and print words 
-print(len(content.split()))
-"
+    python3 "../assets/markdown-wordcount.py" "$file"
 }
+
 # Go to content directory
 cd content || exit 1
 
