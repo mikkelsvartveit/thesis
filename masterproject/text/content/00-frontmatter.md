@@ -50,6 +50,7 @@ header-includes:
   - \usepackage[nohyperlinks]{acronym}
   - \usepackage{dirtree}
   - \usepackage{xcolor}
+  - \usepackage[section]{placeins}
 ---
 
 # Acronyms {-}
