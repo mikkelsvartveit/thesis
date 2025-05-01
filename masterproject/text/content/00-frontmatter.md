@@ -70,5 +70,6 @@ header-includes:
 \acro{MMCC}[MMCC]{Microsoft Malware Classification Challenge}
 \acro{NTNU}[NTNU]{the Norwegian University of Science and Technology}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}
+\acro{p.p.}[p.p.]{percentage points}
 \end{acronym}
 ```

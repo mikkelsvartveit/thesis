@@ -510,6 +510,8 @@ The overall architecture of ResNet50 has:
 
 To preprocess our data for ResNet50, we use the 2D image encoding described in \autoref{two-dimensional-byte-level-encoding}, with a 32x32 image size. However, since ResNet expects a three-channel (RGB) image, we duplicate the pixel values to all three channels, which essentially results in a grayscale image.
 
+<!-- TODO: motivate the duplication across channels, has related work also duplicated? -->
+
 #### ResNet50 with embedding layer
 
 This model architecture builds on the ResNet50 model described in \autoref{resnet50}, but modifies it to include an initial embedding layer. Specifically, the following modifications are made to the standard ResNet50 model:

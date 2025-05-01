@@ -9,6 +9,41 @@
 - Statistical significance
 -->
 
+### Endianness
+
+<!--
+ISAdetect logocv: embedding higher performance across the board
+- added complexity of resnet does not improve results
+- 1D vs 2D, similar performance, but 1d marginally better.
+- Simple 1d & 2d embedding models able to diff between ISAs with same instruction set but different endianness
+
+CPURec: embedding higher performance across the board, but less that ISAdetect logocv
+- 1D vs 2D, similar performance, but 2d marginally better.
+- Seen archs perform well, with 100% accuracy, but is able to decte archs like blackfin rl78 rx etc very well.
+- More correctly guesses than wrong
+
+buildcross: very similar across all models, but 1d no embedding is best
+- worse overall performance than cpu rec and isadetect
+
+isadetect & buildcross on cpu rec:
+- surprisingly does not improve performance
+- 1d embedding is best
+- embedding best
+
+Key take aways:
+- 1d better at endianness, allthough marginally. Depends on suite, but never performs much worse.
+- Embedding seems best for endianness, and performs better on 3/4 cases. Huge diff on LOGO cv isadetect. The roles are reversed when testing on BuildCross though.
+- The larger complexity of resnet does not improve results, and usually performs worse.
+- Although results seem promesing on LOGO cv for isadetect, the performance on cpu rec and buildcross is not as good.
+- Buildcross has no overlap with isadetect, except m68k, and is not as good as cpu rec.
+ -->
+
+Out of all the models on the different test suites, Simple1d-E performed the best overall. While Simple2d-E does marginally beat out Simple1d-E on isadetect-cpurec in \autoref{table:cpurec-endianness-results} and isadetect-buildcross in \autoref{table:buildcross-endianness-results}of 1.2 \ac{p.p.} and 0.5 \ac{p.p.} respectively, we deem these small differences inside the margin of error. However, the relatively larger performance wins on LOGO-CV ISAdetect in \autoref{table:logo-endianness-results} of 4.6 \ac{p.p.} is evidence that Simple1d-E would perform best in real world scenarios.
+
+The largest overall performance differences in our experiments is seen when comparing embedding and non-embedding versions of our models. On the endianness experiments, embedding models perform better in 3/4 cases, with the exception of ISAdetect-Buildcross where Simple1d.
+
+### Instruction width
+
 ## Model architecture performance analysis
 
 <!--
@@ -52,6 +87,7 @@ However, introducing an embedding layer in the model makes it capable of identif
   - Statistical significance
 - Does training on BuildCross improve performance?
 - Visualize some grayscale images
+- Learning rate converges fast relative to the amount of data we have, suggest that it is fitting to something
 -->
 
 ## Comparision with prior literature
@@ -71,6 +107,7 @@ However, introducing an embedding layer in the model makes it capable of identif
 
 Strengths and limitations
 Representation of mainstream vs. exotic architectures
+Similar architectures impact logocv and balance? (ref powerpc vs powerpcspe, armel armhf)
 
 5.5.2 CPURec Dataset
 
@@ -81,9 +118,11 @@ Statistical reliability concerns
 5.5.3 BuildCross Dataset
 
 Library code rather than executables, impact on results
+Which libraries and why, (maybe this should be in methododology?)
 Limited to ELF-supported architectures
 Dependency on external toolchain (mikpe's GitHub)
 Quantity and quality of gathered data
+improves instruction width but not endianness. why?
 -->
 
 ## UN sustainability goals

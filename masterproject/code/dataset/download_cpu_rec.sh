@@ -1,3 +1,5 @@
+set -e
+
 rm -rf cpu_rec
 echo "Downloading CPU Rec dataset..."
 wget -q --show-progress https://github.com/airbus-seclab/cpu_rec/archive/refs/heads/master.zip
