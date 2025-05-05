@@ -8,17 +8,26 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 from tqdm import tqdm
 from .train_test_utils import set_seed
+import time
 
 
 def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
-    if "wandb_project_name" not in config["validator"]:
-        raise ValueError("wandb_project_name not specified in config")
+
+    has_wandb_projet_name = (
+        "wandb_project_name" in config["validator"]
+        and config["validator"]["wandb_project_name"]
+    )
+    if not has_wandb_projet_name:
+        print("Wandb project name not provided, skipping wandb logging")
 
     # Initial seed setting
     seed = config["validator"]["seed"]
     set_seed(seed)
 
-    group_name = f"logo {config["model"]["name"]} {config["target_feature"]} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
+    # Start timing the entire cross-validation process
+    start_time = time.time()
+
+    group_name = f"logo {config['model']['name']} {config['target_feature']} {datetime.now().strftime('%H:%M:%S, %d-%m-%Y')}"
 
     wandb_project = config["validator"]["wandb_project_name"]
 
@@ -41,19 +50,22 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
         set_seed(seed)
 
         group_left_out = groups[test_idx[0]]
-        wandb.init(
+        wandb_run = wandb.init(
             project=wandb_project,
             config=config,
             group=f"{group_name}",
             name=f"fold_{group_left_out}",
+            mode=(
+                "online" if has_wandb_projet_name else "disabled"
+            ),  # disabled = no-op
         )
 
-        wandb.define_metric("epoch")
+        wandb_run.define_metric("epoch")
         # define which metrics will be plotted against it
-        wandb.define_metric("train_loss", step_metric="epoch")
-        wandb.define_metric("test_loss", step_metric="epoch")
-        wandb.define_metric("test_accuracy_chunk", step_metric="epoch")
-        wandb.define_metric("test_accuracy_file", step_metric="epoch")
+        wandb_run.define_metric("train_loss", step_metric="epoch")
+        wandb_run.define_metric("test_loss", step_metric="epoch")
+        wandb_run.define_metric("test_accuracy_chunk", step_metric="epoch")
+        wandb_run.define_metric("test_accuracy_file", step_metric="epoch")
 
         print(f"\n=== Fold {fold} leaving out group '{group_left_out}' ===")
         fold += 1
@@ -95,6 +107,14 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
             weight_decay=config["training"]["weight_decay"],
         )
 
+        wandb_run.log(
+            {
+                "test_dataset_size": len(test_dataset),
+                "train_dataset_size": len(train_dataset),
+                "group_left_out": group_left_out,
+            }
+        )
+
         # Training loop
         for epoch in range(config["training"]["epochs"]):
             model.train()
@@ -125,7 +145,7 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
                 training_true_labels.extend(encoded_labels.cpu().numpy())
 
                 # Log batch metrics
-                wandb.log(
+                wandb_run.log(
                     {
                         f"batch_loss": loss.item(),
                     },
@@ -204,7 +224,7 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
             print(f"Chunk-level Test Accuracy: {100*chunk_accuracy:.2f}%")
             print(f"File-level Test Accuracy: {100*file_level_accuracy:.2f}%")
 
-            wandb.log(
+            wandb_run.log(
                 {
                     "epoch": epoch,
                     "train_loss": avg_training_loss,
@@ -220,13 +240,17 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
         all_predictions.extend(file_level_predictions)
         all_true_labels.extend(file_level_true_labels)
 
-        wandb.finish()
+        wandb_run.finish()
 
-    wandb.init(
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    wandb_run = wandb.init(
         project=wandb_project,
         config=config,
         group=f"{group_name}",
         name="overall_metrics",
+        mode=("online" if has_wandb_projet_name else "disabled"),  # disabled = no-op
     )
 
     # try save model if onnx is installed
@@ -239,20 +263,27 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
             sample_input,
             "model.onnx",
         )
-        wandb.save("model.onnx")
+        wandb_run.save("model.onnx")
     except Exception as e:
         print(f"Failed to save model as onnx: {e}")
 
     # Calculate and log overall metrics
     overall_accuracy = np.mean(np.array(all_predictions) == np.array(all_true_labels))
 
-    wandb.log(
+    hours, remainder = divmod(elapsed_time, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    formatted_time = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+
+    print(f"formatted time: {formatted_time}")
+
+    wandb_run.log(
         {
             "overall_accuracy": overall_accuracy,
             "accuracies_per_group": wandb.Table(
                 data=[[group, acc] for group, acc in accuracies.items()],
                 columns=["group", "accuracy"],
             ),
+            "time_taken": formatted_time,
         }
     )
 
@@ -262,5 +293,5 @@ def logo_cv(config, dataset: Dataset, model_class: nn.Module.__class__, device):
         print(f"Group '{group}': {100*accuracy:.2f}%")
     print(f"Average accuracy: {100*sum(accuracies.values())/len(accuracies):.2f}%")
 
-    wandb.finish()
+    wandb_run.finish()
     return accuracies
