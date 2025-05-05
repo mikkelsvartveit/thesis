@@ -27,7 +27,7 @@ from scipy import stats
 #    return mean, margin_error, lower_bound, upper_bound
 
 
-def calculate_confidence_interval(accuracies, n_samples=50, confidence=0.95):
+def calculate_confidence_interval(accuracies, n_samples, confidence=0.95):
     """
     Calculate confidence interval for model accuracies considering both
     seed variability and sample size
@@ -65,6 +65,80 @@ def calculate_confidence_interval(accuracies, n_samples=50, confidence=0.95):
     return mean_acc, margin_error, lower_bound, upper_bound
 
 
+def logo_cv_confidence_interval(
+    all_run_fold_accuracies: list[list[float]],
+    fold_sample_counts: list[list[int]],
+    confidence=0.95,
+):
+    """
+    Calculate confidence interval for LOGO-CV with multiple runs
+
+    Parameters:
+    all_run_fold_accuracies: List of lists, where each inner list contains fold accuracies for one run
+    fold_sample_counts: List of lists, where each inner list contains sample counts for each fold in one run
+    confidence: Confidence level (default: 0.95 for 95% CI)
+
+    Returns:
+    tuple: (mean, lower_bound, upper_bound)
+    """
+    n_runs = len(all_run_fold_accuracies)
+
+    # Calculate mean accuracy for each run (across its folds)
+    run_mean_accuracies = []
+    for i, run_fold_accs in enumerate(all_run_fold_accuracies):
+        run_fold_counts = fold_sample_counts[i]
+
+        assert len(run_fold_accs) == len(
+            run_fold_counts
+        ), "accuracy measures does not match num folds"
+
+        # Weighted average based on fold sizes
+        total_samples = sum(run_fold_counts)
+        weighted_acc = (
+            sum(acc * count for acc, count in zip(run_fold_accs, run_fold_counts))
+            / total_samples
+        )
+        run_mean_accuracies.append(weighted_acc)
+
+    # Overall mean across runs
+    overall_mean = np.mean(run_mean_accuracies)
+
+    # Step 1: Calculate variance from run-to-run differences
+    variance_between_runs = np.var(run_mean_accuracies, ddof=1)
+
+    # Step 2: Calculate variance from finite sample size across all folds
+    fold_variances = []
+    for i, run_fold_accs in enumerate(all_run_fold_accuracies):
+        run_fold_counts = fold_sample_counts[i]
+
+        # Calculate binomial variance for each fold
+        fold_vars = [
+            acc * (1 - acc) / count
+            for acc, count in zip(run_fold_accs, run_fold_counts)
+        ]
+        # Weight by sample count and average
+        total_samples = sum(run_fold_counts)
+        weighted_var = (
+            sum(var * count for var, count in zip(fold_vars, run_fold_counts))
+            / total_samples
+        )
+        fold_variances.append(weighted_var)
+
+    mean_variance_within = np.mean(fold_variances)
+
+    # Step 3: Combine the variances
+    total_variance = variance_between_runs + mean_variance_within
+
+    # Step 4: Calculate confidence interval using t-distribution
+    t_critical = stats.t.ppf((1 + confidence) / 2, df=n_runs - 1)
+    margin_error = t_critical * np.sqrt(total_variance / n_runs)
+
+    lower_bound = overall_mean - margin_error
+    upper_bound = overall_mean + margin_error
+
+    return overall_mean, margin_error, lower_bound, upper_bound
+
+
 def compare_model_accuracies(
     model_a_accuracies: list[float], model_b_accuracies: list[float], alpha=0.05
 ):
@@ -99,8 +173,6 @@ if __name__ == "__main__":
     # Example usage
     model_1_accuracies = [0.82, 0.85, 0.83, 0.84, 0.86]
     mean, err, lower, upper = calculate_confidence_interval(model_1_accuracies)
-    print(f"Model accuracy: {mean:.4f}+-{err:.4f} (95% CI: [{lower:.4f}, {upper:.4f}])")
-    mean, err, lower, upper = calculate_confidence_interval2(model_1_accuracies)
     print(f"Model accuracy: {mean:.4f}+-{err:.4f} (95% CI: [{lower:.4f}, {upper:.4f}])")
 
     model_2_accuracies = [0.78, 0.80, 0.79, 0.81, 0.82]
