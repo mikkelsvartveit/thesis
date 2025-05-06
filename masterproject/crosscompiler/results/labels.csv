@@ -1,44 +1,41 @@
 architecture;endianness;wordsize;instructionwidth_type;instructionwidth;comment
-arc;little;32;mixed;16/32;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
-arceb;big;32;mixed;16/32;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
-bfin;little;32;mixed;16/32;Blackfin
+arc;little;32;variable;16/32/64;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
+arceb;big;32;variable;16/32/64;16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians
+bfin;little;32;variable;16/32;Blackfin
 bpf;little;64;fixed;64;Only exampleprogram, little data
 c6x;big;32;fixed;32;
-cr16;little;32;mixed;16/32;
-cris;little;32;mixed;16/32;
-csky;little;32;mixed;16/32;
-epiphany;little;32;mixed;16/32;
-fr30;big;32;mixed;16/32;
+cr16;little;32;variable;16/32;
+cris;little;32;variable;16/32;
+csky;little;32;variable;16/32;
+epiphany;little;32;variable;16/32;
+fr30;big;32;variable;16/32;
 frv;big;32;fixed;32;
 ft32;little;32;fixed;32;disassembled in both little and big, even though compiled for little
-h8300;big;32;mixed;16/32;
+h8300;big;32;variable;16/32;
 iq2000;big;32;fixed;32;
-kvx;little;64;mixed;16/32;
+kvx;little;64;variable;16/32;
 lm32;big;32;fixed;32;
 loongarch64;little;64;fixed;64;
 m32r;big;32;fixed;32;
-m68k-elf;big;32;mixed;16/32/48;
+m68k-elf;big;32;variable;16/32/48;
 mcore;little;32;fixed;16;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
 mcoreeb;big;32;fixed;16;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
 microblaze;big;32;fixed;64;
 microblazeel;little;32;fixed;64;
 mmix;big;64;fixed;32;
 mn10300;little;32;variable;na;
-moxie;big;32;mixed;16/32;
-moxieel;little;32;mixed;16/32;
-msp430;little;32;mixed;16/32;
-nds32;little;32;mixed;16/32;
-nds32be;big;32;mixed;16/32;
+moxie;big;32;variable;16/32;
+moxieel;little;32;variable;16/32;
+msp430;little;32;variable;16/32;
+nds32;little;32;variable;16/32;
 nios2;little;32;fixed;64;
 or1k;big;32;fixed;64;
 pru;little;32;fixed;32;
 rl78;little;32;variable;na;
 rx;little;32;variable;na;
-rxeb;big;32;variable;na;
 tilegx;little;64;fixed;64;Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word
-tilegxbe;big;64;fixed;64;Mix of VLIW and variable width, but instructions are fixed 64-bit apart. sometimes two instructions are packed into one 64-bit word
-tricore;little;32;mixed;16/32;
-v850;little;32;mixed;16/32;
+tricore;little;32;variable;16/32;
+v850;little;32;variable;16/32;
 visium;big;32;fixed;32;
-xstormy16;little;32;mixed;16/32;
-xtensa;big;32;variable;na;either 16 or 24 bits, does not align to a single boundary
+xstormy16;little;32;variable;16/32;
+xtensa;big;32;variable;16/24;either 16 or 24 bits, does not align to a single boundary

@@ -94,13 +94,13 @@ instruction_width_map() {
     case "$arch" in
         # x86 architectures - variable instruction width
         "arc" | "arceb")
-            width="16/32"
-            width_type="mixed"
+            width="16/32/64"
+            width_type="variable"
             comment="16 or 32, but sometimes 64 due to 32bit intermediate as arg. Disassembly same for both endians"
             ;;
         "bfin")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment="Blackfin"
             ;;
         "bpf")
@@ -115,27 +115,27 @@ instruction_width_map() {
             ;;
         "cr16")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "cris")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "csky")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "epiphany")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "fr30")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "frv")
@@ -150,7 +150,7 @@ instruction_width_map() {
             ;;
         "h8300")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "iq2000")
@@ -160,7 +160,7 @@ instruction_width_map() {
             ;;
         "kvx")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "lm32")
@@ -180,7 +180,7 @@ instruction_width_map() {
             ;;
         "m68k-elf")
             width="16/32/48"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "mcore" | "mcoreeb")
@@ -205,17 +205,17 @@ instruction_width_map() {
             ;;
         "moxie" | "moxieel")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "msp430")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "nds32" | "nds32be")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "nios2")
@@ -255,12 +255,12 @@ instruction_width_map() {
             ;;
         "tricore")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "v850")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "visium")
@@ -270,11 +270,11 @@ instruction_width_map() {
             ;;
         "xstormy16")
             width="16/32"
-            width_type="mixed"
+            width_type="variable"
             comment=""
             ;;
         "xtensa")
-            width="na"
+            width="16/24"
             width_type="variable"
             comment="either 16 or 24 bits, does not align to a single boundary"
             ;;
