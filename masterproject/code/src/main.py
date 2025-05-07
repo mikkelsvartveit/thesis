@@ -18,6 +18,7 @@ from src.validators import (
     train_test_separate_datasets,
     logo_cv,
     train_test_split,
+    kfold_cv,
 )
 from transforms import get_transform
 
@@ -102,6 +103,9 @@ def main():
     if validator_name == "logo_cv":
         print("Running validator 'logo_cv'")
         logo_cv(config=config, dataset=dataset, model_class=model, device=device)
+    elif validator_name == "kfold_cv":
+        print("Running validator 'kfold_cv'")
+        kfold_cv(config=config, dataset=dataset, model_class=model, device=device)
     elif validator_name == "train_test_split":
         print("Running validator 'logo_cv'")
         train_test_split(
