@@ -1,5 +1,3 @@
-from .EndiannessModels import *
-from .MINOS_cnn import *
 from .EmbeddingModels import *
 from .SimpleCnnModels import *
 from .EmbeddingResNet import ResNet50Embedding
@@ -8,11 +6,7 @@ from torchvision.models import resnet50
 
 def get_model(**kwargs):
     name = kwargs["name"]
-    if name == "MINOS_cnn":
-        return MINOS
-    elif name == "EndiannessModel":
-        return EndiannessModel
-    elif name == "Simple1dEmbedding":
+    if name == "Simple1dEmbedding":
         return Simple1dEmbedding
     elif name == "Simple2dEmbedding":
         return Simple2dEmbedding
