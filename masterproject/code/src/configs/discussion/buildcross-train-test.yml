@@ -1,11 +1,11 @@
 data:
-  name: ISAdetectDataset
+  name: BuildCrossDataset
   params:
-    dataset_path: ISAdetect/ISAdetect_full_dataset/
-    feature_csv_path: ISAdetect-features.csv
+    dataset_path: buildcross/text_bin
+    feature_csv_path: buildcross/labels.csv
     per_architecture_limit: null
     file_byte_read_limit: 512
-    use_code_only: True
+    max_file_splits: 10000
 
 transforms:
   name: Vector1D
@@ -21,7 +21,7 @@ model:
 
 validator:
   name: train_test_split
-  wandb_project_name: isadetect-train-test
+  wandb_project_name: buildcross-train-test
   seed: 42
   train_split_size: 0.8
 

@@ -17,6 +17,7 @@ from src.models import get_model
 from src.validators import (
     train_test_separate_datasets,
     logo_cv,
+    train_test_split,
 )
 from transforms import get_transform
 
@@ -100,7 +101,12 @@ def main():
 
     if validator_name == "logo_cv":
         print("Running validator 'logo_cv'")
-        logo_cv(config, dataset, model, device)
+        logo_cv(config=config, dataset=dataset, model_class=model, device=device)
+    elif validator_name == "train_test_split":
+        print("Running validator 'logo_cv'")
+        train_test_split(
+            config=config, dataset=dataset, model_class=model, device=device
+        )
     elif validator_name == "train_test_separate_datasets":
         testing_dataset = get_dataset(
             transform=transforms,

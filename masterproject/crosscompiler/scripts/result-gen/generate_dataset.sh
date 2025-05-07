@@ -169,7 +169,7 @@ instruction_width_map() {
             comment=""
             ;;
         "loongarch64")
-            width="64"
+            width="32"
             width_type="fixed"
             comment=""
             ;;
@@ -189,7 +189,7 @@ instruction_width_map() {
             comment="16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf"
             ;;
         "microblaze" | "microblazeel")
-            width="64"
+            width="32"
             width_type="fixed"
             comment=""
             ;;
@@ -219,12 +219,12 @@ instruction_width_map() {
             comment=""
             ;;
         "nios2")
-            width="64"
+            width="32"
             width_type="fixed"
             comment=""
             ;;
         "or1k")
-            width="64"
+            width="32"
             width_type="fixed"
             comment=""
             ;;

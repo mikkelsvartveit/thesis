@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:a100:1           # GPU resources requested
 
 #SBATCH --job-name=combined-all
-#SBATCH --time=04:00:00
+#SBATCH --time=10:00:00
 WANDB_PROJECT_NAME="combined-all-$SLURM_JOB_ID"
 TARGET_FEATURES=("endianness" "instructionwidth_type")
 
@@ -34,12 +34,12 @@ run_experiment() {
 cd src
 
 for target_feature in "${TARGET_FEATURES[@]}"; do
-    run_experiment "$target_feature" "configs/combined/Simple1d.yml" 5
-    run_experiment "$target_feature" "configs/combined/Simple1dEmbedding.yml" 5
-    run_experiment "$target_feature" "configs/combined/Simple2d.yml" 5
-    run_experiment "$target_feature" "configs/combined/Simple2dEmbedding.yml" 5
-    run_experiment "$target_feature" "configs/combined/ResNet50.yml" 5
-    run_experiment "$target_feature" "configs/combined/ResNet50Embedding.yml" 5
+    run_experiment "$target_feature" "configs/combined/Simple1d.yml" 20
+    run_experiment "$target_feature" "configs/combined/Simple1dEmbedding.yml" 20
+    run_experiment "$target_feature" "configs/combined/Simple2d.yml" 20
+    run_experiment "$target_feature" "configs/combined/Simple2dEmbedding.yml" 20
+    run_experiment "$target_feature" "configs/combined/ResNet50.yml" 20
+    run_experiment "$target_feature" "configs/combined/ResNet50Embedding.yml" 20
 done
 
 echo "Job finished on $(date)"
