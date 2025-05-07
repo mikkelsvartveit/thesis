@@ -204,7 +204,7 @@ instruction_width_map() {
             comment=""
             ;;
         "moxie" | "moxieel")
-            width="16/32"
+            width="16/32/48"
             width_type="variable"
             comment=""
             ;;

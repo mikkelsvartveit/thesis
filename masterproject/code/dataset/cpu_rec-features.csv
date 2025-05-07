@@ -19,10 +19,10 @@ CLIPPER;;;little;32;variable;16/32/48/64;http://www.bitsavers.org/components/fai
 CompactRISC;;cr16;little;16;variable;16/32/48;CR16, opcode field allways 16 bits. operands 2 or 4 bytes -> 16/32/48, https://my.eng.utah.edu/~cs3710/handouts/cr16a-prog-ref.pdf
 Cray;;;na;64;variable;16/32;https://bitsavers.trailing-edge.com/pdf/cray/CRAY-1/2240004C_CRAY-1_Hardware_Reference_Nov77.pdf
 Epiphany;;epiphany;little;32;variable;16/32;instr size depends on reg used, chapt 7.6: https://adapteva.com/docs/epiphany_arch_ref.pdf, 
-FR-V;;frv;unk;32;fixed;32;VLIW processor, so prett sure it is fixed. https://en.wikipedia.org/wiki/FR-V_(microprocessor) https://web.archive.org/web/20110720090106/http://www.ece.umd.edu/class/enee759m.S2002/papers/suga2000-micro20-4.pdf
+FR-V;;frv;big;32;fixed;32;VLIW processor, so prett sure it is fixed. https://en.wikipedia.org/wiki/FR-V_(microprocessor) https://web.archive.org/web/20110720090106/http://www.ece.umd.edu/class/enee759m.S2002/papers/suga2000-micro20-4.pdf, BuildCross - disassembled and verified big endian and fixed
 FR30;;fr30;big;32;fixed;16;https://sourceware.org/cgen/gen-doc/fr30.html#model-fr30-1
-FT32;;ft32;unk;32;unk;unk;found no good sources
-H8-300;;h8300;na;8;variable;8/16;"binary is ""H8/300"", not L or H. sh4 precursor. https://www.renesas.com/en/document/gde/h8300-programming-manual?srsltid=AfmBOorkkc0UEjCawkqxFfLAl-URrlSvp1EXGRZJnJBWX_4vsmVlWsVi"
+FT32;;ft32;little;32;fixed;32;found no good sources, BuildCross - disassembled and verified little endian and fixed width
+H8-300;;h8300;big;8;variable;16/32;"binary is ""H8/300"", not L or H. sh4 precursor. https://www.renesas.com/en/document/gde/h8300-programming-manual?srsltid=AfmBOorkkc0UEjCawkqxFfLAl-URrlSvp1EXGRZJnJBWX_4vsmVlWsVi, BuildCross - disassembled and verified big endian"
 H8S;;;unk;16;variable;16/32;https://4donline.ihs.com/images/VipMasterIC/IC/RNCC/RNCCS09014/RNCCS09014-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0
 HP-Focus;;;na;32;variable;16/32;https://www.openpa.net/focus_processor_hp.html
 HP-PA;hppa;;big;32;fixed;32;"wrong wordsize in Andreassen table"
@@ -30,18 +30,18 @@ i860;;;bi;32;fixed;32;https://www.ardent-tool.com/CPU/INTEL_80860.pdf https://en
 IA-64;ia64;;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
 IQ2000;;iq2000;big;32;unk;unk;Based off Andreassen, found no good sources
 M32C;;;little;32;variable;16-32;https://en-support.renesas.com/knowledgeBase/16978511
-M32R;;m32r;bi;32;variable;16/32;https://www.farnell.com/datasheets/2865722.pdf
+M32R;;m32r;big;32;fixed;32;https://www.farnell.com/datasheets/2865722.pdf BuildCross - disassembled and verified big endian and fixed width
 M68k;m68k;m68k-elf;big;32;variable;na;
 M88k;;;big;32;fixed;32;file in dataset is big endian, checked with readelf on c-kermit/cku190.dgux540c-88k file (search on google). https://en.wikipedia.org/wiki/Motorola_88000 http://www.bitsavers.org/components/motorola/88000/MC88100_RISC_Microprocessor_Users_Manual_2ed_1990.pdf (chap 1.2)
-MCore;;mcore;big;32;fixed;16;aka Motorola RCE, https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
+MCore;;mcore;little;32;fixed;16;aka Motorola RCE, https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf endianness wrong in andreassen: BuildCross - disassembled and verified little endian
 Mico32;;lm32;big;32;fixed;32;https://en.wikipedia.org/wiki/LatticeMico32
-MicroBlaze;;microblaze;big;32;fixed;32; https://en.wikipedia.org/wiki/MicroBlaze https://www.ee.torontomu.ca/~courses/ee8205/Data-Sheets/sopc/MicroBlaze_DataSheet.pdf
+MicroBlaze;;microblaze;big;32;fixed;32; https://en.wikipedia.org/wiki/MicroBlaze https://www.ee.torontomu.ca/~courses/ee8205/Data-Sheets/sopc/MicroBlaze_DataSheet.pdf, BuildCross - disassembled and verified big endian
 MIPS16;;;bi;16;fixed;16;https://www.ijser.org/researchpaper/Instruction-Set-Architecture-for-a-MIPS-based-16-bit-RISC-Processor.pdf https://en.wikipedia.org/wiki/MIPS_architecture, endianness from andreassen
 MIPSeb;mips;;big;32;fixed;32;"mipseb from corpus, all MIPSeb lables map to this, checked for wsize and iw"
 MIPSel;mipsel;;little;32;fixed;32;
 MMIX;;mmix;big;64;fixed;32;https://en.wikipedia.org/wiki/MMIXhttps://en.wikipedia.org/wiki/MMIX https://mmix.cs.hm.edu/doc/index.html
 MN10300;;mn10300;little;32;unk;unk;found docs for 10300/103S, dont know if the same http://www.bitsavers.org/components/panasonic/panaXseries/13250-040E_MN1030_MN103S_Series_Instruction_Manual.pdf
-Moxie;;moxie;bi;32;variable;16/32/48;http://moxielogic.org/blog/pages/architecture.html
+Moxie;;moxie;big;32;variable;16/32/48;http://moxielogic.org/blog/pages/architecture.html, BuildCross - dissasembled and verified big endian
 MSP430;;msp430;little;16;variable;16/32/48;https://en.wikipedia.org/wiki/TI_MSP430
 NDS32;;nds32;little;32;variable;16/32;little based on cpu_rec.py file name, https://docs.u-boot.org/en/v2020.07/arch/nds32.html, isa called andestar, https://download.paulk.fr/coreboot/mt8173-spm/documentation/isa/AndeStar_ISA_v1.3.pdf
 NIOS-II;;nios2;little;32;fixed;32;fpga https://www-ug.eecg.toronto.edu/msl/manuals/n2cpu_nii51017.pdf, https://en.wikipedia.org/wiki/Nios_II
@@ -59,19 +59,19 @@ RX;;rx;little;32;variable;8-64;https://en-support.renesas.com/knowledgeBase/1698
 S-390;s390x;;big;64;variable;na;"wrong in Andreassen table, S-390 map to s390x"
 SPARC;;;big;na;fixed;32;"one sparc32 and one sparc64 binary are merged into one SPARC"
 STM8;;;na;8;variable;;https://en.wikipedia.org/wiki/STM8
-Stormy16;;xstormy16;bi;32;variable;16/32;wrong wordsize Andreassen table, endiannes bi https://sourceware.org/cgen/gen-doc/xstormy16.html#mach-xstormy16, https://sourceware.org/cgen/gen-doc/xstormy16-insn.html
+Stormy16;;xstormy16;little;32;variable;16/32;wrong wordsize Andreassen table, endiannes bi https://sourceware.org/cgen/gen-doc/xstormy16.html#mach-xstormy16, https://sourceware.org/cgen/gen-doc/xstormy16-insn.html, BuildCross - disassembled and verified little endian
 SuperH;sh4;;little;32;fixed;16;"BI endian in Andreassen table, must be investigated more"
 TILEPro;;;unk;32;variable;8/16/32;VLIW, https://web.archive.org/web/20130123124859/http://www.tilera.com/scm/docs/UG120-Architecture-Overview-TILEPro.pdf
 TLCS-90;;;na;8;variable;8/16;https://en.wikipedia.org/wiki/Toshiba_TLCS
 TMS320C2x;;;unk;16/32;variable;16/32;https://ardent-tool.com/datasheets/TI_TMS320C2x_Users_Guide_1990.pdf
-TMS320C6x;;c6x;bi;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171 
+TMS320C6x;;c6x;little;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171, BuildCross - disassembled and verified little endian
 TriMedia;;;unk;32;unk;unk;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)
 V850;;v850;little;32;variable;16/32;https://www.renesas.com/en/document/mah/v850-familytm-architecture?language=en&srsltid=AfmBOopXB1J0-YNDX6GviV6gGkLCFFazYNur2hCQjzo64m8e1gRYB9em https://en.wikipedia.org/wiki/V850
 VAX;;;little;32;variable;unk;wiki says instr encoding 1 to 58 bytes, seems kinda wierd https://en.wikipedia.org/wiki/VAX https://www.stromasys.com/resources/understanding-the-vax-processors-architecture/
-Visium;;visium;unk;unk;unk;unk;Could not find anything on goole
+Visium;;visium;big;32;fixed;fixed;Could not find anything on google. BuildCross - dissassembled and verified big endian and fixed width
 WE32000;;;na;32;;;https://bitsavers.org/pdf/westernElectric/WE_32100_Microprocessor_Information_Manual_Jan85.pdf
 X86-64;amd64;;little;64;variable;na;
 X86;i386;;little;32;variable;na;
-Xtensa;;xtensa;bi;32;variable;16/24;https://www.cadence.com/content/dam/cadence-www/global/en_US/documents/tools/silicon-solutions/compute-ip/isa-summary.pdf
-XtensaEB;;;big;32;variable;16/24;Assume same as Xtensa, but big endian
+Xtensa;;xtensa;bi;32;variable;16/24;https://www.cadence.com/content/dam/cadence-www/global/en_US/documents/tools/silicon-solutions/compute-ip/isa-summary.pdf investigated with BuildCross, but dissasembly w objdump works with both endiann. Found instructions that are the same format in Xtensa.corpus and XtensaEB.corpus, which suggest that they are the same. (left as bi for safety)
+XtensaEB;;;big;32;variable;16/24;
 Z80;;;little;8;variable;8-32;https://www.smspower.org/Development/Little-Endian https://en.wikipedia.org/wiki/Zilog_Z80
