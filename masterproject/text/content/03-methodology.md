@@ -535,6 +535,10 @@ Additionally, these features have certain technical properties that make them su
 
 ## Evaluation
 
+### K-fold cross validation on ISAdetect dataset
+
+TODO
+
 ### Leave-one-group-out cross validation on ISADetect dataset
 
 The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
