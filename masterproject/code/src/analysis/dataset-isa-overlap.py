@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib_venn import venn2, venn3
+from matplotlib_venn import venn3
 
 
 # Load the architecture columns from both CSVs
@@ -45,17 +45,19 @@ def plot_venn():
         set_colors=("#8ecae6", "#ffd166", "#b7e4c7"),  # blue, yellow, green
         alpha=0.7,
     )
-    # Set intersection color for all three
-    if v.get_patch_by_id("111"):
-        v.get_patch_by_id("111").set_color("#f7b7a3")  # pastel coral
-        v.get_patch_by_id("111").set_alpha(0.8)
+
     # Add edge colors for clarity
     for patch in ["100", "010", "001", "110", "101", "011", "111"]:
         p = v.get_patch_by_id(patch)
         if p:
             p.set_edgecolor("#222")
             p.set_linewidth(1.5)
-    plt.title("ISA Overlap: CpuRec vs ISAdetect vs Buildcross")
+
+    # Move set labels outward for better visibility
+    v.get_label_by_id("B").set_position((-0.72, 0.22))
+    v.get_label_by_id("C").set_position((0.72, 0.22))
+
+    plt.title("ISA overlap in datasets")
     plt.tight_layout()
     plt.savefig("output/dataset-isa-overlap.png")
     plt.show()
