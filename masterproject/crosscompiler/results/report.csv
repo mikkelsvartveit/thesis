@@ -43,6 +43,7 @@ bpf,libexamples.a,19.0781 KB
 c6x,libexamples.a,13.8438 KB
 c6x,libfreetype.a,1346.09 KB
 c6x,libgit2.a,2624.75 KB
+c6x,libjpeg.a,397.594 KB
 c6x,liblzma.a,329.469 KB
 c6x,libpcre2-8.a,692.5 KB
 c6x,libsharpyuv.a,19.3125 KB
@@ -54,6 +55,10 @@ cr16,liblibpng16.a,158.678 KB
 cr16,liblzma.a,143.699 KB
 cr16,libpcre2-8.a,286.844 KB
 cr16,libsharpyuv.a,17.3301 KB
+cr16,libwebp.a,294.654 KB
+cr16,libwebpdecoder.a,105.355 KB
+cr16,libwebpdemux.a,7.54688 KB
+cr16,libwebpmux.a,22.3867 KB
 cr16,libyaml.a,114.057 KB
 cr16,libzlib.a,62.9297 KB
 cris,libexamples.a,8.23438 KB
@@ -86,6 +91,7 @@ csky,libyaml.a,148.064 KB
 csky,libzlib.a,91.7227 KB
 epiphany,libexamples.a,11.2695 KB
 epiphany,liblibpng16.a,170.5 KB
+epiphany,liblzma.a,128.777 KB
 epiphany,libsharpyuv.a,16.9023 KB
 epiphany,libyaml.a,84.2305 KB
 epiphany,libzlib.a,62.9727 KB
@@ -263,6 +269,10 @@ mn10300,libjpeg.a,226.294 KB
 mn10300,liblibpng16.a,154.106 KB
 mn10300,liblzma.a,133.205 KB
 mn10300,libsharpyuv.a,15.168 KB
+mn10300,libwebp.a,319.905 KB
+mn10300,libwebpdecoder.a,128.4 KB
+mn10300,libwebpdemux.a,7.58887 KB
+mn10300,libwebpmux.a,23.5557 KB
 mn10300,libyaml.a,107.146 KB
 mn10300,libzlib.a,62.0508 KB
 moxie,libexamples.a,7.71094 KB
@@ -290,6 +300,7 @@ moxieel,libwebpmux.a,27.1465 KB
 moxieel,libyaml.a,151.828 KB
 moxieel,libzlib.a,84.5566 KB
 msp430,libexamples.a,6.13086 KB
+msp430,liblibpng16.a,204.084 KB
 msp430,libsharpyuv.a,25.5781 KB
 msp430,libyaml.a,119.193 KB
 msp430,libzlib.a,78.2852 KB
@@ -344,6 +355,7 @@ pru,libsharpyuv.a,15.7656 KB
 pru,libyaml.a,187.91 KB
 pru,libzlib.a,129.062 KB
 rl78,libexamples.a,7.62793 KB
+rl78,liblibpng16.a,298.081 KB
 rl78,libsharpyuv.a,50.3652 KB
 rl78,libyaml.a,165.103 KB
 rl78,libzlib.a,123.41 KB
@@ -384,6 +396,8 @@ tricore,libzlib.a,76.9609 KB
 v850,libexamples.a,8.43555 KB
 v850,libfreetype.a,760.895 KB
 v850,libgit2.a,1625.63 KB
+v850,libjpeg.a,227.682 KB
+v850,liblibpng16.a,208.688 KB
 v850,liblzma.a,197.453 KB
 v850,libpcre2-8.a,340.752 KB
 v850,libsharpyuv.a,13.873 KB
@@ -402,6 +416,7 @@ visium,libwebpmux.a,46.75 KB
 visium,libyaml.a,260.203 KB
 visium,libzlib.a,130.879 KB
 xstormy16,libexamples.a,7.5957 KB
+xstormy16,liblibpng16.a,233.254 KB
 xstormy16,libsharpyuv.a,31.5898 KB
 xstormy16,libyaml.a,124.633 KB
 xstormy16,libzlib.a,95.1816 KB

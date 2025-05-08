@@ -55,11 +55,12 @@ Architecture: c6x
   Library: libexamples.a, Text Size 13.8438 KB
   Library: libfreetype.a, Text Size 1346.09 KB
   Library: libgit2.a, Text Size 2624.75 KB
+  Library: libjpeg.a, Text Size 397.594 KB
   Library: liblzma.a, Text Size 329.469 KB
   Library: libpcre2-8.a, Text Size 692.5 KB
   Library: libsharpyuv.a, Text Size 19.3125 KB
   Library: libyaml.a, Text Size 259.781 KB
-  Total text size: 5285 KB
+  Total text size: 5683 KB
 
 Architecture: cr16
   Library: libexamples.a, Text Size 5.63281 KB
@@ -69,9 +70,13 @@ Architecture: cr16
   Library: liblzma.a, Text Size 143.699 KB
   Library: libpcre2-8.a, Text Size 286.844 KB
   Library: libsharpyuv.a, Text Size 17.3301 KB
+  Library: libwebp.a, Text Size 294.654 KB
+  Library: libwebpdecoder.a, Text Size 105.355 KB
+  Library: libwebpdemux.a, Text Size 7.54688 KB
+  Library: libwebpmux.a, Text Size 22.3867 KB
   Library: libyaml.a, Text Size 114.057 KB
   Library: libzlib.a, Text Size 62.9297 KB
-  Total text size: 1588 KB
+  Total text size: 2018 KB
 
 Architecture: cris
   Library: libexamples.a, Text Size 8.23438 KB
@@ -110,10 +115,11 @@ Architecture: csky
 Architecture: epiphany
   Library: libexamples.a, Text Size 11.2695 KB
   Library: liblibpng16.a, Text Size 170.5 KB
+  Library: liblzma.a, Text Size 128.777 KB
   Library: libsharpyuv.a, Text Size 16.9023 KB
   Library: libyaml.a, Text Size 84.2305 KB
   Library: libzlib.a, Text Size 62.9727 KB
-  Total text size: 345 KB
+  Total text size: 474 KB
 
 Architecture: fr30
   Library: libexamples.a, Text Size 10.4023 KB
@@ -335,9 +341,13 @@ Architecture: mn10300
   Library: liblibpng16.a, Text Size 154.106 KB
   Library: liblzma.a, Text Size 133.205 KB
   Library: libsharpyuv.a, Text Size 15.168 KB
+  Library: libwebp.a, Text Size 319.905 KB
+  Library: libwebpdecoder.a, Text Size 128.4 KB
+  Library: libwebpdemux.a, Text Size 7.58887 KB
+  Library: libwebpmux.a, Text Size 23.5557 KB
   Library: libyaml.a, Text Size 107.146 KB
   Library: libzlib.a, Text Size 62.0508 KB
-  Total text size: 1257 KB
+  Total text size: 1736 KB
 
 Architecture: moxie
   Library: libexamples.a, Text Size 7.71094 KB
@@ -371,10 +381,11 @@ Architecture: moxieel
 
 Architecture: msp430
   Library: libexamples.a, Text Size 6.13086 KB
+  Library: liblibpng16.a, Text Size 204.084 KB
   Library: libsharpyuv.a, Text Size 25.5781 KB
   Library: libyaml.a, Text Size 119.193 KB
   Library: libzlib.a, Text Size 78.2852 KB
-  Total text size: 229 KB
+  Total text size: 433 KB
 
 Architecture: nds32
   Library: libexamples.a, Text Size 5.69141 KB
@@ -440,10 +451,11 @@ Architecture: pru
 
 Architecture: rl78
   Library: libexamples.a, Text Size 7.62793 KB
+  Library: liblibpng16.a, Text Size 298.081 KB
   Library: libsharpyuv.a, Text Size 50.3652 KB
   Library: libyaml.a, Text Size 165.103 KB
   Library: libzlib.a, Text Size 123.41 KB
-  Total text size: 346 KB
+  Total text size: 644 KB
 
 Architecture: rx
   Library: libexamples.a, Text Size 5.28125 KB
@@ -492,12 +504,14 @@ Architecture: v850
   Library: libexamples.a, Text Size 8.43555 KB
   Library: libfreetype.a, Text Size 760.895 KB
   Library: libgit2.a, Text Size 1625.63 KB
+  Library: libjpeg.a, Text Size 227.682 KB
+  Library: liblibpng16.a, Text Size 208.688 KB
   Library: liblzma.a, Text Size 197.453 KB
   Library: libpcre2-8.a, Text Size 340.752 KB
   Library: libsharpyuv.a, Text Size 13.873 KB
   Library: libyaml.a, Text Size 145.523 KB
   Library: libzlib.a, Text Size 86.8906 KB
-  Total text size: 3179 KB
+  Total text size: 3615 KB
 
 Architecture: visium
   Library: libexamples.a, Text Size 12.0469 KB
@@ -516,10 +530,11 @@ Architecture: visium
 
 Architecture: xstormy16
   Library: libexamples.a, Text Size 7.5957 KB
+  Library: liblibpng16.a, Text Size 233.254 KB
   Library: libsharpyuv.a, Text Size 31.5898 KB
   Library: libyaml.a, Text Size 124.633 KB
   Library: libzlib.a, Text Size 95.1816 KB
-  Total text size: 259 KB
+  Total text size: 492 KB
 
 Architecture: xtensa
   Library: libexamples.a, Text Size 4.99707 KB

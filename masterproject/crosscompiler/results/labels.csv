@@ -5,7 +5,7 @@ bfin;little;32;variable;16/32;Blackfin
 bpf;little;64;fixed;64;Only exampleprogram, little data
 c6x;big;32;fixed;32;
 cr16;little;32;variable;16/32;
-cris;little;32;variable;16/32;
+cris;little;32;variable;16/32/48/64;
 csky;little;32;variable;16/32;
 epiphany;little;32;variable;16/32;
 fr30;big;32;variable;16/32;
@@ -15,21 +15,21 @@ h8300;big;32;variable;16/32;
 iq2000;big;32;fixed;32;
 kvx;little;64;variable;16/32;
 lm32;big;32;fixed;32;
-loongarch64;little;64;fixed;64;
+loongarch64;little;64;fixed;32;
 m32r;big;32;fixed;32;
 m68k-elf;big;32;variable;16/32/48;
 mcore;little;32;fixed;16;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
 mcoreeb;big;32;fixed;16;16 bit instructions, 32 bit register file https://www.nxp.com/docs/en/data-sheet/MMC2001RM.pdf
-microblaze;big;32;fixed;64;
-microblazeel;little;32;fixed;64;
+microblaze;big;32;fixed;32;
+microblazeel;little;32;fixed;32;
 mmix;big;64;fixed;32;
 mn10300;little;32;variable;na;
-moxie;big;32;variable;16/32;
-moxieel;little;32;variable;16/32;
+moxie;big;32;variable;16/32/48;
+moxieel;little;32;variable;16/32/48;
 msp430;little;32;variable;16/32;
 nds32;little;32;variable;16/32;
-nios2;little;32;fixed;64;
-or1k;big;32;fixed;64;
+nios2;little;32;fixed;32;
+or1k;big;32;fixed;32;
 pru;little;32;fixed;32;
 rl78;little;32;variable;na;
 rx;little;32;variable;na;

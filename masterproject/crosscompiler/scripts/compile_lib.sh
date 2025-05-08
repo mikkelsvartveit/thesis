@@ -156,7 +156,7 @@ EOF
 
 
   echo "Building ${LIB_NAME}..."
-  cmake --build . -j$JCOUNT -v || echo "======= build incomplete! ======="
+  cmake --build . -j$JCOUNT -v -- -k 0 || echo "======= build incomplete! ======="
 
   echo "Installing ${LIB_NAME} to ${OUTPUT_DIR}..."
   cmake --install .
