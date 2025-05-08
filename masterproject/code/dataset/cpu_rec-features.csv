@@ -4,15 +4,15 @@ architecture;isa_detect_name;buildcross_name;endianness;wordsize;instructionwidt
 68HC11;;;big;8;variable;8-32;not sure about endiannes, if it has a concept of endianness. https://stackoverflow.com/questions/26247017/fibonacci-sequence-on-68hc11-using-4-byte-numbers https://en.wikipedia.org/wiki/Motorola_68HC11
 8051;;;na;8;variable;8/16/24;https://www.keil.com/dd/docs/datashts/intel/ism51.pdf https://en.wikipedia.org/wiki/Intel_MCS-51
 Alpha;alpha;;little;64;fixed;32;
-ARC32eb;;arceb;big;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
-ARC32el;;arc;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
-ARcompact;;;little;32;variable;16/32;probably little, but isa does support big-endian aswell. http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+ARC32eb;;;big;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+ARC32el;;;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
+ARcompact;;;little;32;variable;16/32;probably little, but isa does support big-endian aswell. http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf. Buildcross, does not appear to match arc or arceb. ARC32eb & ARC32el does aslo not match
 ARM64;arm64;;little;64;fixed;32;
 ARMeb;;;big;32;fixed;32;is a armv4 binary. might be armv4t, which has16bit thumb instructions, but assume fixed width. https://faculty-web.msoe.edu/meier/ce1921/slidesets/isaarm-instructions.pdf https://en.wikipedia.org/wiki/ARM_architecture_family
 ARMel;armel;;little;32;fixed;32;
 ARMhf;armhf;;little;32;fixed;32;
 AVR;;;na;8;variable;16/32;16bit instr + some with 16 bit operand, https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf
-AxisCris;;cris;little;32;fixed;16;https://www.axis.com/dam/public/25/67/ab/etrax-100lx-programmer%E2%80%99s-manual-en-US-33419.pdf https://en.wikipedia.org/wiki/ETRAX_CRIS
+AxisCris;;cris;little;32;variable;16/32/48/64;https://www.axis.com/dam/public/25/67/ab/etrax-100lx-programmer%E2%80%99s-manual-en-US-33419.pdf https://en.wikipedia.org/wiki/ETRAX_CRIS BuildCross - disassembled and verified variable width
 Blackfin;;bfin;little;32;variable;16/32;https://www.analog.com/media/en/dsp-documentation/processor-manuals/blackfin_pgr_rev2.2.pdf https://en.wikipedia.org/wiki/Blackfin
 Cell-SPU;;;bi;64;unk;unk;Most likely big, but hard to know for sure, since many variations. Same with variable or fixed: https://en.wikipedia.org/wiki/Cell_(processor)
 CLIPPER;;;little;32;variable;16/32/48/64;http://www.bitsavers.org/components/fairchild/clipper/The_CLIPPER_Processor_Instruction_Set_Architecture_and_Implementation.pdf
@@ -28,7 +28,7 @@ HP-Focus;;;na;32;variable;16/32;https://www.openpa.net/focus_processor_hp.html
 HP-PA;hppa;;big;32;fixed;32;"wrong wordsize in Andreassen table"
 i860;;;bi;32;fixed;32;https://www.ardent-tool.com/CPU/INTEL_80860.pdf https://en.wikipedia.org/wiki/Intel_i860
 IA-64;ia64;;little;64;variable;na;"technically variable width, but compiler packs instructions into 4 instrwidth 128bit packages"
-IQ2000;;iq2000;big;32;unk;unk;Based off Andreassen, found no good sources
+IQ2000;;iq2000;big;32;fixed;fixed;Based off Andreassen, found no good sources. BuildCross - disassembled and verified big endian and fixed width
 M32C;;;little;32;variable;16-32;https://en-support.renesas.com/knowledgeBase/16978511
 M32R;;m32r;big;32;fixed;32;https://www.farnell.com/datasheets/2865722.pdf BuildCross - disassembled and verified big endian and fixed width
 M68k;m68k;m68k-elf;big;32;variable;na;
@@ -40,7 +40,7 @@ MIPS16;;;bi;16;fixed;16;https://www.ijser.org/researchpaper/Instruction-Set-Arch
 MIPSeb;mips;;big;32;fixed;32;"mipseb from corpus, all MIPSeb lables map to this, checked for wsize and iw"
 MIPSel;mipsel;;little;32;fixed;32;
 MMIX;;mmix;big;64;fixed;32;https://en.wikipedia.org/wiki/MMIXhttps://en.wikipedia.org/wiki/MMIX https://mmix.cs.hm.edu/doc/index.html
-MN10300;;mn10300;little;32;unk;unk;found docs for 10300/103S, dont know if the same http://www.bitsavers.org/components/panasonic/panaXseries/13250-040E_MN1030_MN103S_Series_Instruction_Manual.pdf
+MN10300;;mn10300;little;32;variable;8/16/24/32;found docs for 10300/103S, dont know if the same http://www.bitsavers.org/components/panasonic/panaXseries/13250-040E_MN1030_MN103S_Series_Instruction_Manual.pdf BuildCross - disassembled and verified variable width
 Moxie;;moxie;big;32;variable;16/32/48;http://moxielogic.org/blog/pages/architecture.html, BuildCross - dissasembled and verified big endian
 MSP430;;msp430;little;16;variable;16/32/48;https://en.wikipedia.org/wiki/TI_MSP430
 NDS32;;nds32;little;32;variable;16/32;little based on cpu_rec.py file name, https://docs.u-boot.org/en/v2020.07/arch/nds32.html, isa called andestar, https://download.paulk.fr/coreboot/mt8173-spm/documentation/isa/AndeStar_ISA_v1.3.pdf
@@ -53,7 +53,7 @@ PIC24;;;little;16;fixed;24;
 PPCeb;powerpc;;big;32;fixed;32;unsure if this is 64 or 32 bit
 PPCel;ppc64el;;little;64;fixed;32;
 RISC-V;riscv64;;little;64;fixed;32;
-RL78;;rl78;little;unk;unk;unk;Dont know which rl78 version, but they are consistently little endian. https://en.wikipedia.org/wiki/RL78 
+RL78;;rl78;little;unk;variable;8/16/24/32;Dont know which rl78 version, but they are consistently little endian. https://en.wikipedia.org/wiki/RL78 BuildCross - disassembled and verified variable width
 ROMP;;;big;32;variable;16/32;https://en.wikipedia.org/wiki/IBM_ROMP, big according to andreassen
 RX;;rx;little;32;variable;8-64;https://en-support.renesas.com/knowledgeBase/16980415 https://www.renesas.com/en/document/mas/rx-family-users-manual-software-rev120?srsltid=AfmBOoo7-ZI96FMFgjLqLB9mWeGhJWlrxPGfdtbRwsb91S3bpAcXBFU3
 S-390;s390x;;big;64;variable;na;"wrong in Andreassen table, S-390 map to s390x"
@@ -64,7 +64,7 @@ SuperH;sh4;;little;32;fixed;16;"BI endian in Andreassen table, must be investiga
 TILEPro;;;unk;32;variable;8/16/32;VLIW, https://web.archive.org/web/20130123124859/http://www.tilera.com/scm/docs/UG120-Architecture-Overview-TILEPro.pdf
 TLCS-90;;;na;8;variable;8/16;https://en.wikipedia.org/wiki/Toshiba_TLCS
 TMS320C2x;;;unk;16/32;variable;16/32;https://ardent-tool.com/datasheets/TI_TMS320C2x_Users_Guide_1990.pdf
-TMS320C6x;;c6x;little;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171, BuildCross - disassembled and verified little endian
+TMS320C6x;;c6x;little;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171, BuildCross - disassembled and verified little endian. (for some reason the file is stored as the opposite endianness of buildcross)
 TriMedia;;;unk;32;unk;unk;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)
 V850;;v850;little;32;variable;16/32;https://www.renesas.com/en/document/mah/v850-familytm-architecture?language=en&srsltid=AfmBOopXB1J0-YNDX6GviV6gGkLCFFazYNur2hCQjzo64m8e1gRYB9em https://en.wikipedia.org/wiki/V850
 VAX;;;little;32;variable;unk;wiki says instr encoding 1 to 58 bytes, seems kinda wierd https://en.wikipedia.org/wiki/VAX https://www.stromasys.com/resources/understanding-the-vax-processors-architecture/

@@ -119,7 +119,7 @@ instruction_width_map() {
             comment=""
             ;;
         "cris")
-            width="16/32"
+            width="16/32/48/64"
             width_type="variable"
             comment=""
             ;;
