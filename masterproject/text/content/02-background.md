@@ -8,7 +8,7 @@ This chapter presents the theoretical foundation required to understand the rest
 
 All computer software boils down to a series of bytes readable by the CPU. The bytes are organized in _instructions_. An instruction always includes an _opcode_ (Operation Code), which tells the CPU what operation should be executed. Depending on the opcode, the instruction often contains one or more _operands_, which provides the CPU with the data that should be operated on. The operands can be immediate values (values specified directly in the instruction), registers (a small, very fast memory located physically on the CPU), or memory addresses. \autoref{fig:arm-instruction} illustrates the instruction format of ARM, which uses 32-bit instructions.
 
-![Instruction format and examples from the ARM instruction set. \label{fig:arm-instruction}](images/arm-instruction.svg)
+![Instruction format and examples from the ARM instruction set. \label{fig:arm-instruction}](images/background/arm-instruction.svg)
 
 <!-- Assembly? -->
 
@@ -116,7 +116,7 @@ The \ac{GCC} is a comprehensive compiler system supporting various programming l
 
 When invoking \ac{GCC} to create a final executable, the compiler automatically calls the appropriate Binutils tools to create the final executable, and an illustration of this pipeline can be seen in \autoref{fig:gcc-binutils-pipeline}. Since the final executable depends on the target system, the \ac{GCC} compiler and Binutils tools must be configured to target the same architecture. This is typically done by specifying the target architecture when building the toolchain, after which the \ac{GCC} compiler will use the appropriate Binutils tools to generate the final executable for that architecture.
 
-![Illustration of how the \ac{GCC} with Binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/gnu-gcc-binutils-pipeline.svg)
+![Illustration of how the \ac{GCC} with Binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/background/gnu-gcc-binutils-pipeline.svg)
 
 All of the GNU projects are distributed under the \ac{GPL}, which allows users to freely use, modify, and distribute the software. This has made \ac{GCC} and Binutils widely adopted in open-source projects and embedded systems development.
 
@@ -197,11 +197,11 @@ Modern machine learning has roots all the way back to the 1950s, when the first 
 
 \acp{CNN} is a deep learning technique designed for processing grid-based data. It is most commonly applied to visual tasks such as image classification and object detection. The main invention of \acp{CNN} is the concept of convolution layers. These layers scan across the input using _kernels_. The kernels detect features such as edges, textures, and patterns in the input data, and each output a feature map that is passed to the next layer. Each kernel has parameters that are trained based on the entire input grid. \autoref{fig:sliding-kernel} shows an example of a kernel sliding over the input.
 
-![A 3x3 kernel sliding over a 4x4 input. This layer will result in a 2x2 output. \label{fig:sliding-kernel}](images/sliding-kernel.svg)
+![A 3x3 kernel sliding over a 4x4 input. This layer will result in a 2x2 output. \label{fig:sliding-kernel}](images/background/sliding-kernel.svg)
 
 Most \ac{CNN} architectures also use pooling layers, which are static, non-trainable layers that reduce the spatial dimensions of the data. Activation layers, usually ReLU, are used to introduce non-linearity into the network. Finally, fully-connected layers at the end of the network are used for final classification. \autoref{fig:cnn-architecture} shows an example of a basic \ac{CNN} architecture.
 
-![Simple CNN architecture \label{fig:cnn-architecture}](images/cnn-architecture.svg)
+![Simple CNN architecture \label{fig:cnn-architecture}](images/background/cnn-architecture.svg)
 
 \acp{CNN} provide several advantages over competing approaches:
 
@@ -227,7 +227,7 @@ When training machine learning models, especially when model complexity is high,
 
 \autoref{fig:overfitting} shows an example of performance behavior of a model that is overfitting. We see that both training accuracy and validation accuracy improves initially, but after 7 epochs, the validation accuracy stagnates while training accuracy keeps increasing.
 
-![Example of training and validation accuracy when overfitting \label{fig:overfitting}](./images/overfitting.svg)
+![Example of training and validation accuracy when overfitting \label{fig:overfitting}](./images/background/overfitting.svg)
 
 Regularization is a set of techniques for reducing overfitting in machine learning models. In general, regularization penalizes models that are very complex, which incentivizes simpler models that likely generalize better to unseen data.
 
@@ -283,13 +283,15 @@ $$
 
 By forcing the network to function without access to all neurons during training, dropout prevents any neuron from relying too heavily on a specific subset of other neurons. This encourages the network to learn redundant representations, which improves robustness. The technique is particularly effective for very deep networks, where common dropout probabilities range from 0.2 to 0.5.
 
+<!-- TODO: explain K-fold and LOGO? -->
+
 ### Leave-one-group-out cross validation
 
 _Cross validation_ is a technique used to assess performance and generalizability of a machine learning model. It involves partitioning data into subsets, where the model is trained on certain subsets while validated using the remaining ones. The process is repeated, making sure the model is trained and validated using different splits. This helps reduce overfitting on a fixed validation set, with the trade-off of requiring more computation since the model needs to be trained multiple times. \autoref{fig:cross-validation} illustrates how the data can be split in a 5-fold cross validation. Each fold serves as validation data once while remaining data is used for training.
 
 It is worth noting that cross validation is used only when verifying the model architecture and hyperparameters, not when training the actual model that will be deployed. After performance is assessed using cross validation techniques, the final model is trained on all available training data without holding out a validation set.
 
-![K-fold cross validation with 5 folds. \label{fig:cross-validation}](images/cross-validation.svg)
+![K-fold cross validation with 5 folds. \label{fig:cross-validation}](images/background/cross-validation.svg)
 
 \ac{LOGO CV} is a variation used in cases where the data is grouped into distinct clusters or categories. The purpose is to ensure that the trained model is tested on data independent of the groups it was trained on. Instead of partitioning the data into random subsets, it is split into groups based on a predefined variable. For each iteration, one group is left out as the validation set, and the model is trained on the remaining groups. This technique assesses how well the model generalizes to completely unseen groups, which is especially useful in case the final model will be used with data that does not belong to any of the groups present in the training data.
 

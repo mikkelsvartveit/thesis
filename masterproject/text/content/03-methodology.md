@@ -336,7 +336,7 @@ We treat each byte value as an integer whose value range from 0 to 255. The valu
 
 When applying two-dimensional \ac{CNN} on 2D grids of this format, the byte values will essentially be treated as pixel values, where the byte sequence forms a grayscale image. \autoref{fig:byte-encoding} shows an example of a 9-byte sequence encoded as a 3x3 pixel grayscale image.
 
-![Encoding bytes as a grayscale image. \label{fig:byte-encoding}](images/byte-encoding.svg)
+![Encoding bytes as a grayscale image. \label{fig:byte-encoding}](images/methodology/byte-encoding.svg)
 
 This approach was chosen based on previous literature which successfully classified malware from binary executables using \acp{CNN} [@Kumari2017] [@Prima2021] [@Hammad2022] [@Al-Masri2024] [@El-Shafai2021] [@Alvee2021] [@Liang2021] [@Son2022].
 
