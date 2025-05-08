@@ -6,7 +6,15 @@ This chapter presents the results of the experiments described in \autoref{metho
 
 This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the endianness of binary files.
 
-### Training and testing on ISADetect
+### K-fold cross-validation on ISADetect
+
+In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
+
+![Endianness classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.png)
+
+\FloatBarrier
+
+### Leave-one-group-out cross-validation on ISADetect
 
 In this experiment, we train and evaluate our models using \ac{LOGO CV} as detailed in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}. \autoref{table:logo-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
@@ -266,6 +274,14 @@ Table: Endianness classification performance when training on the ISADetect and 
 ## Instruction width type
 
 This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the instruction width type of binary files.
+
+### K-fold cross-validation on ISADetect
+
+In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
+
+![Instruction width type classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.png)
+
+\FloatBarrier
 
 ### Training and testing on ISADetect
 
