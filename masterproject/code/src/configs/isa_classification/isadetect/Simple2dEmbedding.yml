@@ -1,0 +1,33 @@
+data:
+  name: ISAdetectDataset
+  params:
+    dataset_path: ISAdetect/ISAdetect_full_dataset/
+    feature_csv_path: ISAdetect-features.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    use_code_only: True
+
+transforms:
+  name: Vector1D
+  params:
+    length: 512
+
+model:
+  name: Simple2dEmbedding
+  params:
+    input_length: 512
+    num_classes: 23
+    dropout_rate: 0.3
+
+validator:
+  name: kfold_cv
+  wandb_project_name: Simple2dEmbedding
+  n_splits: 5
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 5

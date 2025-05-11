@@ -1,0 +1,33 @@
+data:
+  name: BuildCrossDataset
+  params:
+    dataset_path: buildcross/text_bin
+    feature_csv_path: buildcross/labels.csv
+    per_architecture_limit: null
+    file_byte_read_limit: 512
+    max_file_splits: 10000
+
+transforms:
+  name: Vector1D
+  params:
+    length: 512
+
+model:
+  name: Simple1d
+  params:
+    input_length: 512
+    num_classes: 40
+    dropout_rate: 0.3
+
+validator:
+  name: kfold_cv
+  wandb_project_name: Simple1d
+  n_splits: 5
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 5
