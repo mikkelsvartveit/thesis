@@ -8,7 +8,7 @@ ARC32eb;;;big;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) ht
 ARC32el;;;little;32;variable;16/32;https://en.wikipedia.org/wiki/ARC_(processor) http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf
 ARcompact;;;little;32;variable;16/32;probably little, but isa does support big-endian aswell. http://me.bios.io/images/d/dd/ARCompactISA_ProgrammersReference.pdf. Buildcross, does not appear to match arc or arceb. ARC32eb & ARC32el does aslo not match
 ARM64;arm64;;little;64;fixed;32;
-ARMeb;;;big;32;fixed;32;is a armv4 binary. might be armv4t, which has16bit thumb instructions, but assume fixed width. https://faculty-web.msoe.edu/meier/ce1921/slidesets/isaarm-instructions.pdf https://en.wikipedia.org/wiki/ARM_architecture_family
+ARMeb;;;big;32;fixed;32;is a armv4 binary. might be armv4t, which can have 16bit thumb instructions, but assume fixed width. https://faculty-web.msoe.edu/meier/ce1921/slidesets/isaarm-instructions.pdf https://en.wikipedia.org/wiki/ARM_architecture_family
 ARMel;armel;;little;32;fixed;32;
 ARMhf;armhf;;little;32;fixed;32;
 AVR;;;na;8;variable;16/32;16bit instr + some with 16 bit operand, https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf
@@ -64,7 +64,7 @@ SuperH;sh4;;little;32;fixed;16;"BI endian in Andreassen table, must be investiga
 TILEPro;;;unk;32;variable;8/16/32;VLIW, https://web.archive.org/web/20130123124859/http://www.tilera.com/scm/docs/UG120-Architecture-Overview-TILEPro.pdf
 TLCS-90;;;na;8;variable;8/16;https://en.wikipedia.org/wiki/Toshiba_TLCS
 TMS320C2x;;;unk;16/32;variable;16/32;https://ardent-tool.com/datasheets/TI_TMS320C2x_Users_Guide_1990.pdf
-TMS320C6x;;c6x;little;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171, BuildCross - disassembled and verified little endian. (for some reason the file is stored as the opposite endianness of buildcross)
+TMS320C6x;;c6x;unk;32;fixed;32;VLIW, https://www.ti.com/lit/ug/spru731a/spru731a.pdf?ts=1740359420171, BuildCross - disassembled and verified fixed width. (can be dissasembled with buildcross, but compared with c6x binaries cant get the endianness of the files to match up. Not sure what endianness is actually correct for the isa)
 TriMedia;;;unk;32;unk;unk;dont know which processor, they all have different isas https://en.wikipedia.org/wiki/TriMedia_(media_processor)
 V850;;v850;little;32;variable;16/32;https://www.renesas.com/en/document/mah/v850-familytm-architecture?language=en&srsltid=AfmBOopXB1J0-YNDX6GviV6gGkLCFFazYNur2hCQjzo64m8e1gRYB9em https://en.wikipedia.org/wiki/V850
 VAX;;;little;32;variable;unk;wiki says instr encoding 1 to 58 bytes, seems kinda wierd https://en.wikipedia.org/wiki/VAX https://www.stromasys.com/resources/understanding-the-vax-processors-architecture/
