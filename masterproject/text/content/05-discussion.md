@@ -83,12 +83,11 @@ It is clear from our results that the larger complexity of ResNet does not signi
 ## Model architecture performance analysis
 
 <!--
-(Mikkel)
-- Why embeddings work so well
-- Why larger models do not perform better
-- 1D vs 2D
-  - 2D better at instruction width? Why?
-- Variability ("flakyness") in model performance
+TODO:
+
+- Visualize some grayscale images
+- Learning rate converges fast relative to the amount of data we have, suggest that it is fitting to something
+
 -->
 
 ### Impact of embedding layers
@@ -147,20 +146,6 @@ This is common behavior when the size of the training dataset is limited. While 
 
 ## Model generalizability
 
-<!--
-- LOGO already tests this
-  - Show comparison to regular leave-one-out cross validation to prove that it overfits if not using LOGO CV
-- Why does this not convert well to CpuRec and BuildCross?
-  - Models might be memorizing specific ISA characteristics rather than learning generalizable features
-  - Limited sample size
-  - Greater diversity of architectures
-    - Struggles with 8-bit?
-  - Statistical significance
-- Does training on BuildCross improve performance?
-- Visualize some grayscale images
-- Learning rate converges fast relative to the amount of data we have, suggest that it is fitting to something
--->
-
 A key objective of our models is to be able to generalize to \acp{ISA} that were not seen during training. This section analyzes the generalizability of our models and how our experiments support this objective.
 
 ### Leave-one-group-out cross validation
@@ -188,6 +173,14 @@ This overlap of \acp{ISA} between the datasets is a limitation of our experiment
 ![Endianness classification performance on the CpuRec dataset after excluding the \acp{ISA} present in ISAdetect \label{fig:cpurec-endianness-by-model-exclude-overlap}](./images/discussion/cpurec-endianness-by-model-exclude-overlap.png)
 
 ![Instruction width classification performance on the CpuRec dataset after excluding the \acp{ISA} present in ISAdetect \label{fig:cpurec-instructionwidthtype-by-model-exclude-overlap}](./images/discussion/cpurec-instructionwidthtype-by-model-exclude-overlap.png)
+
+We identify several potential reasons for the poor generalizability of our ISAdetect-trained models:
+
+- The diversity of the ISAdetect dataset used for training is quite limited. CpuRec contains 76 different \acp{ISA}, while ISAdetect only contains 23. In addition, the ISAdetect dataset is more homogeneous, with all \acp{ISA} being supported compile targets for recent versions of the Debian Linux distribution. CpuRec, on the other hand, was developed by manually cross-compiling source code to a very diverse set of \acp{ISA}. By inspecting the \ac{ISA} features in the two dataset, we can for instance observe that while all \acp{ISA} in ISAdetect have 32 or 64 bit word sizes, CpuRec also contains several \acp{ISA} with 8 and 16 bit word sizes.
+
+- The CpuRec dataset only contains a single binary file per \ac{ISA}. This is a significant limitation of the dataset that makes our results less conclusive and more sensitive to anomalies in the specific binary used for each \ac{ISA}.
+
+- Due to the nature of deep learning, it is possible that the \ac{CNN} models are picking up on \ac{ISA}-specific patterns that are not inherently related to the endianness or instruction width. This is a common problem in deep learning, and is known as overfitting to the training data. Since it is difficult to interpret the inner workings of \ac{CNN} models, we can only speculate whether this is the case. However, the high accuracies observed when running K-fold cross validation on the ISAdetect dataset do support the claim that the models are easy to fit to full \acp{ISA} compared to fitting them to specific \ac{ISA} characteristics.
 
 As noted in the results chapter, our findings show that augmenting the training data with BuildCross does not improve the generalizability of endianness detection. However, we do see indications that the instruction width type classification task benefits from augmenting the training data with BuildCross. To make this a fair comparison, we must note that training on BuildCross results in more \acp{ISA} overlap between the training and test datasets, as compared to training on ISAdetect only. To emphasize that the performance is actually better on unseen \acp{ISA}, we can examine the results when excluding both the \acp{ISA} present in ISAdetect and BuildCross from the test set. \autoref{fig:combined-instructionwidthtype-by-model-exclude-overlap} illustrates this. Compared to \autoref{fig:cpurec-instructionwidthtype-by-model-exclude-overlap}, we see significant performance improvements across all model architectures, indicating that the inclusion of a more diverse training dataset does improve the generalizability of instruction width type classification. (TODO: reason more about why this is the case)
 
@@ -246,7 +239,7 @@ improves instruction width but not endianness. why?
 ## Limitations
 
 <!--
-- Only two target features,
+- Only two target features (time/resource constraint),
   - how that might limit knowledge on how well CNNs in general works on detecting isa features
 - Black-box models – hard to interpret why it doesn't generalize that well
 - Training on more than just code sections?
