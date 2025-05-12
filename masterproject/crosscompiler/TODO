@@ -3,3 +3,4 @@
 - cleanup unused ./toolchains/arch.cmake
 - Makefile targets that changes
 - Licensing
+- Add libgit to to sources.tar.gz

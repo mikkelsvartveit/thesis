@@ -2,12 +2,32 @@
 
 ## Overview of key findings
 
+In this section, we will briefly go over the main findings in our experiments. We will also highlight the potential implications of these findings related to our research questions by indicating further points of discussion for later sections.
+
+<!-- Summarize each experiment, small comment on variability -->
+
+In terms of raw performance on the two classification tasks, the different models performance varies quite a lot depending on the experimental suite and datasets. In the logo-cv suite with isa detect, we are able to achieve <!-- TODO: --> accuracy on endianness detection with and <!-- TODO: --> accuracy on instruction width detection. Both of these scores were achieved with the Simple1d-E model. The performance on the other suites are not quite as convincing, as on the cpu-rec suites we see higher variability between runs, and lower overall accuracy on the BuildCross suite.
+
+<!-- Endiannes, are they able to detect it? which model performs best. 1d Embedding is best-->
+
+<!-- Instruction widht, are they able to detect it? which model performs best 2d is best-->
+
 <!--
 (Stian)
 - Superior performance of Simple1d-E
 - Bar chart with performance on each ISA
 - Statistical significance
--->
+
+<!--
+- endianness
+- instruction width
+- Summary
+  - Simple1de endiannes
+  - Simple2de instruction width
+  - Resnet50 worse than simple
+  - Embedding better than no embedding for endainness
+  - However, inconclusive results due tu high variability in ... suites.
+ -->
 
 ### Endianness
 
@@ -17,7 +37,7 @@ ISAdetect logocv: embedding higher performance across the board
 - 1D vs 2D, similar performance, but 1d marginally better.
 - Simple 1d & 2d embedding models able to diff between ISAs with same instruction set but different endianness
 
-CPURec: embedding higher performance across the board, but less that ISAdetect logocv
+CPURec: embedding higher performance across the board, but less than ISAdetect logocv
 - 1D vs 2D, similar performance, but 2d marginally better.
 - Seen archs perform well, with 100% accuracy, but is able to decte archs like blackfin rl78 rx etc very well.
 - More correctly guesses than wrong
@@ -35,12 +55,16 @@ Key take aways:
 - Embedding seems best for endianness, and performs better on 3/4 cases. Huge diff on LOGO cv isadetect. The roles are reversed when testing on BuildCross though.
 - The larger complexity of resnet does not improve results, and usually performs worse.
 - Although results seem promesing on LOGO cv for isadetect, the performance on cpu rec and buildcross is not as good.
-- Buildcross has no overlap with isadetect, except m68k, and is not as good as cpu rec.
+- Buildcross has no overlap with isadetect, except m68k, and is not as good as in cpu rec.
  -->
 
-Out of all the models on the different test suites, Simple1d-E performed the best overall. While Simple2d-E does marginally beat out Simple1d-E on isadetect-cpurec in \autoref{table:cpurec-endianness-results} and isadetect-buildcross in \autoref{table:buildcross-endianness-results}of 1.2 \ac{p.p.} and 0.5 \ac{p.p.} respectively, we deem these small differences inside the margin of error. However, the relatively larger performance wins on LOGO-CV ISAdetect in \autoref{table:logo-endianness-results} of 4.6 \ac{p.p.} is evidence that Simple1d-E would perform best in real world scenarios.
+<!--TODO: back with statistical significance -->
 
-The largest overall performance differences in our experiments is seen when comparing embedding and non-embedding versions of our models. On the endianness experiments, embedding models perform better in 3/4 cases, with the exception of ISAdetect-Buildcross where Simple1d.
+<!-- Out of all the experiment on the different test suites, Simple1d-E is the model that performed the best overall. While Simple2d-E does marginally beat out Simple1d-E on isadetect-cpurec in \autoref{table:cpurec-endianness-results} and isadetect-buildcross in \autoref{table:buildcross-endianness-results}of 1.2 \ac{p.p.} and 0.5 \ac{p.p.} respectively, we deem these small differences inside **the margin of error**. However, the relatively larger performance wins on LOGO-CV ISAdetect in \autoref{table:logo-endianness-results} of 4.6 \ac{p.p.} is evidence that Simple1d-E would perform best in real world scenarios.
+
+The largest overall performance differences in our experiments is seen when comparing embedding and non-embedding versions of our models. On the endianness experiments embedding models perform better in 3 out of 4 test suites, with a clear gap in performance on logo-isadetect. The only exception ISAdetect-Buildcross where both 1d and 2d non-embedding versions beat out their embedding counterparts, with a lot less variance in the reported average accuracy as well. Still, the large performance difference on LOGO-CV ISAdetect indicates that the embedding models are better suited for endianness detection, where the other results are less significant.
+
+It is clear from our results that the larger complexity of ResNet does not significantly improve results. ResNet50 and ResNet50-E's performance is at least on par with the other models, barring the 95th percentile margin of error. The training loss in the different suites , indicates that the features the ResNet model learns related to endianness are not complex enough to require all the extra complexity and learnable parameters. This is true, even with the larger input of 1024 bytes compared to 512 that the simple models use. -->
 
 ### Instruction width
 
@@ -210,7 +234,8 @@ improves instruction width but not endianness. why?
 ## Limitations
 
 <!--
-- Only two target features
+- Only two target features,
+  - how that might limit knowledge on how well CNNs in general works on detecting isa features
 - Black-box models – hard to interpret why it doesn't generalize that well
 - Training on more than just code sections?
 - File splitting implications
