@@ -1,3 +1,5 @@
 - dont report archs with errors, such as 6502 whuich makes archive files but does not have working disassembler
 - README
 - cleanup unused ./toolchains/arch.cmake
+- Makefile targets that changes
+- Licensing
