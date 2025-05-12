@@ -129,17 +129,17 @@ Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec}
 | STM8         | n/a        | 8        | variable          |
 | TriMedia     | unknown    | 32       | unknown           |
 
-The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation of open-source projects using gcc cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset.
+The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset.
 
 <!-- Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
 
 ### Technical configuration
 
-For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center GPUs [@Idun]. The following hardware configuration was used for all experiments:
+For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center \acp{GPU} [@Idun]. The following hardware configuration was used for all experiments:
 
 - CPU: Intel Xeon E5-2695 v4 (12 cores enabled)
-- GPU: NVIDIA A100 40GB
+- \ac{GPU}: NVIDIA A100 40GB
 - RAM: 16 GB
 
 We use the PyTorch framework for building and training our models. The following software versions were used:
@@ -164,7 +164,7 @@ Table: Hyperparameter selection \label{table:hyperparameters}
 | Learning rate  | 0.0001        |
 | Weight decay   | 0.01          |
 
-We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient GPU utilization, while small enough to provide a regularization effect through noise in gradient estimation.
+We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient \ac{GPU} utilization, while small enough to provide a regularization effect through noise in gradient estimation.
 
 Cross entropy loss is the natural choice for classification tasks, as it tends to provide superior performance for classification tasks compared to mean squared error loss [@Golik2013].
 
@@ -178,7 +178,7 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 This thesis introduces BuildCross, a toolset and dataset representing a significant contribution to the field. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream \acp{ISA}. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance aiming to generate a larger volume of binary code for the underrepresented less common architectures.
 
-We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with GNU Compiler Collection (GCC) and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
+We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with \ac{GCC} and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
 ```{=latex}
 \begin{longtable}[c]{p{2cm}p{1.5cm}p{12cm}}
@@ -218,11 +218,11 @@ zlib & 1.3 & A software library used for data compression. It provides lossless 
 - Exists systems for building toolchains, our choice landed on BuildCross.
 - containerized for portability, size optim and reproducibility -->
 
-In order to generate binary programs for specific ISA, we need a cross-compiler that can run on our host system and target that architecture. While common targets like x86, ARM and MIPS systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to configure properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on the GNU Compiler Collection and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
+In order to generate binary programs for specific \ac{ISA}, we need a cross-compiler that can run on our host system and target that architecture. While common targets like x86, ARM and MIPS systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to configure properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on the \ac{GCC} and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
 
-A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of GCC, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by the user mikpe on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures. The buildcross project was used as a base for our own toolchain building scripts, and expanded to support additional architectures.
+A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of \ac{GCC}, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by the user mikpe on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures. The buildcross project was used as a base for our own toolchain building scripts, and expanded to support additional architectures.
 
-The BuildCross project uses singularity images to create containerized, reproducible and portable cross compilation environments for the supported architectures. The GCC suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
+The BuildCross project uses singularity images to create containerized, reproducible and portable cross compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
 
@@ -236,11 +236,11 @@ The toolchain configuration setup is not perfect though, as some of the librarie
 
 ### Gathering results
 
-The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in ELF format, providing functions utilities other programs can link to.
+The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in \ac{ELF} format, providing functions and utilities other programs can link to.
 
 Using the GNU Binutils toolkit from our compiled toolchains, we employed the archiver (ar) to extract individual object files, objcopy to isolate code sections from these objects, and objdump to generate disassembly. This process yielded our core dataset of compiled code sections across all target architectures.
 
-For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's ELF headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
+For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's \ac{ELF} headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
 
 ### Results
 
@@ -324,7 +324,7 @@ Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented featu
 
 ## Experiments
 
-This research primarily involves training, validating, and evaluating \ac{CNN} models using ISA characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
+This research primarily involves training, validating, and evaluating \ac{CNN} models using \ac{ISA} characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
 
 ### Data preprocessing
 
@@ -362,7 +362,7 @@ In our experiments, we train, evaluate, and compare the model architectures outl
 
 #### Simple 1D CNN
 
-This model is a small one-dimensional CNN. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters. This model is hereby referred to as _Simple1d_.
+This model is a small one-dimensional \ac{CNN}. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters. This model is hereby referred to as _Simple1d_.
 
 Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
@@ -399,7 +399,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-This model builds on the the simple 1D CNN model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1d-E_.
+This model builds on the the simple 1D \ac{CNN} model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1d-E_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
@@ -436,7 +436,7 @@ Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
 #### Simple 2D CNN
 
-This model is a small two-dimensional CNN. The input size is 32x16x1, which is the result of the 2D encoding of a 512-byte sequence. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-2d-cnn-with-embedding-layer}. Then, the model consists of two convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-2d-cnn}. The model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple2d_.
+This model is a small two-dimensional \ac{CNN}. The input size is 32x16x1, which is the result of the 2D encoding of a 512-byte sequence. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-2d-cnn-with-embedding-layer}. Then, the model consists of two convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-2d-cnn}. The model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple2d_.
 
 Table: Simple 2D CNN \label{table:simple-2d-cnn}
 
@@ -467,7 +467,7 @@ Table: Simple 2D CNN \label{table:simple-2d-cnn}
 
 #### Simple 2D CNN with embedding layer
 
-This model builds on the the simple 2D CNN model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2d-E_.
+This model builds on the the simple 2D \ac{CNN} model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2d-E_.
 
 Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 

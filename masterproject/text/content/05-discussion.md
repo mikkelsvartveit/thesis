@@ -6,11 +6,23 @@ In this section, we will briefly go over the main findings in our experiments. W
 
 <!-- Summarize each experiment, small comment on variability -->
 
-In terms of raw performance on the two classification tasks, the different models performance varies quite a lot depending on the experimental suite and datasets. In the logo-cv suite with isa detect, we are able to achieve <!-- TODO: --> accuracy on endianness detection with and <!-- TODO: --> accuracy on instruction width detection. Both of these scores were achieved with the Simple1d-E model. The performance on the other suites are not quite as convincing, as on the cpu-rec suites we see higher variability between runs, and lower overall accuracy on the BuildCross suite.
+<!--
+K-fold
+- ALL models perform the same with next to no variance
+- The fact that allready seen architectures are included in the test set makes it easy to fit endianness and instruction width to already seen architectures. This backs up our suspicion that the models can easily fit on features that are not inherently tied to endianness and instruction width. We feel it is the correct assumption that LOGO-CV and training and testing on different datasets is the best way of evaluating CNNs general ability to detect ISA features.
+-->
+
+In the initial K-fold cross validation experiments on ISAdetect we observed that all models performed similarly well, with next to 100% classification accuracy on both endianness and instruction width type. This result was also achieved with very little variance between runs, and points to the fact that already seen architectures across the training and test set lets the models excel at fitting to endianness and instruction width. The incredibly high accuracy feeds our suspicion that the models can quickly fit to architectural features that are not inherently tied to endianness and instruction width. We believe it was correct to assume that this needed to be investigated further, and that \ac{LOGO CV} and training and testing on different datasets is the best way of evaluating the \acp{CNN} general ability to detect \ac{ISA} features.
+
+In the \ac{LOGO CV} on ISAdetect runs and the evaluation strategies using multiple datasets we see more varied and interesting results compared to K-fold. In terms of raw classification performance, individual model performance varies quite a lot depending on the experimental suite and datasets. In the \ac{LOGO CV} suite with ISAdetect, we are able to achieve <!-- TODO: --> accuracy on endianness detection with and <!-- TODO: --> accuracy on instruction width detection. Both of these scores were achieved with the Simple1d-E model. The performance on the other suites are not quite as convincing, as on the cpu-rec suites we see higher variability between runs, and lower overall accuracy on the BuildCross suite.
 
 <!-- Endiannes, are they able to detect it? which model performs best. 1d Embedding is best-->
 
 <!-- Instruction widht, are they able to detect it? which model performs best 2d is best-->
+
+<!-- Buildcross improves cpu rec performance -->
+
+<!-- ResNet models does not improve prformance -->
 
 <!--
 (Stian)
