@@ -159,11 +159,7 @@ We note that while generalizability for the endianness classification task seem 
 ## Dataset quality assessment
 
 <!--
-5.5.1 ISADetect Dataset
-
-Strengths and limitations
-Representation of mainstream vs. exotic architectures
-Similar architectures impact logocv and balance? (ref powerpc vs powerpcspe, armel armhf)
+TODO:
 
 5.5.2 CPURec Dataset
 
@@ -180,6 +176,59 @@ Dependency on external toolchain (mikpe's GitHub)
 Quantity and quality of gathered data
 improves instruction width but not endianness. why?
 -->
+
+### ISAdetect dataset
+
+The ISAdetect is our main dataset for training machine learning models. It contains 23 different \acp{ISA}, with each architecture containing between 2800 and 6000 binary program samples [@Kairajarvi2020] [@Clemens2015] per architecture. We train our models on the code sections of these binary program samples, and exclude the code sections that are smaller than 1024 bytes. We do not perform file splitting on the ISAdetect dataset to augment the amount of training data, as preliminary results revealed that this did not improve model performance or generalizability. Taking this into consideration, \autoref{table:isadetect-samples} shows the number of samples per \ac{ISA} in ISAdetect. This averages to 4,086 samples per \ac{ISA}.
+
+Table: Number of samples per \ac{ISA} in ISAdetect. \label{table:isadetect-samples}
+
+| \ac{ISA}   | No. samples |
+| ---------- | ----------: |
+| s390       |       5,118 |
+| sparc      |       4,923 |
+| armhf      |       3,674 |
+| i386       |       4,484 |
+| arm64      |       3,518 |
+| armel      |       3,814 |
+| sh4        |       5,854 |
+| amd64      |       4,059 |
+| riscv64    |       4,285 |
+| mipsel     |       3,693 |
+| s390x      |       3,511 |
+| powerpc    |       3,618 |
+| mips       |       3,547 |
+| m68k       |       4,313 |
+| ppc64el    |       3,521 |
+| x32        |       4,059 |
+| hppa       |       4,830 |
+| powerpcspe |       3,922 |
+| alpha      |       3,952 |
+| sparc64    |       3,205 |
+| mips64el   |       4,280 |
+| ppc64      |       2,822 |
+| ia64       |       4,983 |
+| **Total**  |  **93,985** |
+
+We can examine the number of samples for each class for both of our target features, endianness and instruction width type. \autoref{table:isadetect-endianness-samples-per-class} and \autoref{table:isadetect-instructionwidthtype-samples-per-class} show the number of samples per class for endianness and instruction width type, respectively. We can see that for both target features, there are more than 30,000 training instances per class. This should be sufficient for training even the most complex \ac{CNN} models.
+
+Table: Number of samples per class for endianness in ISAdetect. \label{table:isadetect-endianness-samples-per-class}
+
+| Endianness | No. samples | Percentage |
+| ---------- | ----------: | ---------: |
+| little     |      54,176 |     57.64% |
+| big        |      39,809 |     42.36% |
+
+Table: Number of samples per class for instruction width type in ISAdetect. \label{table:isadetect-instructionwidthtype-samples-per-class}
+
+| Instruction width type | No. samples | Percentage |
+| ---------------------- | ----------: | ---------: |
+| fixed                  |      63,458 |     67.52% |
+| variable               |      30,527 |     32.48% |
+
+We also observe that there is some class imbalance in the dataset, particularly for instruction width type, where more than two thirds of the binaries have fixed-width instructions. While this level of class imbalance is generally considered acceptable, it might cause the models to slightly bias towards the majority class.
+
+While the amount of data and the class balance is sufficient for training large deep learning models, it is not particularly diverse in terms of the \acp{ISA} present in the dataset. Since all architectures are supported compile targets for recent versions of the Debian Linux distribution, it is likely that these \acp{ISA} are built for running general-purpose operating systems rather than specialized applications such as embedded systems. There are also \ac{ISA} pairs in the dataset that are quite similar, such as `armel`/`armhf` and `powerpc`/`powerpcspe`. This might cause slightly misleading performance numbers when running \ac{LOGO CV}, as the models may overfit to the similarity between these \acp{ISA}.
 
 ## UN sustainability goals
 
