@@ -11,3 +11,8 @@ Kairajärvi
 Andreassen
 Granboulan
 decompilation
+BuildCross
+CpuRec
+ISAdetect-BuildCross
+ISAdetect-CpuRec
+ResNet

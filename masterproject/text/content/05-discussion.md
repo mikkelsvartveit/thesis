@@ -4,81 +4,29 @@
 
 In this section, we will briefly go over the main findings in our experiments. We will also highlight the potential implications of these findings related to our research questions by indicating further points of discussion for later sections.
 
-<!-- Summarize each experiment, small comment on variability -->
+### K-fold cross validation and evaluation strategies
 
-<!--
-K-fold
-- ALL models perform the same with next to no variance
-- The fact that allready seen architectures are included in the test set makes it easy to fit endianness and instruction width to already seen architectures. This backs up our suspicion that the models can easily fit on features that are not inherently tied to endianness and instruction width. We feel it is the correct assumption that LOGO-CV and training and testing on different datasets is the best way of evaluating CNNs general ability to detect ISA features.
--->
+In the initial K-fold cross validation experiments on ISAdetect we observed that all models performed similarly well, with next to 100% classification accuracy on both endianness and instruction width type. This result was also achieved with very little variance between runs, and points to the fact that already seen architectures across the training and test set lets the models excel at fitting to endianness and instruction width. The incredibly high accuracy feeds our suspicion that the models can quickly fit to architectural features that are not inherently tied to endianness and instruction width. We believe it was correct in our assessment that this needed to be investigated further, and that \ac{LOGO CV} and train-testing on different datasets is the best way of evaluating the \acp{CNN} general ability to detect \ac{ISA} features.
 
-In the initial K-fold cross validation experiments on ISAdetect we observed that all models performed similarly well, with next to 100% classification accuracy on both endianness and instruction width type. This result was also achieved with very little variance between runs, and points to the fact that already seen architectures across the training and test set lets the models excel at fitting to endianness and instruction width. The incredibly high accuracy feeds our suspicion that the models can quickly fit to architectural features that are not inherently tied to endianness and instruction width. We believe it was correct to assume that this needed to be investigated further, and that \ac{LOGO CV} and training and testing on different datasets is the best way of evaluating the \acp{CNN} general ability to detect \ac{ISA} features.
+In the \ac{LOGO CV} on ISAdetect runs and the evaluation strategies using multiple datasets we see more varied and interesting results compared to K-fold. In terms of raw classification performance, individual model performance varies quite a lot depending on the experimental suite and datasets. On the \ac{LOGO CV} suite with ISAdetect, we are able to achieve 90.3% average accuracy on endianness detection and 88.0% accuracy on instruction width detection. Both of these scores were achieved with the Simple1d-E model. The performance on the other suites are not quite as convincing, as on the suites testing on CpuRec we see higher variability between runs with lower accuracies, and lower overall accuracy on the BuildCross suites.
 
-In the \ac{LOGO CV} on ISAdetect runs and the evaluation strategies using multiple datasets we see more varied and interesting results compared to K-fold. In terms of raw classification performance, individual model performance varies quite a lot depending on the experimental suite and datasets. In the \ac{LOGO CV} suite with ISAdetect, we are able to achieve <!-- TODO: --> accuracy on endianness detection with and <!-- TODO: --> accuracy on instruction width detection. Both of these scores were achieved with the Simple1d-E model. The performance on the other suites are not quite as convincing, as on the cpu-rec suites we see higher variability between runs, and lower overall accuracy on the BuildCross suite.
+### Endianness detection
 
-<!-- Endiannes, are they able to detect it? which model performs best. 1d Embedding is best-->
+With endianness detection we see the clear performance differences between embedding and non-embedding models. The embedding models perform better in 3 out of 4 test suites, with a clear gap in performance on \ac{LOGO CV} ISAdetect. The only exception is ISAdetect-Buildcross where both 1d and 2d non-embedding versions beat out their embedding counterparts, with a lot less variance in the reported average accuracy as well. When comparing model dimensionality and complexity when testing on CpuRec based on the 95% confidence interval, we see no statistical significant difference between the 1d, 2d and ResNet50. Still, the large performance difference on \ac{LOGO CV} ISAdetect and training on ISAdetect + Buildcross and testing on CpuRec experiments indicates that the embedding models are better suited for endianness detection, where the results carry significant differences and test-suites are more comprehensive in terms of evaluation strategy and dataset size.
 
-<!-- Instruction widht, are they able to detect it? which model performs best 2d is best-->
+### Instruction width type detection
 
-<!-- Buildcross improves cpu rec performance -->
+For instruction width type detection, it is even less clear which variations of models perform best. In the ISAdetect-CpuRec suite the performance is not great, with results comparable to random guesswork hovering between 53.2% and 60.1% average accuracy across all. Just like with endianness detection, the two best performing suites are \ac{LOGO CV} ISAdetect and ISAdetect+BuildCross on CpuRec. We also see here that embedding models perform better, although with less performance differences across model variations. While it seems that embedding models are better suited for instruction width detection, the performance differences are not as pronounced as with endianness detection.
 
-<!-- ResNet models does not improve prformance -->
+### Addition of BuildCross
 
-<!--
-(Stian)
-- Superior performance of Simple1d-E
-- Bar chart with performance on each ISA
-- Statistical significance
+We believe that the addition of the BuildCross dataset has had a positive impact on the overall quality and robustness of our testing methodology, as shown in the results from both ISAdetect-BuildCross and ISAdetect+BuildCross on CpuRec experiments. Our ISAdetect-BuildCross performance shows comparable results to ISAdetect-CpuRec on instruction width detection, validating our efforts in creating a dataset with more exotic and diverse datasets. However, an interesting anomaly appears with endianness detection in the same suite, as the non-embedding models outperform their embedding counterparts with remarkably low variance. This unexpected pattern contrasts the other experimental suites. There is some indication of similar behavior, although less pronounced, in the instruction width detection experiments on the same suite.
 
-<!--
-- endianness
-- instruction width
-- Summary
-  - Simple1de endiannes
-  - Simple2de instruction width
-  - Resnet50 worse than simple
-  - Embedding better than no embedding for endainness
-  - However, inconclusive results due tu high variability in ... suites.
- -->
+While ISAdetect-BuildCross showed some interesting patterns, the most significant impact in terms of overall accuracy appeared when combining ISAdetect and BuildCross. The addition of BuildCross significantly improved performance on the CpuRec testing suite, particularly for instruction width type detection. In this case, performance jumped from around 50-60% to above 80% for the top performing models. This indicates that the addition of more diverse and exotic architectures in the training data has a positive impact on the overall performance of our models.
 
-### Endianness
+### Simple vs complex models
 
-<!--
-ISAdetect logocv: embedding higher performance across the board
-- added complexity of resnet does not improve results
-- 1D vs 2D, similar performance, but 1d marginally better.
-- Simple 1d & 2d embedding models able to diff between ISAs with same instruction set but different endianness
-
-CPURec: embedding higher performance across the board, but less than ISAdetect logocv
-- 1D vs 2D, similar performance, but 2d marginally better.
-- Seen archs perform well, with 100% accuracy, but is able to decte archs like blackfin rl78 rx etc very well.
-- More correctly guesses than wrong
-
-buildcross: very similar across all models, but 1d no embedding is best
-- worse overall performance than cpu rec and isadetect
-
-isadetect & buildcross on cpu rec:
-- surprisingly does not improve performance
-- 1d embedding is best
-- embedding best
-
-Key take aways:
-- 1d better at endianness, allthough marginally. Depends on suite, but never performs much worse.
-- Embedding seems best for endianness, and performs better on 3/4 cases. Huge diff on LOGO cv isadetect. The roles are reversed when testing on BuildCross though.
-- The larger complexity of resnet does not improve results, and usually performs worse.
-- Although results seem promesing on LOGO cv for isadetect, the performance on cpu rec and buildcross is not as good.
-- Buildcross has no overlap with isadetect, except m68k, and is not as good as in cpu rec.
- -->
-
-<!--TODO: back with statistical significance -->
-
-<!-- Out of all the experiment on the different test suites, Simple1d-E is the model that performed the best overall. While Simple2d-E does marginally beat out Simple1d-E on isadetect-cpurec in \autoref{table:cpurec-endianness-results} and isadetect-buildcross in \autoref{table:buildcross-endianness-results}of 1.2 \ac{p.p.} and 0.5 \ac{p.p.} respectively, we deem these small differences inside **the margin of error**. However, the relatively larger performance wins on LOGO-CV ISAdetect in \autoref{table:logo-endianness-results} of 4.6 \ac{p.p.} is evidence that Simple1d-E would perform best in real world scenarios.
-
-The largest overall performance differences in our experiments is seen when comparing embedding and non-embedding versions of our models. On the endianness experiments embedding models perform better in 3 out of 4 test suites, with a clear gap in performance on logo-isadetect. The only exception ISAdetect-Buildcross where both 1d and 2d non-embedding versions beat out their embedding counterparts, with a lot less variance in the reported average accuracy as well. Still, the large performance difference on LOGO-CV ISAdetect indicates that the embedding models are better suited for endianness detection, where the other results are less significant.
-
-It is clear from our results that the larger complexity of ResNet does not significantly improve results. ResNet50 and ResNet50-E's performance is at least on par with the other models, barring the 95th percentile margin of error. The training loss in the different suites , indicates that the features the ResNet model learns related to endianness are not complex enough to require all the extra complexity and learnable parameters. This is true, even with the larger input of 1024 bytes compared to 512 that the simple models use. -->
-
-### Instruction width
+It is worth noting that the higher complexity of ResNet architectures did not translate to significant performance gains in our testing. Despite having significantly more parameters and deeper architecture, ResNet50 and ResNet50-E typically performed on par with or worse than simpler models. Training loss patterns across different experimental suites suggest that the features related to endianness and instruction width type may not be complex enough to require the additional representational power that ResNet provides<!-- TODO: training loss -->. This observation holds true even when considering that ResNet models were given a larger input window of 1024 bytes compared to the 512 bytes used by simpler models. The result suggests that lightweight models may be preferable for these specific ISA feature detection tasks, offering comparable accuracy with lower computational requirements.
 
 ## Model architecture performance analysis
 
@@ -143,6 +91,10 @@ To control and reproduce these pseudo-random elements, one can specify a seed. S
 Generally, we observe a very high variance between different runs due to differences in randomness. This indicates that the training process of the model is unstable, where the performance on an unseen test set varies greatly even if the training loss quickly converges to zero. For instance, the best-performing model for endianness detection (_Simple1d-E_), when evaluating with \ac{LOGO CV} on ISADetect, shows a standard deviation of up to 28 percentage points for certain \acp{ISA} when comparing the accuracy across different random seeds (see \autoref{table:logo-endianness-results}). This happens even though we take precautions such as using low learning rates and regularizing the models with dropout.
 
 This is common behavior when the size of the training dataset is limited. While we consider our training dataset to be large and comprehensive, the model variability strengthens our suspicion that the dataset is too homogeneous for training deep neural networks in an optimal way. Another factor that might cause these results is outliers in the data. Random initialization might make models more or less sensitive to outliers in the training data.
+
+### Architecture Outliers
+
+<!-- m68k LOGO CV,  -->
 
 ## Model generalizability
 
