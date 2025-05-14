@@ -146,15 +146,50 @@ An advantage of the BuildCross dataset compared to the CpuRec dataset is that th
 
 We note that while generalizability for the endianness classification task seem similar between the CpuRec and BuildCross datasets, the instruction width type classification task shows a clear improvement when evaluated on the BuildCross dataset. (TODO reason more about why this is the case.)
 
-## Comparision with prior literature
+## Comparison with prior literature
+
+### Andreassen and Morrison
 
 <!--
 (Stian)
-- Compare to Andreassen
-- Critique of Andreassen
-  - Doesn’t exclude previously seen architectures when testing on CPURec
-  - Lacking a lot of labels and mislabeling certain things
-  -->
+- Prior litterature introduction: andreassen
+  - Same supervisor as us, we got referenced this thesis from him (morrison)
+  - Comment on which test suites are the same, what he did diferently (labling, included architectures)
+  - Endiannes:
+    - LOGO CV ISAdetectCode only:
+      - 92.0% bigram, 91.7% EndiannessSignature. Rand forest
+    - Isadetect code CpuRec:
+      - 86.3% LogisticRegression and RandomForest bigram. 82,4% SVC EndiannessSignature
+  - Fixed vs Variable width
+    - LogoCv CpuRec:
+      - 88.4% RandomForest with autocorrelation
+      - Not comparable since we did not have enough training data to consider this an experimental suite for inclusion
+  - inherent differences in approach
+    - He did feature engineering, we tried to do it with CNNs and automatically extract features
+    - CNNs and deep learning require more data, and we are not able to train on the same amount of data as he did for some of his suites
+    - We have different labling of datasets, and we are not able to compare the results directly
+  - Critique of Andreassen
+    - Reproducton of his results fell outside the scope of this thesis
+    - Doesn’t exclude previously seen architectures when testing on CPURec
+    - Lacking a lot of labels and mislabeling certain things
+    - Does not appear to do multiple runs with different seeds, might be a problem with random initialization, while likely less of a problem for simpler ml models? TODO check this
+-->
+
+In our search for related work documented in \autoref{related-work}, the thesis by Andreassen and Morrison [@Andreassen_Morrison_2024] stands out as the only other identified research that specifically addresses the problem of detecting individual \ac{ISA} features from unknown binary code. This work was supervised by Donn Morrison, who is also the supervisor of the current thesis and who recommended we review this research. For clarity in the following discussion, we will refer to this paper as "Andreassen's work," acknowledging Morrison's supervisory role in that project. The thesis uses a similar approaches and datasets, but with different feature extraction methods. Andreassen uses explicit feature engineering with classical machine learning classifiers for targeting the different \ac{ISA} features, while we used \acp{CNN} to automatically extract features from the binary code. While the thesis also targets endianness and instruction width type detection, he also includes the third target feature of detecting instruction width size of fixed-width architectures.
+
+The thesis uses some of the same experimental suites as we do, with the same datasets and evaluation strategies. \ac{LOGO CV} was a key part of in all of his suites, in addition to training on ISAdetect and testing on CpuRec, \ac{LOGO CV} with CpuRec and training on CpuRec testing on ISAdetect. We will compare the results of our models with the results of Andreassen's models where applicable. However, there are some key differences in the labeling of datasets and the architectures used for training and testing, which makes a completely accurate and direct comparison difficult. In the next subsections we present our interpretation of a direct performance comparison on endianness and instruction width type classification, before discussing the potentially impactful differences in our approaches and addressing comparison issues.
+
+#### Endianness
+
+There are two experimental suites set up in [@Andreassen_Morrison_2024] that are comparable to our results. The first suite is \ac{LOGO CV} on ISAdetect on code sections, where he achieved an accuracy of 92.0% using a Random Forest classifier with bigram features, and 91.7% using a Random Forest classifier with EndiannessSignature features. In comparison, we achieve an accuracy of 90.3% using the Simple1d-E model on the same dataset. Andreassen's bigram feature consists of counting up all combinations of two byte-pairs in each program, resulting in a histogram of $256 \cdot 256 = 65,536$ input features. The EndiannessSignature was originally developed by [@Clemens2015] and is a feature vector of the counts of only 4 bigrams, 0xfffe, 0xfeff, 0x0001, and 0x0100. Increment and decrement by one are common operations in computer programs, and these bigrams can capture this difference across the two endianness types<!-- TODO write about in related work, maybe not needed here -->. Our results are a bit lower than Andreassen's on average, but within the 95% confidence interval of ±2.0% for our model. The other comparable suite is training on ISAdetect code sections and testing on CpuRec. Andreassen achieved an accuracy of 86.3% using a Random Forest and Logistic Regression classifier with bigram features. In comparison, we were only able to achieve an accuracy of 75.4%, 76.3% and 76.4% using the Simple1d-E, Simple2d-E and ResNet50-E models respectively in our testing. This is a relatively large difference in performance. One advantage of Andreassen's feature extraction methods is the use of entire binary files, as both the bigram-based features are able to gather statistical information from the entire file. \acp{CNN} automatic feature extraction are limited to the input window of the model. This is also an advantage of \acp{CNN}, as they might be better suited for smaller samples code sections.
+
+#### Instruction width type
+
+#### Differences in approach and critique
+
+Andreassen does not list statistical evidence for the accuracy of his models, and labeling differences makes a statistically significant comparison impossible.
+
+### Instruction Set Architecture Detection
 
 ## Dataset quality assessment
 
