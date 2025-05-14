@@ -53,6 +53,7 @@ header-includes:
   - \usepackage{dirtree}
   - \usepackage{xcolor}
   - \usepackage[section]{placeins}
+  - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
 ---
 
 # Acronyms {-}
