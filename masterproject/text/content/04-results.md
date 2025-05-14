@@ -10,7 +10,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Endianness classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.png)
+![Endianness classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
 
 \FloatBarrier
 
@@ -51,9 +51,9 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAD
 
 \normalsize
 
-![Endianness classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.png)
+![Endianness classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.png)
+![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
 
 \autoref{fig:logo-endianness-by-model} aggregates the results across \acp{ISA}, allowing for comparison of the overall performance of each model. We see that the _Simple1d-E_ model performs the best, with a mean overall accuracy of 89.7% and a standard deviation of 5.5%.
 
@@ -131,9 +131,9 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.png)
+![Endianness classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.png)
+![Endianness classification performance by ISA when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
 
 \autoref{fig:cpurec-endianness-by-model} aggregates the results across \acp{ISA}. We observe that the three embedding models perform the best, and the performance difference between them are down to margin of error. However, it appears that the larger ResNet50-E model achieves more consistent results across runs.
 
@@ -195,9 +195,9 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.png)
+![Endianness classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.png)
+![Endianness classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
 
 \autoref{fig:buildcross-endianness-by-model} aggregates the results across \acp{ISA}. Here, we observe that contrary to the other testing setups, the embedding models are not performing better than their non-embedding counterparts.
 
@@ -275,9 +275,9 @@ Table: Endianness classification performance when training on the ISADetect and 
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect and buildcross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.png)
+![Endianness classification performance by model when training on the ISADetect and buildcross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISADetect and buildcross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.png)
+![Endianness classification performance by ISA when training on the ISADetect and buildcross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
 
 \autoref{fig:combined-endianness-by-model} aggregates the results across \acp{ISA}. Notably, introducing the BuildCross dataset as additional training data does not improve performance for any of the models.
 
@@ -293,7 +293,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Instruction width type classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.png)
+![Instruction width type classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
 
 \FloatBarrier
 
@@ -334,9 +334,9 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 \normalsize
 
-![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.png)
+![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.png)
+![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
 
 \autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. Similar to the performance seen with endianness classification, the performance of the embedding models perform better than the non-embedding counterparts, with the _Simple1d-E_ model performing the best with an overall accuracy of 87.8% and a standard deviation of 4.3%.
 
@@ -431,9 +431,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.png)
+![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.png)
+![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
 
 \autoref{fig:cpurec-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. None of the models perform any better than a baseline model with random output for this target feature.
 
@@ -495,9 +495,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.png)
+![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.png)
+![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
 
 \autoref{fig:buildcross-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. With instruction width type as the target feature, it is even more prominent that the embedding models do not perform well when evaluating on the BuildCross dataset. The best performing model is the _Simple2d_ model, with an overall accuracy of 70.2% and a comparatively low standard deviation of 1.0%.
 
@@ -592,9 +592,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.png)
+![Instruction width type classification performance by model when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.png)
+![Instruction width type classification performance by \ac{ISA} when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
 
 \autoref{fig:combined-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, and \autoref{fig:combined-instructionwidthtype-by-isa} aggregates results across the different models. For this target feature, we do see a significant improvement in performance when adding the BuildCross dataset as additional training data. The _Simple2d-E_ model performs the best, with an overall accuracy of 79.1% and a standard deviation of 2.6%.
 
