@@ -37,8 +37,10 @@ mainfontoptions:
 linestretch: 1.25
 numbersections: true
 link-citations: true
-linkcolor: "blue"
-urlcolor: "blue"
+linkcolor: "RoyalBlue"
+urlcolor: "RoyalBlue"
+citecolor: "RoyalBlue"
+filecolor: "RoyalBlue"
 toc: "true"
 
 abstract: |
