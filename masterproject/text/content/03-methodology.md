@@ -1,6 +1,6 @@
 # Methodology
 
-This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models, target features, and data preprocessing used in the experiments in \autoref{experiments}. Finally, we describe our evaluation strategy and metrics in \autoref{evaluation}.
+This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models, target features, and data preprocessing used in the experiments in \autoref{experiments}. Finally, we describe our evaluation strategy and metrics in \autoref{evaluation-strategies}.
 
 ## Experimental setup
 
