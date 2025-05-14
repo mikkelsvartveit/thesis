@@ -158,25 +158,6 @@ We note that while generalizability for the endianness classification task seem 
 
 ## Dataset quality assessment
 
-<!--
-TODO:
-
-5.5.2 CPURec Dataset
-
-Single binary per ISA limitation
-Misclassification issues
-Statistical reliability concerns
-
-5.5.3 BuildCross Dataset
-
-Library code rather than executables, impact on results
-Which libraries and why, (maybe this should be in methododology?)
-Limited to ELF-supported architectures
-Dependency on external toolchain (mikpe's GitHub)
-Quantity and quality of gathered data
-improves instruction width but not endianness. why?
--->
-
 ### ISAdetect dataset
 
 The ISAdetect is our main dataset for training machine learning models. It contains 23 different \acp{ISA}, with each architecture containing between 2800 and 6000 binary program samples [@Kairajarvi2020] [@Clemens2015] per architecture. We train our models on the code sections of these binary program samples, and exclude the code sections that are smaller than 1024 bytes. We do not perform file splitting on the ISAdetect dataset to augment the amount of training data, as preliminary results revealed that this did not improve model performance or generalizability. Taking this into consideration, \autoref{table:isadetect-samples} shows the number of samples per \ac{ISA} in ISAdetect. This averages to 4,086 samples per \ac{ISA}.
@@ -229,6 +210,31 @@ Table: Number of samples per class for instruction width type in ISAdetect. \lab
 We also observe that there is some class imbalance in the dataset, particularly for instruction width type, where more than two thirds of the binaries have fixed-width instructions. While this level of class imbalance is generally considered acceptable, it might cause the models to slightly bias towards the majority class.
 
 While the amount of data and the class balance is sufficient for training large deep learning models, it is not particularly diverse in terms of the \acp{ISA} present in the dataset. Since all architectures are supported compile targets for recent versions of the Debian Linux distribution, it is likely that these \acp{ISA} are built for running general-purpose operating systems rather than specialized applications such as embedded systems. There are also \ac{ISA} pairs in the dataset that are quite similar, such as `armel`/`armhf` and `powerpc`/`powerpcspe`. This might cause slightly misleading performance numbers when running \ac{LOGO CV}, as the models may overfit to the similarity between these \acp{ISA}.
+
+TODO: most variable width ISAs are from the x86 family
+
+### CpuRec dataset
+
+We use the CpuRec dataset for testing the performance and evaluating the generalizability of our trained models. Contrary to ISAdetect, contains binaries from 76 different \acp{ISA}, providing us with a significantly more diverse set of architectures for evaluating our models.
+
+However, CpuRec only contains a single compiled binary file per \ac{ISA}. We consider this a significant limitation of this dataset. Not only does this mean that the data is too limited to be used for any training of deep learning models, there is also only one sample per \ac{ISA} we can use for evaluating whether the model generalizes to new \acp{ISA}. To claim stronger statistical significance of the per-\ac{ISA} results, we would ideally need more than one sample for each.
+
+Another limitation of the CpuRec dataset is its inconsistencies in labelling, data sourcing, and reproducibility. While the CpuRec repository is open source [@TODO], the origin of the compiled binaries is not clear. For properly labelling this dataset, we have relied on a combination of previous theses and papers using the dataset, inspecting the source code of the CpuRec repository, and using our own tools and processes to determine \ac{ISA} features from the binary code. As a result, we are not fully confident that the labelling of the dataset is completely accurate.
+
+### BuildCross dataset
+
+TODO (Stian)
+
+<!--
+5.5.3 BuildCross Dataset
+
+- Library code rather than executables, impact on results
+- Which libraries and why, (maybe this should be in methododology?)
+- Limited to ELF-supported architectures
+- Dependency on external toolchain (mikpe's GitHub)
+- Quantity and quality of gathered data
+- improves instruction width but not endianness. why?
+-->
 
 ## UN sustainability goals
 
