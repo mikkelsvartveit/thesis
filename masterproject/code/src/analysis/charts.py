@@ -1,6 +1,38 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import matplotlib.font_manager as fm
+import os
+
+
+def font_context():
+    # Define font paths
+    font_dir = "../../../text/assets/fonts"
+    font_regular = os.path.join(font_dir, "SourceSerif4-Regular.ttf")
+    font_bold = os.path.join(font_dir, "SourceSerif4-Bold.ttf")
+    font_semibold = os.path.join(font_dir, "SourceSerif4-SemiBold.ttf")
+
+    # Register fonts with matplotlib
+    for font_path in [font_regular, font_bold, font_semibold]:
+        fm.fontManager.addfont(font_path)
+
+    # Create font names
+    font_family = "Source Serif 4"
+    return plt.rc_context(
+        {
+            "font.family": "serif",
+            "font.serif": [font_family],
+            "font.size": 10,
+            "axes.titlesize": 12,
+            "axes.titleweight": "bold",
+            "axes.labelweight": "regular",
+            "xtick.labelsize": 9,
+            "ytick.labelsize": 9,
+            "legend.fontsize": 9,
+            "figure.titlesize": 14,
+            "figure.titleweight": "bold",
+        }
+    )
 
 
 def model_swarmplot(
@@ -12,6 +44,7 @@ def model_swarmplot(
     **kwargs,
 ):
     model_acc_dict = {name: accs for name, accs in zip(model_names, model_accuracies)}
+    # with font_context():
     palette = sns.color_palette("deep", n_colors=len(model_names))
     sns.set_palette(palette)
 
