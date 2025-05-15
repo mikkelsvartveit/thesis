@@ -27,6 +27,30 @@ from scipy import stats
 #    return mean, margin_error, lower_bound, upper_bound
 
 
+def calculate_weighted_run_average(fold_results, fold_sample_counts):
+    """
+    Calculate weighted average accuracy across folds in a single run. Used for LOGO-CV and K-Fold CV.
+
+    Parameters:
+    fold_accuracies (list): List of accuracy values for each fold
+    fold_sample_counts (list): List of sample counts for each fold
+
+    Returns:
+    float: Weighted average accuracy
+    """
+    assert len(fold_results) == len(
+        fold_sample_counts
+    ), "Number of fold_results must match number of sample counts"
+
+    total_samples = sum(fold_sample_counts)
+    weighted_res = (
+        sum(res * count for res, count in zip(fold_results, fold_sample_counts))
+        / total_samples
+    )
+
+    return weighted_res
+
+
 def calculate_confidence_interval(accuracies, n_samples, confidence=0.95):
     """
     Calculate confidence interval for model accuracies considering both
@@ -93,11 +117,7 @@ def logo_cv_confidence_interval(
         ), "accuracy measures does not match num folds"
 
         # Weighted average based on fold sizes
-        total_samples = sum(run_fold_counts)
-        weighted_acc = (
-            sum(acc * count for acc, count in zip(run_fold_accs, run_fold_counts))
-            / total_samples
-        )
+        weighted_acc = calculate_weighted_run_average(run_fold_accs, run_fold_counts)
         run_mean_accuracies.append(weighted_acc)
 
     # Overall mean across runs
@@ -117,11 +137,7 @@ def logo_cv_confidence_interval(
             for acc, count in zip(run_fold_accs, run_fold_counts)
         ]
         # Weight by sample count and average
-        total_samples = sum(run_fold_counts)
-        weighted_var = (
-            sum(var * count for var, count in zip(fold_vars, run_fold_counts))
-            / total_samples
-        )
+        weighted_var = calculate_weighted_run_average(fold_vars, run_fold_counts)
         fold_variances.append(weighted_var)
 
     mean_variance_within = np.mean(fold_variances)
@@ -167,6 +183,57 @@ def compare_model_accuracies(
     mean_diff = np.mean(differences)
 
     return significant, p_value, mean_diff
+
+
+# Option 1: Use existing function with weighted averages
+def compare_logo_cv_models(
+    model_a_fold_accuracies: list[list[float]],
+    model_b_fold_accuracies: list[list[float]],
+    model_a_fold_counts: list[list[int]],
+    model_b_fold_counts: list[list[int]],
+    alpha=0.05,
+):
+    """
+    Compare two models evaluated with LOGO-CV using the existing comparison function
+
+    Parameters:
+    model_a_fold_accuracies: List of lists, fold accuracies for each run of model A
+    model_b_fold_accuracies: List of lists, fold accuracies for each run of model B
+    model_a_fold_counts: Sample counts for each fold in model A
+    model_b_fold_counts: Sample counts for each fold in model B
+    alpha: Significance level (default: 0.05)
+
+    Returns:
+    tuple: (significant_difference, p_value, mean_difference)
+    """
+    # Ensure equal number of runs
+    assert len(model_a_fold_accuracies) == len(
+        model_b_fold_accuracies
+    ), "Number of runs must match for both models"
+    assert len(model_a_fold_counts) == len(
+        model_b_fold_counts
+    ), "Number of runs must match for both models"
+
+    # Calculate weighted average accuracy for each run
+    model_a_run_accuracies = []
+    model_b_run_accuracies = []
+
+    for i in range(len(model_a_fold_accuracies)):
+        # Calculate weighted average for model A, run i
+        weighted_acc_a = calculate_weighted_run_average(
+            model_a_fold_accuracies[i], model_a_fold_counts[i]
+        )
+        model_a_run_accuracies.append(weighted_acc_a)
+
+        # Same for model B
+        weighted_acc_b = calculate_weighted_run_average(
+            model_b_fold_accuracies[i], model_b_fold_counts[i]
+        )
+        model_b_run_accuracies.append(weighted_acc_b)
+
+    return compare_model_accuracies(
+        model_a_run_accuracies, model_b_run_accuracies, alpha
+    )
 
 
 if __name__ == "__main__":
