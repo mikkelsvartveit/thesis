@@ -74,5 +74,6 @@ header-includes:
 \acro{NTNU}[NTNU]{the Norwegian University of Science and Technology}
 \acro{RISC}[RISC]{Reduced Instruction Set Computing}
 \acro{p.p.}[p.p.]{percentage points}
+\acro{SGD}[SGD]{United Nations Sustainable Development Goals}
 \end{acronym}
 ```

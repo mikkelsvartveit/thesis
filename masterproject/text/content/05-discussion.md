@@ -173,7 +173,7 @@ We note that while generalizability for the endianness classification task seem 
     - Doesn’t exclude previously seen architectures when testing on CPURec
     - Lacking a lot of labels and mislabeling certain things
     - Does not appear to do multiple runs with different seeds, might be a problem with random initialization, while likely less of a problem for simpler ml models? TODO check this
--->
+    -->
 
 In our search for related work documented in \autoref{related-work}, the thesis by Andreassen and Morrison [@Andreassen_Morrison_2024] stands out as the only other identified research that specifically addresses the problem of detecting individual \ac{ISA} features from unknown binary code. This work was supervised by Donn Morrison, who is also the supervisor of the current thesis and who recommended we review this research. For clarity in the following discussion, we will refer to this paper as "Andreassen's work," acknowledging Morrison's supervisory role in that project. The thesis uses a similar approaches and datasets, but with different feature extraction methods. Andreassen uses explicit feature engineering with classical machine learning classifiers for targeting the different \ac{ISA} features, while we used \acp{CNN} to automatically extract features from the binary code. While the thesis also targets endianness and instruction width type detection, he also includes the third target feature of detecting instruction width size of fixed-width architectures.
 
@@ -271,12 +271,20 @@ TODO (Stian)
 - improves instruction width but not endianness. why?
 -->
 
-## UN sustainability goals
+## Sustainability implications
 
 <!--
 - Smaller models use less power which is good
 - https://www.ntnu.no/excited/b%C3%A6rekraft-i-it-utdanning
 -->
+
+While this thesis focuses on a specialized technical problem in computer science, our contributions may have potential implications for sustainability. We examine some of these implications and relate them to the \ac{SGD} [@UN2015].
+
+Our work contributes to the field of reverse engineering. Reverse engineering is a crucial part of malware analysis and digital forensics. \ac{SGD} 16 targets peace, justice, and strong institutions. Enhanced capabilities in reverse engineering helps combating cybersecurity threats, which impacts this goal in a positive way. However, reverse engineering techniques also have potential for misuse by malicious actors. If reverse engineers with malicious intent discover vulnerabilities in the software, they may use this information to perform illegal activities. While we believe better reverse engineering tools provide a net benefit for software security and thus supports \ac{SGD} 16, there are still considerations to make regarding aiding malicious actors.
+
+Unfortunately, reverse engineering is occasionally used for misusing proprietary software. Malicious actors may steal secrets embedded in compiled code, illegally copy or clone functionality, or bypass licensing mechanisms in the software. As a consequence of this, there is a risk that our work undermines \ac{SGD} 9, which relates to resilient infrastructure and innovation.
+
+The environmental impact of modern AI tools is commonly criticized. Deep learning models require significant amounts of energy, both during training and during inference. TODO finish this
 
 ## Limitations
 
