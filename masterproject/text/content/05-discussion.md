@@ -264,7 +264,7 @@ We use the CpuRec dataset for testing the performance and evaluating the general
 
 However, CpuRec only contains a single compiled binary file per \ac{ISA}. We consider this a significant limitation of this dataset. Not only does this mean that the data is too limited to be used for any training of deep learning models, there is also only one sample per \ac{ISA} we can use for evaluating whether the model generalizes to new \acp{ISA}. To claim stronger statistical significance of the per-\ac{ISA} results, we would ideally need more than one sample for each.
 
-Another limitation of the CpuRec dataset is its inconsistencies in labelling, data sourcing, and reproducibility. While the CpuRec repository is open source [@TODO], the origin of the compiled binaries is not clear. For properly labelling this dataset, we have relied on a combination of previous theses and papers using the dataset, inspecting the source code of the CpuRec repository, and using our own tools and processes to determine \ac{ISA} features from the binary code. As a result, we are not fully confident that the labelling of the dataset is completely accurate.
+Another limitation of the CpuRec dataset is its inconsistencies in labelling, data sourcing, and reproducibility. While the CpuRec repository is open source [@Granboulan_cpu_rec_dataset2024], the origin of the compiled binaries is not clear. For properly labelling this dataset, we have relied on a combination of previous theses and papers using the dataset, inspecting the source code of the CpuRec repository, and using our own tools and processes to determine \ac{ISA} features from the binary code. As a result, we are not fully confident that the labelling of the dataset is completely accurate.
 
 ### BuildCross dataset
 
@@ -283,18 +283,13 @@ TODO (Stian)
 
 ## Sustainability implications
 
-<!--
-- Smaller models use less power which is good
-- https://www.ntnu.no/excited/b%C3%A6rekraft-i-it-utdanning
--->
-
 While this thesis focuses on a specialized technical problem in computer science, our contributions may have potential implications for sustainability. We examine some of these implications and relate them to the \ac{SGD} [@UN2015].
 
 Our work contributes to the field of reverse engineering. Reverse engineering is a crucial part of malware analysis and digital forensics. \ac{SGD} 16 targets peace, justice, and strong institutions. Enhanced capabilities in reverse engineering helps combating cybersecurity threats, which impacts this goal in a positive way. However, reverse engineering techniques also have potential for misuse by malicious actors. If reverse engineers with malicious intent discover vulnerabilities in the software, they may use this information to perform illegal activities. While we believe better reverse engineering tools provide a net benefit for software security and thus supports \ac{SGD} 16, there are still considerations to make regarding aiding malicious actors.
 
 Unfortunately, reverse engineering is occasionally used for misusing proprietary software. Malicious actors may steal secrets embedded in compiled code, illegally copy or clone functionality, or bypass licensing mechanisms in the software. As a consequence of this, there is a risk that our work undermines \ac{SGD} 9, which relates to resilient infrastructure and innovation.
 
-The environmental impact of modern AI tools is commonly criticized. Deep learning models require significant amounts of energy, both during training and during inference. TODO finish this
+The environmental impact of modern AI tools is commonly criticized. Deep learning models require significant amounts of energy, both during training and during inference. For instance, in 2023, the daily energy usage for inference for ChatGPT was estimated at 564 MWh [@DeVries2023]. This amount of energy could power around 20 000 households, and it is reasonable to assume that the power usage of ChatGPT has increased significantly since this estimation was made. This is a concerning trend that may undermine \ac{SGD} 12, which calls for responsible consumption and production. In our work, we use \acp{CNN}, which is a deep learning architecture with significant computational demands. By sticking to traditional machine learning algorithms and manual feature engineering, significant amounts of energy would likely be spared. However, our results also indicate that very small \ac{CNN} models perform as well or better than larger and deeper networks. Since the small models require far less computational power to train and use, this result will hopefully steer future research towards more energy-efficient approaches.
 
 ## Limitations
 
