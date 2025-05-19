@@ -197,15 +197,20 @@ Comparing model performance, training data, and model complexity, Andreassen pre
 
 #### Differences in approach and critique
 
-While we attempt to compare our work with Andreassen's, there are some key differences in our approaches that make a direct comparison difficult. Classical classifiers are often much less constrained by the amount of training data available, and he uses other train test suites enabled by this. We are not able to train on the same datasets as he does, and it is hard to decide wether model performance differences is due to lack of diverse training data on our end, or that manual feature engineering using his methods is better suited for the task.
+While we attempt to compare our work with Andreassen's, there are some key differences in our approaches that make a direct comparison difficult. These include dataset labeling and \ac{ISA} inclusion differences, lack of documentation of model hyperparameters and statistical evidence for comparing our approaches. 
 
-The most significant difference lies in the dataset labeling. ISAdetect contains mostly mainstream architectures with redly available documentation, whereas CpuRec comprises code sections from numerous exotic, more poorly documented architectures. This presents considerable challenges for accurate labeling, as we experienced during dataset preparation documented in \autoref{datasets}. Andreassen's research relied on labeling provided by another \ac{NTNU} researcher. We conducted a review of each of the architecture's labeling across both ISAdetect and CpuRec datasets, which enabled us to include additional \acp{ISA} in both endianness and instruction width type detection analysis. During this process, we identified incorrect labels for several architectures in CpuRec, with these discrepancies illustrated in /fig{todo}. Additionally, CpuRec has undergone updates since Andreassen completed his thesis, introducing architectures like ARC32el and ARC32eb that were unavailable during his research. These labeling challenges, combined with the differences in dataset composition and not being able to reproduce Andreassen's results, limit our capacity to draw definitive conclusions comparing between our findings and his previous work.
+The most significant difference lies in the dataset labeling. ISAdetect contains mostly mainstream architectures with readily available documentation, whereas CpuRec comprises code sections from numerous exotic, more poorly documented architectures. This presents considerable challenges for accurate labeling, something that we experienced during dataset preparation documented in \autoref{datasets}. Andreassen's research relied on labeling provided by another \ac{NTNU} researcher which lacked a lot of data for many architectures, likely because of the time consuming process of categorizing endianness and instruction widths. We conducted our own review of each of the architecture's labeling across both ISAdetect and CpuRec datasets, which enabled us to include additional \acp{ISA} in both endianness and instruction width type detection analysis. During this process, we also identified incorrect labels for several architectures in CpuRec, with these discrepancies illustrated in /fig{todo}. Additionally, CpuRec has undergone updates since Andreassen completed his thesis, introducing architectures like ARC32el and ARC32eb that were unavailable during his research. As we will go into in \autoref{cpurec-dataset}, we are also not entirely confident in the accuracy of our labeling either. These labeling challenges combined with the differences in dataset composition, limit our capacity to draw definitive conclusions comparing between our findings and his previous work.
+
+There is also a lack of documentation in how Andreassen's custom software implements these models, particularly regarding hyperparameter configuration. Reproducing his results fell out of the scope of this thesis, so we are not able to verify his work, or to determine if reproduction is feasible. Many classifiers from the scikit-learn library that he uses have numerous configurable parameters, and while he optimized some hyperparameters on certain models using grid search, Andreassen only explicitly documents that the random_state parameter was set to 42 for reproducibility, max_iter=10,000 for convergence, and n_jobs=-1 to enable multi-core processing. We can only assume that he used default values from scikit-learn for non-specified hyperparameters. On the testing suites where our work overlaps with his, meaningful statistical comparison is difficult since Andreassen appears to have done only one run for each model configuration. While his use of \ac{LOGO CV} provides some statistical robustness, models dependent on random initialization would benefit from multiple runs with different seeds to document performance stability. This was evident in our experiments, where we sometimes observed high variability and clear outliers in our results, as shown in \autoref{fig:combined-instructionwidthtype-by-model}. Attempts at reproduction of his work would require making assumptions about the unspecified hyperparameters, further complicating verification of his findings.
+ 
+In terms of model generalizability across unseen architectures, we find Andreassen's work lacks a more thorough discussion of this aspect. While he implements \ac{LOGO CV} on ISAdetect for endianness and CpuRec for instruction width type, which provides valuable insights into performance on exotic unseen architectures, our research demonstrates that testing across different datasets with overlapping architectures significantly impacts model performance, as discussed in \autoref{testing-on-other-datasets} This cross-dataset testing represents an important dimension of generalizability that Andreassen does not explore to a point where we can fairly compare our approaches. However, it is still our opinion that feature engineering provides much clearer insights into what the models are fitting to, with features like EndiannessSignatures and AutoCorrelation offering more interpretability than those learned by a \ac{CNN}. 
+
+
+Classical classifiers are often much less constrained by the amount of training data available, and he uses other train test suites enabled by this. We are not able to train on the same datasets as he does, and it is hard to decide whether model performance differences is due to lack of diverse training data on our end, or that manual feature engineering using his methods is better suited for the task.Despite the limitation in his analysis, Andreassen's results suggest that his feature extraction methods are capable of learning generalizable features even when trained on smaller datasets, indicating that his feature engineering approach with classical classifiers can potentially outperform more complex CNN models while requiring less training data and computational overhead.
 
 <!-- Does not comment on exclusion of previously seen architectures
 
-Reproduction of his methods and results fell outside the scope of this thesis, so we are not able to verify the results of Andreassens work. But in comapring model performance and complexity, we noticed that there are little documentation on the implementation of his classification models and experimental setup. We feel that this
-
-Andreassen does not list statistical evidence for the accuracy of his models, and labeling differences makes a statistically significant comparison impossible. -->
+-->
 
 ### Instruction Set Architecture Detection (not a priority)
 
@@ -288,6 +293,14 @@ TODO (Stian)
 - Quantity and quality of gathered data
 - improves instruction width but not endianness. why?
 -->
+
+### Inherent labeling challenges
+
+<!-- 
+  - different types of endianness
+  - Diffrent interpretations of instruction width: fixed mixed, fully variable
+  - se notion - discussion https://www.notion.so/misva/Discussion-1aba9989fe0280c39862cdb89d3e4d31?pvs=4
+ -->
 
 ## Sustainability implications
 
