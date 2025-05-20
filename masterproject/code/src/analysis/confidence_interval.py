@@ -2,31 +2,6 @@ import numpy as np
 from scipy import stats
 
 
-# def calculate_confidence_interval(accuracies: list[float], confidence=0.95):
-#     """
-#     Calculate confidence interval across all runs for model accuracies
-
-#     Parameters:
-#     accuracies (list): List of accuracy values from multiple runs
-#     confidence (float): Confidence level (default: 0.95 for 95% CI)
-
-#     Returns:
-#     tuple: (mean, lower_bound, upper_bound)
-#     """
-#     n = len(accuracies)
-#     mean = np.mean(accuracies)
-#     std_dev = np.std(accuracies, ddof=1)  # Using ddof=1 for sample standard deviation
-
-#     # Calculate confidence interval using t-distribution
-#     t_critical = stats.t.ppf((1 + confidence) / 2, df=n - 1)
-#     margin_error = t_critical * (std_dev / np.sqrt(n))
-
-#     lower_bound = mean - margin_error
-#     upper_bound = mean + margin_error
-
-#    return mean, margin_error, lower_bound, upper_bound
-
-
 def calculate_weighted_run_average(fold_results, fold_sample_counts):
     """
     Calculate weighted average accuracy across folds in a single run. Used for LOGO-CV and K-Fold CV.

@@ -316,61 +316,68 @@ Another limitation of the CpuRec dataset is its inconsistencies in labelling, da
   - Identified c6x likely compiled for the oposite endianness for buildcross than cpurec
 - Is this a contribution to the field?
 -->
-The BuildCross dataset is a custom dataset we developed for this thesis, with the ambition of creating a dataset with a more diverse set of \acp{ISA} of the same quality as ISAdetect. The dataset contains code sections from compiled open source libraries for X different \acp{ISA}. Our main concerns when creating this dataset, which we will address in this section were: 
+The BuildCross dataset is a custom dataset we developed for this thesis, with the ambition of creating a dataset with a more diverse set of \acp{ISA} of the same quality as ISAdetect. The dataset contains code sections from compiled open source libraries and our main concerns when creating this dataset, which we will address in this section were: 
 
 - Ensure sufficient diversity of \acp{ISA} to supplement previous datasets
 - Ensure sufficient quantity of data 
 - The binary data was representative of production ready binary code seen in reverse engineering scenarios
 - Reproducible results to make the dataset useful for future research 
 
-BuildCross ultimately contains object code from static libraries for 40 different \acp{ISA}. The total dataset size is **123MB**, with an average of **3.00 MB** per architecture and a median of **2.51 MB**. The dataset sizes and file counts for each architecture is listed in \autoref{table:buildcross-sizes-file-counts}. We believe we have successfully created a dataset that offers greater diversity than ISAdetect, incorporating 39 additional \acp{ISA} not present there. Although our dataset contains approximately half the number of architectures as CpuRec (40 compared to 76) and is approximately 5 times the size, using individual file samples alone would be too limiting for training large deep learning models. We had to resort to file splitting in order to reach a level of trainable data comparable to ISAdetect, and without the ability to analyze code similarity across the splits, we cannot fully verify the quality of the resulting data. However, our focus on library code may be advantageous, as libraries inherently separate commonly used functionality into reusable functions, which we believe are likely to create representative samples of binary code. File splitting on BuildCross is a better option than on CpuRec, where some files have duplicated code sections three or four times to fill file size requirements for that project [@Granboulan_cpu_rec_dataset2024]. Nevertheless, we recognize that samples from unique programs would likely provide more distinctive and representative training examples.
+BuildCross ultimately contains object code from static libraries for 40 different \acp{ISA}. The total dataset size is **123MB**, with an average of **3.00 MB** per architecture and a median of **2.51 MB**. The dataset sizes and file counts for each architecture is listed in \autoref{table:buildcross-sizes-file-counts}. We believe we have successfully created a dataset that offers greater diversity than ISAdetect, incorporating 39 additional \acp{ISA} not present there.
 
-Table: Number of samples per \ac{ISA} in BuildCross. \label{table:buildcross-sizes-file-counts}
+Although our dataset is approximately 5 times the size of CpuRec and contains approximately half the number of architectures (40 compared to 76), using individual file samples alone would be too limiting for training large deep learning models. We had to resort to file splitting in order to reach a level of trainable data comparable to ISAdetect, and without the ability to analyze code similarity across the splits, we cannot fully verify the quality of the resulting data. However, our focus on library code may be advantageous, as libraries inherently separate commonly used functionality into reusable functions, which we believe are likely to create representative samples of binary code. File splitting on BuildCross is a better option than on CpuRec, where some files have duplicated code sections three or four times to fill file size requirements for that project [@Granboulan_cpu_rec_dataset2024]. Nevertheless, we recognize that samples from unique programs would likely provide more distinctive and representative training examples.
 
-| Architecture | Total code section sizes | Number of files | Average file size |
-| ------------ | -----------------------: | --------------: | ----------------: |
-| arc          |                  3.23 MB |              14 |         236.19 KB |
-| arceb        |                  1.70 MB |              12 |         144.72 KB |
-| bfin         |                  2.88 MB |              14 |         210.59 KB |
-| bpf          |                  0.02 MB |               1 |          19.08 KB |
-| c6x          |                  5.55 MB |               8 |         710.42 KB |
-| cr16         |                  1.97 MB |              13 |         155.28 KB |
-| cris         |                  3.98 MB |              14 |         291.33 KB |
-| csky         |                  4.15 MB |              14 |         303.86 KB |
-| epiphany     |                  0.46 MB |               6 |          79.11 KB |
-| fr30         |                  2.17 MB |               7 |         317.99 KB |
-| frv          |                  4.93 MB |              14 |         360.31 KB |
-| ft32         |                  0.44 MB |              10 |          44.67 KB |
-| h8300        |                  4.30 MB |               9 |         489.59 KB |
-| iq2000       |                  2.41 MB |               8 |         308.97 KB |
-| kvx          |                  4.90 MB |              14 |         358.70 KB |
-| lm32         |                  3.32 MB |              13 |         261.73 KB |
-| loongarch64  |                  4.71 MB |              14 |         344.59 KB |
-| m32r         |                  1.96 MB |              12 |         167.05 KB |
-| m68k-elf     |                  1.83 MB |              12 |         156.02 KB |
-| mcore        |                  1.24 MB |               7 |         181.98 KB |
-| mcoreeb      |                  1.24 MB |               7 |         182.02 KB |
-| microblaze   |                  5.74 MB |              14 |         419.53 KB |
-| microblazeel |                  5.71 MB |              14 |         417.58 KB |
-| mmix         |                  4.22 MB |              13 |         332.36 KB |
-| mn10300      |                  1.70 MB |              12 |         144.73 KB |
-| moxie        |                  2.19 MB |              12 |         187.03 KB |
-| moxieel      |                  2.19 MB |              12 |         186.47 KB |
-| msp430       |                  0.42 MB |               5 |          86.65 KB |
-| nds32        |                  2.85 MB |              14 |         208.11 KB |
-| nios2        |                  4.21 MB |              14 |         307.72 KB |
-| or1k         |                  5.42 MB |              14 |         396.61 KB |
-| pru          |                  2.39 MB |               8 |         306.05 KB |
-| rl78         |                  0.63 MB |               5 |         128.92 KB |
-| rx           |                  1.46 MB |              12 |         124.29 KB |
-| tilegx       |                 11.71 MB |              14 |         856.69 KB |
-| tricore      |                  1.61 MB |               8 |         206.36 KB |
-| v850         |                  3.53 MB |              10 |         361.58 KB |
-| visium       |                  3.41 MB |              12 |         291.16 KB |
-| xstormy16    |                  0.48 MB |               5 |          98.45 KB |
-| xtensa       |                  2.61 MB |              14 |         191.18 KB |
-| ---------    |                --------- |       --------- |         --------- |
-| **Sum**      |            **119.89 MB** |               - |                 - |
+<!-- Code quality library vs source code -->
+We were also concerned that the library object code would not be representative of features found full binary programs. 
+
+<!-- Limitations -->
+
+<!-- Validation of quality through improvements on classification on cpurec. -->
+
+Table: Number of samples per \ac{ISA} in BuildCross. No. 1024 sized samples are count of 1024 byte sized chunks resulting from code-splitting. \label{table:buildcross-sizes-file-counts}
+
+| Architecture | Total Size (MB) | Number of Files | No. 1024 sized samples |
+| ------------ | --------------: | --------------: | ---------------------: |
+| arc          |            3.23 |              14 |                   3299 |
+| arceb        |            1.70 |              12 |                   1731 |
+| bfin         |            2.88 |              14 |                   2942 |
+| bpf          |            0.02 |               1 |                     19 |
+| c6x          |            5.55 |               8 |                   5679 |
+| cr16         |            1.97 |              13 |                   2012 |
+| cris         |            3.98 |              14 |                   4074 |
+| csky         |            4.15 |              14 |                   4247 |
+| epiphany     |            0.46 |               6 |                    471 |
+| fr30         |            2.17 |               7 |                   2223 |
+| frv          |            4.93 |              14 |                   5037 |
+| ft32         |            0.44 |               9 |                    440 |
+| h8300        |            4.30 |               9 |                   4402 |
+| iq2000       |            2.41 |               8 |                   2466 |
+| kvx          |            4.90 |              14 |                   5016 |
+| lm32         |            3.32 |              13 |                   3396 |
+| loongarch64  |            4.71 |              14 |                   4818 |
+| m32r         |            1.96 |              12 |                   1997 |
+| m68k-elf     |            1.83 |              12 |                   1866 |
+| mcore        |            1.24 |               7 |                   1270 |
+| mcoreeb      |            1.24 |               7 |                   1270 |
+| microblaze   |            5.74 |              14 |                   5867 |
+| microblazeel |            5.71 |              14 |                   5840 |
+| mmix         |            4.22 |              13 |                   4314 |
+| mn10300      |            1.70 |              12 |                   1732 |
+| moxie        |            2.19 |              12 |                   2237 |
+| moxieel      |            2.19 |              12 |                   2232 |
+| msp430       |            0.42 |               5 |                    432 |
+| nds32        |            2.85 |              14 |                   2908 |
+| nios2        |            4.21 |              14 |                   4301 |
+| or1k         |            5.42 |              14 |                   5544 |
+| pru          |            2.39 |               8 |                   2443 |
+| rl78         |            0.63 |               5 |                    643 |
+| rx           |            1.46 |              12 |                   1486 |
+| tilegx       |           11.71 |              14 |                  11986 |
+| tricore      |            1.61 |               8 |                   1646 |
+| v850         |            3.53 |              10 |                   3609 |
+| visium       |            3.41 |              12 |                   3488 |
+| xstormy16    |            0.48 |               5 |                    490 |
+| xtensa       |            2.61 |              14 |                   2669 |
 
 
 

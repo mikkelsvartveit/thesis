@@ -1,3 +1,5 @@
+set -e
+
 DIR=$(pwd)
 if [[ "$DIR" != */dataset ]]; then
     echo "Error, please cd to the dataset directory"
