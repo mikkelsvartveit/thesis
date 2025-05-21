@@ -172,11 +172,10 @@ We note that while generalizability for the endianness classification task seem 
     - Lacking a lot of labels and mislabeling certain things
     - Does not appear to do multiple runs with different seeds, might be a problem with random initialization, while likely less of a problem for simpler ml models? TODO check this
     -->
+
 ### Andreassen and Morrison
 
-
 In our search for related work documented in \autoref{related-work}, the thesis "Discovery of ISA features from binary programs from unknown instruction set architectures" by Andreassen and Morrison [@Andreassen_Morrison_2024] stands out as the only other identified research that specifically addresses the problem of detecting individual \ac{ISA} features from unknown binary code. This work was supervised by Donn Morrison, who is also the supervisor of the current thesis and who recommended we review this research. For clarity in the following discussion, we will refer to this paper as "Andreassen's work," acknowledging Morrison's supervisory role in that project. The thesis uses similar evaluation strategies and datasets, but with different feature extraction methods. Andreassen uses explicit feature engineering with classical machine learning classifiers for targeting the different \ac{ISA} features, as opposed to deep learning techniques to automatically extract features from the binary code. In addition to him also targeting endianness and instruction width type detection, he includes the third target feature of detecting instruction width size of fixed-width architectures.
-
 
 The thesis uses some of the same experimental suites as we do on endianness detection, with the same datasets and evaluation strategies. \ac{LOGO CV} was like for us a key part of all his suites, in addition to training on ISAdetect and testing on CpuRec, \ac{LOGO CV} with CpuRec and training on CpuRec testing on ISAdetect. We will compare the results of our models with the results of Andreassen's models where applicable. However, there are some key differences in the labeling of datasets and the architectures used for training and testing, which makes a completely accurate and direct comparison difficult. In the next subsections, we present our interpretation of a direct performance comparison on endianness and instruction width type classification, before discussing the potentially impactful differences in our approaches and addressing comparison issues.
 
@@ -191,19 +190,20 @@ There are two experimental suites targeting endianness set up in [@Andreassen_Mo
 Andreassen uses two different feature engineering techniques, bigrams and EndiannessSignatures, and both methods have different advantages in complexity and training data requirements compared to our \ac{CNN} approach. The bigram feature consists of counting up all combinations of two byte-pairs in each program, resulting in a histogram of $256 \cdot 256 = 65,536$ input features. The EndiannessSignature was originally developed by [@Clemens2015] and is a feature vector of the counts of only 4 bigrams, 0xfffe, 0xfeff, 0x0001, and 0x0100. Increment and decrement by one are common operations in computer programs, and these bigrams can capture this difference across the two endianness types<!-- TODO write about in related work, maybe not needed here -->. The bigram feature was limited to 150 binaries per architecture for training due to memory constraints, but is still able to perform well with a much smaller training dataset than what deep learning approaches would require. The 65,536 long feature vector does result in a significant count of learnable parameters depending on the classifier, and scikit-learn's MLPClassifier with the default hidden layer size of 100, assuming that is what Andreassen used, would have 6.56 million weights [@MLPClassifierScikitLearn]. This falls in between our simple CNN models of 150k-217k parameters and ResNet50 of ~25M for reference. The EndiannessSignature feature on the other hand is very simple with an input feature vector of only 4 elements and is able to achieve similar- and often outperform the bigram feature. Andreassen's approaches are able overall to achieve similar performance on paper compared to us with less training data and complexity, especially when looking at the EndiannessSignature feature [@Andreassen_Morrison_2024].
 
 <!-- TODO: Compare bigram and embedding? -->
+
 ##### Generalizability
 
 A possible explanation for the effectiveness of Andreassen's feature extraction methods is his use of entire binary files, as both bigram-based features can gather statistical information from the complete binary. In contrast, \ac{CNN}-based automatic feature extraction is limited to the input window size of the model, which we have set to 512 and 1024 bytes for Simple and ResNet models respectively. While requiring more training data, the \ac{CNN} approach might have an advantage in inference scenarios when only limited portions of a binary are available. We suspect that the bigram feature, based on a memory-intensive brute force approach, would require larger amounts of input binary data to be effective. For the EndiannessSignature feature, we cannot determine how frequently these specific bigrams appear within the first kilobytes of code, making it difficult to assess its effectiveness on smaller code sections. While our \ac{CNN} approach might be better suited for smaller code samples, Andreassen's models are able to make accurate predictions using much simpler classification techniques [@Andreassen_Morrison_2024].
 
 #### Instruction width type
 
-##### Performance 
+##### Performance
 
 There are no directly comparable experimental suites for instruction width type detection between our work and Andreassen's. He uses CpuRec for training on all experimental suites, running experiments with \ac{LOGO CV} with CpuRec, testing on ISAdetectFull, and testing on ISAdetectCode. The decision not to train on ISAdetect is justified by the lack of variety in his labeling, resulting in only 2 variable width architectures: amd64 and i386, both from the x86-family. His results are still impressive when training on the more limited CpuRec dataset, with the best performing models reaching accuracies of **86.0%** with \ac{LOGO CV} CpuRec and **92.2%** accuracy when testing on ISAdetect. While not directly comparable, our own \ac{LOGO CV} suite on ISAdetect performs on par in terms of accuracy on ISAdetect (**88.0%** with Simple1d-E). Meanwhile, our suite training on ISAdetect and testing on CpuRec performs significantly worse with only **60.1%** accuracy. Only the Combined suite results in comparable performance (**82.9%** with Simple2d-E).
 
 ##### Complexity
 
-Comparing model performance, training data, and model complexity, Andreassen presents three feature extraction methods: ByteDifferencePrimes, AutoCorrelation and Fourier. Andreassen does not explicitly detail the feature vector lengths of his models, but reading his thesis we are able to create likely estimates. ByteDifferencePrimes keeps track of distances between identical byte values in the binary, managing the first 50 prime factors of distances for each byte-value. This should result in a feature vector of $50 \cdot 256 = 12,800$ elements. The AutoCorrelation feature depends on the lag range parameter, computing autocorrelation for each value across that range. The optimal lag range depended on the classifier but varied between 32 and 1024. The Fourier feature converts the binary into a frequency spectrum, and the number of input features depends on the decided frequency range. Like with the AutoCorrelation feature, the optimal frequency range depended on the classifier but varied between 16 and 512, resulting in $2 \cdot FrequencyRange + 1$ features. Both AutoCorrelation and Fourier result in models much smaller in complexity than our \acp{CNN}, with AutoCorrelation seemingly performing on par or better than our models. ByteDifferencePrimes is a lot more complex, and the larger classifiers are more comparable to our Simple \ac{CNN} models. 
+Comparing model performance, training data, and model complexity, Andreassen presents three feature extraction methods: ByteDifferencePrimes, AutoCorrelation and Fourier. Andreassen does not explicitly detail the feature vector lengths of his models, but reading his thesis we are able to create likely estimates. ByteDifferencePrimes keeps track of distances between identical byte values in the binary, managing the first 50 prime factors of distances for each byte-value. This should result in a feature vector of $50 \cdot 256 = 12,800$ elements. The AutoCorrelation feature depends on the lag range parameter, computing autocorrelation for each value across that range. The optimal lag range depended on the classifier but varied between 32 and 1024. The Fourier feature converts the binary into a frequency spectrum, and the number of input features depends on the decided frequency range. Like with the AutoCorrelation feature, the optimal frequency range depended on the classifier but varied between 16 and 512, resulting in $2 \cdot FrequencyRange + 1$ features. Both AutoCorrelation and Fourier result in models much smaller in complexity than our \acp{CNN}, with AutoCorrelation seemingly performing on par or better than our models. ByteDifferencePrimes is a lot more complex, and the larger classifiers are more comparable to our Simple \ac{CNN} models.
 
 ##### Generalizability
 
@@ -211,7 +211,7 @@ Looking at his results with AutoCorrelation and ByteDifferencePrimes, we can be 
 
 #### Differences in approach and critique
 
-While we attempt to compare our work with Andreassen's, there are some key differences in our approaches that make a direct comparison difficult. These include dataset labeling and \ac{ISA} inclusion differences, lack of documentation of model hyperparameters, and statistical evidence for comparing our approaches. 
+While we attempt to compare our work with Andreassen's, there are some key differences in our approaches that make a direct comparison difficult. These include dataset labeling and \ac{ISA} inclusion differences, lack of documentation of model hyperparameters, and statistical evidence for comparing our approaches.
 
 ##### Dataset labeling and \ac{ISA} inclusion differences
 
@@ -225,7 +225,7 @@ In an attempt to compare model complexity and performance, we discovered a lack 
 
 In terms of model generalizability across unseen architectures, we find Andreassen's work lacks a more thorough discussion of this aspect. While he implements \ac{LOGO CV} on ISAdetect for endianness and CpuRec for instruction width type, which provides valuable insights into performance on exotic unseen architectures, our research demonstrates that testing across different datasets with overlapping architectures significantly impacts model performance, as discussed in \autoref{testing-on-other-datasets}. This cross-dataset testing represents an important dimension of generalizability that Andreassen does not explore to a point where we can fairly compare our approaches. However, it is still our opinion that feature engineering provides much clearer insights into what the models are fitting to, with features like EndiannessSignatures and AutoCorrelation offering more interpretability than those learned by a \ac{CNN}.
 
-#### Summary 
+#### Summary
 
 Comparing our deep learning approach with Andreassen's feature engineering methods reveals important insights about both methodologies. Classical machine learning classifiers with engineered features for detecting endianness and instruction width type demonstrate several advantages: they appear to require less training data, offer better interpretability, and can achieve competitive or superior performance. However, differences in testing suites, differences in dataset labeling and architecture inclusion, and limited documentation of hyperparameters and cross-run variation make direct comparisons challenging. Our work contributes additional rigor through multiple runs and statistical analysis, while also exploring more on generalizability through our methodology and newly created dataset. We have shown that the CNN approach may offer advantages compared to Andreassen, like when working with limited binary sections or when expanding to \ac{ISA} features seeking to avoid the extensive domain knowledge required for effective feature engineering. We believe both approaches have their merits, and that future work could benefit from leveraging both the interpretability and efficiency of engineered features and the automatic feature extraction capabilities of deep learning models.
 
@@ -316,19 +316,21 @@ Another limitation of the CpuRec dataset is its inconsistencies in labelling, da
   - Identified c6x likely compiled for the oposite endianness for buildcross than cpurec
 - Is this a contribution to the field?
 -->
-The BuildCross dataset is a custom dataset we developed for this thesis, with the ambition of creating a dataset with a more diverse set of \acp{ISA} of the same quality as ISAdetect. The dataset contains code sections from compiled open source libraries and our main concerns when creating this dataset, which we will address in this section were: 
+
+The BuildCross dataset is a custom dataset we developed for this thesis, with the ambition of creating a dataset with a more diverse set of \acp{ISA} of the same quality as ISAdetect. The dataset contains code sections from compiled open source libraries and our main concerns when creating this dataset, which we will address in this section were:
 
 - Ensure sufficient diversity of \acp{ISA} to supplement previous datasets
-- Ensure sufficient quantity of data 
+- Ensure sufficient quantity of data
 - The binary data was representative of production ready binary code seen in reverse engineering scenarios
-- Reproducible results to make the dataset useful for future research 
+- Reproducible results to make the dataset useful for future research
 
 BuildCross ultimately contains object code from static libraries for 40 different \acp{ISA}. The total dataset size is **123MB**, with an average of **3.00 MB** per architecture and a median of **2.51 MB**. The dataset sizes and file counts for each architecture is listed in \autoref{table:buildcross-sizes-file-counts}. We believe we have successfully created a dataset that offers greater diversity than ISAdetect, incorporating 39 additional \acp{ISA} not present there.
 
 Although our dataset is approximately 5 times the size of CpuRec and contains approximately half the number of architectures (40 compared to 76), using individual file samples alone would be too limiting for training large deep learning models. We had to resort to file splitting in order to reach a level of trainable data comparable to ISAdetect, and without the ability to analyze code similarity across the splits, we cannot fully verify the quality of the resulting data. However, our focus on library code may be advantageous, as libraries inherently separate commonly used functionality into reusable functions, which we believe are likely to create representative samples of binary code. File splitting on BuildCross is a better option than on CpuRec, where some files have duplicated code sections three or four times to fill file size requirements for that project [@Granboulan_cpu_rec_dataset2024]. Nevertheless, we recognize that samples from unique programs would likely provide more distinctive and representative training examples.
 
 <!-- Code quality library vs source code -->
-We were also concerned that the library object code would not be representative of features found full binary programs. 
+
+We were also concerned that the library object code would not be representative of features found full binary programs.
 
 <!-- Limitations -->
 
@@ -379,12 +381,9 @@ Table: Number of samples per \ac{ISA} in BuildCross. No. 1024 sized samples are 
 | xstormy16    |            0.48 |               5 |                    490 |
 | xtensa       |            2.61 |              14 |                   2669 |
 
-
-
-
 ### Inherent labeling challenges
 
-<!-- 
+<!--
   - different types of endianness
   - Diffrent interpretations of instruction width: fixed mixed, fully variable
   - se notion - discussion https://www.notion.so/misva/Discussion-1aba9989fe0280c39862cdb89d3e4d31?pvs=4
@@ -403,9 +402,14 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 ## Limitations
 
 <!--
-- Only two target features (time/resource constraint),
-  - how that might limit knowledge on how well CNNs in general works on detecting isa features
-- Black-box models – hard to interpret why it doesn't generalize that well
-- Training on more than just code sections?
-- File splitting implications 
+TODO:
+- File splitting implications
 -->
+
+The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.
+
+Our models are exclusively trained and tested on the code sections of the binary file. The rationale behind this is that the non-code sections, partiularly the headers, of a binary file often reveals information about the \ac{ISA}, and we would risk that the model overfits on this. During the initial exploration phase, we did notice that training on the full binary file resulted in higher model performance across the board, supporting our hypothesis that training on full binary files leads to models learning to identify \ac{ISA}-specific patterns in the non-code sections of the file, which is undesirable. However, since we only train on code sections, the reverse engineer would need to identify the code section of an unknown binary before using our models to detect \ac{ISA} features. This can be a difficult task for undocumented file formats and instruction sets, and might limit the practical usability of our models.
+
+The lack of interpretability of neural networks is also a limitation of our work. This is a common issue with deep learning models in general. While other machine learning techniques such as linear regression, nearest neighbor, and decision trees are easy to inspect and interpret, neural networks operate in a way that makes the model weights hard to reason about after training. Because of this, we are not able to make strong claims about why the models predict the way they do in our performance analyses. That said, we still provide insights that we consider likely based on observed model behavior.
+
+As discussed in \autoref{dataset-quality-assessment}, we have also identified some limitations related to our datasets. However, some of these have been mitigated by developing the BuildCross dataset, which addresses some of the limitations of ISAdetect and CpuRec.
