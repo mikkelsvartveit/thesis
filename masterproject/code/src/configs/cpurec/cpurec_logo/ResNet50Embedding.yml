@@ -1,0 +1,33 @@
+data:
+  name: CpuRecDataset
+  params:
+    dataset_path: cpu_rec/cpu_rec_corpus
+    feature_csv_path: cpu_rec-features.csv
+    per_architecture_limit: null
+    max_file_splits: 1000
+    file_byte_read_limit: 1024
+
+transforms:
+  name: Vector1D
+  params:
+    length: 1024
+
+model:
+  name: ResNet50Embedding
+  params:
+    input_length: 1024
+    num_classes: 2
+    embedding_dim: 128
+    vocab_size: 256
+
+validator:
+  name: logo_cv
+  wandb_project_name: ResNet50Embedding
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  criterion: CrossEntropyLoss
+  batch_size: 64
+  epochs: 2
