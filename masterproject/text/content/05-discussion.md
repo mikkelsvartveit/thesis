@@ -177,7 +177,7 @@ We note that while generalizability for the endianness classification task seem 
 
 In our search for related work documented in \autoref{related-work}, the thesis "Discovery of ISA features from binary programs from unknown instruction set architectures" by Andreassen and Morrison [@Andreassen_Morrison_2024] stands out as the only other identified research that specifically addresses the problem of detecting individual \ac{ISA} features from unknown binary code. This work was supervised by Donn Morrison, who is also the supervisor of the current thesis and who recommended we review this research. For clarity in the following discussion, we will refer to this paper as "Andreassen's work," acknowledging Morrison's supervisory role in that project. The thesis uses similar evaluation strategies and datasets, but with different feature extraction methods. Andreassen uses explicit feature engineering with classical machine learning classifiers for targeting the different \ac{ISA} features, as opposed to deep learning techniques to automatically extract features from the binary code. In addition to him also targeting endianness and instruction width type detection, he includes the third target feature of detecting instruction width size of fixed-width architectures.
 
-The thesis uses some of the same experimental suites as we do on endianness detection, with the same datasets and evaluation strategies. \ac{LOGO CV} was like for us a key part of all his suites, in addition to training on ISAdetect and testing on CpuRec, \ac{LOGO CV} with CpuRec and training on CpuRec testing on ISAdetect. We will compare the results of our models with the results of Andreassen's models where applicable. However, there are some key differences in the labeling of datasets and the architectures used for training and testing, which makes a completely accurate and direct comparison difficult. In the next subsections, we present our interpretation of a direct performance comparison on endianness and instruction width type classification, before discussing the potentially impactful differences in our approaches and addressing comparison issues.
+The thesis uses some of the same experimental suites as we do on endianness detection, with the same datasets and evaluation strategies. \ac{LOGO CV} was a key part of all his suites, in addition to training on ISAdetect and testing on CpuRec, \ac{LOGO CV} with CpuRec and training on CpuRec testing on ISAdetect. We will compare the results of our models with the results of Andreassen's models where applicable. However, there are some key differences in the labeling of datasets and the architectures used for training and testing, which makes a completely accurate and direct comparison difficult. In the next subsections, we present our interpretation of a direct performance comparison on endianness and instruction width type classification, before discussing the potentially impactful differences in our approaches and addressing comparison issues.
 
 #### Endianness
 
@@ -209,7 +209,7 @@ Comparing model performance, training data, and model complexity, Andreassen pre
 
 Looking at his results with AutoCorrelation and ByteDifferencePrimes, we can be certain that there was an advantage in being able to train on the architecturally diverse CpuRec dataset. Comparing our results, we see that our models struggle when moving from ISAdetect to CpuRec, and that we required the more diverse BuildCross dataset to achieve similar performance. Andreassen's results indicate that his feature extraction methods are able to learn generalizable features even when trained on a smaller dataset, and that the feature engineering approach would be able to outperform our \ac{CNN} models in this case.
 
-#### Differences in approach and critique
+#### Differences in approach and comparison issues
 
 While we attempt to compare our work with Andreassen's, there are some key differences in our approaches that make a direct comparison difficult. These include dataset labeling and \ac{ISA} inclusion differences, lack of documentation of model hyperparameters, and statistical evidence for comparing our approaches.
 
@@ -309,9 +309,11 @@ Another limitation of the CpuRec dataset is its inconsistencies in labelling, da
     - Essentially function calls added
   - Address relocation
     - impact on results
+  -
 - Limitations
   - Limited to ELF-supported architectures
   - Dependency on external toolchain (mikpe's GitHub)
+  - -O0 vs -O3 optimization
 - improves both instruction width and endianness. why?
   - Identified c6x likely compiled for the oposite endianness for buildcross than cpurec
 - Is this a contribution to the field?
@@ -324,62 +326,49 @@ The BuildCross dataset is a custom dataset we developed for this thesis, with th
 - The binary data was representative of production ready binary code seen in reverse engineering scenarios
 - Reproducible results to make the dataset useful for future research
 
-BuildCross ultimately contains object code from static libraries for 40 different \acp{ISA}. The total dataset size is **123MB**, with an average of **3.00 MB** per architecture and a median of **2.51 MB**. The dataset sizes and file counts for each architecture is listed in \autoref{table:buildcross-sizes-file-counts}. We believe we have successfully created a dataset that offers greater diversity than ISAdetect, incorporating 39 additional \acp{ISA} not present there.
+BuildCross ultimately contains object code from static libraries for **40** different \acp{ISA}. The total dataset size is **123MB**, with an average of **3.00 MB** per architecture and a median of **2.51 MB**. The dataset sizes and file counts for each architecture is listed in \autoref{table:buildcross-labels-full}. We believe we have successfully created a dataset that offers greater diversity than ISAdetect, incorporating 39 additional \acp{ISA} not present there. The dataset is also balanced for both target features, both when looking at the number of samples per class and the number of architectures per class, shown in \autoref{table:buildcross-endianness-samples-per-class} and \autoref{table:buildcross-instructionwidthtype-samples-per-class}.
 
-Although our dataset is approximately 5 times the size of CpuRec and contains approximately half the number of architectures (40 compared to 76), using individual file samples alone would be too limiting for training large deep learning models. We had to resort to file splitting in order to reach a level of trainable data comparable to ISAdetect, and without the ability to analyze code similarity across the splits, we cannot fully verify the quality of the resulting data. However, our focus on library code may be advantageous, as libraries inherently separate commonly used functionality into reusable functions, which we believe are likely to create representative samples of binary code. File splitting on BuildCross is a better option than on CpuRec, where some files have duplicated code sections three or four times to fill file size requirements for that project [@Granboulan_cpu_rec_dataset2024]. Nevertheless, we recognize that samples from unique programs would likely provide more distinctive and representative training examples.
+Table: Number of samples per class for endianness in BuildCross. Displays distribution across both \acp{ISA} and 1024 byte file splitting the models were subject to. \label{table:buildcross-endianness-samples-per-class}
 
-<!-- Code quality library vs source code -->
+| Endianness | No. 1024 byte samples | Percentage of samples | Architecture count | Percentage of architectures |
+| ---------- | --------------------: | --------------------: | -----------------: | --------------------------: |
+| big        |                 54186 |                44.22% |                 16 |                      40.00% |
+| little     |                 68356 |                55.78% |                 24 |                      60.00% |
 
-We were also concerned that the library object code would not be representative of features found full binary programs.
+Table: Number of samples per class for instruction width type in BuildCross. Displays distribution across both \acp{ISA} and 1024 byte file splitting the models were subject to. \label{table:buildcross-instructionwidthtype-samples-per-class}
 
-<!-- Limitations -->
+| Instruction Width Type | No. 1024 byte samples | Percentage of samples | Architecture count | Percentage of architectures |
+| ---------------------- | --------------------: | --------------------: | -----------------: | --------------------------: |
+| variable               |                 52367 |                42.73% |                 22 |                      55.00% |
+| fixed                  |                 70175 |                57.27% |                 18 |                      45.00% |
+
+Although our dataset is around 6 times the size of CpuRec (20.98 vs. 119.88 MB) and contains approximately half the number of architectures (40 compared to 76), using individual file samples alone would be too limiting for training large deep learning models. We had to resort to file splitting in order to reach a level of trainable data comparable to ISAdetect, and without the ability to analyze code similarity across the splits, we cannot fully verify the quality of the resulting data. However, our focus on library code may be advantageous, as libraries inherently separate commonly used functionality into reusable functions, which we believe are likely to create representative samples of binary code. File splitting on BuildCross is a better option than on CpuRec, where some files have duplicated code sections three or four times to fill file size requirements for that project [@Granboulan_cpu_rec_dataset2024]. Nevertheless, we recognize that samples from unique programs would likely provide more distinctive and representative training examples.
+
+We were also concerned that the static library object code might not adequately represent features found in full binary programs. Our decision to compile static libraries instead of working programs came from two practical challenges: the difficulty of finding compiled programs for exotic architectures, and the difficulty in finding source code that could be cross-compiled for our target architectures. While compiled working programs would have been ideal to represent real-world scenarios, the availability and standalone nature of these open source libraries made them the only feasible alternative for creating a dataset of sufficient size, given the scope of the project.
+
+We investigated the potential impact of this further, and came to the conclusion that object code from static libraries lserves as an appropriate representation based on several key findings. The transformation from static library code to a program binary occurs exclusively during the linking stage, as illustrated in \autoref{fig:gcc-binutils-pipeline}. Static library object code essentially consists of compiled functions and subroutines, which are handled identically to object code from compiled source files in working programs. The machine code itself is identical in nature - the CPU instructions extracted from a static library and placed into the final binary are the same format as instructions from the directly compiled source files. Once linked, they're all sequences of machine instructions. While the linking stage has no effect on the machine instructions themselves, the linker does resolve symbol references and memory addresses. Object code typically contains placeholders for these references, which are replaced with the actual addresses during linking. However, the inherent features of the \ac{ISA} does not change despite unresolved symbols, and the instructions themselves remain valid. While we acknowledge that the linking stage modifies the object code in ways that could potentially influence the \acp{CNN} trained on this data, we believe that it does not compromise our investigation of RQ1-3. If \acp{CNN} are indeed capable of detecting ISA features (a positive answer to RQ1), then the presence of unresolved symbols and placeholder addresses in library object code should not impair the model's ability to learn the architectural characteristics we aim to identify.
+
+To validate this approach, we experimentally tried to forcefully link the libraries to see if this yielded better results. Our tests revealed that linking all object code into a single binary across different bare metal targets consistently resulted in inflated code sections compared to the original library object code. For example, on the Epiphany architecture shown by the use of the toolchain below this paragraph, the .text section increased substantially from 63 KB to 110 KB. This inflation likely results from the addition of C runtime initialization code (such as crt0.c), padding/alignment requirements, and other overhead necessary for bare metal execution. This standardized initialization code would appear nearly identical across all binaries for the same architecture, providing no meaningful differences of features for classification tasks. In fact, the inclusion of such similar boilerplate code would likely hurt classifier performance with code splitting, as the limited input window of our model would capture unique less architecture-specific code, potentially diluting the patterns we aim to detect.
+
+```bash
+# Using the epiphany singularity container from the BuildCross crosscompiler suite
+cat results/report.csv | grep -e epiphany,libzlib.a -e Architecture
+> Architecture,Libraries,Text_Size
+> epiphany,libzlib.a,62.9727 KB
+
+epiphany-unknown-elf-gcc -o zlib_complete_binary \
+  -Wl,--whole-archive,--unresolved-symbols=ignore-all \
+  results/library_files/epiphany/libzlib.a -Wl,--no-whole-archive
+
+epiphany-unknown-elf-readelf -S zlib_complete_binary | grep -e Name -e .text
+>  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+>  [ 2] .text             PROGBITS        80000030 008030 01ae94 00  AX  0   0 16
+                                                      # 0x01ae94 ~= 110 KB
+```
 
 <!-- Validation of quality through improvements on classification on cpurec. -->
 
-Table: Number of samples per \ac{ISA} in BuildCross. No. 1024 sized samples are count of 1024 byte sized chunks resulting from code-splitting. \label{table:buildcross-sizes-file-counts}
-
-| Architecture | Total Size (MB) | Number of Files | No. 1024 sized samples |
-| ------------ | --------------: | --------------: | ---------------------: |
-| arc          |            3.23 |              14 |                   3299 |
-| arceb        |            1.70 |              12 |                   1731 |
-| bfin         |            2.88 |              14 |                   2942 |
-| bpf          |            0.02 |               1 |                     19 |
-| c6x          |            5.55 |               8 |                   5679 |
-| cr16         |            1.97 |              13 |                   2012 |
-| cris         |            3.98 |              14 |                   4074 |
-| csky         |            4.15 |              14 |                   4247 |
-| epiphany     |            0.46 |               6 |                    471 |
-| fr30         |            2.17 |               7 |                   2223 |
-| frv          |            4.93 |              14 |                   5037 |
-| ft32         |            0.44 |               9 |                    440 |
-| h8300        |            4.30 |               9 |                   4402 |
-| iq2000       |            2.41 |               8 |                   2466 |
-| kvx          |            4.90 |              14 |                   5016 |
-| lm32         |            3.32 |              13 |                   3396 |
-| loongarch64  |            4.71 |              14 |                   4818 |
-| m32r         |            1.96 |              12 |                   1997 |
-| m68k-elf     |            1.83 |              12 |                   1866 |
-| mcore        |            1.24 |               7 |                   1270 |
-| mcoreeb      |            1.24 |               7 |                   1270 |
-| microblaze   |            5.74 |              14 |                   5867 |
-| microblazeel |            5.71 |              14 |                   5840 |
-| mmix         |            4.22 |              13 |                   4314 |
-| mn10300      |            1.70 |              12 |                   1732 |
-| moxie        |            2.19 |              12 |                   2237 |
-| moxieel      |            2.19 |              12 |                   2232 |
-| msp430       |            0.42 |               5 |                    432 |
-| nds32        |            2.85 |              14 |                   2908 |
-| nios2        |            4.21 |              14 |                   4301 |
-| or1k         |            5.42 |              14 |                   5544 |
-| pru          |            2.39 |               8 |                   2443 |
-| rl78         |            0.63 |               5 |                    643 |
-| rx           |            1.46 |              12 |                   1486 |
-| tilegx       |           11.71 |              14 |                  11986 |
-| tricore      |            1.61 |               8 |                   1646 |
-| v850         |            3.53 |              10 |                   3609 |
-| visium       |            3.41 |              12 |                   3488 |
-| xstormy16    |            0.48 |               5 |                    490 |
-| xtensa       |            2.61 |              14 |                   2669 |
+Despite initial concerns about dataset quality, our experiments provided validation of BuildCross's effectiveness. When incorporating BuildCross with ISAdetect into the training set for CpuRec classification, we observed significant performance improvements: an increase of 8.3 \ac{p.p.} in average accuracy for endianness detection and a remarkable 26.9 \ac{p.p.} improvement for instruction width type classification across our best-performing models. These substantial improvements, particularly in instruction width type detection, provide good evidence supporting both the code quality and accuracy of the dataset's labeling. These results suggest that the dataset successfully captures the architectural features necessary for effective classification.
 
 ### Inherent labeling challenges
 
@@ -402,7 +391,10 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 ## Limitations
 
 <!--
-TODO:
+- Only two target features (time/resource constraint),
+  - how that might limit knowledge on how well CNNs in general works on detecting isa features
+- Black-box models – hard to interpret why it doesn't generalize that well
+- Training on more than just code sections?
 - File splitting implications
 -->
 
