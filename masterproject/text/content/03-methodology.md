@@ -220,9 +220,9 @@ zlib & 1.3 & A software library used for data compression. It provides lossless 
 
 In order to generate binary programs for specific \ac{ISA}, we need a cross-compiler that can run on our host system and target that architecture. While common targets like x86, ARM and MIPS systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to configure properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on the \ac{GCC} and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
 
-A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of \ac{GCC}, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by the user mikpe on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures. The buildcross project was used as a base for our own toolchain building scripts, and expanded to support additional architectures.
+A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of \ac{GCC}, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by Mikael Pettersson on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures [@Mikpe2024]. The buildcross project was used as a base for our own toolchain building scripts, and expanded to support additional architectures.
 
-The BuildCross project uses singularity images to create containerized, reproducible and portable cross compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
+The cross-compiler suite uses singularity images to create containerized, reproducible and portable cross-compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
 
@@ -242,11 +242,11 @@ Using the GNU Binutils toolkit from our compiled toolchains, we employed the arc
 
 For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's \ac{ELF} headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
 
-### Results
+### Final dataset yields and structure
 
-The final dataset spans X architectures with approximately Y MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
+The final dataset spans 40 architectures with approximately 120 MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
 
-The dataset is distributed as a tar.gz file with the following structure:
+The source code for the cross-compiler suite is available under the masterproject/crosscompiler directory on the thesis GitHub page [@thesisgithub]. The dataset itself is published as a GitHub Release and distributed as a tar.gz file with the following structure:
 
 ```{=latex}
 \begin{figure}[h]
@@ -274,6 +274,8 @@ The dataset is distributed as a tar.gz file with the following structure:
 ```
 
 The labels.csv file contains architecture metadata including endianness, wordsize and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries. The data from the labels.csv file is presented in \autoref{table:buildcross-dataset-labels}.
+
+<!-- TODO: should this table be here or appendix? -->
 
 Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented feature values for endianness, wordsize, instructionswidth_type and instructionswidth. Also includes code section sizes extracted for each architecture \label{table:buildcross-dataset-labels}
 
