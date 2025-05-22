@@ -74,11 +74,11 @@ However, introducing an embedding layer in the model makes it capable of identif
 
 ### Model complexity
 
-A clear trend in our results is that the large ResNet models do not perform better than the smaller and simpler \ac{CNN} architectures, and in many cases they actually perform worse than the smaller models. A possible explanation for this is that the ResNet models' high representational power might overfit on the training data. This typically happens when the size or diversity of the training data is limited.
+\autoref{fig:parameter-count} shows the parameter count of each of our models. A clear trend in our results is that the large ResNet models do not perform better than the smaller and simpler \ac{CNN} architectures, and in many cases they actually perform worse than the smaller models. A possible explanation for this is that the ResNet models' high representational power might overfit on the training data. This typically happens when the size or diversity of the training data is limited.
+
+![Parameter count of each model \label{fig:parameter-count}](images/discussion/parameter-count.svg)
 
 While we consider our data quantity to be sufficient, there are reasons to believe that the diversity of the data is not high enough to avoid overfitting when training larger models. This claim is also supported by the fact that every model we trained converged rather quickly, almost always after just one or two epochs. The limited representational power of the smaller models may actually be beneficial in our case, since they are forced to learn simpler and more obvious patterns instead of picking up on what might effectively be random noise in the training data.
-
-TODO: bar chart showing the parameter count of each model
 
 ### CNN dimensionality
 
