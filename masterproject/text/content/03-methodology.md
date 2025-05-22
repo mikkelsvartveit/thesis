@@ -508,7 +508,7 @@ The overall architecture of ResNet50 has:
 - 1 average pooling layer
 - 1 fully connected layer
 
-To preprocess our data for ResNet50, we use the 2D image encoding described in \autoref{two-dimensional-byte-level-encoding}, with a 32x32 image size. However, since ResNet expects a three-channel (RGB) image, we duplicate the pixel values to all three channels, which essentially results in a grayscale image. The ResNet50 model from the PyTorch Torchvision library is used, and has a total of 25,557,032 parameters.
+To preprocess our data for ResNet50, we use the 2D image encoding described in \autoref{two-dimensional-byte-level-encoding}, with a 32x32 image size. However, since ResNet expects a three-channel (RGB) image, we duplicate the pixel values to all three channels, which essentially results in a grayscale image. The ResNet50 model from the PyTorch Torchvision library is used, and has a total of 23,512,130 parameters.
 
 <!-- TODO: motivate the duplication across channels, has related work also duplicated? -->
 
@@ -520,7 +520,7 @@ This model architecture builds on the ResNet50 model described in \autoref{resne
 
 - Modified the first convolution layer to accept 128 channels instead of 3
 
-The model takes a vector of length 1024 as input, which is reshaped to 32x32 after the embedding layer. The embedding layer reduces the size of ResNet50 by a small factor, resulting in a model with 23,936,898 parameters. This model is hereby referred to as _ResNet50-E_.
+The model takes a vector of length 1024 as input, which is reshaped to 32x32 after the embedding layer. The embedding layer increases the size of ResNet50 by a small factor, resulting in a model with 23,936,898 parameters. This model is hereby referred to as _ResNet50-E_.
 
 ### Target features
 
