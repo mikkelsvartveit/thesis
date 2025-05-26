@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 import pandas as pd
 import matplotlib.font_manager as fm
 import os
@@ -200,3 +201,39 @@ def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(1
 
     plt.tight_layout()
     return fig
+
+
+def plot_confusion_matrix(
+    cm,
+    class_names,
+    title="Confusion Matrix",
+    cmap=plt.cm.RdYlGn,
+    normalize=False,
+):
+    if normalize:
+        cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+        cm = np.nan_to_num(cm)
+        # Create custom annotations with % symbol
+        annotations = [[f"{val:.1f}%" for val in row] for row in cm * 100]
+    else:
+        annotations = True
+
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(
+        cm * 100 if normalize else cm,
+        annot=annotations,
+        fmt="",  # Empty format since we're providing custom annotations
+        cmap=cmap,
+        xticklabels=class_names,
+        yticklabels=class_names,
+        vmin=0 if normalize else None,
+        vmax=100 if normalize else None,
+        cbar=False,
+        square=True,
+        linewidths=0.5,
+        linecolor="black",
+        annot_kws={"size": 13},
+    )
+    plt.title(title)
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
