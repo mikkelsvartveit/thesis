@@ -54,6 +54,7 @@ header-includes:
   - \usepackage{xcolor}
   - \usepackage[section]{placeins}
   - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
+  - \def\chapterautorefname{Chapter}
   - \def\sectionautorefname{Section}
   - \def\subsectionautorefname{Section}
   - \def\subsubsectionautorefname{Section}
