@@ -324,6 +324,8 @@ Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented featu
 | xstormy16    | little     | 32       | mixed                 | 16/32            | 219             |
 | xtensa       | big        | 32       | variable              | na               | 2671            |
 
+TODO: Change mixed to variable for all these
+
 ## Experiments
 
 This research primarily involves training, validating, and evaluating \ac{CNN} models using \ac{ISA} characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
