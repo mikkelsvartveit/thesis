@@ -1,14 +1,3 @@
-<!--
-RQ: To what extent can CNNs effectively identify ISA features from raw binary programs without explicit feature engineering?
-
-- RQ1: Which ISA features can be successfully classified by CNNs?
-
-- RQ2: How does the model architecture impact the CNN's ability to learn ISA characteristics?
-
-- RQ3: How does the choice of binary encoding method impact the CNN's ability to learn ISA characteristics?
-
--->
-
 # Discussion
 
 ## Overview of key findings
@@ -42,14 +31,6 @@ While ISAdetect-BuildCross showed some interesting patterns, the most significan
 It is worth noting that the higher complexity of ResNet architectures did not translate to significant performance gains in our testing. Despite having significantly more parameters and deeper architecture, ResNet50 and ResNet50-E typically performed on par with or worse than simpler models. Training loss patterns across different experimental suites suggest that the features related to endianness and instruction width type may not be complex enough to require the additional representational power that ResNet provides<!-- TODO: training loss -->. This observation holds true even when considering that ResNet models were given a larger input window of 1024 bytes compared to the 512 bytes used by simpler models. The result suggests that lightweight models may be preferable for these specific ISA feature detection tasks, offering comparable accuracy with lower computational requirements.
 
 ## Model architecture performance analysis
-
-<!--
-TODO:
-
-- Visualize some grayscale images
-- Learning rate converges fast relative to the amount of data we have, suggest that it is fitting to something
-
--->
 
 ### Impact of embedding layers
 
@@ -107,7 +88,7 @@ This is common behavior when the size of the training dataset is limited. While 
 
 ### Architecture Outliers
 
-<!-- m68k LOGO CV,  -->
+<!-- TODO: m68k LOGO CV,  -->
 
 ## Model generalizability
 
@@ -162,7 +143,7 @@ We note that while generalizability for the endianness classification task seem 
 ## Comparison with prior literature
 
 <!--
-(Stian)
+TODO (Stian)
 - Prior litterature introduction: andreassen
   - Same supervisor as us, we got referenced this thesis from him (morrison)
   - Comment on which test suites are the same, what he did diferently (labling, included architectures)
@@ -325,7 +306,7 @@ An important limitation of the CpuRec dataset we want to highlight is its incons
 
 ### BuildCross dataset
 
-<!--
+<!-- TODO
 5.5.3 BuildCross Dataset
 - Quantity of data
 - Dataset balance
@@ -393,13 +374,14 @@ epiphany-unknown-elf-readelf -S zlib_complete_binary | grep -e Name -e .text
                                                       # 0x01ae94 ~= 110 KB
 ```
 
-<!-- Validation of quality through improvements on classification on cpurec. -->
+<!-- TODO: Validation of quality through improvements on classification on cpurec. -->
 
 Despite initial concerns about dataset quality, our experiments provided validation of BuildCross's effectiveness. When incorporating BuildCross with ISAdetect into the training set for CpuRec classification, we observed significant performance improvements: an increase of 8.3 \ac{p.p.} in average accuracy for endianness detection and a remarkable 26.9 \ac{p.p.} improvement for instruction width type classification across our best-performing models. These substantial improvements, particularly in instruction width type detection, provide good evidence supporting both the code quality and accuracy of the dataset's labeling. These results suggest that the dataset successfully captures the architectural features necessary for effective classification.
 
 ### Inherent labeling challenges
 
 <!--
+TODO:
   - different types of endianness
   - Diffrent interpretations of instruction width: fixed mixed, fully variable
   - se notion - discussion https://www.notion.so/misva/Discussion-1aba9989fe0280c39862cdb89d3e4d31?pvs=4
@@ -417,17 +399,6 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 
 ## Limitations
 
-<!--
-- Only two target features (time/resource constraint),
-  - how that might limit knowledge on how well CNNs in general works on detecting isa features
-- Only training on code sections TODO?
-  - Not that important in relaton to RQs
-  - How this limits the practical usability of our models
-- Black-box models – hard to interpret why it doesn't generalize that well
-- Training on more than just code sections?
-- File splitting implications
--->
-
 The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.<!-- TODO: expand with what types of classification fits with cnns, and why -->
 
 Our models are exclusively trained and tested on the code sections of the binary file. The rationale behind this is that the non-code sections, partiularly the headers, of a binary file often reveals information about the \ac{ISA}, and we would risk that the model overfits on this. During the initial exploration phase, we did notice that training on the full binary file resulted in higher model performance across the board, supporting our hypothesis that training on full binary files leads to models learning to identify other \ac{ISA}-specific patterns in the non-code sections of the file, rather than fitting to inherent \ac{ISA} features, which is undesirable. However, since we only train on code sections, the reverse engineer would need to identify the code section of an unknown binary before using our models to detect \ac{ISA} features. This can be a difficult task for undocumented file formats and instruction sets, and might limit the practical usability of our models.
@@ -435,6 +406,7 @@ Our models are exclusively trained and tested on the code sections of the binary
 The lack of interpretability of neural networks is also a limitation of our work. This is a common issue with deep learning models in general. While other machine learning techniques such as linear regression, nearest neighbor, and decision trees are easy to inspect and interpret, neural networks operate in a way that makes the model weights hard to reason about after training. Because of this, we are not able to make strong claims about why the models predict the way they do in our performance analyses. That said, we still provide insights that we consider likely based on observed model behavior.
 
 <!--
+TODO:
 - Limitations
   - Limited to ELF-supported architectures
   - Many archetectures require specific versions of GCC

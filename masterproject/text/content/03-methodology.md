@@ -42,8 +42,6 @@ Table: \acp{ISA} present in ISADetect dataset \label{table:isadetect}
 
 The ISAdetect dataset is publicly available through etsin.fairdata.fi [@Kairajarvi_dataset2020]. Our study utilizes the most recent version, Version 6, released March 29th 2020. The dataset is distributed as a compressed archive (new_new_dataset/ISAdetect_full_dataset.tar.gz) containing both complete program binaries and code-only sections for each architecture. Additionally, all of \ac{ISA} folder contains a JSON file with detailed metadata for each individual binary, including properties such as endianness and wordsize. This dataset was used for the same purpouse by Andressaen in his masters thesis, and we referred to his table in Appendix A for additional labeling of instruction width type (fixed/variable) and instruction width ranges [@Andreassen_Morrison_2024].
 
-<!-- TODO: more specific dataset stats based on how we handle the imbalance -->
-
 #### CpuRec
 
 The CpuRec dataset is a collection of executable code-only sections extracted from binaries of 72 different architectures, developed by Louis Granboulan for use with the cpu_rec tool. The cpu_rec uses Markov-chains and Kullback-Leibler divergence with the dataset in order to classify the ISA of an input binary [@Granboulan_paper2020]. Even though only one binary per architecture is provided, which is likely insufficient for training a deep learning model on its own, the diversity of ISAs represented makes the dataset an excellent test set for evaluating our model. \autoref{table:cpurec} lists the \acp{ISA} present in CpuRec and their architectural features.
@@ -131,7 +129,7 @@ Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec}
 
 The cpu_rec tool-suite is available on GitHub, and the binaries used in the thesis are available as under cpu_rec_corpus directory [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures like M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To fill this gap, we referenced Appendix A of Andreassen's thesis [@Andreassen_Morrison_2024] to obtain architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset.
 
-<!-- Dataset quality
+<!-- TODO: Dataset quality
 While many of the more common ISAs were packaged using standard file-headers, some of the binaries had undocumented .text sections, where the author had to make educated guesses in order to identify code [source].  -->
 
 ### Technical configuration
@@ -214,7 +212,8 @@ zlib & 1.3 & A software library used for data compression. It provides lossless 
 
 ### Pipeline for developing toolchains
 
-<!-- - Not all toolchains are publicly available
+<!-- TODO:
+- Not all toolchains are publicly available
 - Exists systems for building toolchains, our choice landed on BuildCross.
 - containerized for portability, size optim and reproducibility -->
 
@@ -225,8 +224,6 @@ A full cross-compiler toolchain have a lot of moving parts, and since a lot of a
 The cross-compiler suite uses singularity images to create containerized, reproducible and portable cross-compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources (why libraries)
-
-<!-- TODO: should we cite CMake? -->
 
 When using the compiled toolchains, we have to overcome the challenge of configuring each library for compilation to the target architecture. Instead of manually configuring each library for each architecture, we used the build system CMake and toolchain configuration files to automate the process. CMake is a widely used build system that simplifies the process of configuring and generating build files for different platforms and compilers. It allows us to specify the target architecture, compiler, linker, and other build options in a platform-independent way, only requiring one toolchain file per architecture. While most architectures could use a common template toolchain file, CMake made it straightforward to implement the specific configurations needed for architectures with unique requirements.
 
@@ -511,8 +508,6 @@ The overall architecture of ResNet50 has:
 - 1 fully connected layer
 
 To preprocess our data for ResNet50, we use the 2D image encoding described in \autoref{two-dimensional-byte-level-encoding}, with a 32x32 image size. However, since ResNet expects a three-channel (RGB) image, we duplicate the pixel values to all three channels, which essentially results in a grayscale image. The ResNet50 model from the PyTorch Torchvision library is used, and has a total of 23,512,130 parameters.
-
-<!-- TODO: motivate the duplication across channels, has related work also duplicated? -->
 
 #### ResNet50 with embedding layer
 
