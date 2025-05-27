@@ -41,10 +41,6 @@ linkcolor: "RoyalBlue"
 urlcolor: "RoyalBlue"
 citecolor: "RoyalBlue"
 filecolor: "RoyalBlue"
-toc: "true"
-
-abstract: |
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat in varius, temporibus et semper, facilisi. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed ut perspiciatis unde omnis iste natus error similique et maxime. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, while ac sapien inceptos himenaeos justo etiam phasellus turpis nullam fringilla semper, rhoncus sem, vitae. Integer nec odio praesent libero sed cursus ante dapibus diam, maecenas faucibus mollis interdum efficitur justo in tellus tempor, nunc. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi rerum facilis est cumque, optime. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et doloremque magnam aliquam.
 
 header-includes:
   - \usepackage{array}
@@ -54,11 +50,39 @@ header-includes:
   - \usepackage{xcolor}
   - \usepackage[section]{placeins}
   - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
-  - \def\chapterautorefname{Chapter}
-  - \def\sectionautorefname{Section}
-  - \def\subsectionautorefname{Section}
-  - \def\subsubsectionautorefname{Section}
+  - \usepackage[norwegian,english]{babel}
+  - \renewcommand{\maketitle}{} # Disable cover page
 ---
+
+<!-- Abstract in English -->
+
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat in varius, temporibus et semper, facilisi. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed ut perspiciatis unde omnis iste natus error similique et maxime. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, while ac sapien inceptos himenaeos justo etiam phasellus turpis nullam fringilla semper, rhoncus sem, vitae. Integer nec odio praesent libero sed cursus ante dapibus diam, maecenas faucibus mollis interdum efficitur justo in tellus tempor, nunc. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi rerum facilis est cumque, optime. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et doloremque magnam aliquam.
+\end{abstract}
+
+<!-- Abstract in Norwegian -->
+
+\selectlanguage{norwegian}
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat in varius, temporibus et semper, facilisi. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed ut perspiciatis unde omnis iste natus error similique et maxime. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, while ac sapien inceptos himenaeos justo etiam phasellus turpis nullam fringilla semper, rhoncus sem, vitae. Integer nec odio praesent libero sed cursus ante dapibus diam, maecenas faucibus mollis interdum efficitur justo in tellus tempor, nunc. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi rerum facilis est cumque, optime. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et doloremque magnam aliquam.
+\end{abstract}
+\selectlanguage{english}
+
+<!-- Override autoref behavior -->
+
+\def\chapterautorefname{Chapter}
+\def\sectionautorefname{Section}
+\def\subsectionautorefname{Section}
+\def\subsubsectionautorefname{Section}
+
+<!-- Table of contents -->
+
+```{=latex}
+{
+  \hypersetup{hidelinks}
+  \tableofcontents
+}
+```
 
 # Acronyms {-}
 
