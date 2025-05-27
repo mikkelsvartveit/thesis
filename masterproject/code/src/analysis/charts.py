@@ -51,9 +51,7 @@ def model_swarmplot(
 
     # Create strip plot
     plt.figure(figsize=(9, 6))
-    plt.title(f"Swarmplot of {target_feature} accuracies")
-    plt.xlabel("Model")
-    plt.ylabel("Accuracy")
+    plt.ylabel("Model Accuracy")
     plt.ylim(0, 1)
     plt.xticks(rotation=30)
 
@@ -72,7 +70,7 @@ def model_swarmplot(
             color="black",
             capsize=5,
             markersize=4,
-            label=f"Mean ± 95% CI" if i == 0 else None,
+            label=f"Mean ± 95% Confidence Interval" if i == 0 else None,
         )
 
     plt.legend(loc="lower left")
