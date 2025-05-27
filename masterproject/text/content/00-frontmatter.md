@@ -1,5 +1,5 @@
 ---
-title: "[Title undecided]"
+title: "Unveiling Instruction Set Characteristics from Raw Binary Code using Convolutional Neural Networks"
 subtitle: |
   \vspace{0.2cm}
   TDT4900 – Master's Thesis\
