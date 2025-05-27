@@ -1,4 +1,5 @@
 \appendix
+\acresetall
 
 <!-- Reference with \autoref{dataset-additional-information} -->
 

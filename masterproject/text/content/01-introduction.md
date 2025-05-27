@@ -1,3 +1,5 @@
+\acresetall
+
 # Introduction
 
 ## Rationale
