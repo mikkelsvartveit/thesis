@@ -28,9 +28,7 @@ An important part of all \acp{ISA} is the instruction set, which defines the bin
 
 #### Word size
 
-<!-- TODO: Elaborate how it is not clearly defined, could be reffering to register width, addressable memory space size, datapath width in the cpu, ALU input width. In earlier architectures, likely used in marketing aswell -->
-
-A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities.
+A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. However, there is not a clear definition of what word size means. One natural way to define it is the size of the registers in the CPU. For instance, this is why we refer to _x86-64_ as a 64-bit architecture. Even so, some software and documentation for the x86 family – such as the Microsoft Windows API – still define a single word to be 16 bits, even though the registers are 64 bits wide. Other definitions include the addressable memory space size, the data bus width, or the ALU input width, all of which may or may not be the equal to the register size.
 
 #### Endianness {#background-endianness}
 
