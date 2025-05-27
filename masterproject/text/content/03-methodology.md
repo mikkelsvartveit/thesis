@@ -551,9 +551,16 @@ To validate whether our model generalizes to \acp{ISA} not present in the traini
 
 ### Testing on other datasets
 
-To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA}. In particular, \autoref{table:evaluation-strategies} shows the three evaluation strategies in which we use the additional datasets.
+To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These testing suites follow normal train-test format, where we train the models on allotted data from the training dataset, and run inference and test model performance on the evaluation dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA} and our choice of testing suites are based on a couple of factors:
 
-Table: Evaluation strategies using multiple datasets \label{table:evaluation-strategies}
+- Model requirements on the amount of data needed to train
+- The quality of the datasets, in terms of labelling and size
+- Focus on inference on \acp{ISA} not present in the testing set
+- Limit the number of permutations of target features, model variations, and testing suites to ensure proper evaluation of the models within the scope of this thesis.
+
+\autoref{table:evaluation-strategies} shows the three evaluation strategies in which we use the additional datasets. These train-test suites is referred to as _ISAdetect-CpuRec_, _ISAdetect-BuildCross_ and _Combined-CpuRec_ for ease of reference.
+
+Table: Evaluation strategies using multiple datasets \label{table:evaluation-strategies}.
 
 | #   | Training dataset       | Evaluation dataset |
 | --- | ---------------------- | ------------------ |
@@ -566,6 +573,10 @@ Table: Evaluation strategies using multiple datasets \label{table:evaluation-str
 To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different random seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different random seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
 
 For the cross validation evaluation strategies, we repeat the experiments 10 times with different random seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times.
+
+#### Confidence intervals
+
+TODO
 
 ### Baseline
 

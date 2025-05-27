@@ -3,7 +3,7 @@
 pdf: ../../output/master-thesis.pdf
 
 ../../output/master-thesis.pdf: content/*.md 
-	@echo "\nCompiling PDF..."
+	@echo "\nCompiling PDF... - $(shell date +"%H:%M:%S")"
 	mkdir -p ../../output
 	pandoc content/*.md \
 		--resource-path=content \
