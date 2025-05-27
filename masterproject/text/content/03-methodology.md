@@ -281,35 +281,35 @@ Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented featu
 
 | architecture | endianness | wordsize | instructionwidth_type | instructionwidth | total size (kb) |
 | ------------ | ---------- | -------- | --------------------- | ---------------- | --------------- |
-| arc          | little     | 32       | mixed                 | 16/32            | 3299            |
-| arceb        | big        | 32       | mixed                 | 16/32            | 1729            |
-| bfin         | little     | 32       | mixed                 | 16/32            | 2942            |
+| arc          | little     | 32       | variable              | 16/32            | 3299            |
+| arceb        | big        | 32       | variable              | 16/32            | 1729            |
+| bfin         | little     | 32       | variable              | 16/32            | 2942            |
 | c6x          | big        | 32       | fixed                 | 32               | 5271            |
-| cr16         | little     | 32       | mixed                 | 16/32            | 1583            |
-| cris         | little     | 32       | mixed                 | 16/32            | 4070            |
-| csky         | little     | 32       | mixed                 | 16/32            | 4244            |
-| epiphany     | little     | 32       | mixed                 | 16/32            | 334             |
-| fr30         | big        | 32       | mixed                 | 16/32            | 2215            |
+| cr16         | little     | 32       | variable              | 16/32            | 1583            |
+| cris         | little     | 32       | variable              | 16/32            | 4070            |
+| csky         | little     | 32       | variable              | 16/32            | 4244            |
+| epiphany     | little     | 32       | variable              | 16/32            | 334             |
+| fr30         | big        | 32       | variable              | 16/32            | 2215            |
 | frv          | big        | 32       | fixed                 | 32               | 5033            |
 | ft32         | little     | 32       | fixed                 | 32               | 445             |
-| h8300        | big        | 32       | mixed                 | 16/32            | 4396            |
+| h8300        | big        | 32       | variable              | 16/32            | 4396            |
 | iq2000       | big        | 32       | fixed                 | 32               | 2459            |
-| kvx          | little     | 64       | mixed                 | 16/32            | 5012            |
+| kvx          | little     | 64       | variable              | 16/32            | 5012            |
 | lm32         | big        | 32       | fixed                 | 32               | 3392            |
 | loongarch64  | little     | 64       | fixed                 | 64               | 4814            |
 | m32r         | big        | 32       | fixed                 | 32               | 1997            |
-| m68k-elf     | big        | 32       | mixed                 | 16/32/48         | 1866            |
+| m68k-elf     | big        | 32       | variable              | 16/32/48         | 1866            |
 | mcore        | little     | 32       | fixed                 | 16               | 1268            |
 | mcoreeb      | big        | 32       | fixed                 | 16               | 1268            |
 | microblaze   | big        | 32       | fixed                 | 64               | 5862            |
 | microblazeel | little     | 32       | fixed                 | 64               | 5834            |
 | mmix         | big        | 64       | fixed                 | 32               | 4305            |
 | mn10300      | little     | 32       | variable              | na               | 1251            |
-| moxie        | big        | 32       | mixed                 | 16/32            | 2236            |
-| moxieel      | little     | 32       | mixed                 | 16/32            | 2229            |
-| msp430       | little     | 32       | mixed                 | 16/32            | 223             |
-| nds32        | little     | 32       | mixed                 | 16/32            | 2507            |
-| nds32be      | big        | 32       | mixed                 | 16/32            | 1431            |
+| moxie        | big        | 32       | variable              | 16/32            | 2236            |
+| moxieel      | little     | 32       | variable              | 16/32            | 2229            |
+| msp430       | little     | 32       | variable              | 16/32            | 223             |
+| nds32        | little     | 32       | variable              | 16/32            | 2507            |
+| nds32be      | big        | 32       | variable              | 16/32            | 1431            |
 | nios2        | little     | 32       | fixed                 | 64               | 4299            |
 | or1k         | big        | 32       | fixed                 | 64               | 5541            |
 | pru          | little     | 32       | fixed                 | 32               | 2435            |
@@ -318,13 +318,11 @@ Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented featu
 | rxeb         | big        | 32       | variable              | na               | 1300            |
 | tilegx       | little     | 64       | fixed                 | 64               | 11964           |
 | tilegxbe     | big        | 64       | fixed                 | 64               | 11970           |
-| tricore      | little     | 32       | mixed                 | 16/32            | 1644            |
-| v850         | little     | 32       | mixed                 | 16/32            | 3171            |
+| tricore      | little     | 32       | variable              | 16/32            | 1644            |
+| v850         | little     | 32       | variable              | 16/32            | 3171            |
 | visium       | big        | 32       | fixed                 | 32               | 3481            |
-| xstormy16    | little     | 32       | mixed                 | 16/32            | 219             |
+| xstormy16    | little     | 32       | variable              | 16/32            | 219             |
 | xtensa       | big        | 32       | variable              | na               | 2671            |
-
-TODO: Change mixed to variable for all these
 
 ## Experiments
 
