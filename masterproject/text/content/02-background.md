@@ -12,11 +12,9 @@ All computer software boils down to a series of bytes readable by the CPU. The b
 
 ![Instruction format and examples from the ARM instruction set. \label{fig:arm-instruction}](images/background/arm-instruction.svg)
 
-<!-- Assembly? -->
-
 ### Instruction set architectures
 
-An \ac{ISA} is a contract between hardware and software on how binary code should be run on a given computer. In the early days, every new computer system was created with a new \ac{ISA}, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the \ac{ISA} as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all System/360 computers could run the same programs as they shared a common \ac{ISA}. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established \acp{ISA}, ensuring cross generational program compatibility.
+An \acf{ISA} is a contract between hardware and software on how binary code should be run on a given computer. In the early days computer programming, every new computer system was created with a new \ac{ISA}, meaning programs had to be custom-written for each specific machine. IBM and their System/360 series, introduced in 1964, were the first to use the \ac{ISA} as an abstraction layer between hardware and software. This new approach meant that despite having different internal architectures, all variations of the System/360 computers could run the same programs as they shared a common \ac{ISA}. The commercial success of this approach set an industry standard that continues to define modern computing, where hardware manufacturers can implement already established \acp{ISA}, ensuring cross generational program compatibility.
 
 In addition to defining an instruction set, the \ac{ISA} gives a complete specification about how software interfaces with hardware, including how instructions can be combined, memory organization and addressing, supported data types, memory consistency models, and interrupt handling. Examples of well‐known \ac{ISA} families are x86, ARM, and RISC-V. Compilers can typically target multiple \acp{ISA}, allowing the same high‐level source code to be executed on different architectures through appropriate translation to the target instruction set.
 
@@ -30,13 +28,13 @@ An important part of all \acp{ISA} is the instruction set, which defines the bin
 
 #### Word size
 
-A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. However, there is not a clear definition of what word size means. One natural way to define it is the size of the registers in the CPU. For instance, this is why we refer to _x86-64_ as a 64-bit architecture. Even so, some software and documentation for the x86 family – such as the Microsoft Windows API – still define a single word to be 16 bits, even though the registers are 64 bits wide. Other definitions include the addressable memory space size, the data bus width, or the ALU input width, all of which may or may not be the equal to the register size.
+A fundamental characteristic of any \ac{ISA} is its word size, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. However, there is not a standardized definition of what word size is referring to. One natural way to define it is the size of the registers in the CPU. For instance, this is why _x86-64_ is reffered to as a 64-bit architecture. Even so, some software and documentation for the x86 family – such as the Microsoft Windows API – still define a single word to be 16 bits, even though the registers are 64 bits wide. Other definitions include the addressable memory space size, the data bus width, or the ALU input width, all of which may or may not be the equal to the register size.
 
 #### Endianness {#background-endianness}
 
 <!-- TODO: explain different types of endianness seen in diff archs -->
 
-The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{tab:endianness}.
+The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{table:endianness}. This is a pretty simple characteristic of the \ac{ISA}, but when analyzing and running the program, which order the bytes are stored in memory is crucial to understand. The endianness is typically defined by the \ac{ISA}, but some architectures can support both big and little-endian modes, like certain versions of ARM.
 
 ```{=latex}
 \begin{table}[h]
@@ -72,7 +70,7 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 \end{center}
 
 \caption{Comparison of how a 32-bit integer is stored in big endian and little endian.}
-\label{tab:endianness}
+\label{table:endianness}
 
 \end{table}
 ```
@@ -152,7 +150,7 @@ While software reverse engineering encompasses a broad range of activities beyon
 
 ### Typical RE process
 
-The thought process of a reverse engineer is often iterative and exploratory, as they try to understand the program's behavior and functionality [@Muller2009; @Qasem2022]. Votipka et al. [@Votipka2020] conducted a survey of reverse engineers and found that the most common high level steps in the reverse engineering process can be grouped into 3 phases:
+The thought process of a reverse engineer is often iterative and exploratory, as they try to understand the program's behavior and functionality [@Muller2009; @Qasem2022]. Votipka et al. conducted a survey of reverse engineers and found that the most common high level steps in the reverse engineering process can be grouped into 3 phases [@Votipka2020]:
 
 1. **Overview** \
    The reverse engineer try to establish a high-level understanding of the program. Some reverse engineers report that programs subject for analysis comes with some information, which help point the analysis in the right direction. A common strategy is to list strings used by the programs, which often also points to external API calls. They also look at loaded resources, libraries and try to identify important functions and code segments.
@@ -169,6 +167,8 @@ In order for reverse engineers to analyze a program the code needs to be in a hu
 
 #### Binary reverse engineering and disassemblers
 
+<!-- TODO: expand -->
+
 At the lowest level, when presented with a binary of unknown origin, reverse engineers use _disassemblers_ like objdump, angr and IDA Pro along with obtained knowledge of the \ac{ISA} to translate the binary into assembly instructions [@idapro; @angr; @GorkeSteensland2024]. Metadata about the \ac{ISA} and target system is usually present in binary file headers like \ac{ELF}, making disassembly a quite simple for known architectures. The main challenges at this level are figuring out the \ac{ISA} if it is unknown or undocumented, as well as identifying code sections, program entry point and function boundaries so that execution can be followed. Some binaries are also be compressed or encrypted, also inhibiting disassembly [@GorkeSteensland2024; @Kairajarvi2020; @Nicolao2018; @Qasem2022].
 
 #### Decompilers and higher level analysis
@@ -179,13 +179,11 @@ In addition to disassembly, some tools are able to lift binaries into higher lev
 
 #### Obfuscation
 
-Obfuscation is a technique that aims to make reverse engineering more difficult, by transforming the code in a way that preserves its functionality but makes it harder to understand. This can be achieved through various methods, such as manipulating the control flow of the program in order to make execution harder to follow, alter common data structure layouts and strings, and changing the layout of the file itself and order of instructions. Tools like Tigress and Obfuscator-LLVM can take in a working program and apply these transformations automatically [@tigress; @ollvm2015]. Obfuscation can be used to protect the intellectual property of the program, make finding and exploiting bugs harder, all by deterring reverse engineering efforts. It can also be used maliciously like circumventing malware detection tools. Obfuscation can make reverse engineering more challenging, however as the program is semantically equivalent, it is still possible to analyze the program and understand its behavior [@Ding2019; @Luo2014; @Popov2007].
+Obfuscation is a technique that aims to make reverse engineering more difficult, by transforming the code in a way that preserves its functionality but makes it harder to understand. This can be achieved through various methods, such as manipulating the control flow of the program in order to make execution harder to follow, alter common data structure layouts and strings, and changing the layout of the file itself and order of instructions. Tools like Tigress and Obfuscator-LLVM can take in a working program and apply these transformations automatically [@tigress; @ollvm2015].
 
-### What is needed to reverse engineer
+Another advanced obfuscation technique involves creating custom virtual machines that execute programs using proprietary instruction sets incompatible with standard CPUs. This process requires two compilation steps: first, the original program is compiled to target the custom virtual machine's instruction set, and then the virtual machine itself is compiled for the host platform. The host system can then execute the obfuscated code only through this intermediary virtual machine layer. These virtual machines are sometimes referred to as an emulator or interpreter, and execution of the virtualized program is similar to the execution pipeline of interpreted and bytecode based languages like Python, Java and JavaScript. The custom instruction set makes it very difficult to disassemble the program, and static analysis of the program is often impossible without first reverse engineering the custom virtual machine [@Liang2018; @Kinder2012].
 
-TODO
-
-- Explain what ISA features are needed for reverse engineering
+Obfuscation can be used to protect the intellectual property of the program, make finding and exploiting bugs harder, all by deterring reverse engineering efforts. It can also be used maliciously like circumventing malware detection tools. Obfuscation can make reverse engineering more challenging, however as the program is semantically equivalent, it is still possible to analyze the program and understand its behavior [@Ding2019; @Luo2014; @Popov2007; @Liang2018].
 
 ## Machine learning
 

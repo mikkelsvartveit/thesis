@@ -12,7 +12,7 @@ This thesis utilizes three primary datasets: BuildCross, ISAdetect and CpuRec. T
 
 #### ISADetect
 
-The ISAdetect dataset is the product of a masters thesis by Sami Kairajärvi and the resulting paper: "ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code" [@Kairajarvi2020]. A part of their contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All of their program binaries are collected from Debian Linux repositories, selected due to the Debian distribution being a trusted project and ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on tackling the dataset imbalances seen in Clemens' work, and each architecture contains around 3000 binary program samples [@Kairajarvi2020] [@Clemens2015]. \autoref{table:isadetect} lists the \acp{ISA} present in ISADetect and their architectural features.
+The ISAdetect dataset is the product of a masters thesis by Sami Kairajärvi and the resulting paper: "ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code" [@Kairajarvi2020]. A part of their contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All of their program binaries are collected from Debian Linux repositories, selected due to the Debian distribution being a trusted project and ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on tackling the dataset imbalances seen in Clemens' work, and each architecture contains around 3000 binary program samples [@Kairajarvi2020; @Clemens2015]. \autoref{table:isadetect} lists the \acp{ISA} present in ISADetect and their architectural features.
 
 Table: \acp{ISA} present in ISADetect dataset \label{table:isadetect}
 
@@ -339,13 +339,13 @@ When applying two-dimensional \ac{CNN} on 2D grids of this format, the byte valu
 
 ![Encoding bytes as a grayscale image. \label{fig:byte-encoding}](images/methodology/byte-encoding.svg)
 
-This approach was chosen based on previous literature which successfully classified malware from binary executables using \acp{CNN} [@Kumari2017] [@Prima2021] [@Hammad2022] [@Al-Masri2024] [@El-Shafai2021] [@Alvee2021] [@Liang2021] [@Son2022].
+This approach was chosen based on previous literature which successfully classified malware from binary executables using \acp{CNN} [@Kumari2017; @Prima2021; @Hammad2022; @Al-Masri2024; @El-Shafai2021; @Alvee2021; @Liang2021; @Son2022].
 
 #### One-dimensional byte-level encoding
 
 Similar to the 2D approach, we treat each byte as an integer. The values are placed in a one-dimensional array of a predetermined size. If the file is larger than the predetermined size, only the first bytes are used. If the file is smaller than the predetermined size, the remaining bytes are padded with zero values.
 
-This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019] [@Pizzolotto2021].
+This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019; @Pizzolotto2021].
 
 #### Input size and file splitting
 
