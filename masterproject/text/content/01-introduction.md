@@ -25,10 +25,10 @@ The overarching research question that guides this thesis is:
 We break this down into three sub-questions:
 
 > **RQ1**: Which ISA features can be classified with high accuracy by CNNs?
-
-> **RQ2**: How does the model architecture impact the CNN's ability to learn ISA characteristics?
-
-> **RQ3**: How does the choice of method for encoding software binaries impact the CNNs' ability to learn ISA characteristics?
+>
+> **RQ2**: How does the choice of method for encoding software binaries impact the CNNs' ability to learn ISA characteristics?
+>
+> **RQ3**: How does the model architecture impact the CNN's ability to learn ISA characteristics?
 
 ## Contributions
 
