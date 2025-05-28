@@ -52,6 +52,7 @@ header-includes:
   - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
   - \usepackage[norwegian,english]{babel}
   - \renewcommand{\maketitle}{} # Disable cover page
+  - \usepackage{listings}
 ---
 
 <!-- Abstract in English -->

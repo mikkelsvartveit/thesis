@@ -34,7 +34,7 @@ A fundamental characteristic of any \ac{ISA} is its word size, which defines the
 
 <!-- TODO: explain different types of endianness seen in diff archs -->
 
-The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{table:endianness}. This is a pretty simple characteristic of the \ac{ISA}, but when analyzing and running the program, which order the bytes are stored in memory is crucial to understand. The endianness is typically defined by the \ac{ISA}, but some architectures can support both big and little-endian modes, like certain versions of ARM.
+The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{table:endianness}. This is a pretty simple characteristic of the \ac{ISA}, but when analyzing and running the program, which order the bytes are stored in memory is crucial to understand. The endianness is typically defined by the \ac{ISA}, but some architectures can support both big and little-endian modes, called bi-endian, like some modern versions of ARM, MIPS and PowerPC. Even though these architectures support endianness mode switching during runtime, programs are typically compiled for a single specific endianness, making the software binaries themselves either big or little endian. In other words, even though an \ac{ISA} is classified as bi-endian, the endianness of a binary program is typically fixed at compile time.
 
 ```{=latex}
 \begin{table}[h]
@@ -77,17 +77,87 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 
 #### Instruction width
 
-The instruction width refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_. This means that each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits.
+The instruction width refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_, where each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits. A comparison between fixed width and variable width instruction sets can be seen in \autoref{fig:assembly_comparison}. The degree of variability in instruction widths differs across architectures: some support a wide range of sizes like x86, while others such as Blackfin and Epiphany are limited to specific combinations, like only 16 or 32 bit instructions. Instruction width has implications for binary program alignment in terms of analysis. Binaries from fixed-width \acp{ISA} are in principle easier to analyze since instructions are consistently aligned to specific byte boundaries, while variable-width \acp{ISA} complicate the identification of the beginning and end of instructions.
+
+```{=latex}
+\lstdefinestyle{assembly}{
+    basicstyle=\ttfamily\footnotesize,
+    numbers=none,
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=4,
+    showspaces=false,
+    showstringspaces=false,
+    frame=single,
+    rulecolor=\color{black!30},
+    backgroundcolor=\color{gray!5},
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    xleftmargin=0.5em,
+    xrightmargin=0.5em
+}
+\begin{figure}[htbp]
+\centering
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{x86-64 Architecture}
+\lstset{style=assembly}
+\begin{lstlisting}
+4156           pushq %r14
+4155           pushq %r13
+4154           pushq %r12
+55             pushq %rbp
+53             pushq %rbx
+4883ec60       subq  $0x60, %rsp
+4889442458     movq  %rax, 0x58(%rsp)
+31c0           xorl  %eax, %eax
+83ff01         cmpl  $0x1, %edi
+0f8f32020000   jg    0x400d87 <.text+0x257>
+488d6c2454     leaq  0x54(%rsp), %rbp
+4c8d64243c     leaq  0x3c(%rsp), %r12
+41be01000000   movl  $0x1, %r14d
+0f1f8000000000 nopl  (%rax)
+488d5c2430     leaq  0x30(%rsp), %rbx
+\end{lstlisting}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{ARM64 (AArch64) Architecture}
+\lstset{style=assembly}
+\begin{lstlisting}
+d14007ff    sub	sp, sp, #0x1, lsl #12
+d11843ff    sub	sp, sp, #0x610
+a9b67bfd    stp	x29, x30, [sp, #-0xa0]!
+910003fd    mov	x29, sp
+a90363f7    stp	x23, x24, [sp, #0x30]
+6d0627e8    stp	d8, d9, [sp, #0x60]
+2a0003f8    mov	w24, w0
+f0000080    adrp	x0, 0x414000
+91066000    add	x0, x0, #0x198
+6d072fea    stp	d10, d11, [sp, #0x70]
+a90573fb    stp	x27, x28, [sp, #0x50]
+6d0837ec    stp	d12, d13, [sp, #0x80]
+aa0103fc    mov	x28, x1
+f9400001    ldr	x1, [x0]
+f90b57a1    str	x1, [x29, #0x16a8]
+\end{lstlisting}
+\end{minipage}
+\caption{Comparison of disassmbly of binary programs between x86-64 and ARM64 architectures. The binary encoding of the instructions on the left side of the assembly illustrates the variable width of x86-64 instructions compared to the fixed width of ARM64 instructions.}
+\label{fig:assembly_comparison}
+\end{figure}
+```
 
 ### Compilers
 
-Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like the C compiler) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many computer architectures.
+Software developers employ tools like compilers and interpreters to convert programs from human-readable programming languages to executable machine code. In the very early days of computer programming, software had to be written in assembly languages that mapped instructions directly to binary code for execution. Growing hardware capabilities allowed for more complex applications, however, the lack of human readability of assembly languages made software increasingly difficult and expensive to maintain. In order to overcome this challenge, compilers were created to translate human-readable higher-level languages into executable programs. In the early 1950s, there were successful attempts at translating symbolically heavy mathematical language to machine code. The language FORTRAN, developed at IBM in 1957, is generally considered the first complete compiled language, being able to achieve efficiency near that of hand-coded applications. While languages like FORTRAN were primarily used for scientific computing needs, the growing complexity of software applications drove the development of more advanced operating systems and compilers. One such advancement was the creation of the C programming language and its compiler in the early 1970s. Modern compilers (like \ac{GCC} and Clang) are able to analyze the semantic meaning of the program, usually through some form of intermediate representation. The \ac{ISA} of the target system provides the compiler with the recipe to translate the intermediate representation into executable code. The intermediate representation is usually language- and system architecture-agnostic, which has the added benefit of allowing a compiler to translate the same program to many computer architectures.
 
 The evolution of compilers brought significant advantages in code portability and development efficiency. Programming languages' increasing abstraction away from machine code was necessary to achieve efficient development and portability across different computer architectures. However, this combined with other transformations done by compilers increasingly widened the gap between the original source code and the binary executable. By separating the program's logic from its hardware-specific implementation, developers could write code once, compile, and run it on every platform they wanted, at the cost of making it more difficult to understand what a binary program does.
 
 ### Embedded targets and cross-compilation
 
-Embedded systems are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Unlike general-purpose computers, embedded systems designed for specific tasks are therefore typically optimized for reliability, power efficiency, and cost-effectiveness. These embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of \ac{IoT} devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface, operating as headless systems controlled programmatically.
+Embedded systems are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Unlike general-purpose computers, embedded systems designed for specific tasks are therefore typically optimized for reliability, power efficiency, and cost-effectiveness. These embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of \ac{IoT} devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface and can only be controlled programmatically.
 
 Since these specialized systems frequently use custom hardware with \acp{ISA} different from standard desktop or server computers, they present unique challenges for software development. Unlike general-purpose computers, which are often used to create programs for the same platform it is built on, it's often impractical or impossible to compile code directly on the target device. Developers typically have to use a technique called cross-compilation to build software for embedded systems.
 
@@ -103,32 +173,32 @@ A _cross-compiler toolchain_ is the collection of software tools necessary to bu
 
 The \acf{GCC} is a comprehensive compiler system supporting various programming languages including C, C++, and Fortran. \ac{GCC} started out as the GNU C Compiler in 1987, but was later renamed as it expanded to support more languages. \ac{GCC} is designed to be highly portable, and can be built to run on various operating systems and hardware architectures. It features a modular design, using internal intermediate representations that are largely host and target system agnostic. This lets much of the optimization logic and transformation to work with different frontends for different programming languages and different backends to generate code for a wide range of \acp{ISA}. \ac{GCC} by itself takes in an input file in supported languages like C and outputs assembly for the target architecture. Each instance of a \ac{GCC} compiler is configured to target a specific architecture, and this flexibility allows developers compile versions of \ac{GCC} to build software for different platforms.
 
-\ac{GCC} is not able to create working executables by itself however, as behind the scenes \ac{GCC} sets up a pipeline consisting of different tools in order to create executable programs. A common pairing to set up this pipeline with the core \ac{GCC} is GNU Binutils, which is a collection of binary program tools that is designed to work alongside compilers to create and manage executables. Some key components of Binutils include:
+\ac{GCC} is not able to create working executables by itself however, as behind the scenes \ac{GCC} sets up a pipeline consisting of different tools in order to create executable programs. A common pairing to set up this pipeline with \ac{GCC} is GNU Binutils, which is a collection of binary program tools that is designed to work alongside compilers to create and manage executables. Some key components of Binutils include:
 
 - **as**: The GNU assembler, which converts assembly language to machine code
 - **ld**: The GNU linker, which combines machine code files into executables or libraries
 - **ar**: Creates, modifies, and extracts from archive files (static libraries)
 - **objcopy**: Copies and translates object files between formats
 - **objdump**: Displays information about object files, including disassembly
-- **readelf**: Displays information about \ac{ELF} format files
+- **readelf**: Displays information about \ac{ELF} files
 
 When invoking \ac{GCC} to create a final executable, the compiler automatically calls the appropriate Binutils tools to create the final executable, and an illustration of this pipeline can be seen in \autoref{fig:gcc-binutils-pipeline}. Since the final executable depends on the target system, the \ac{GCC} compiler and Binutils tools must be configured to target the same architecture. This is typically done by specifying the target architecture when building the toolchain, after which the \ac{GCC} compiler will use the appropriate Binutils tools to generate the final executable for that architecture.
 
-![Illustration of how the \ac{GCC} with Binutils pipeline when compiling a source program with gcc. \label{fig:gcc-binutils-pipeline}](images/background/gnu-gcc-binutils-pipeline.svg)
+![Illustration of how the \ac{GCC} with Binutils pipeline compiles a source program, source.c, into an output executable. \label{fig:gcc-binutils-pipeline}](images/background/gnu-gcc-binutils-pipeline.svg)
 
 All of the GNU projects are distributed under the \ac{GPL}, which allows users to freely use, modify, and distribute the software. This has made \ac{GCC} and Binutils widely adopted in open-source projects and embedded systems development.
 
 #### Binary file formats and structures
 
-Binary files come in different formats, each with its own structure and purpose, and understanding these formats is necessary for working with compiled code. In order for a program to be interpreted or executed by a computer it must be stored in a way that the CPU can read and understand. One way of doing this in to include a header at the beginning of the file, that contains metadata about the executable. While different file formats exists, like Portable Executable for Windows and Mach Object (Mach-O) for macOS, the most common binary file format for Unix-like systems and many embedded devices is the \ac{ELF}. Since \ac{ELF} format is the most commonly seen in cross-compilation and embedded systems, it is the focus of this section.
+Binary files come in different formats, each with its own structure and purpose, and understanding these formats is necessary for working with compiled code. In order for a program to be interpreted or executed by a computer it must be stored in a way that the CPU can read and understand. One way of doing this in to include a header at the beginning of the file that contains metadata about the executable. While different file formats exists, like Portable Executable for Windows and Mach Object for macOS, the most common binary file format for Unix-like systems and many embedded devices is the \acf{ELF}. Since \ac{ELF} is the most commonly seen file format in cross-compilation environments and embedded systems, it is the focus of this section.
 
-The \acf{ELF} format is a flexible and extensible binary file format that can be used for executables, object code, shared libraries et cetera. The \ac{ELF} header contains information about the file type, \ac{ISA}, entry point address for where to start execution, and section headers. It also includes support for debugging information, symbol tables, and relocation entries, making it easier to analyze and debug programs.
+The \acf{ELF} is a flexible and extensible binary file format that can be used for executables, object code, shared libraries et cetera. The \ac{ELF} header contains information about the file type, \ac{ISA}, entry point address for where to start execution, and section headers. It also includes support for debugging information, symbol tables, and relocation entries, making it easier to analyze and debug programs.
 
-\ac{ELF} files are organized into what is called sections, which are contiguous blocks of information within the binary file serving different purposes. The section names are conventionally prefixed with a period (.), and common sections in \ac{ELF} files include:
+\ac{ELF} files are organized into what is called sections, which are contiguous blocks of information within the binary file serving different purposes. The section names are conventionally prefixed with a period, and common sections in \ac{ELF} files include:
 
 - **.text**: Contains the executable code (machine instructions). Sometimes referred to as the code section.
 - **.data**: Contains initialized global variables
-- **.bss**: Contains uninitialized global variables
+- **.bss**: Contains space for uninitialized global variables
 - **.rodata**: Contains read-only data like strings
 - **.symtab**: Symbol table with function and variable names and their locations
 
@@ -146,14 +216,14 @@ Software reverse engineering is a systematic process of analyzing and understand
 
 Software reverse engineering serves many purposes in the digital landscape of today. In the domain of cybersecurity, it enables many types of vulnerability detection, where security researchers and bug hunters identify exploitable pieces of code. It can also be used to identify and analyze malware, protecting critical systems from infected executables and preventing cyberattacks [@Ding2019; @Subedi2018; @Votipka2020; @Qasem2022]. Beyond cybersecurity, reverse engineering enables software interoperability by allowing engineers to understand how systems interact when documentation is unavailable. It can play a vital role in software maintenance, especially for legacy systems where original documentation or development expertise has been lost. Software reverse engineering also serves important legal and compliance functions, helping organizations verify adherence to security standards and licensing requirements. It can also support digital forensics through code similarity detection and ownership attribution [@Votipka2020; @Muller2009; @Qasem2022; @Shoshitaishvili2016; @Fauzi2017; @Luo2014; @Popov2007].
 
-While software reverse engineering encompasses a broad range of activities beyond the scope of this thesis, understanding the complete process provides context for our research contribution. Although we focus specifically on binary reverse engineering at the lowest level, presenting the entire reverse engineering workflow helps position our work within the larger field. The reverse engineering landscape can be viewed through two perspectives: first, the cognitive strategies and approaches reverse engineers employ when analyzing programs, and second, the practical tools and transformations they use to facilitate this analysis. In the following sections, we explore both the methodical process reverse engineers follow and some of the tools that enable their work at different levels of code abstraction.
+While software reverse engineering encompasses a broad range of activities beyond the scope of this thesis, understanding the complete process provides context for our research contribution. Although we focus specifically on binary reverse engineering at the lowest level, presenting more of the reverse engineering workflow helps position our work within the larger field. The reverse engineering landscape can be viewed through two perspectives: the cognitive strategies and approaches reverse engineers employ when analyzing programs, and the practical tools and transformations they use to facilitate this analysis. In the following sections, we explore both the methodical process reverse engineers follow and some of the tools that enable their work at different levels of code abstraction.
 
 ### Typical RE process
 
 The thought process of a reverse engineer is often iterative and exploratory, as they try to understand the program's behavior and functionality [@Muller2009; @Qasem2022]. Votipka et al. conducted a survey of reverse engineers and found that the most common high level steps in the reverse engineering process can be grouped into 3 phases [@Votipka2020]:
 
 1. **Overview** \
-   The reverse engineer try to establish a high-level understanding of the program. Some reverse engineers report that programs subject for analysis comes with some information, which help point the analysis in the right direction. A common strategy is to list strings used by the programs, which often also points to external API calls. They also look at loaded resources, libraries and try to identify important functions and code segments.
+   The reverse engineer try to establish a high-level understanding of the program. Some reverse engineers report that programs subject for analysis comes with some information, which help point the analysis in the right direction. A common strategy is to list strings used by the programs, often available in clear text in the data section of an executable. These strings often give hints about the domain and environment and might also point to external API calls. They also look at loaded resources, libraries and try to identify important functions and code segments.
 2. **Subcomponent Scanning** \
    In this phase, the reverse engineer scans through prioritized functions and code sections identified in the Overview step. In this scan the reverse engineer looks for so-called beacons; important nuggets of information like API-calls, strings, left over symbol-names from compilation, control-flow structures et cetera. If a function outline is found, the reverse engineer will try to identify the input and output of the function, and how it interacts with other subroutines. Some common algorithms, loops and datastructures can be recognized from experience, and marked for future analysis.
 3. **Focused Experimentation** \
@@ -163,13 +233,13 @@ The reverse engineering process is often iterative and exploratory, and the reve
 
 ### Tools and challenges
 
-In order for reverse engineers to analyze a program the code needs to be in a human-readable format. Software reverse engineering is reliant on tools that transform programs in to digestible forms, like binary code to assembly, or assembly to higher level abstractions. Each level of abstraction comes with unique challenges that might need to be overcome in order to apply the tools and reverse engineer the program.
+In order for reverse engineers to analyze a program the code needs to be in a human-readable format. Software reverse engineering is reliant on tools that transform programs in to digestible forms, like binary code to assembly, or assembly to source languages like C. Each level of abstraction comes with unique challenges that might need to be overcome in order to apply the tools and reverse engineer the program.
 
 #### Binary reverse engineering and disassemblers
 
-<!-- TODO: expand -->
+At the lowest level, when presented with a binary of unknown origin, reverse engineers use _disassemblers_ like objdump, angr and IDA Pro along with obtained knowledge of the \ac{ISA} to translate the binary into assembly instructions [@idapro; @angr; @GorkeSteensland2024]. Metadata about the \ac{ISA} and target system is usually present in binary file headers like \ac{ELF}, making disassembly a quite simple for known architectures. Some of these tools are also able to recognize the \ac{ISA} from a closed set of known architectures based on the binary code directly.
 
-At the lowest level, when presented with a binary of unknown origin, reverse engineers use _disassemblers_ like objdump, angr and IDA Pro along with obtained knowledge of the \ac{ISA} to translate the binary into assembly instructions [@idapro; @angr; @GorkeSteensland2024]. Metadata about the \ac{ISA} and target system is usually present in binary file headers like \ac{ELF}, making disassembly a quite simple for known architectures. The main challenges at this level are figuring out the \ac{ISA} if it is unknown or undocumented, as well as identifying code sections, program entry point and function boundaries so that execution can be followed. Some binaries are also be compressed or encrypted, also inhibiting disassembly [@GorkeSteensland2024; @Kairajarvi2020; @Nicolao2018; @Qasem2022].
+The primary challenge in binary reverse engineering arises when the target uses an unknown or undocumented \ac{ISA}. Without existing disassembler support, reverse engineers must discover the instruction encoding through statistical analysis and pattern recognition, which is a significantly more complex task. However, this approach is only feasible by knowing fundamental architectural properties first, like endianness, instruction encoding format and width, word size, and whether the architecture is stack-based or register-based. Chernov & Troshina demonstrate this process systematically, beginning with statistical frequency analysis to identify return instructions, then using correlation patterns to discover call and jump instructions, before progressing to arithmetic and memory operations [@Chernov2012]. In addition to instruction identification, unknown \ac{ISA}s present additional challenges in determining structural elements such as code sections, program entry points, and function boundaries, which are all essential for meaningful execution flow analysis. Binaries can also be compressed or encrypted, all of which inhibits disassembly and reverse engineering [@GorkeSteensland2024; @Kairajarvi2020; @Nicolao2018; @Qasem2022].
 
 #### Decompilers and higher level analysis
 
@@ -181,9 +251,9 @@ In addition to disassembly, some tools are able to lift binaries into higher lev
 
 Obfuscation is a technique that aims to make reverse engineering more difficult, by transforming the code in a way that preserves its functionality but makes it harder to understand. This can be achieved through various methods, such as manipulating the control flow of the program in order to make execution harder to follow, alter common data structure layouts and strings, and changing the layout of the file itself and order of instructions. Tools like Tigress and Obfuscator-LLVM can take in a working program and apply these transformations automatically [@tigress; @ollvm2015].
 
-Another advanced obfuscation technique involves creating custom virtual machines that execute programs using proprietary instruction sets incompatible with standard CPUs. This process requires two compilation steps: first, the original program is compiled to target the custom virtual machine's instruction set, and then the virtual machine itself is compiled for the host platform. The host system can then execute the obfuscated code only through this intermediary virtual machine layer. These virtual machines are sometimes referred to as an emulator or interpreter, and execution of the virtualized program is similar to the execution pipeline of interpreted and bytecode based languages like Python, Java and JavaScript. The custom instruction set makes it very difficult to disassemble the program, and static analysis of the program is often impossible without first reverse engineering the custom virtual machine [@Liang2018; @Kinder2012].
+Another advanced obfuscation technique involves creating custom virtual machines that execute programs using proprietary or random instruction sets incompatible with standard CPUs. This process requires two compilation steps: first, the original program is compiled to target the custom virtual machine's instruction set, and then the virtual machine itself is compiled for the host platform. The host system can then execute the obfuscated code only through this intermediary virtual machine layer, essentially letting a CPU execute code from any arbitrarily constructed \ac{ISA}. These virtual machines are sometimes referred to as an emulator or interpreter, and execution of the virtualized program is similar to the execution pipeline of interpreted and bytecode based languages like Python, Java and JavaScript. The custom instruction set makes it very difficult to disassemble the program, as the custom \ac{ISA} based executed code can be constructed in ways that do not match the binary encoding of other known architectures. Static analysis of the program is often impossible without first reverse engineering the custom virtual machine or by reverse engineering the custom instruction set from scratch like described in \autoref{binary-reverse-engineering-and-disassemblers} [@Liang2018; @Chernov2012; @Kinder2012].
 
-Obfuscation can be used to protect the intellectual property of the program, make finding and exploiting bugs harder, all by deterring reverse engineering efforts. It can also be used maliciously like circumventing malware detection tools. Obfuscation can make reverse engineering more challenging, however as the program is semantically equivalent, it is still possible to analyze the program and understand its behavior [@Ding2019; @Luo2014; @Popov2007; @Liang2018].
+Obfuscation serves multiple purposes: protecting intellectual property, hindering bug discovery and exploitation, and generally deterring reverse engineering efforts. However, it can also be employed maliciously to evade malware detection systems. While obfuscation complicates reverse engineering, the underlying program semantics remain unchanged, meaning that the obfuscated code is functionally equivalent to the original. This semantic equivalence ensures that with enough effort and appropriate techniques, reverse engineers can still decipher the program's behavior and functionality [@Ding2019; @Kinder2012; @Luo2014; @Popov2007; @Liang2018].
 
 ## Machine learning
 
