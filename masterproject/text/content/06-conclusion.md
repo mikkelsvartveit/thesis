@@ -14,8 +14,6 @@ In conclusion, our work has shown that \ac{CNN}-based approaches to detecting in
 
 ## Future work
 
-<!--
-TODO:
-- Sliding window, for classification of full binary with data?
-- How to adapt to other ISA features?
--->
+We identify several possibilities for building on our work. Firstly, extending our approach to more target features would allow for deeper understanding of the binary file. Considering that \ac{CNN}-based models do not demand extensive feature engineering, applying the same methodology for other \ac{ISA} features, such as word size, instruction width (for fixed-width instruction sets), or register count, would be feasible given a dataset with clearly defined labels.
+
+Furthermore, extending our approach to operate on full binary files, rather than just code sections, would be beneficial. This would enable our method to be applied even when the code section of a binary cannot be easily identified. To achieve this, we propose adopting a "rolling window" technique, as demonstrated in a previous binary analysis study by Beckman & Haile [@Beckman2020]. In their approach, a 10 KB segment of the binary is repeatedly classified, with the window offset increased by 5 KB each time. By analyzing certainty metrics across these segments, they were able to automatically detect the code section within the binary.
