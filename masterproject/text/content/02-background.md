@@ -32,8 +32,6 @@ A fundamental characteristic of any \ac{ISA} is its word size, which defines the
 
 #### Endianness {#background-endianness}
 
-<!-- TODO: explain different types of endianness seen in diff archs -->
-
 The endianness determines how multi-byte values are stored in memory: little-endian architectures store the least significant byte first (like x86), while big-endian stores the most significant byte first, as illustrated in \autoref{table:endianness}. This is a pretty simple characteristic of the \ac{ISA}, but when analyzing and running the program, which order the bytes are stored in memory is crucial to understand. The endianness is typically defined by the \ac{ISA}, but some architectures can support both big and little-endian modes, called bi-endian, like some modern versions of ARM, MIPS and PowerPC. Even though these architectures support endianness mode switching during runtime, programs are typically compiled for a single specific endianness, making the software binaries themselves either big or little endian. In other words, even though an \ac{ISA} is classified as bi-endian, the endianness of a binary program is typically fixed at compile time.
 
 ```{=latex}
@@ -373,9 +371,111 @@ Embeddings are a way a to convert discrete data like words, categories, or items
 
 Word embeddings serve as the foundation for many natural language processing tasks. When trained on massive English datasets, these embeddings often capture sophisticated semantic relationships. A classic example in the literature demonstrates this through vector arithmetic: starting with the vector of "king", subtracting "man", and adding "woman", we end up with a vector that is very close to that of "queen" [@Mikolov2013].
 
-#### Fine-tuning
+### Statistical evaluation and hypothesis testing
 
-Fine-tuning involves taking a pre-trained model and then training it further on a new but related task. The model's weights are updated to work with the new task, while retaining knowledge from pre-training. Common approaches include full fine-tuning (updating all parameters), partial fine-tuning (updating certain layers while others reming frozen), and gradual fine-tuning (progressively increasing the learning rate across layers).
+Statistical evaluation is a crucial part of machine learning, as it helps us understand and draw conclusions on how well our model performs. Due to the stochastic nature of machine learning, since with many models the training process involves random initialization and sampling, it is important to use statistical methods to ensure that our results are not just due to chance. This is especially important when comparing different models or hyperparameters, as we want to be able to draw conclusions on whether the differences in performance are statistically significant. In this thesis we tackle binary classification problems, where the model predicts which of two classes the input belongs to. In this section we will focus on common statistical methods used to evaluate machine learning models on binary classification problems.
+
+There are several statistical methods that can be used to evaluate machine learning models, of which the most basic and common are accuracy, precision, recall, and F1-score. These metrics are often used to evaluate classification models, and they are defined as follows:
+
+- **Accuracy**: The proportion of correct predictions out of all predictions made.
+  $$
+  \text{Accuracy} = \frac{\text{True Positives} + \text{True Negatives}}{\text{Total Predictions}}
+  $$
+- **Precision**: The proportion of true positive predictions out of all positive predictions made.
+  $$
+  \text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}
+  $$
+- **Recall**: The proportion of true positive predictions out of all actual positive instances. It
+  $$
+  \text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}
+  $$
+- **F1-score**: The harmonic mean of precision and recall, which balances the two metrics.
+  $$
+  \text{F1-score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+  $$
+
+While accuracy is a simple and intuitive metric, precision, recall and F1-score requires a definition of a positive and negative class. When classifying a binary file as malware or benign or diagnosing disease, and detecting fraud the positive class is the one we are interested in detecting, and the negative is the one we want to avoid misclassifying. However, in some cases there are no clear positive and negative class, such as when detecting \ac{ISA} features in binary files. In these cases, precision, recall and F1-score can be less meaningful, and accuracy is often the preferred metric.
+
+Accuracy still does not account for the stochastic nature of machine learning, and it is important to use statistical methods to ensure that the measured accuracy is not just due to chance. In binary classification problems without a clear positive class, evaluating estimating confidence intervals for accuracy and running paired t-tests gives a better understanding of the model performance.
+
+#### Confidence intervals for binary classification
+
+Confidence intervals provide a range of values where there is a certain probability that the true value is within. For example, a 95% confidence interval for the average accuracy across multiple runs of different random initialization means that if we were to repeat the experiment many times, 95% of the time the true average accuracy would fall within the calculated interval.
+
+In binary classification tasks, accuracy can be modeled as a binomial process, where each prediction is an independent Bernoulli trial with a probability of successful classification $p$. The confidence interval is impacted by sources of variability, and when evaluation model performance across multiple seeds, we encounter two sources of uncertainty which needs to be modeled: within run variance and between run variance.
+
+##### Within-run variance
+
+For a single run of a binary classification model with $n$ samples, the accuracy follows a binomial distribution. The variance of the accuracy can be estimated as:
+
+$$
+\text{Var}_{\text{within\_run}} = \frac{p(1-p)}{n}
+$$
+
+where $p$ is the observed accuracy and $n$ is the number of test samples.
+
+##### Between-run variance
+
+Due to random initialization of models between runs and stochastic training processes, different runs with different seeds will yield different accuracies on the same dataset. This introduces additional variance where we need to take all accuracies from multiple runs into account. The variance of the accuracy across $k$ runs can be estimated as:
+
+$$
+\text{Var}_{\text{models}} = \frac{1}{k-1}\sum_{i=1}^{k}(p_i - \bar{p})^2
+$$
+
+where $p_i$ is the accuracy of run $i$, $\bar{p}$ is the average accuracy across all runs, and $k$ is the number of runs. We use k-1 in the denominator instead of k to account for the degrees of freedom in the sample (Bessel's correction).
+
+##### Combined variance and confidence interval construction
+
+The total variance combines both sources of uncertainty, and under the assumption that the two sources of variance are independent, we can add them together:
+
+$$
+\text{Var}_{\text{total}} = E[\text{Var}_{\text{within\_run}}] + \text{Var}_{\text{models}}
+$$
+
+The expected value of the within-run variance based on previous assumptions is just the average within-run variance across all runs. With this combined variance, we can construct a confidence interval or the average accuracy for a given confidence level $(1-\alpha)$. While the central limit theorem states that the distribution of the sample mean approaches a normal distribution as the sample size increases, a more conservative approach for smaller number of runs (less than 30) is to use the t-distribution. The confidence interval for $k$ runs can then be constructed as:
+
+$$
+\text{CI} = \bar{p} \pm t_{\alpha/2, k-1} \cdot \sqrt{\frac{\text{Var}_{\text{total}}}{k}}
+$$
+
+where $t_{\alpha/2, k-1}$ is the critical value from the t-distribution for a given confidence level $(1-\alpha)$ and $(k-1)$ degrees of freedom.
+
+##### Extension to cross-validation
+
+When using cross-validation, the accuracy is calculated for each fold, and the confidence interval can be constructed similarly as in a normal train-test suite. While K-fold cross validation suites typically have balanced groups of samples, in \ac{LOGO CV} scenarios the number of test samples within each fold might vary from fold to fold. In this case, the accuracy for each run is calculated as a weighted average of the accuracies across all folds:
+
+$$
+p_\text{run} = \frac{\sum_{j=1}^{f} n_j \cdot p_j }{\sum_{j=1}^{f} n_j}
+$$
+
+where $p_j$ is the accuracy for fold $j$, $n_j$ is the number of samples in fold $j$, and $f$ is the total number of folds. The variance within runs for use in confidence interval construction is then similarly weighted:
+
+$$
+\text{Var}_{\text{within\_run}}
+= \frac{\sum_{j=1}^{f} n_j \cdot \frac{p_j(1-p_j)}{n_j}}{\sum_{j=1}^{f} n_j }
+= \frac{\sum_{j=1}^{f} p_j(1-p_j)}{\sum_{j=1}^{f} n_j}
+$$
+
+#### Paired t-test for comparing models
+
+A paired t-test provides a statistically principled approach to determine whether observed differences in performance are statistically significant or could have occurred by chance. When comparing the performance of two models, simply looking at their mean accuracies can be misleading due to the variance inherent in machine learning evaluation. Non-overlapping confidence intervals between two models does give a good indication that the models are statistically different, but overlapping confidence intervals requires further analysis to determine whether the difference is statistically significant for a given significance level. The paired t-test is a statistical test that is well suited for model comparison because it can account for correlation between the two models' performance on the same dataset/data splits. For this test we have the following null and alternative hypotheses:
+
+$H_0$: There is no difference in mean performance between the two models $(\mu_{\text{diff}} = 0)$ \
+$H_1$: There is a significant difference in mean performance between the two models $(\mu_{\text{diff}} \neq 0)$
+
+##### Statistical procedure
+
+For k paired runs with the same data splits, we calculate the differences in mean accuracy between the two models we want to compare:
+
+$$
+d_i = p_{i,A} - p_{i,B}
+$$
+
+where $p_{i,A}$ is the accuracy of model A on and $p_{i,B}$ on run $i$. Like with the confidence interval, we assume an underlying t-distribution for the differences:
+
+$$
+d_i \sim t(\mu_{\text{diff}}, \sigma_{\text{diff}})
+$$
 
 ## Related work
 

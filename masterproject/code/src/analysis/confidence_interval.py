@@ -134,7 +134,7 @@ def compare_model_accuracies(
     model_a_accuracies: list[float], model_b_accuracies: list[float], alpha=0.05
 ):
     """
-    Perform paired t-test to compare the runs accross two models
+    Perform paired t-test to compare the runs across two models
 
     Parameters:
     model_a_accuracies: List of accuracy values for model A
@@ -160,7 +160,6 @@ def compare_model_accuracies(
     return significant, p_value, mean_diff
 
 
-# Option 1: Use existing function with weighted averages
 def compare_logo_cv_models(
     model_a_fold_accuracies: list[list[float]],
     model_b_fold_accuracies: list[list[float]],
