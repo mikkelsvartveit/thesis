@@ -146,9 +146,31 @@ def compare_model_accuracies(
     """
     # Ensure the accuracies are from the same seeds/runs
     assert len(model_a_accuracies) == len(model_b_accuracies)
+    n_runs = len(model_a_accuracies)
 
     # Calculate differences
     differences = np.array(model_b_accuracies) - np.array(model_a_accuracies)
+
+    if n_runs >= 3:  # Shapiro-Wilk requires at least 3 samples
+        normality_stat, normality_p = stats.shapiro(differences)
+    else:
+        # For very small samples, skip normality test
+        normality_stat, normality_p = np.nan, 1.0
+
+    normality_alpha = 0.05  # Significance level for normality test
+
+    normality_ok = normality_p > normality_alpha or np.isnan(normality_p)
+
+    if not normality_ok:
+        print(
+            "Warning: Differences are not normally distributed (p-value = {:.4f}). "
+            "Using non-parametric test.".format(normality_p)
+        )
+        # Use Wilcoxon signed-rank test if normality is violated
+        wilcoxon_stat, p_value = stats.wilcoxon(differences)
+        significant = p_value < alpha
+        mean_diff = np.mean(differences)
+        return significant, p_value, mean_diff, "w"
 
     # Perform paired t-test
     t_stat, p_value = stats.ttest_rel(model_b_accuracies, model_a_accuracies)
@@ -157,7 +179,7 @@ def compare_model_accuracies(
     significant = p_value < alpha
     mean_diff = np.mean(differences)
 
-    return significant, p_value, mean_diff
+    return significant, p_value, mean_diff, "t"
 
 
 def compare_logo_cv_models(

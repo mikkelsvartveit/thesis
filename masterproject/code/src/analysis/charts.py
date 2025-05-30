@@ -116,7 +116,7 @@ def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(1
                     row_data.append("N/A")
                 else:
                     # Unpack comparison results
-                    is_significant, p_value, mean_diff = comparison
+                    is_significant, p_value, mean_diff, test_type = comparison
 
                     # Format the result
                     if mean_diff < 0:
@@ -134,7 +134,7 @@ def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(1
                     else:
                         sig_mark = ""
 
-                    result = f"Δ = {abs(mean_diff):.4f}\np = {p_value:.4f}{sig_mark}\n({direction})"
+                    result = f"Δ = {abs(mean_diff):.4f}\np = {p_value:.4f}{sig_mark} ({test_type})\n({direction})"
                     row_data.append(result)
         table_data.append(row_data)
 
@@ -164,7 +164,7 @@ def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(1
             if row_model != col_model:
                 comparison = model_comparisons[row_model][col_model]
                 if comparison is not None:
-                    is_significant, p_value, mean_diff = comparison
+                    is_significant, p_value, mean_diff, _ = comparison
                     if is_significant:
                         cell = table[(i + 1, j)]
                         # Make cell text bold for significant results
@@ -189,6 +189,7 @@ def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(1
         - Δ: Average accuracy difference between models
         - H_0: There is no significant difference in average accuracy between the models.
         - *: p < 0.05, **: p < 0.01, ***: p < 0.001
+        - (w): Wilcoxon signed-rank test, (t): Paired t-test
         - Direction shows which model performs better
         - Green cells indicate the model in the column is significantly better than the model in the row
         - Red cells indicate the model in the row is significantly better than the model in the column

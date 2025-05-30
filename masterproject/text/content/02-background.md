@@ -125,21 +125,21 @@ The instruction width refers to the size, typically measured in bits, of a singl
 \textbf{ARM64 (AArch64) Architecture}
 \lstset{style=assembly}
 \begin{lstlisting}
-d14007ff    sub	sp, sp, #0x1, lsl #12
-d11843ff    sub	sp, sp, #0x610
-a9b67bfd    stp	x29, x30, [sp, #-0xa0]!
-910003fd    mov	x29, sp
-a90363f7    stp	x23, x24, [sp, #0x30]
-6d0627e8    stp	d8, d9, [sp, #0x60]
-2a0003f8    mov	w24, w0
-f0000080    adrp	x0, 0x414000
-91066000    add	x0, x0, #0x198
-6d072fea    stp	d10, d11, [sp, #0x70]
-a90573fb    stp	x27, x28, [sp, #0x50]
-6d0837ec    stp	d12, d13, [sp, #0x80]
-aa0103fc    mov	x28, x1
-f9400001    ldr	x1, [x0]
-f90b57a1    str	x1, [x29, #0x16a8]
+d14007ff    sub   sp, sp, #0x1, lsl #12
+d11843ff    sub   sp, sp, #0x610
+a9b67bfd    stp   x29, x30, [sp, #-0xa0]!
+910003fd    mov   x29, sp
+a90363f7    stp   x23, x24, [sp, #0x30]
+6d0627e8    stp   d8, d9, [sp, #0x60]
+2a0003f8    mov   w24, w0
+f0000080    adrp  x0, 0x414000
+91066000    add   x0, x0, #0x198
+6d072fea    stp   d10, d11, [sp, #0x70]
+a90573fb    stp   x27, x28, [sp, #0x50]
+6d0837ec    stp   d12, d13, [sp, #0x80]
+aa0103fc    mov   x28, x1
+f9400001    ldr   x1, [x0]
+f90b57a1    str   x1, [x29, #0x16a8]
 \end{lstlisting}
 \end{minipage}
 \caption{Comparison of disassmbly of binary programs between x86-64 and ARM64 architectures. The binary encoding of the instructions on the left side of the assembly illustrates the variable width of x86-64 instructions compared to the fixed width of ARM64 instructions.}
@@ -385,7 +385,7 @@ There are several statistical methods that can be used to evaluate machine learn
   $$
   \text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}
   $$
-- **Recall**: The proportion of true positive predictions out of all actual positive instances. It
+- **Recall**: The proportion of true positive predictions out of all actual positive instances.
   $$
   \text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}
   $$
@@ -394,7 +394,7 @@ There are several statistical methods that can be used to evaluate machine learn
   \text{F1-score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
   $$
 
-While accuracy is a simple and intuitive metric, precision, recall and F1-score requires a definition of a positive and negative class. When classifying a binary file as malware or benign or diagnosing disease, and detecting fraud the positive class is the one we are interested in detecting, and the negative is the one we want to avoid misclassifying. However, in some cases there are no clear positive and negative class, such as when detecting \ac{ISA} features in binary files. In these cases, precision, recall and F1-score can be less meaningful, and accuracy is often the preferred metric.
+While accuracy is a simple and intuitive metric, precision, recall and F1-score requires a definition of a positive and negative class. When classifying a binary file as malware or benign, diagnosing disease, and detecting fraud the positive class is the one we are interested in detecting, and the negative is the one we want to avoid misclassifying. However, in some scenarios there are no clear positive and negative class, such as when detecting \ac{ISA} features in binary files. In these cases, precision, recall and F1-score can be less meaningful, and accuracy is often the preferred metric.
 
 Accuracy still does not account for the stochastic nature of machine learning, and it is important to use statistical methods to ensure that the measured accuracy is not just due to chance. In binary classification problems without a clear positive class, evaluating estimating confidence intervals for accuracy and running paired t-tests gives a better understanding of the model performance.
 
@@ -426,21 +426,23 @@ where $p_i$ is the accuracy of run $i$, $\bar{p}$ is the average accuracy across
 
 ##### Combined variance and confidence interval construction
 
-The total variance combines both sources of uncertainty, and under the assumption that the two sources of variance are independent, we can add them together:
+The total variance combines both sources of uncertainty, the within-run variance and the between-run variance. We are interested in the variance of the average accuracy across $k$ runs. Since we are averaging $k$ independent runs, and the variance of an average of independent random variables decreases by a factor of $k$, the total variance can be expressed as:
 
 $$
-\text{Var}_{\text{total}} = E[\text{Var}_{\text{within\_run}}] + \text{Var}_{\text{models}}
+\text{Var}_{\text{total}} = \frac{E[\text{Var}_{\text{within\_run}}]}{k} + \frac{\text{Var}_{\text{models}}}{k}
 $$
 
-The expected value of the within-run variance based on previous assumptions is just the average within-run variance across all runs. With this combined variance, we can construct a confidence interval or the average accuracy for a given confidence level $(1-\alpha)$. While the central limit theorem states that the distribution of the sample mean approaches a normal distribution as the sample size increases, a more conservative approach for smaller number of runs (less than 30) is to use the t-distribution. The confidence interval for $k$ runs can then be constructed as:
+This formulation assumes that the within-run and between-run sources of variance are independent, which is reasonable since different random seeds ensure that the stochastic training processes across runs are uncorrelated. The expected value of the within-run variance based on previous assumptions is just the average within-run variance across all runs. 
+
+With this combined variance, we can construct a confidence interval for the average accuracy for a given confidence level $(1-\alpha)$. While the central limit theorem states that the distribution of the sample mean approaches a normal distribution as the sample size increases, a more conservative approach for smaller number of runs (less than 30) is to use the t-distribution. The confidence interval for $k$ runs can then be constructed as:
 
 $$
-\text{CI} = \bar{p} \pm t_{\alpha/2, k-1} \cdot \sqrt{\frac{\text{Var}_{\text{total}}}{k}}
+\text{CI} = \bar{p} \pm t_{\alpha/2, k-1} \cdot \sqrt{\text{Var}_{\text{total}}}
 $$
 
 where $t_{\alpha/2, k-1}$ is the critical value from the t-distribution for a given confidence level $(1-\alpha)$ and $(k-1)$ degrees of freedom.
 
-##### Extension to cross-validation
+##### Extension to cross-validation {#confidence-interval-logocv}
 
 When using cross-validation, the accuracy is calculated for each fold, and the confidence interval can be constructed similarly as in a normal train-test suite. While K-fold cross validation suites typically have balanced groups of samples, in \ac{LOGO CV} scenarios the number of test samples within each fold might vary from fold to fold. In this case, the accuracy for each run is calculated as a weighted average of the accuracies across all folds:
 
@@ -458,7 +460,7 @@ $$
 
 #### Paired t-test for comparing models
 
-A paired t-test provides a statistically principled approach to determine whether observed differences in performance are statistically significant or could have occurred by chance. When comparing the performance of two models, simply looking at their mean accuracies can be misleading due to the variance inherent in machine learning evaluation. Non-overlapping confidence intervals between two models does give a good indication that the models are statistically different, but overlapping confidence intervals requires further analysis to determine whether the difference is statistically significant for a given significance level. The paired t-test is a statistical test that is well suited for model comparison because it can account for correlation between the two models' performance on the same dataset/data splits. For this test we have the following null and alternative hypotheses:
+A paired t-test provides a statistical approach to determine whether observed differences in performance are statistically significant or could have occurred by chance. When comparing the performance of two models, simply looking at their mean accuracies can be misleading due to the variance inherent in machine learning evaluation. Non-overlapping confidence intervals between two models does give a good indication that the models are statistically different, but overlapping confidence intervals requires further analysis to determine whether the difference is statistically significant for a given significance level. The paired t-test is a statistical test that is well suited for model comparison because it can account for correlation between the two models' performance on the same dataset/data splits. For this test we have the following null and alternative hypotheses:
 
 $H_0$: There is no difference in mean performance between the two models $(\mu_{\text{diff}} = 0)$ \
 $H_1$: There is a significant difference in mean performance between the two models $(\mu_{\text{diff}} \neq 0)$
@@ -468,14 +470,47 @@ $H_1$: There is a significant difference in mean performance between the two mod
 For k paired runs with the same data splits, we calculate the differences in mean accuracy between the two models we want to compare:
 
 $$
-d_i = p_{i,A} - p_{i,B}
+d_i = p_{i,B} - p_{i,A}
 $$
 
-where $p_{i,A}$ is the accuracy of model A on and $p_{i,B}$ on run $i$. Like with the confidence interval, we assume an underlying t-distribution for the differences:
+where $p_{i,A}$ is the accuracy of model A on and $p_{i,B}$ on run $i$. For the paired t-test, we assume that the differences in performance $d_i = p_{i,B} - p_{i,A}$ are normally distributed. This assumption is justified because the differences are computed from the same data splits, reducing variability, and the Central Limit Theorem supports normality when the number of test samples is sufficiently large.
 
 $$
-d_i \sim t(\mu_{\text{diff}}, \sigma_{\text{diff}})
+d_i \sim N(\mu_{\text{diff}}, \sigma_{\text{diff}}^2)
 $$
+
+In accordance to the paired t-test statistic $t$ then follows a t-distribution, and is calculated as:  
+$$
+t = \frac{\bar{d}}{s_d / \sqrt{k}}
+$$
+
+where $\bar{d}$ is the mean of the differences, $s_d$ is the standard deviation of the differences, and $k$ is the number of paired runs. The degrees of freedom for the t-distribution is $k-1$.
+
+We can then calculate the p-value for the t-statistic, which tells us _the probability of observing a difference as extreme as the one we observed, assuming the null hypothesis is true_. We compare the t-value to the t-distribution and calculate the p-value using:
+
+$$
+\text{p-value} = 2 \cdot P(T_{k-1} \geq |t|)
+$$
+
+where $T_{k-1}$ represents the t-distribution with $k-1$ degrees of freedom. The factor of 2 accounts for the two-sidedness of the test, since we are interested in whether the difference is significantly different in either direction. If the p-value is below a predefined significance level $\alpha$, we reject the null hypothesis and conclude that there is a statistically significant difference between the two models. The significance level is typically set to 0.05, meaning that we are willing to accept a 5% chance of incorrectly rejecting the null hypothesis when it is actually true.
+
+##### Extension to cross-validation
+
+When using cross-validation, the paired t-test comparisons need an additional aggregation step. For each fold, just like in \autoref{confidence-interval-logocv}, we calculate the accuracy for each model in each run as a weighted average of the accuracies across all folds:
+
+$$
+p_{i,A} = \frac{\sum_{j=1}^{f} n_{j} \cdot p_{i,j,A}}{\sum_{j=1}^{f} n_{j}}
+,\quad\quad
+p_{i,B} = \frac{\sum_{j=1}^{f} n_{j} \cdot p_{i,j,B}}{\sum_{j=1}^{f} n_{j}}
+$$
+
+where $p_{i,j,A}$ and $p_{i,j,B}$ is the accuracy of model A and B respectively on fold $j$ in run $i$, and $n_j$ is the number of samples in fold $j$. The differences in mean accuracy between the two models are then calculated as:
+
+$$
+d_i = p_{i,B} - p_{i,A}
+$$
+
+and the rest of the statistical procedure follows as in the non-cross-validation case described in \autoref{statistical-procedure}.
 
 ## Related work
 
