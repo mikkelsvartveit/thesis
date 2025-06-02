@@ -2,7 +2,7 @@
 
 # Methodology
 
-This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the machine learning models, target features, and data preprocessing used in the experiments in \autoref{experiments}. Finally, we present our evaluation strategy and metrics in \autoref{evaluation-strategies}.
+This chapter describes the methodology used in this thesis. We start by describing the experimental setup, including the system configuration and the datasets used in the thesis in \autoref{experimental-setup}. We then describe the development process for BuildCross, our custom dataset, in \autoref{developing-a-custom-dataset}. Next, we describe the machine learning models, target features, and data preprocessing used in the experiments in \autoref{experiments}. Finally, we present our evaluation strategy and metrics in \autoref{evaluation-strategies}.
 
 ## Experimental setup
 
@@ -10,11 +10,11 @@ This chapter describes the methodology used in this thesis. We start by describi
 
 This thesis utilizes three primary datasets: BuildCross, ISAdetect, and CpuRec. The BuildCross dataset is a novel contribution developed for this thesis, and its development discussed in \autoref{developing-a-custom-dataset}. ISAdetect and CpuRec datasets are sourced from previous work in software reverse engineering. These datasets contain samples of binary programs from a variety of different \acp{ISA}. Architectures vary in their similarity regarding features such as endianness, word size, and instruction width, and our model development focuses on the ability to reliably detect architectural features independent of the specific \ac{ISA}. The choice of datasets is therefore motivated by architectural diversity, with the goal of reducing potential correlations between groups of \acp{ISA} and the features we aim to detect. Additionally, since binary programs are not human-readable, errors and inconsistencies in the data are difficult to uncover. We rely on accurate labeling of the datasets to ensure reliable results. Based on our search for fitting datasets, we have found that the combination of ISAdetect and CpuRec datasets strikes an optimal balance between the number of architectures represented and the volume of training data available, and they complement each other in a way that aligns with our research objectives.
 
-#### ISADetect
+#### ISAdetect
 
-The ISAdetect dataset is the product of a master's thesis by Sami Kairajärvi and the resulting paper: "ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code" [@Kairajarvi2020]. One of their key contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All program binaries were collected from Debian Linux repositories, which were selected according to the author because the Debian distribution is a trusted project that has been ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on addressing the dataset imbalances forund in previous research, such as Clemens' work, with each architecture containing approximately 3,000 binary program samples [@Clemens2015]. \autoref{table:isadetect} lists the \acp{ISA} present in ISADetect and their architectural features.
+The ISAdetect dataset is the product of a master's thesis by Sami Kairajärvi and the resulting paper _ISAdetect: Usable Automated Detection of CPU Architecture and Endianness for Executable Binary Files and Object Code_ [@Kairajarvi2020]. One of their key contributions is providing, to our knowledge, the most comprehensive publicly available dataset of binary programs from different \acp{ISA} to date. All program binaries were collected from Debian Linux repositories, a choice motivated by the Debian distribution being a trusted project that has been ported to a wide variety of \acp{ISA}. This resulted in a dataset consisting of 23 different architectures. Kairajärvi et al. also focused on addressing the dataset imbalances found in previous research, such as Clemens' work, with each architecture containing approximately 3,000 binary program samples [@Clemens2015]. \autoref{table:isadetect} lists the \acp{ISA} present in ISAdetect and their architectural features.
 
-Table: \acp{ISA} present in ISADetect dataset \label{table:isadetect}
+Table: \acp{ISA} present in ISAdetect dataset \label{table:isadetect}
 
 | ISA        | Endianness | Word size | Instruction width |
 | ---------- | ---------- | --------- | ----------------- |
@@ -42,11 +42,11 @@ Table: \acp{ISA} present in ISADetect dataset \label{table:isadetect}
 | sparc64    | big        | 64        | 32                |
 | x32        | little     | 32        | variable          |
 
-The ISAdetect dataset is publicly available through etsin.fairdata.fi [@Kairajarvi_dataset2020]. Our study utilizes the most recent version available at the time of running our experiments, Version 6, released on March 29, 2020. The dataset is distributed as a compressed archive (new_new_dataset/ISAdetect_full_dataset.tar.gz) containing both complete program binaries and code-only sections for each architecture. Additionally, each \ac{ISA} folder contains a JSON file with detailed metadata for each individual binary, including properties such as endianness and word size. Additional labeling used by this thesis was based on another master's thesis by Andreassen & Morrison [@Andreassen_Morrison_2024]. We also expanded the labeling on instruction width for undocumented architectures by looking up technical documentation and manuals for the \acp{ISA} in question. Their labeling and the differences are documented in \autoref{table:isadetect-labels-comparison} in the appendix.
+The ISAdetect dataset is publicly available through etsin.fairdata.fi [@Kairajarvi_dataset2020]. Our study utilizes the most recent version available at the time of running our experiments, Version 6, released on March 29, 2020. The dataset is distributed as a compressed archive (new_new_dataset/\allowbreak ISAdetect_full_dataset.tar.gz) containing both complete program binaries and code-only sections for each architecture. Additionally, each \ac{ISA} folder contains a JSON file with detailed metadata for each individual binary, including properties such as endianness and word size. Additional labeling used by this thesis was based on another master's thesis by Andreassen & Morrison [@Andreassen_Morrison_2024]. We also expanded the labeling on instruction width for undocumented architectures by looking up technical documentation and manuals for the \acp{ISA} in question. Their labeling and the differences are documented in \autoref{table:isadetect-labels-comparison} in the appendix.
 
 #### CpuRec
 
-The CpuRec dataset is a collection of executable code-only sections extracted from binaries from 72 different \acp{ISA}. It was developed by Louis Granboulan for use with the cpu_rec tool, which employs Markov chains and Kullback-Leibler divergence to classify the \ac{ISA} of input binaries [@Granboulan_paper2020]. Although only one binary per architecture is provided—which is likely insufficient for training a deep learning model on its own, the diversity of \acp{ISA} represented makes this dataset an excellent test set for evaluating our models. \autoref{table:cpurec-labels} lists the \acp{ISA} present in CpuRec and their architectural features.
+The CpuRec dataset is a collection of code-only sections extracted from binaries of 72 different \acp{ISA}. It was developed by Louis Granboulan for use with the _cpu_rec_ tool, which employs Markov chains and Kullback-Leibler divergence to classify the \ac{ISA} of input binaries [@Granboulan_paper2020]. Although only one binary per architecture is provided – which is likely insufficient for training a deep learning model on its own – the diversity of \acp{ISA} represented makes this an excellent testing dataset for evaluating our models. \autoref{table:cpurec-labels} lists the \acp{ISA} present in CpuRec and their architectural features.
 
 Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec-labels}
 
@@ -131,13 +131,13 @@ Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec-labels}
 
 The cpu_rec tool-suite is available on GitHub, and the binaries used in this thesis are available in the cpu_rec_corpus directory within the cpu_rec repository [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures such as M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset provides only architecture names without additional feature labels. To address this gap, we referenced Appendix A in the thesis by Andreassen & Morrison, who used this dataset in their work and provided labels for architectural features including endianness, wordsize, and instruction width specifications for each architecture in the dataset [@Andreassen_Morrison_2024].
 
-However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. While we relied on the labeling work by Andreassen & Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the csv-file used in our source code (/masterproject/code/dataset/cpu_rec-features.csv) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen & Morrison, and a comparison between their work and ours can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
+However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. While we relied on the labeling work by Andreassen & Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the csv-file used in our source code (/masterproject/code/dataset/cpu_rec-features.csv) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen & Morrison, and a comparison between them can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
 
 ### Technical configuration
 
 For all experiments, we use the Idun cluster at \ac{NTNU}. This \ac{HPC} cluster is equipped with 230 NVIDIA Data Center \acp{GPU} [@Idun]. The following hardware configuration was used for all experiments:
 
-- CPU: Intel Xeon E5-2695 v4 (12 cores enabled)
+- CPU: Intel Xeon or AMD EPYC (12 cores enabled)
 - \ac{GPU}: NVIDIA A100 40GB
 - RAM: 16 GB
 
@@ -242,7 +242,7 @@ For dataset labeling, we extracted the endianness and wordsize metadata directly
 
 ### Final dataset yields and structure
 
-The final dataset spans 40 architectures with approximately 120 MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
+The final dataset spans 40 architectures with approximately 120 MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files (TODO: fix number), while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
 
 The source code for the cross-compiler suite is available under the masterproject/crosscompiler directory on the thesis GitHub page [@thesisgithub]. The dataset itself is published as a GitHub Release and distributed as a tar.gz file with the following structure:
 
@@ -545,22 +545,22 @@ To validate whether our model generalizes to \acp{ISA} not present in the traini
 
 ### Testing on other datasets
 
-To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These testing suites follow normal train-test format, where we train the models on allotted data from the training dataset, and run inference and test model performance on the evaluation dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA} and our choice of testing suites are based on a couple of factors:
+To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These evaluation strategies follow a train-test format, where we train the models on allotted data from a training dataset, and run inference and test model performance on a testing dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA} and our choice of evaluation strategies are based on a couple of factors:
 
 - Model requirements on the amount of data needed to train
 - The quality of the datasets, in terms of labelling and size
 - Focus on inference on \acp{ISA} not present in the testing set
-- Limit the number of permutations of target features, model variations, and testing suites to ensure proper evaluation of the models within the scope of this thesis.
+- Limit the number of permutations of target features, model variations, and evaluation strategies to ensure proper evaluation of the models within the scope of this thesis.
 
-\autoref{table:evaluation-strategies} shows the three evaluation strategies in which we use the additional datasets. These train-test suites is referred to as _ISAdetect-CpuRec_, _ISAdetect-BuildCross_ and _Combined-CpuRec_ for ease of reference.
+\autoref{table:evaluation-strategies} shows the three evaluation strategies in which we use the additional datasets. These evaluation strategies are referred to as _ISAdetect-CpuRec_, _ISAdetect-BuildCross_ and _Combined-CpuRec_ for ease of reference.
 
 Table: Evaluation strategies using multiple datasets \label{table:evaluation-strategies}.
 
-| #   | Training dataset       | Evaluation dataset |
-| --- | ---------------------- | ------------------ |
-| 1   | ISAdetect              | CpuRec             |
-| 2   | ISAdetect              | BuildCross         |
-| 3   | ISAdetect + BuildCross | CpuRec             |
+| Reference            | Training dataset       | Evaluation dataset |
+| -------------------- | ---------------------- | ------------------ |
+| ISAdetect-CpuRec     | ISAdetect              | CpuRec             |
+| ISAdetect-BuildCross | ISAdetect              | BuildCross         |
+| Combined-CpuRec      | ISAdetect + BuildCross | CpuRec             |
 
 ### Cross-seed validation
 
