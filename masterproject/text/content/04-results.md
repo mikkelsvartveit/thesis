@@ -57,11 +57,13 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAD
 
 ![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
 
-![Confusion matrix showing the performance of ISADetect models in predicting big versus little endianness using \ac{LOGO CV}. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-logo-endianness}](./images/results/confusion-logo-endianness-allmodels.svg)
+![Confusion matrix showing the performance of ISADetect models in predicting big versus little endianness using \ac{LOGO CV}. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-logo-endianness}](./images/results/confusion-logo-endianness-allmodels.svg){ width=300px }
 
 \autoref{fig:logo-endianness-by-model} aggregates the results across \acp{ISA}, allowing for comparison of the overall performance of each model. We see that the _Simple1d-E_ model performs the best, with a mean overall accuracy of 89.7% and a standard deviation of 5.5%.
 
 \autoref{fig:logo-endianness-by-isa} aggregates results across the different models, painting a picture of which \acp{ISA} are easier to classify. We observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds. Lastly, the _m68k_ binaries are systematically misclassified by every model architecture.
+
+\autoref{fig:cm-logo-endianness} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are slightly biased towards predicting big-endian.
 
 \FloatBarrier
 
@@ -139,11 +141,13 @@ Table: Endianness classification performance when training on the ISADetect data
 
 ![Endianness classification performance by ISA when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting big versus little endianness on the ISADetect-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-isadetect-cpurec-endianness}](./images/results/confusion-cpurecall-endianness-all-models.svg)
+![Confusion matrix showing the performance of models in predicting big versus little endianness on the ISADetect-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-isadetect-cpurec-endianness}](./images/results/confusion-cpurecall-endianness-all-models.svg){ width=300px }
 
 \autoref{fig:cpurec-endianness-by-model} aggregates the results across \acp{ISA}. We observe that the three embedding models perform the best, and the performance difference between them are down to margin of error. However, it appears that the larger ResNet50-E model achieves more consistent results across runs.
 
 \autoref{fig:cpurec-endianness-by-isa} aggregates results across the different models. Again, we observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds.
+
+\autoref{fig:cm-isadetect-cpurec-endianness} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are significantly biased towards predicting big-endian.
 
 \FloatBarrier
 
@@ -205,11 +209,13 @@ Table: Endianness classification performance when training on the ISADetect data
 
 ![Endianness classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting big versus little endianness on the ISADetect-BuildCross suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-isadetect-buildcross-endianness}](./images/results/confusion-buildcrossall-endianness-all-models.svg)
+![Confusion matrix showing the performance of models in predicting big versus little endianness on the ISADetect-BuildCross suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-isadetect-buildcross-endianness}](./images/results/confusion-buildcrossall-endianness-all-models.svg){ width=300px }
 
 \autoref{fig:buildcross-endianness-by-model} aggregates the results across \acp{ISA}. Here, we observe that contrary to the other testing setups, the embedding models are not performing better than their non-embedding counterparts.
 
 \autoref{fig:buildcross-endianness-by-isa} aggregates results across the different models. We see that the average classification performance varies a lot across the different \acp{ISA}, from 3% for the `rxeb` architecture to 96% for the `tricore` architecture.
+
+\autoref{fig:cm-isadetect-buildcross-endianness} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that even though overall classification performance is low, the models appear balanced and do not show any clear bias towards a specific class.
 
 \FloatBarrier
 
@@ -287,11 +293,13 @@ Table: Endianness classification performance when training on the ISADetect and 
 
 ![Endianness classification performance by ISA when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting big versus little endianness on the Combined-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-combined-cpurec-endianness}](./images/results/confusion-combinedall-endianness-all-models.svg)
+![Confusion matrix showing the performance of models in predicting big versus little endianness on the Combined-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each endianness classification. \label{fig:cm-combined-cpurec-endianness}](./images/results/confusion-combinedall-endianness-all-models.svg){ width=300px }
 
-\autoref{fig:combined-endianness-by-model} aggregates the results across \acp{ISA}. Notably, introducing the BuildCross dataset as additional training data does not improve performance for any of the models.
+\autoref{fig:combined-endianness-by-model} aggregates the results across \acp{ISA}. Notably, introducing the BuildCross dataset as additional training data improves classification performance for most models.
 
 \autoref{fig:combined-endianness-by-isa} aggregates results across the different models.
+
+\autoref{fig:cm-combined-cpurec-endianness} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are slightly biased towards predicting big-endian.
 
 \FloatBarrier
 
@@ -348,11 +356,13 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 ![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
 
-![Confusion matrix showing the performance of ISADetect models in predicting fixed versus variable instruction width using \ac{LOGO CV}. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg)
+![Confusion matrix showing the performance of ISADetect models in predicting fixed versus variable instruction width using \ac{LOGO CV}. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg){ width=300px }
 
 \autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. Similar to the performance seen with endianness classification, the performance of the embedding models perform better than the non-embedding counterparts, with the _Simple1d-E_ model performing the best with an overall accuracy of 87.8% and a standard deviation of 4.3%.
 
 \autoref{fig:logo-instructionwidthtype-by-isa} aggregates results across the different models. Many \acp{ISA} are correctly classified with accuracy well above 90%, while others perform poorly.
+
+\autoref{fig:cm-logo-instructionwidthtype} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are slightly biased towards predicting fixed instruction width.
 
 \FloatBarrier
 
@@ -447,11 +457,13 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the ISADetect-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-isadetect-cpurec-instructionwidthtype}](./images/results/confusion-cpurecall-instructionwidthtype-all-models.svg)
+![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the ISADetect-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-isadetect-cpurec-instructionwidthtype}](./images/results/confusion-cpurecall-instructionwidthtype-all-models.svg){ width=300px }
 
 \autoref{fig:cpurec-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. None of the models perform any better than a baseline model with random output for this target feature.
 
 \autoref{fig:cpurec-instructionwidthtype-by-isa} aggregates results across the different models.
+
+\autoref{fig:cm-isadetect-cpurec-instructionwidthtype} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are severely biased towards predicting fixed instruction width, to the point where true variable instruction width binaries are misclassified over 70.7% of the time.
 
 \FloatBarrier
 
@@ -513,11 +525,13 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the ISADetect-BuildCross suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-isadetect-buildcross-instructionwidthtype}](./images/results/confusion-buildcrossall-instructionwidthtype-all-models.svg)
+![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the ISADetect-BuildCross suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-isadetect-buildcross-instructionwidthtype}](./images/results/confusion-buildcrossall-instructionwidthtype-all-models.svg){ width=300px }
 
 \autoref{fig:buildcross-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. With instruction width type as the target feature, it is even more prominent that the embedding models do not perform well when evaluating on the BuildCross dataset. The best performing model is the _Simple2d_ model, with an overall accuracy of 70.2% and a comparatively low standard deviation of 1.0%.
 
 \autoref{fig:buildcross-instructionwidthtype-by-isa} aggregates results across the different models.
+
+\autoref{fig:cm-isadetect-buildcross-instructionwidthtype} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are severely biased towards predicting fixed instruction width, to the point where true variable instruction width binaries are misclassified 68.7% of the time.
 
 \FloatBarrier
 
@@ -612,8 +626,10 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
 
-![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the Combined-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-combined-cpurec-instructionwidthtype}](./images/results/confusion-combinedall-instructionwidthtype-all-models.svg)
+![Confusion matrix showing the performance of models in predicting fixed versus variable instruction width on the Combined-CpuRec suite. The percentages represent the mean prediction accuracy across all models for each instruction width type classification. \label{fig:cm-combined-cpurec-instructionwidthtype}](./images/results/confusion-combinedall-instructionwidthtype-all-models.svg){ width=300px }
 
-\autoref{fig:combined-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, and \autoref{fig:combined-instructionwidthtype-by-isa} aggregates results across the different models. For this target feature, we do see a significant improvement in performance when adding the BuildCross dataset as additional training data. The _Simple2d-E_ model performs the best, with an overall accuracy of 79.1% and a standard deviation of 2.6%.
+\autoref{fig:combined-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, and \autoref{fig:combined-instructionwidthtype-by-isa} aggregates results across the different models. For this target feature, we also see a significant improvement in performance when adding the BuildCross dataset as additional training data. The _Simple2d-E_ model performs the best, with an overall accuracy of 79.1% and a standard deviation of 2.6%.
+
+\autoref{fig:cm-combined-cpurec-instructionwidthtype} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are balanced in their predictions. Notably, adding the BuildCross dataset as additional training data balances seems to solve the bias issues observed in \autoref{fig:cm-isadetect-cpurec-instructionwidthtype}.
 
 \FloatBarrier
