@@ -20,7 +20,7 @@ In addition to defining an instruction set, the \ac{ISA} gives a complete specif
 
 #### CISC and RISC
 
-\acp{ISA} today generally fall into two camps: *\ac{CISC}* and *\ac{RISC}*. \ac{CISC} architectures, like x86, provide many specialized instructions that can perform complex operations in a single instruction. \ac{CISC} can simplify complex operations at the programming level as well as potentially reduce code size, but at the cost of requiring more complex hardware. \ac{RISC} architectures, like ARM and RISC-V, favor simplicity with a smaller set of fixed-length instructions that execute in a single cycle, potentially making them more energy efficient and easier to implement.
+\acp{ISA} today generally fall into two camps: _\ac{CISC}_ and _\ac{RISC}_. \ac{CISC} architectures, like x86, provide many specialized instructions that can perform complex operations in a single instruction. \ac{CISC} can simplify complex operations at the programming level as well as potentially reduce code size, but at the cost of requiring more complex hardware. \ac{RISC} architectures, like ARM and RISC-V, favor simplicity with a smaller set of fixed-length instructions that execute in a single cycle, potentially making them more energy efficient and easier to implement.
 
 #### Instruction set
 
@@ -28,11 +28,11 @@ An important part of all \acp{ISA} is the instruction set, which defines the bin
 
 #### Word size
 
-A fundamental characteristic of any \ac{ISA} is its *word size*, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. However, there is not a standardized definition of what word size is referring to. One natural way to define it is the size of the registers in the CPU. For instance, this is why x86-64 is referred to as a 64-bit architecture. Even so, some software and documentation for the x86 family – such as the Microsoft Windows API – still define a single word to be 16 bits, even though the registers are 64 bits wide. Other definitions include the addressable memory space size, the data bus width, or the ALU input width, all of which may or may not be the equal to the register size.
+A fundamental characteristic of any \ac{ISA} is its _word size_, which defines the natural unit of data the processor works with – typically 32 or 64 bits in modern architectures. This affects everything from register sizes to memory addressing capabilities. However, there is not a standardized definition of what word size is referring to. One natural way to define it is the size of the registers in the CPU. For instance, this is why x86-64 is referred to as a 64-bit architecture. Even so, some software and documentation for the x86 family – such as the Microsoft Windows API – still define a single word to be 16 bits, even though the registers are 64 bits wide. Other definitions include the addressable memory space size, the data bus width, or the ALU input width, all of which may or may not be the equal to the register size.
 
 #### Endianness {#background-endianness}
 
-The *endianness* determines how multi-byte values are stored in memory: *little-endian* architectures (like the x86 family) store the least significant byte first, while *big-endian* architectures stores the most significant byte first. This is illustrated in \autoref{table:endianness}. Endianness is a rudimentary characteristic of an \ac{ISA}, but when analyzing and running a program, which order the bytes are stored in memory is crucial to understand. The endianness is typically determined by the \ac{ISA}, but some architectures support both big-endian and little-endian modes. This is often referred to as *bi-endian*, and is encountered in MIPS, PowerPC, and some modern versions of ARM. Even though these architectures support endianness mode switching during runtime, programs are typically compiled for a single specific endianness, making the software binaries themselves either big-endian or little-endian. In other words, even though an \ac{ISA} is classified as bi-endian, the endianness of a binary program is typically fixed at compile time.
+The _endianness_ determines how multi-byte values are stored in memory: _little-endian_ architectures (like the x86 family) store the least significant byte first, while _big-endian_ architectures stores the most significant byte first. This is illustrated in \autoref{table:endianness}. Endianness is a rudimentary characteristic of an \ac{ISA}, but when analyzing and running a program, which order the bytes are stored in memory is crucial to understand. The endianness is typically determined by the \ac{ISA}, but some architectures support both big-endian and little-endian modes. This is often referred to as _bi-endian_, and is encountered in MIPS, PowerPC, and some modern versions of ARM. Even though these architectures support endianness mode switching during runtime, programs are typically compiled for a single specific endianness, making the software binaries themselves either big-endian or little-endian. In other words, even though an \ac{ISA} is classified as bi-endian, the endianness of a binary program is typically fixed at compile time.
 
 ```{=latex}
 \begin{table}[h]
@@ -75,7 +75,7 @@ Byte & 0x78 & 0x56 & 0x34 & 0x12 \\
 
 #### Instruction width
 
-The *instruction width* refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_, where each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits. A comparison between fixed width and variable width instruction sets is displayed in \autoref{fig:assembly_comparison}. The degree of variability in instruction widths differs: some architectures, such as x86, support a wide range of sizes. Others, such as Blackfin and Epiphany, are limited to specific combinations, where instructions are either 16 bits or 32 bits. Instruction width has implications for binary program alignment in terms of analysis. Binaries from fixed-width \acp{ISA} are in theory easier to analyze, since instructions are consistently aligned to specific byte boundaries, while variable-width \acp{ISA} complicate the identification of the beginning and end of instructions.
+The _instruction width_ refers to the size, typically measured in bits, of a single CPU instruction. Some architectures, such as ARM64, have _fixed-width instructions_, where each instruction has the same size. Others, such as most \ac{CISC} instruction sets, have _variable-width instructions_, where the size of each instruction can vary based on factors such as the opcode and the addressing mode. For instance, x86-64 programs can contain instructions ranging from 8 to 120 bits. A comparison between fixed width and variable width instruction sets is displayed in \autoref{fig:assembly_comparison}. The degree of variability in instruction widths differs: some architectures, such as x86, support a wide range of sizes. Others, such as Blackfin and Epiphany, are limited to specific combinations, where instructions are either 16 bits or 32 bits. Instruction width has implications for binary program alignment in terms of analysis. Binaries from fixed-width \acp{ISA} are in theory easier to analyze, since instructions are consistently aligned to specific byte boundaries, while variable-width \acp{ISA} complicate the identification of the beginning and end of instructions.
 
 ```{=latex}
 \lstdefinestyle{assembly}{
@@ -155,9 +155,9 @@ The evolution of compilers brought significant advantages in code portability an
 
 ### Embedded targets and cross-compilation
 
-*Embedded systems* are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Thus, unlike general-purpose computers, embedded systems designed for specific tasks are typically optimized for reliability, power efficiency, and cost-effectiveness. Embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of \ac{IoT} devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface and can only be controlled programmatically.
+_Embedded systems_ are specialized computing devices integrated within larger systems to perform specific and dedicated functions. Thus, unlike general-purpose computers, embedded systems designed for specific tasks are typically optimized for reliability, power efficiency, and cost-effectiveness. Embedded systems power everything from household appliances like refrigerators and washing machines to networking equipment like routers, and a vast array of \ac{IoT} devices. Most embedded systems are characterized by resource constraints, including limited memory, processing power, and energy capacity. In order for these systems to perform in such environments, embedded platforms typically incorporate specialized hardware with custom processors and peripherals optimized for specific tasks. As a result, many embedded systems feature limited or no user interface and can only be controlled programmatically.
 
-Since these specialized systems frequently use custom hardware with \acp{ISA} different from standard desktop or server computers, they present unique challenges for software development. Unlike general-purpose computers, which are often used to create programs for the same platform it is built on, it's often impractical or impossible to compile code directly on the target device. Developers typically have to use a technique called *cross-compilation* to build software for embedded systems.
+Since these specialized systems frequently use custom hardware with \acp{ISA} different from standard desktop or server computers, they present unique challenges for software development. Unlike general-purpose computers, which are often used to create programs for the same platform it is built on, it's often impractical or impossible to compile code directly on the target device. Developers typically have to use a technique called _cross-compilation_ to build software for embedded systems.
 
 #### Cross-compilation
 
@@ -210,7 +210,7 @@ File formats like \ac{ELF} provides a standardized way to represent the structur
 
 ## Software reverse engineering
 
-*Software reverse engineering* is a systematic process of analyzing and understanding how a program works without access to its original source code or internal documentation. At its core, reverse engineering involves working backwards from a compiled program to comprehend its functionality, architecture, and behavior – the opposite direction of traditional software development. Reverse engineering has its origins in hardware reverse engineering, where analysis of competitors' designs was used to gain a competitive advantage. Today, software reverse engineering is primarily used for understanding program behavior, not for replicating it. Whether investigating potentially malicious code or maintenance of legacy systems, software reverse engineering provides insights when source code and documentation are unavailable [@Chikofsky1990; @Fauzi2017; @Muller2009; @Qasem2022].
+_Software reverse engineering_ is a systematic process of analyzing and understanding how a program works without access to its original source code or internal documentation. At its core, reverse engineering involves working backwards from a compiled program to comprehend its functionality, architecture, and behavior – the opposite direction of traditional software development. Reverse engineering has its origins in hardware reverse engineering, where analysis of competitors' designs was used to gain a competitive advantage. Today, software reverse engineering is primarily used for understanding program behavior, not for replicating it. Whether investigating potentially malicious code or maintenance of legacy systems, software reverse engineering provides insights when source code and documentation are unavailable [@Chikofsky1990; @Fauzi2017; @Muller2009; @Qasem2022].
 
 Software reverse engineering serves many purposes in the digital landscape of today. In the domain of cybersecurity, it enables many types of vulnerability detection, where security researchers and bug hunters identify exploitable pieces of code. It can also be used to identify and analyze malware, protecting critical systems from infected executables and preventing cyberattacks [@Ding2019; @Subedi2018; @Votipka2020; @Qasem2022]. Beyond cybersecurity, reverse engineering enables software interoperability by allowing engineers to understand how systems interact when documentation is unavailable. It can play a vital role in software maintenance, especially for legacy systems where original documentation or development expertise has been lost. Software reverse engineering also serves important legal and compliance functions, helping organizations verify adherence to security standards and licensing requirements. It can also support digital forensics through code similarity detection and ownership attribution [@Votipka2020; @Muller2009; @Qasem2022; @Shoshitaishvili2016; @Fauzi2017; @Luo2014; @Popov2007].
 
@@ -349,19 +349,19 @@ $$
 
 By forcing the network to function without access to all neurons during training, dropout prevents any neuron from relying too heavily on a specific subset of other neurons. This encourages the network to learn redundant representations, which improves robustness. The technique is particularly effective for very deep networks, where common dropout probabilities range from 0.2 to 0.5.
 
-### Cross validation
+### Cross-validation
 
-_Cross validation_ is a technique used to assess performance and generalizability of a machine learning model. It involves partitioning data into subsets, where the model is trained on certain subsets while validated using the remaining ones. The process is repeated, making sure the model is trained and validated using different splits. This helps reduce overfitting on a fixed validation set, with the trade-off of requiring more computation since the model needs to be trained multiple times.
+_Cross-validation_ is a technique used to assess performance and generalizability of a machine learning model. It involves partitioning data into subsets, where the model is trained on certain subsets while validated using the remaining ones. The process is repeated, making sure the model is trained and validated using different splits. This helps reduce overfitting on a fixed validation set, with the trade-off of requiring more computation since the model needs to be trained multiple times.
 
-It is worth noting that cross validation is used only when verifying the model architecture and hyperparameters, not when training the actual model that will be deployed. After performance is assessed using cross validation techniques, the final model is trained on all available training data without holding out a validation set.
+It is worth noting that cross-validation is used only when verifying the model architecture and hyperparameters, not when training the actual model that will be deployed. After performance is assessed using cross-validation techniques, the final model is trained on all available training data without holding out a validation set.
 
-#### K-fold cross validation
+#### K-fold cross-validation
 
-In K-fold cross validation, the data is randomly split into $K$ equal-sized subsets called _folds_. Then, the model is trained $K$ times, once for each fold. In each run, one fold is used for validating the model performance, while the remaining $K-1$ folds are used as the training data. The model performance is typically aggregated across the runs to provide metrics for overall cross-validated performance. \autoref{fig:cross-validation} illustrates how the data can be split in a 5-fold cross validation. Each fold serves as validation data once while remaining data is used for training.
+In K-fold cross-validation, the data is randomly split into $K$ equal-sized subsets called _folds_. Then, the model is trained $K$ times, once for each fold. In each run, one fold is used for validating the model performance, while the remaining $K-1$ folds are used as the training data. The model performance is typically aggregated across the runs to provide metrics for overall cross-validated performance. \autoref{fig:cross-validation} illustrates how the data can be split in a 5-fold cross-validation. Each fold serves as validation data once while remaining data is used for training.
 
-![K-fold cross validation with 5 folds. \label{fig:cross-validation}](images/background/cross-validation.svg)
+![K-fold cross-validation with 5 folds. \label{fig:cross-validation}](images/background/cross-validation.svg)
 
-#### Leave-one-group-out cross validation
+#### Leave-one-group-out cross-validation
 
 \ac{LOGO CV} is a variation used in cases where the data is grouped into distinct clusters or categories. The purpose is to ensure that the trained model is tested on data independent of the groups it was trained on. Instead of partitioning the data into random subsets, it is split into groups based on a predefined variable. For each iteration, one group is left out as the validation set, and the model is trained on the remaining groups. This technique assesses how well the model generalizes to completely unseen groups, which is especially useful in case the final model will be used with data that does not belong to any of the groups present in the training data.
 
@@ -432,7 +432,7 @@ $$
 \text{Var}_{\text{total}} = \frac{E[\text{Var}_{\text{within\_run}}]}{k} + \frac{\text{Var}_{\text{models}}}{k}
 $$
 
-This formulation assumes that the within-run and between-run sources of variance are independent, which is reasonable since different random seeds ensure that the stochastic training processes across runs are uncorrelated. The expected value of the within-run variance based on previous assumptions is just the average within-run variance across all runs. 
+This formulation assumes that the within-run and between-run sources of variance are independent, which is reasonable since different random seeds ensure that the stochastic training processes across runs are uncorrelated. The expected value of the within-run variance based on previous assumptions is just the average within-run variance across all runs.
 
 With this combined variance, we can construct a confidence interval for the average accuracy for a given confidence level $(1-\alpha)$. While the central limit theorem states that the distribution of the sample mean approaches a normal distribution as the sample size increases, a more conservative approach for smaller number of runs (less than 30) is to use the t-distribution. The confidence interval for $k$ runs can then be constructed as:
 
@@ -444,7 +444,7 @@ where $t_{\alpha/2, k-1}$ is the critical value from the t-distribution for a gi
 
 ##### Extension to cross-validation {#confidence-interval-logocv}
 
-When using cross-validation, the accuracy is calculated for each fold, and the confidence interval can be constructed similarly as in a normal train-test suite. While K-fold cross validation suites typically have balanced groups of samples, in \ac{LOGO CV} scenarios the number of test samples within each fold might vary from fold to fold. In this case, the accuracy for each run is calculated as a weighted average of the accuracies across all folds:
+When using cross-validation, the accuracy is calculated for each fold, and the confidence interval can be constructed similarly as in a normal train-test suite. While K-fold cross-validation suites typically have balanced groups of samples, in \ac{LOGO CV} scenarios the number of test samples within each fold might vary from fold to fold. In this case, the accuracy for each run is calculated as a weighted average of the accuracies across all folds:
 
 $$
 p_\text{run} = \frac{\sum_{j=1}^{f} n_j \cdot p_j }{\sum_{j=1}^{f} n_j}
@@ -479,7 +479,8 @@ $$
 d_i \sim N(\mu_{\text{diff}}, \sigma_{\text{diff}}^2)
 $$
 
-In accordance to the paired t-test statistic $t$ then follows a t-distribution, and is calculated as:  
+In accordance to the paired t-test statistic $t$ then follows a t-distribution, and is calculated as:
+
 $$
 t = \frac{\bar{d}}{s_d / \sqrt{k}}
 $$

@@ -534,15 +534,15 @@ Additionally, these features have certain technical properties that make them su
 
 ## Evaluation strategies
 
-### K-fold cross validation on ISAdetect dataset
+### K-fold cross-validation on ISAdetect dataset
 
-As an initial experiment, we use K-fold cross validation (as described in \autoref{k-fold-cross-validation}) on the ISAdetect dataset to evaluate the performance of our models. We pick a value of 5 folds, a common choice for K-fold cross validation that balances between computational cost and robustness. It should be noted that this experiment does not provide an indication of how the model performs on previously unseen \acp{ISA}, since all 23 \acp{ISA} are present in the training data for each fold. However, we still include this experiment for the sake of interpreting the general behavior of the models.
+As an initial experiment, we use K-fold cross-validation (as described in \autoref{k-fold-cross-validation}) on the ISAdetect dataset to evaluate the performance of our models. We pick a value of 5 folds, a common choice for K-fold cross-validation that balances between computational cost and robustness. It should be noted that this experiment does not provide an indication of how the model performs on previously unseen \acp{ISA}, since all 23 \acp{ISA} are present in the training data for each fold. However, we still include this experiment for the sake of interpreting the general behavior of the models.
 
-### Leave-one-group-out cross validation on ISADetect dataset
+### Leave-one-group-out cross-validation on ISAdetect dataset
 
-The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. K-fold cross validation, as described in \autoref{k-fold-cross-validation-on-isadetect-dataset}, is a more robust variant of the train-test split that repeats this process multiple times with different splits. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
+The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. K-fold cross-validation, as described in \autoref{k-fold-cross-validation-on-isadetect-dataset}, is a more robust variant of the train-test split that repeats this process multiple times with different splits. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
 
-To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISADetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we get a strong indication of how the model performs on previously unseen \acp{ISA}.
+To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISAdetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we get a strong indication of how the model performs on previously unseen \acp{ISA}.
 
 ### Testing on other datasets
 
@@ -567,7 +567,7 @@ Table: Evaluation strategies using multiple datasets \label{table:evaluation-str
 
 To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different random seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different random seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
 
-For the cross validation evaluation strategies, we repeat the experiments 10 times with different random seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times.
+For the cross-validation evaluation strategies, we repeat the experiments 10 times with different random seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times.
 
 #### Confidence intervals
 
