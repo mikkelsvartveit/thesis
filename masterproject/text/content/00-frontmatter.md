@@ -16,7 +16,7 @@ date: |
   \today
   \vspace{2.5cm}
 author:
-  - Stian J. Sulebak
+  - Stian Jørstad Sulebak
   - Mikkel Svartveit
 bibliography: "bibliography.bib"
 
@@ -41,6 +41,7 @@ linkcolor: "RoyalBlue"
 urlcolor: "RoyalBlue"
 citecolor: "RoyalBlue"
 filecolor: "RoyalBlue"
+columns: 30
 
 header-includes:
   - \usepackage{array}

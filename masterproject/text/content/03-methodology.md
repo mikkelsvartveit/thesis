@@ -175,41 +175,9 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 ## Developing a custom dataset
 
-This thesis introduces BuildCross, a toolset and dataset representing a significant contribution to the field. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream \acp{ISA}. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance aiming to generate a larger volume of binary code for the underrepresented less common architectures.
+This thesis introduces BuildCross, a comprehensive toolset and diversified binary dataset that addresses gaps in architecture representation for machine learning models in binary analysis. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap in diversity and volume between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream \acp{ISA}. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance aiming to generate a larger volume of binary code for the underrepresented less common architectures.
 
-We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for these exotic architectures using cross-compilation with \ac{GCC} and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable toolchains, (2) gathering sources and configuring these toolchains for binary compilation, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
-
-```{=latex}
-\begin{longtable}[c]{p{2cm}p{1.5cm}p{12cm}}
-\caption{Source libraries used to compile and generate the BuildCross dataset \label{table:buildcross-dataset-libraries}} \\
-\toprule
-Library & Version & Description \\
-\midrule
-\endfirsthead
-
-\bottomrule
-\endlastfoot
-
-freetype & 2.13.3 & A software library for rendering fonts. It's widely used for high-quality text rendering in applications, providing support for TrueType, OpenType, and other font formats. \\
-
-libgit2 & 1.9.0 & A portable, pure C implementation of the Git core methods. It provides a fast, linkable library for Git operations that can be used in applications to implement Git functionality without spawning a git process. \\
-
-libjpeg-turbo & 3.1.0 & An optimized version of libjpeg that uses SIMD instructions to accelerate JPEG compression and decompression. It's significantly faster than the original libjpeg while maintaining compatibility. \\
-
-libpng & 1.6.47 & The official PNG reference library that provides support for reading, writing, and manipulating PNG (Portable Network Graphics) image files. It's widely used in graphics processing applications. \\
-
-libwebp & 1.5.0 & A library for encoding and decoding WebP images, Google's image format that provides superior lossless and lossy compression for web images, resulting in smaller file sizes than PNG or JPEG. \\
-
-libyaml & 0.2.5 & A C library for parsing and emitting YAML (YAML Ain't Markup Language) data. It's commonly used in configuration files and data serialization applications. \\
-
-pcre2 & 10.45 & Perl Compatible Regular Expressions library (version 2), which provides functions for pattern matching using regular expressions. It's used in many applications for text processing and search operations. \\
-
-xzutils & 1 & A set of compression utilities based on the LZMA algorithm. The XZ format provides high compression ratios and is commonly used for software distribution and archiving. \\
-
-zlib & 1.3 & A software library used for data compression. It provides lossless data-compression functions and is widely used in many software applications for compressing data, including PNG image processing. \\
-
-\end{longtable}
-```
+We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for exotic architectures using cross-compilation with \ac{GCC} and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable cross-compiler toolchains for different \acp{ISA}, (2) gathering compilable source code, configuring the toolchains and compiling binaries, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
 ### Pipeline for developing toolchains
 
@@ -224,11 +192,26 @@ A full cross-compiler toolchain have a lot of moving parts, and since a lot of a
 
 The cross-compiler suite uses singularity images to create containerized, reproducible and portable cross-compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
 
-### Configuring toolchains and gathering library sources (why libraries)
+### Configuring toolchains and gathering library sources
 
 When using the compiled toolchains, we have to overcome the challenge of configuring each library for compilation to the target architecture. Instead of manually configuring each library for each architecture, we used the build system CMake and toolchain configuration files to automate the process. CMake is a widely used build system that simplifies the process of configuring and generating build files for different platforms and compilers. It allows us to specify the target architecture, compiler, linker, and other build options in a platform-independent way, only requiring one toolchain file per architecture. While most architectures could use a common template toolchain file, CMake made it straightforward to implement the specific configurations needed for architectures with unique requirements.
 
 The libraries we selected for our dataset are widely used and have a large codebase, which provides a good representation of real-world code. By compiling these libraries, we can ensure that the generated binaries are representative of actual software applications. This is important for training and evaluating our models, as it allows us to assess their performance on realistic data. Additionally, using well-known libraries helps us avoid potential issues with licensing and distribution, as these libraries are commonly used in open-source projects. By compiling these libraries for the target architectures, we can create a diverse dataset that covers a wide range of instruction sets and architectural features. With the only requirement that the libraries support CMake, the BuildCross suite supports adding more libraries to the dataset in the future.
+
+Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries} \\
+
+<!-- prettier-ignore -->
+| Library   | Version  | Description             |
+| :-----     | :---     | ------------------------- |
+| freetype [@freetypesource]      | 2.13.3  | A software library for rendering fonts. It's widely used for high-quality text rendering in applications, providing support for TrueType, OpenType, and other font formats [@freetype].                                        |
+| libgit2 [@libgit2source]       | 1.9.0   | A portable, pure C implementation of the Git core methods. It provides a fast, linkable library for Git operations that can be used in applications to implement Git functionality without spawning a git process [@libgit2]. |
+| libjpeg-turbo [@libjpeg-turbosource] | 3.1.0   | An optimized version of libjpeg that uses SIMD instructions to accelerate JPEG compression and decompression. It's significantly faster than the original libjpeg while maintaining compatibility [@libjpeg-turbo].                 |
+| libpng [@libpngsource]        | 1.6.47  | The official PNG reference library that provides support for reading, writing, and manipulating PNG (Portable Network Graphics) image files. It's widely used in graphics processing applications [@libpng].                 |
+| libwebp [@libwebpsource]       | 1.5.0   | A library for encoding and decoding WebP images, Google's image format that provides superior lossless and lossy compression for web images, resulting in smaller file sizes than PNG or JPEG [@libwebp].                     |
+| libyaml [@libyamlsource]       | 0.2.5   | A C library for parsing and emitting YAML (YAML Ain't Markup Language) data. It's commonly used in configuration files and data serialization applications [@libyaml].                                                        |
+| pcre2 [@pcre2source]         | 10.45   | Perl Compatible Regular Expressions library (version 2), which provides functions for pattern matching using regular expressions. It's used in many applications for text processing and search operations [@pcre2].        |
+| xzutils [@xzutilssource]       | 1       | A set of compression utilities based on the LZMA algorithm. The XZ format provides high compression ratios and is commonly used for software distribution and archiving [@xzutils].                                           |
+| zlib [@zlibsource]          | 1.3     | A software library used for data compression. It provides lossless data-compression functions and is widely used in many software applications for compressing data, including PNG image processing [@zlib].               |
 
 The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
 
