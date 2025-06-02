@@ -63,6 +63,6 @@
   <text x="320" y="55" font-family="Arial" font-size="14">Validation Accuracy</text>
   
   <!-- Overfitting point annotation -->
-  <line x1="200" y1="220" x2="200" y2="100" stroke="#666666" stroke-width="1" stroke-dasharray="4"/>
-  <text x="200" y="95" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Overfitting begins</text>
+  <line x1="220" y1="220" x2="220" y2="100" stroke="#666666" stroke-width="1" stroke-dasharray="4"/>
+  <text x="220" y="95" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Overfitting begins</text>
 </svg>
