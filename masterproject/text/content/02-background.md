@@ -479,7 +479,7 @@ $$
 d_i \sim N(\mu_{\text{diff}}, \sigma_{\text{diff}}^2)
 $$
 
-In accordance to the paired t-test statistic $t$ then follows a t-distribution, and is calculated as:
+If the number of paired runs is small, we can use the Shapiro-Wilk test to check for normality of the differences. If the differences are not normally distributed, we can use a non-parametric alternative like the Wilcoxon signed-rank test. If $d_i$'s are normally distributed we calculate the paired t-test statistic $t$ which then follows a t-distribution, and is calculated as:
 
 $$
 t = \frac{\bar{d}}{s_d / \sqrt{k}}
