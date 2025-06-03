@@ -2,6 +2,8 @@
 
 # Discussion
 
+This chapter discusses and interprets our results and findings from \autoref{results}. \autoref{overview-of-key-findings} begins by summarizing the main discoveries and their implications for our research questions. \autoref{model-architecture-performance-analysis} then examines the performance characteristics of the different model architectures, focusing on aspects such as the impact of embedding layers, model complexity, \acs{CNN} dimensionality, and observed performance variance. Then, \autoref{model-generalizability} assesses the ability of our models to generalize to unseen \acsp{ISA}. A comparative analysis with prior research is presented in \autoref{comparison-with-prior-literature-andreassen-and-morrison}. Following this, \autoref{dataset-quality-assessment} critically evaluates the datasets employed, discussing their respective strengths and limitations. We also explore the broader sustainability implications in \autoref{sustainability-implications}, and conclude by acknowledging the limitations of our work in \autoref{limitations}.
+
 ## Overview of key findings
 
 In this section, we will briefly go over the main findings in our experiments. We will also highlight the potential implications of these findings related to our research questions by indicating further points of discussion for later sections in this chapter.
