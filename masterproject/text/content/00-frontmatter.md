@@ -88,6 +88,7 @@ Våre resultater viser at selv om CNNer kan oppdage sentrale ISA-egenskaper fra 
 \def\sectionautorefname{Section}
 \def\subsectionautorefname{Section}
 \def\subsubsectionautorefname{Section}
+\def\paragraphautorefname{Section}
 
 <!-- Table of contents -->
 
