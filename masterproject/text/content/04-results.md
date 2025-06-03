@@ -10,7 +10,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 ### K-fold cross-validation on ISADetect
 
-In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
+In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
 ![Endianness classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
 
@@ -309,7 +309,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 ### K-fold cross-validation on ISADetect
 
-In this experiment, we train and evaluate our models using K-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
+In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
 ![Instruction width type classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
 

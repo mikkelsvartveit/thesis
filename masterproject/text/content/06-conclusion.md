@@ -19,3 +19,5 @@ We identify several possibilities for building on our work. Firstly, extending o
 Furthermore, extending our approach to operate on full binary files, rather than just code sections, would be beneficial. This would enable our method to be applied even when the code section of a binary cannot be easily identified. To achieve this, we propose adopting a "rolling window" technique, as demonstrated in a previous binary analysis study by Beckman & Haile [@Beckman2020]. In their approach, a 10 KB segment of the binary is repeatedly classified, with the window offset increased by 5 KB each time. By analyzing certainty metrics across these segments, they were able to automatically detect the code section within the binary.
 
 <!-- NAtural language processing techniques -->
+
+<!-- Test medium-sized CNNS -- we only tried very small and very large ones -->
