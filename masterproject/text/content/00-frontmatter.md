@@ -41,7 +41,6 @@ linkcolor: "RoyalBlue"
 urlcolor: "RoyalBlue"
 citecolor: "RoyalBlue"
 filecolor: "RoyalBlue"
-columns: 30
 
 header-includes:
   - \usepackage{array}

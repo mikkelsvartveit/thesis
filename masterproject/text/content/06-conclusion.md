@@ -21,3 +21,11 @@ Furthermore, extending our approach to operate on full binary files, rather than
 <!-- NAtural language processing techniques -->
 
 <!-- Test medium-sized CNNS -- we only tried very small and very large ones -->
+
+<!-- Expand buildcross, should be possible with CMAKE. -->
+
+<!-- CNNs for ISA-classifcation. Hard to not get CNNs to not fit to ISAs. Why not let CNN fit to isas? :o(we tried this for a bit, seemed to work, but not tested) -->
+
+<!-- - ISA classification with buildcross -->
+
+<!-- Other CNN variants? Unet for code section segmentation? :o -->

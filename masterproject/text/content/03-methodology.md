@@ -307,15 +307,15 @@ Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented featu
 
 ## Experiments
 
-This research primarily involves training, validating, and evaluating \ac{CNN} models using \ac{ISA} characteristics such as endianness, word size, and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
+This research primarily involves training, validating, and evaluating \ac{CNN} models using the \ac{ISA} characteristics endianness and instruction length as the target features. This subsection outlines our approach to data preprocessing as well as the model architectures we use for our experiments.
 
 ### Data preprocessing
 
-While most \ac{CNN} architectures are designed for image data, our datasets consist of compiled binary executables. Thus, how these are encoded into a format that can be consumed by a \ac{CNN} is a crucial part of our method. In our experiments, we use two different approaches for image encoding.
+While most \ac{CNN} architectures are designed for image data, our datasets consist of compiled binary executables. Thus, how these are encoded into a format that can be consumed by a \ac{CNN} is a crucial part of our methodology. In our experiments, we use two different approaches for image encoding.
 
 #### Two-dimensional byte-level encoding
 
-We treat each byte value as an integer whose value range from 0 to 255. The values are placed in a two-dimensional array of a predetermined size. If the file is larger than the predetermined size, only the first bytes are used. If the file is smaller than the predetermined size, the remaining bytes are padded with zero values.
+Using two-dimensional byte-level encoding, we treat each byte in the binary file as an integer with values ranging from 0 to 255. These values are arranged in a two-dimensional array of predetermined size and fed into the \ac{CNN}. For files larger than this predetermined size, we use only the initial bytes that fit within the dimensions. Rather than applying data augmentation techniques for files smaller than this predetermined size, we exclude them from the dataset entirely. We discuss this approach in more detail in \autoref{input-size-and-file-splitting}.
 
 When applying two-dimensional \ac{CNN} on 2D grids of this format, the byte values will essentially be treated as pixel values, where the byte sequence forms a grayscale image. \autoref{fig:byte-encoding} shows an example of a 9-byte sequence encoded as a 3x3 pixel grayscale image.
 
@@ -325,27 +325,27 @@ This approach was chosen based on previous literature which successfully classif
 
 #### One-dimensional byte-level encoding
 
-Similar to the 2D approach, we treat each byte as an integer. The values are placed in a one-dimensional array of a predetermined size. If the file is larger than the predetermined size, only the first bytes are used. If the file is smaller than the predetermined size, the remaining bytes are padded with zero values.
+Similar to the 2D approach, in one-dimensional byte-level encoding we treat each byte as an integer value, and place them in a one-dimensional array of a predetermined size. If the file is larger than the predetermined size, only the first bytes are used. If the file is smaller than the predetermined size they are excluded from the dataset.
 
 This approach was chosen based on previous literature which successfully detected compiler optimization levels in binary executables using 1D \acp{CNN} [@Yang2019; @Pizzolotto2021].
 
 #### Input size and file splitting
 
-Since the size of the files in our datasets vary greatly, we need a way to handle varying file sizes. When training our model, we want each data instance to be of a fixed size. We want to use an input size as small as possible for efficiency reasons, while being large enough to capture enough information. In addition, picking an input size as small as possible ensures that most of our files are large enough to fill the entire input vector without padding.
+Since the size of the files in our datasets vary greatly, we need a way to handle varying file sizes. When training our model, we want each data instance to be of a fixed size. Our goal is to use input sizes as small as possible to create time and energy efficient models, while still being large enough to capture enough information about the features we aim to detect. In addition, smaller input sizes ensures that most of our files are large enough to fill the entire input vector, increasing the amount of usable data in the dataset.
 
 For the one-dimensional models, we pick an input size of 512 bytes. We choose this number based on preliminary testing, which revealed that input sizes larger than 512 bytes did not improve model performance.
 
 For the small two-dimensional models, we use an input size of 32x16. This matches the 512-byte input size for the one-dimensional models. In addition, we hypothesize that using a width of 32 bytes might improve the models' ability to detect repeating patterns, since many programs use an instruction width of 32. For the models based on ResNet, we use an input size of 32x32 (which gives 1024 bytes), since this architecture is designed for square images.
 
-For the few files that are smaller than the pre-determined input size, we choose to exclude them from training instead of padding them to fit the input size. For files larger than the input size $I$, only the first $I$ bytes from the file is used. For the custom dataset we developed, which contains few, but rather large files, we also use file splitting to increase the number of training instances. Given a file of size $F$ and a model input size of $I$, each file is divided into $\lfloor F/I \rfloor$ instances.
+For files smaller than the predetermined input size, we choose to exclude them from training rather than padding them to fit the input size. Only the ISAdetect dataset contained files below this threshold, and these represented a small, likely insignificant portion of the total files in that dataset. Furthermore, data augmentation techniques such as padding can introduce noise, and we concluded that exclusion was a better option than potentially degrading the quality of the data. For files in ISAdetect and CpuRec datasets larger than the input size $I$, only the first $I$ bytes from the file is used. For the custom dataset we developed, which contains few, but rather large files, we use file splitting to increase the number of training instances. Since these binary files are composed of concatenated code sections from multiple library object files, we deem file splitting to be a valid and appropriate approach. Given a file of size $F$ and a model input size of $I$, each file is divided into $\lfloor F/I \rfloor$ instances.
 
 ### Model architectures
 
-In our experiments, we train, evaluate, and compare the model architectures outlined in this subsection.
+In our experiments, we train, evaluate, and compare the model architectures outlined in this subsection. The models architectures were chosen and designed to test how input encoding, model complexity and word embedding affect the model's ability to learn the target \ac{ISA} features.
 
 #### Simple 1D CNN
 
-This model is a small one-dimensional \ac{CNN}. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters. This model is hereby referred to as _Simple1d_.
+The smallest model we developed is a small one-dimensional \ac{CNN}. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters, and is hereby referred to as _Simple1d_.
 
 Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
@@ -382,7 +382,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-This model builds on the the simple 1D \ac{CNN} model in \autoref{simple-1d-cnn} by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple1d-E_.
+Our one-dimensional word-embedding model builds on the _Simple1d_ \ac{CNN} in \autoref{simple-1d-cnn}, and is constructed by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters and is hereby referred to as _Simple1d-E_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
@@ -419,7 +419,7 @@ Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
 #### Simple 2D CNN
 
-This model is a small two-dimensional \ac{CNN}. The input size is 32x16x1, which is the result of the 2D encoding of a 512-byte sequence. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-2d-cnn-with-embedding-layer}. Then, the model consists of two convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-2d-cnn}. The model has a total of 184,794 trainable parameters. This model is hereby referred to as _Simple2d_.
+The _Simple2d_ model is a small two-dimensional \ac{CNN}, and aims to test how the two-dimensional encoding of the input effects model performance. The input size is 32x16x1, which is the result of the 2D encoding of a 512-byte sequence. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-2d-cnn-with-embedding-layer}. Then, the model consists of two convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution blocks and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-2d-cnn}. The model has a total of 184,794 trainable parameters and is hereby referred to as _Simple2d_.
 
 Table: Simple 2D CNN \label{table:simple-2d-cnn}
 
@@ -450,7 +450,7 @@ Table: Simple 2D CNN \label{table:simple-2d-cnn}
 
 #### Simple 2D CNN with embedding layer
 
-This model builds on the the simple 2D \ac{CNN} model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters. This model is hereby referred to as _Simple2d-E_.
+Our two-dimensional embedding model builds on the simple 2D \ac{CNN} model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters, and is hereby referred to as _Simple2d-E_.
 
 Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 
@@ -505,7 +505,7 @@ The model takes a vector of length 1024 as input, which is reshaped to 32x32 aft
 
 ### Target features
 
-For every model architecture, we will separately train and evaluate model using these target features:
+For every model architecture, we will separately train and evaluate model using these two target features:
 
 - **Endianness** – the ordering of bytes in a multi-byte value.
 - **Instruction width type** – whether the length of each instruction is fixed or variable.
@@ -530,7 +530,7 @@ Since \ac{LOGO CV} trains a distinct model for each fold (one for each held-out 
 
 ### Testing on other datasets
 
-To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These evaluation strategies follow a train-test format, where we train the models on allotted data from a training dataset, and run inference and test model performance on a testing dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA} and our choice of evaluation strategies are based on a couple of factors:
+To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These evaluation strategies follow a train-test format, where we train the models on designated data from a training dataset, and run inference and test model performance on a testing dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA} and our choice of evaluation strategies are based on a couple of factors:
 
 - Model requirements on the amount of data needed to train
 - The quality of the datasets, in terms of labelling and size
@@ -549,10 +549,10 @@ Table: Evaluation strategies using multiple datasets \label{table:evaluation-str
 
 ### Cross-seed validation
 
-To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
+To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we analyze the stability of our model architecture by examining the deviations in results across different initializations.
 
-For the cross-validation evaluation strategies, we repeat the experiments 10 times with different seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times. To ensure reproducibility, the seeds used along with the model architectures and training parameters are documented in the source code repository [@thesisgithub].
+For the cross-validation evaluation strategies, we repeat the experiments 10 times with different seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times. To ensure reproducibility, the seeds and run configurations are documented in the source code repository [@thesisgithub].
 
 ### Performance metrics and confidence intervals
 
-To quantify the uncertainty in our model performance metrics, we calculate confidence intervals. The confidence interval is a range of values that is likely to contain the true value of a parameter with a certain level of confidence, and the general statistical procedure is described in \autoref{confidence-intervals-for-binary-classification}. In our case, we use a 95% confidence interval around the average accuracy of our models across multiple runs. We also calculate average accuracy and its standard deviation per \ac{ISA} and confusion matrices to identify systematic misclassifications across the different target features.
+To quantify the uncertainty in our model performance metrics, we calculate confidence intervals around the accuracy of our models. The confidence interval is a range of values that is likely to contain the true value of a parameter with a certain level of confidence, and the general statistical procedure is described in \autoref{confidence-intervals-for-binary-classification}. In our case, we use a 95% confidence interval around the average accuracy of our models across multiple runs. We also calculate average accuracy and its standard deviation per \ac{ISA} and confusion matrices to identify systematic misclassifications across the different target features.
