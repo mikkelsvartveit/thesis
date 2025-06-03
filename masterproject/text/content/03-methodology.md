@@ -341,7 +341,9 @@ For files smaller than the predetermined input size, we choose to exclude them f
 
 ### Model architectures
 
-In our experiments, we train, evaluate, and compare the model architectures outlined in this subsection. The models architectures were chosen and designed to test how input encoding, model complexity and word embedding affect the model's ability to learn the target \ac{ISA} features.
+In our experiments, we train, evaluate, and compare several model architectures to detect architectural features from binary code. Our approach is inspired by successful applications of \acp{CNN} to binary analysis in previous work, detailed in \autoref{cnn-applications-for-binary-machine-code}. While the scope of this thesis limits the range of model variations we can test, we focus on three factors that have influence model performance in previous research: input encoding, model size and complexity, and word embedding.
+
+The model architectures described below are specifically designed to investigate how these factors affect a model's ability to learn target \ac{ISA} features. By systematically varying these aspects across our experiments, we aim to determine how effective they are in determining \ac{ISA} features from binary programs.
 
 #### Simple 1D CNN
 
