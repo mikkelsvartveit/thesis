@@ -1,3 +1,11 @@
+PANDOC_FLAGS = \
+	--resource-path=content \
+	--citeproc \
+	--csl="assets/ieee.csl" \
+	--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
+	--to=latex \
+	--standalone
+
 .PHONY: wordcount watch worddiff pdf
 
 pdf: ../../output/master-thesis.pdf
@@ -6,12 +14,8 @@ pdf: ../../output/master-thesis.pdf
 	@echo "\nCompiling PDF... - $(shell date +"%H:%M:%S")"
 	mkdir -p ../../output
 	pandoc content/*.md \
-		--resource-path=content \
-		--citeproc \
-		--csl="assets/ieee.csl" \
+		$(PANDOC_FLAGS) \
 		--pdf-engine=xelatex \
-		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
-		--to=latex \
 		--output=$@
 	@echo "Finished compiling PDF."
 
@@ -34,12 +38,7 @@ latex: ../../output/master-thesis.tex
 	mkdir -p ../../output
 	rm -f ../../output/master-thesis.tex
 	pandoc content/*.md \
-		--resource-path=content \
-		--citeproc \
-		--csl="assets/ieee.csl" \
-		--from=markdown+tex_math_single_backslash+tex_math_dollars+raw_tex \
-		--to=latex \
-		--standalone \
+		$(PANDOC_FLAGS) \
 		--output=$@
 	@echo "Finished compiling LaTeX file."
 

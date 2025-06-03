@@ -198,7 +198,7 @@ When using the compiled toolchains, we have to overcome the challenge of configu
 
 The libraries we selected for our dataset are widely used and have a large codebase, which provides a good representation of real-world code. By compiling these libraries, we can ensure that the generated binaries are representative of actual software applications. This is important for training and evaluating our models, as it allows us to assess their performance on realistic data. Additionally, using well-known libraries helps us avoid potential issues with licensing and distribution, as these libraries are commonly used in open-source projects. By compiling these libraries for the target architectures, we can create a diverse dataset that covers a wide range of instruction sets and architectural features. With the only requirement that the libraries support CMake, the BuildCross suite supports adding more libraries to the dataset in the future.
 
-Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries} \\
+Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries}
 
 <!-- prettier-ignore -->
 | Library   | Version  | Description             |
@@ -210,7 +210,7 @@ Table: Source libraries used to compile and generate the BuildCross dataset. \la
 | libwebp [@libwebpsource]       | 1.5.0   | A library for encoding and decoding WebP images, Google's image format that provides superior lossless and lossy compression for web images, resulting in smaller file sizes than PNG or JPEG [@libwebp].                     |
 | libyaml [@libyamlsource]       | 0.2.5   | A C library for parsing and emitting YAML (YAML Ain't Markup Language) data. It's commonly used in configuration files and data serialization applications [@libyaml].                                                        |
 | pcre2 [@pcre2source]         | 10.45   | Perl Compatible Regular Expressions library (version 2), which provides functions for pattern matching using regular expressions. It's used in many applications for text processing and search operations [@pcre2].        |
-| xzutils [@xzutilssource]       | 1       | A set of compression utilities based on the LZMA algorithm. The XZ format provides high compression ratios and is commonly used for software distribution and archiving [@xzutils].                                           |
+| xzutils [@xzutilssource]       | 5.7.1     | A set of compression utilities based on the LZMA algorithm. The XZ format provides high compression ratios and is commonly used for software distribution and archiving [@xzutils].                                           |
 | zlib [@zlibsource]          | 1.3     | A software library used for data compression. It provides lossless data-compression functions and is widely used in many software applications for compressing data, including PNG image processing [@zlib].               |
 
 The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
@@ -510,9 +510,9 @@ For every model architecture, we will separately train and evaluate model using 
 - **Endianness** – the ordering of bytes in a multi-byte value.
 - **Instruction width type** – whether the length of each instruction is fixed or variable.
 
-We choose these features due to their importance in a reverse engineering process – if the reverse engineer can predictably split up the file into instructions of fixed width, it provides a solid starting point for understanding the control flow. Knowing the endianness allows the reverse engineer to properly interpret numerical values such as memory addresses.
+We choose these features due to their importance in a reverse engineering process – if the reverse engineer can predictably split up the file into instructions of fixed width, it provides a solid starting point for deciphering instruction-boundaries. Knowing the endianness allows the reverse engineer to properly interpret numerical values such as memory addresses.
 
-Additionally, these features have certain technical properties that make them suitable for deep learning models. Firstly, the features themselves have less ambiguous definitions than other \ac{ISA} characteristics such as word size. In addition, the chosen features exhibit consistent byte patterns across the entire binary, allowing for analyzing small segments of binary code at the time.
+Additionally, these features have certain technical properties that make them suitable for deep learning models. First, the features themselves have less ambiguous definitions than other \ac{ISA} characteristics such as word size. Both features have clear classes that are well-suited for classification by models such as \acp{CNN}: endianness of a file is typically either big or little, and instruction width is either fixed or variable. Furthermore, the chosen features exhibit consistent byte patterns across the entire binary, allowing for analysis of small segments of binary code at a time.
 
 ## Evaluation strategies
 
@@ -524,7 +524,9 @@ As an initial experiment, we use K-fold cross-validation (as described in \autor
 
 The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. K-fold cross-validation, as described in \autoref{k-fold-cross-validation-on-isadetect-dataset}, is a more robust variant of the train-test split that repeats this process multiple times with different splits. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
 
-To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISAdetect dataset, using the single held-out group as the validation set. Repeating this process for each group and aggregating the results, we get a strong indication of how the model performs on previously unseen \acp{ISA}.
+To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISAdetect dataset, using the single held-out group as the validation set.
+
+Since \ac{LOGO CV} trains a distinct model for each fold (one for each held-out \ac{ISA}), we initialize each model with the same random seed across all 23 folds. This ensures identical starting weights, allowing us to attribute performance differences across folds to the difficulty in classifying each held-out ISA rather than to variations in initial conditions. We can then average performance metrics across folds to obtain a measure of how well that particular model configuration generalizes to unseen \acp{ISA}.
 
 ### Testing on other datasets
 
@@ -547,15 +549,10 @@ Table: Evaluation strategies using multiple datasets \label{table:evaluation-str
 
 ### Cross-seed validation
 
-To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different random seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different random seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
+To account for the stochastic nature of deep neural network training, we validate each architecture by training multiple times with different seeds. The seed impacts factors such as weight initialization and data shuffling. By training using different seeds and averaging the performance metrics, we achieve a more reliable assessment of model performance by mitigating fortunate or unfortunate random initializations. Furthermore, we quantify the stability of our model architecture by examining the standard deviation across different initializations.
 
-For the cross-validation evaluation strategies, we repeat the experiments 10 times with different random seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times.
+For the cross-validation evaluation strategies, we repeat the experiments 10 times with different seeds. For the experiments where we test on CpuRec and BuildCross, we repeat the experiments 20 times. To ensure reproducibility, the seeds used along with the model architectures and training parameters are documented in the source code repository [@thesisgithub].
 
-#### Confidence intervals
+### Performance metrics and confidence intervals
 
-TODO
-
-### Baseline
-
-- Andreassen
-  - Clemens endianness heuristic
+To quantify the uncertainty in our model performance metrics, we calculate confidence intervals. The confidence interval is a range of values that is likely to contain the true value of a parameter with a certain level of confidence, and the general statistical procedure is described in \autoref{confidence-intervals-for-binary-classification}. In our case, we use a 95% confidence interval around the average accuracy of our models across multiple runs. We also calculate average accuracy and its standard deviation per \ac{ISA} and confusion matrices to identify systematic misclassifications across the different target features.
