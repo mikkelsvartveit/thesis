@@ -175,30 +175,23 @@ A weight decay of 0.01 provides moderate regularization strength, and provides a
 
 ## Developing a custom dataset
 
-This thesis introduces BuildCross, a comprehensive toolset and diversified binary dataset that addresses gaps in architecture representation for machine learning models in binary analysis. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap in diversity and volume between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream \acp{ISA}. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec on the other hand contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance aiming to generate a larger volume of binary code for the underrepresented less common architectures.
+This thesis introduces BuildCross, a comprehensive toolset and diversified binary dataset that addresses gaps in architecture representation for use by machine learning models in binary analysis. BuildCross compiles and extracts code sections from archive files of widely-used open source libraries (referenced in \autoref{table:buildcross-dataset-libraries}). The code sections in the binary files are extracted for use by our models, in addition to being disassembled for dataset labeling and quality control. We developed BuildCross with the goal of bridging the gap in \ac{ISA} diversity and volume between ISAdetect and CpuRec datasets. While ISAdetect contains a large volume of binary programs, it consists mostly of architectures from more mainstream \acp{ISA}. We believe this dataset alone lacks sufficient diversity to develop truly architecture-agnostic models. CpuRec, on the other hand, contains binaries from a great variety of architectures, but the lack of significant volume and uncertainties with labeling of the dataset makes it unsuited to train larger ML models on. BuildCross strikes a balance, aiming to generate a larger volume of binary code for the underrepresented less common architectures.
 
-We have found that large consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for exotic architectures using cross-compilation with \ac{GCC} and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable cross-compiler toolchains for different \acp{ISA}, (2) gathering compilable source code, configuring the toolchains and compiling binaries, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
+We have found that large, consistent sources of already compiled binaries for embedded and bare metal systems are hard to come by, which are experiences also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compiled binary programs for exotic architectures using cross-compilation with \ac{GCC} and GNU Binutils. We developed a pipeline consisting of three steps: (1) creating containerized workable cross-compiler toolchains for different \acp{ISA}, (2) gathering compilable source code, configuring the toolchains and compiling binaries, and (3) extracting features and relevant data from the compiled libraries. With future expansion in mind, it is able to accommodate additional target toolchains and binary sources.
 
 ### Pipeline for developing toolchains
 
-<!-- TODO:
-- Not all toolchains are publicly available
-- Exists systems for building toolchains, our choice landed on BuildCross.
-- containerized for portability, size optim and reproducibility -->
+In order to generate binary programs for specific \acp{ISA}, we need a cross-compiler that can run on our host system and target that architecture. While common targets like x86, ARM and MIPS systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to configure properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on \ac{GCC} and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
 
-In order to generate binary programs for specific \ac{ISA}, we need a cross-compiler that can run on our host system and target that architecture. While common targets like x86, ARM and MIPS systems have readily available toolchains for multiple host platforms, the more exotic architectures not covered by the ISAdetect dataset are in our experience either not publicly available or cumbersome to configure properly. The best option in our case is to create/compile these toolchains ourselves, and we decided on the \ac{GCC} and GNU Binutils due to the GNU project's long history of supporting a large variety of architectures.
+A full cross-compiler toolchain has a lot of moving parts, and since many architectures are not supported on newer versions of \ac{GCC}, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR, etc. would require a lot of trial and error. To get us started, we employed the buildcross project by Mikael Pettersson on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures [@Mikpe2024]. The buildcross project was used as a base for our own toolchain building scripts and expanded to support additional architectures.
 
-A full cross-compiler toolchain have a lot of moving parts, and since a lot of architectures are not supported on newer versions of \ac{GCC}, configuring compatible versions of Binutils, LIBC implementations, GMP, MPC, MPFR etc. would require a lot of trial and error. To get us started we employed the buildcross project by Mikael Pettersson on GitHub, as it contained a setup for building cross-compilers with documented version compatibility for deprecated architectures [@Mikpe2024]. The buildcross project was used as a base for our own toolchain building scripts, and expanded to support additional architectures.
-
-The cross-compiler suite uses singularity images to create containerized, reproducible and portable cross-compilation environments for the supported architectures. The \ac{GCC} suite's source code with its extensions is ~15GB, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in a separate images of roughly 500MB in size.
+The cross-compiler suite uses Apptainer images to create containerized, reproducible, and portable cross-compilation environments for the supported architectures. Apptainer is an open-source alternative to Docker and is designed for high-performance computing environments [@singularity; @singularity_github]. The \ac{GCC} suite's source code with its extensions is around 15GB in size, and in order to reduce image space and build time, we created a builder image with the necessary dependencies and libraries for building the toolchains. This builder script is used to build the toolchain for each architecture, and the resulting toolchains are stored in separate images of roughly 500MB in size.
 
 ### Configuring toolchains and gathering library sources
 
-When using the compiled toolchains, we have to overcome the challenge of configuring each library for compilation to the target architecture. Instead of manually configuring each library for each architecture, we used the build system CMake and toolchain configuration files to automate the process. CMake is a widely used build system that simplifies the process of configuring and generating build files for different platforms and compilers. It allows us to specify the target architecture, compiler, linker, and other build options in a platform-independent way, only requiring one toolchain file per architecture. While most architectures could use a common template toolchain file, CMake made it straightforward to implement the specific configurations needed for architectures with unique requirements.
+To streamline the compilation process across multiple target architectures, we used CMake toolchain configuration files rather than manually configuring each library. The manual approach of configuring each library individually for every target architecture was both time-consuming and prone to inconsistencies. CMake, a widely used build system, simplifies this process by allowing us to configure and generate build files for different platforms and compilers in a platform-independent way [@cmake]. With CMake, we could specify the target architecture, compiler, linker, and other build options using just one toolchain file per architecture. While most architectures could share a common template toolchain file, CMake also made it straightforward to implement specific configurations for architectures with unique requirements.
 
-The libraries we selected for our dataset are widely used and have a large codebase, which provides a good representation of real-world code. By compiling these libraries, we can ensure that the generated binaries are representative of actual software applications. This is important for training and evaluating our models, as it allows us to assess their performance on realistic data. Additionally, using well-known libraries helps us avoid potential issues with licensing and distribution, as these libraries are commonly used in open-source projects. By compiling these libraries for the target architectures, we can create a diverse dataset that covers a wide range of instruction sets and architectural features. With the only requirement that the libraries support CMake, the BuildCross suite supports adding more libraries to the dataset in the future.
-
-Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries}
+The libraries we selected for our dataset are widely used and have large codebases, which provides a good representation of real-world code. They were chosen to ensure that the generated binaries are representative of actual software applications. This is important for training and evaluating our models, as it allows us to assess their performance on realistic data. Additionally, using well-known open source libraries helps us avoid potential issues with licensing, distribution, and reproducibility. By compiling these libraries for the target architectures, we can create a diverse dataset that covers a wide range of instruction sets and architectural features. With the only requirement being that the libraries support CMake, the BuildCross suite can also accommodate additional libraries in the future.
 
 <!-- prettier-ignore -->
 | Library   | Version  | Description             |
@@ -213,19 +206,21 @@ Table: Source libraries used to compile and generate the BuildCross dataset. \la
 | xzutils [@xzutilssource]       | 5.7.1     | A set of compression utilities based on the LZMA algorithm. The XZ format provides high compression ratios and is commonly used for software distribution and archiving [@xzutils].                                           |
 | zlib [@zlibsource]          | 1.3     | A software library used for data compression. It provides lossless data-compression functions and is widely used in many software applications for compressing data, including PNG image processing [@zlib].               |
 
-The toolchain configuration setup is not perfect though, as some of the libraries has dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many architectures. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled for most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
+Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries}
+
+The toolchain configuration setup is not perfect though, as some of the libraries have dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for this many \acp{ISA}. The most common issues we encountered were the lack of libc intrinsic header file definitions for some of the targets. CMake could in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compiled most architectures with the linker flag -Wl,--unresolved-symbols=ignore-all, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produce valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries could be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
 
 ### Gathering results
 
-The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in \ac{ELF} format, providing functions and utilities other programs can link to.
+The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building, and installing features, we generated install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object-files) in \ac{ELF} format, providing functions and utilities other programs can link to.
 
 Using the GNU Binutils toolkit from our compiled toolchains, we employed the archiver (ar) to extract individual object files, objcopy to isolate code sections from these objects, and objdump to generate disassembly. This process yielded our core dataset of compiled code sections across all target architectures.
 
-For dataset labeling, we extracted the endianness and wordsize metadata directly from each architecture's \ac{ELF} headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexidesimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
+For dataset labeling, we extracted the endianness and word size metadata directly from each architecture's \ac{ELF} headers. However, determining instruction width proved more challenging due to inconsistent documentation online across exotic architectures. We established a methodology by analyzing instruction patterns in the disassembly, using the hexadecimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
 
 ### Final dataset yields and structure
 
-The final dataset spans 40 architectures with approximately 120 MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64 and blackfin containing up to Z files (TODO: fix number), while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in the previous section.
+The final dataset spans 40 architectures with approximately 120 MB of binary code, and information on the included architectures can be found in \autoref{table:buildcross-dataset-labels}. The distribution across architectures varies, with more supported architectures like arc, loongarch64, and blackfin containing more files, while more exotic architectures like xstormy16 and rl78 contain fewer samples due to compilation challenges mentioned in \autoref{configuring-toolchains-and-gathering-library-sources}.
 
 The source code for the cross-compiler suite is available under the masterproject/crosscompiler directory on the thesis GitHub page [@thesisgithub]. The dataset itself is published as a GitHub Release and distributed as a tar.gz file with the following structure:
 
@@ -246,7 +241,7 @@ The source code for the cross-compiler suite is available under the masterprojec
 .3 arc/.
 .3 bfin/.
 .3 (\ldots).
-.2 labels.csv (Dataset labels for endianness, wordsize and instruction width).
+.2 labels.csv (Dataset labels for endianness, word size and instruction width).
 .2 report.csv (Code section file-sizes for each library in csv format).
 .2 report.txt (Code section file-sizes for each library in text format).
 }
@@ -254,56 +249,54 @@ The source code for the cross-compiler suite is available under the masterprojec
 \end{figure}
 ```
 
-The labels.csv file contains architecture metadata including endianness, wordsize and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries. The data from the labels.csv file is presented in \autoref{table:buildcross-dataset-labels}.
+The labels.csv file contains architecture metadata including endianness, word size and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with report.csv offering machine-readable format and report.txt providing human-readable summaries. The data from the labels.csv file is presented in \autoref{table:buildcross-dataset-labels}.
 
-<!-- TODO: should this table be here or appendix? -->
+Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented feature values for endianness, wor dsize, instructionswidth_type and instructionswidth. Also includes code section sizes extracted for each architecture \label{table:buildcross-dataset-labels}
 
-Table: Labels for the \acp{ISA} in the BuildCross dataset, with documented feature values for endianness, wordsize, instructionswidth_type and instructionswidth. Also includes code section sizes extracted for each architecture \label{table:buildcross-dataset-labels}
-
-| architecture | endianness | wordsize | instructionwidth_type | instructionwidth | total size (kb) |
-| ------------ | ---------- | -------- | --------------------- | ---------------- | --------------- |
-| arc          | little     | 32       | variable              | 16/32            | 3299            |
-| arceb        | big        | 32       | variable              | 16/32            | 1729            |
-| bfin         | little     | 32       | variable              | 16/32            | 2942            |
-| c6x          | big        | 32       | fixed                 | 32               | 5271            |
-| cr16         | little     | 32       | variable              | 16/32            | 1583            |
-| cris         | little     | 32       | variable              | 16/32            | 4070            |
-| csky         | little     | 32       | variable              | 16/32            | 4244            |
-| epiphany     | little     | 32       | variable              | 16/32            | 334             |
-| fr30         | big        | 32       | variable              | 16/32            | 2215            |
-| frv          | big        | 32       | fixed                 | 32               | 5033            |
-| ft32         | little     | 32       | fixed                 | 32               | 445             |
-| h8300        | big        | 32       | variable              | 16/32            | 4396            |
-| iq2000       | big        | 32       | fixed                 | 32               | 2459            |
-| kvx          | little     | 64       | variable              | 16/32            | 5012            |
-| lm32         | big        | 32       | fixed                 | 32               | 3392            |
-| loongarch64  | little     | 64       | fixed                 | 64               | 4814            |
-| m32r         | big        | 32       | fixed                 | 32               | 1997            |
-| m68k-elf     | big        | 32       | variable              | 16/32/48         | 1866            |
-| mcore        | little     | 32       | fixed                 | 16               | 1268            |
-| mcoreeb      | big        | 32       | fixed                 | 16               | 1268            |
-| microblaze   | big        | 32       | fixed                 | 64               | 5862            |
-| microblazeel | little     | 32       | fixed                 | 64               | 5834            |
-| mmix         | big        | 64       | fixed                 | 32               | 4305            |
-| mn10300      | little     | 32       | variable              | na               | 1251            |
-| moxie        | big        | 32       | variable              | 16/32            | 2236            |
-| moxieel      | little     | 32       | variable              | 16/32            | 2229            |
-| msp430       | little     | 32       | variable              | 16/32            | 223             |
-| nds32        | little     | 32       | variable              | 16/32            | 2507            |
-| nds32be      | big        | 32       | variable              | 16/32            | 1431            |
-| nios2        | little     | 32       | fixed                 | 64               | 4299            |
-| or1k         | big        | 32       | fixed                 | 64               | 5541            |
-| pru          | little     | 32       | fixed                 | 32               | 2435            |
-| rl78         | little     | 32       | variable              | na               | 338             |
-| rx           | little     | 32       | variable              | na               | 1486            |
-| rxeb         | big        | 32       | variable              | na               | 1300            |
-| tilegx       | little     | 64       | fixed                 | 64               | 11964           |
-| tilegxbe     | big        | 64       | fixed                 | 64               | 11970           |
-| tricore      | little     | 32       | variable              | 16/32            | 1644            |
-| v850         | little     | 32       | variable              | 16/32            | 3171            |
-| visium       | big        | 32       | fixed                 | 32               | 3481            |
-| xstormy16    | little     | 32       | variable              | 16/32            | 219             |
-| xtensa       | big        | 32       | variable              | na               | 2671            |
+| architecture | endianness | word size | instruction width type | instruction width | total size (kb) |
+| ------------ | ---------- | --------- | ---------------------- | ----------------- | --------------- |
+| arc          | little     | 32        | variable               | 16/32             | 3299            |
+| arceb        | big        | 32        | variable               | 16/32             | 1729            |
+| bfin         | little     | 32        | variable               | 16/32             | 2942            |
+| c6x          | big        | 32        | fixed                  | 32                | 5271            |
+| cr16         | little     | 32        | variable               | 16/32             | 1583            |
+| cris         | little     | 32        | variable               | 16/32             | 4070            |
+| csky         | little     | 32        | variable               | 16/32             | 4244            |
+| epiphany     | little     | 32        | variable               | 16/32             | 334             |
+| fr30         | big        | 32        | variable               | 16/32             | 2215            |
+| frv          | big        | 32        | fixed                  | 32                | 5033            |
+| ft32         | little     | 32        | fixed                  | 32                | 445             |
+| h8300        | big        | 32        | variable               | 16/32             | 4396            |
+| iq2000       | big        | 32        | fixed                  | 32                | 2459            |
+| kvx          | little     | 64        | variable               | 16/32             | 5012            |
+| lm32         | big        | 32        | fixed                  | 32                | 3392            |
+| loongarch64  | little     | 64        | fixed                  | 64                | 4814            |
+| m32r         | big        | 32        | fixed                  | 32                | 1997            |
+| m68k-elf     | big        | 32        | variable               | 16/32/48          | 1866            |
+| mcore        | little     | 32        | fixed                  | 16                | 1268            |
+| mcoreeb      | big        | 32        | fixed                  | 16                | 1268            |
+| microblaze   | big        | 32        | fixed                  | 64                | 5862            |
+| microblazeel | little     | 32        | fixed                  | 64                | 5834            |
+| mmix         | big        | 64        | fixed                  | 32                | 4305            |
+| mn10300      | little     | 32        | variable               | na                | 1251            |
+| moxie        | big        | 32        | variable               | 16/32             | 2236            |
+| moxieel      | little     | 32        | variable               | 16/32             | 2229            |
+| msp430       | little     | 32        | variable               | 16/32             | 223             |
+| nds32        | little     | 32        | variable               | 16/32             | 2507            |
+| nds32be      | big        | 32        | variable               | 16/32             | 1431            |
+| nios2        | little     | 32        | fixed                  | 64                | 4299            |
+| or1k         | big        | 32        | fixed                  | 64                | 5541            |
+| pru          | little     | 32        | fixed                  | 32                | 2435            |
+| rl78         | little     | 32        | variable               | na                | 338             |
+| rx           | little     | 32        | variable               | na                | 1486            |
+| rxeb         | big        | 32        | variable               | na                | 1300            |
+| tilegx       | little     | 64        | fixed                  | 64                | 11964           |
+| tilegxbe     | big        | 64        | fixed                  | 64                | 11970           |
+| tricore      | little     | 32        | variable               | 16/32             | 1644            |
+| v850         | little     | 32        | variable               | 16/32             | 3171            |
+| visium       | big        | 32        | fixed                  | 32                | 3481            |
+| xstormy16    | little     | 32        | variable               | 16/32             | 219             |
+| xtensa       | big        | 32        | variable               | na                | 2671            |
 
 ## Experiments
 
