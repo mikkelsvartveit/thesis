@@ -8,21 +8,21 @@ This chapter presents the results of the experiments described in \autoref{metho
 
 This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the endianness of binary files.
 
-### K-fold cross-validation on ISADetect
+### K-fold cross-validation on ISAdetect
 
 In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Endianness classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
+![Endianness classification performance by model when using K-fold cross-validation on the ISAdetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
 
 \FloatBarrier
 
-### Leave-one-group-out cross-validation on ISADetect
+### Leave-one-group-out cross-validation on ISAdetect
 
 In this experiment, we train and evaluate our models using \ac{LOGO CV} as detailed in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}. \autoref{table:logo-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Endianness classification performance when using \ac{LOGO CV} on the ISADetect dataset. \label{table:logo-endianness-results}
+Table: Endianness classification performance when using \ac{LOGO CV} on the ISAdetect dataset. \label{table:logo-endianness-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -53,9 +53,9 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAD
 
 \normalsize
 
-![Endianness classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
+![Endianness classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
+![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when using \ac{LOGO CV} on the ISAdetect dataset, aggregated across all models \label{fig:cm-logo-endianness}](./images/results/confusion-logo-endianness-allmodels.svg){ width=300px }
 
@@ -67,13 +67,13 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAD
 
 \FloatBarrier
 
-### Training on ISADetect, testing on CpuRec
+### Training on ISAdetect, testing on CpuRec
 
-For this experiment, each model is trained on the ISADetect dataset, and then performance tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
+For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
 
 \small
 
-Table: Endianness classification performance when training on the ISADetect dataset and testing on the CpuRec dataset. \label{table:cpurec-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset. \label{table:cpurec-endianness-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -137,9 +137,9 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
+![Endianness classification performance by ISA when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when training on the ISAdetect dataset and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-isadetect-cpurec-endianness}](./images/results/confusion-cpurecall-endianness-all-models.svg){ width=300px }
 
@@ -151,13 +151,13 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \FloatBarrier
 
-### Training on ISADetect, testing on BuildCross
+### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISADetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
+For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Endianness classification performance when training on the ISADetect dataset and testing on the BuildCross dataset. \label{table:buildcross-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset. \label{table:buildcross-endianness-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -205,11 +205,11 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
+![Endianness classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
 
-![Confusion matrix of endianness classification when training on the ISADetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-endianness}](./images/results/confusion-buildcrossall-endianness-all-models.svg){ width=300px }
+![Confusion matrix of endianness classification when training on the ISAdetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-endianness}](./images/results/confusion-buildcrossall-endianness-all-models.svg){ width=300px }
 
 \autoref{fig:buildcross-endianness-by-model} aggregates the results across \acp{ISA}. Here, contrary to the other testing setups, we observe that the embedding models are performing worse than their non-embedding counterparts.
 
@@ -219,13 +219,13 @@ Table: Endianness classification performance when training on the ISADetect data
 
 \FloatBarrier
 
-### Training on ISADetect and BuildCross, testing on CpuRec
+### Training on ISAdetect and BuildCross, testing on CpuRec
 
 \autoref{table:combined-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Endianness classification performance when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset. \label{table:combined-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. \label{table:combined-endianness-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -289,9 +289,9 @@ Table: Endianness classification performance when training on the ISADetect and 
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
+![Endianness classification performance by ISA when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-combined-cpurec-endianness}](./images/results/confusion-combinedall-endianness-all-models.svg){ width=300px }
 
@@ -307,21 +307,21 @@ Table: Endianness classification performance when training on the ISADetect and 
 
 This section evaluates and compares the performance of the proposed \ac{CNN} models (described in \autoref{model-architectures}) in detecting the instruction width type of binary files.
 
-### K-fold cross-validation on ISADetect
+### K-fold cross-validation on ISAdetect
 
 In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Instruction width type classification performance by model when using K-fold cross-validation on the ISADetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when using K-fold cross-validation on the ISAdetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
 
 \FloatBarrier
 
-### Training and testing on ISADetect
+### Training and testing on ISAdetect
 
 In this experiment, we train and evaluate our models using \ac{LOGO CV} as detailed in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}. \autoref{table:logo-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISADetect dataset. \label{table:logo-instructionwidthtype-results}
+Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISAdetect dataset. \label{table:logo-instructionwidthtype-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -352,11 +352,11 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 \normalsize
 
-![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISADetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
 
-![Confusion matrix of instruction width type classification when using \ac{LOGO CV} on the ISADetect dataset, aggregated across all models \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg){ width=300px }
+![Confusion matrix of instruction width type classification when using \ac{LOGO CV} on the ISAdetect dataset, aggregated across all models \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg){ width=300px }
 
 \autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. Similar to the performance seen with endianness classification, the performance of the embedding models perform better than the non-embedding counterparts, with the _Simple1d-E_ model performing the best with a mean accuracy of 88.0%.
 
@@ -366,13 +366,13 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 \FloatBarrier
 
-### Training on ISADetect, testing on CpuRec
+### Training on ISAdetect, testing on CpuRec
 
 \autoref{table:cpurec-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Instruction width type classification performance when training on the ISADetect dataset and testing on the CpuRec dataset. \label{table:cpurec-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset. \label{table:cpurec-instructionwidthtype-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -453,9 +453,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect dataset and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-isadetect-cpurec-instructionwidthtype}](./images/results/confusion-cpurecall-instructionwidthtype-all-models.svg){ width=300px }
 
@@ -467,13 +467,13 @@ Table: Instruction width type classification performance when training on the IS
 
 \FloatBarrier
 
-### Training on ISADetect, testing on BuildCross
+### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISADetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
+For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Instruction width type classification performance when training on the ISADetect dataset and testing on the BuildCross dataset. \label{table:buildcross-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset. \label{table:buildcross-instructionwidthtype-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -521,9 +521,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-instructionwidthtype}](./images/results/confusion-buildcrossall-instructionwidthtype-all-models.svg){ width=300px }
 
@@ -535,13 +535,13 @@ Table: Instruction width type classification performance when training on the IS
 
 \FloatBarrier
 
-### Training on ISADetect and BuildCross, testing on CpuRec
+### Training on ISAdetect and BuildCross, testing on CpuRec
 
 \autoref{table:combined-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Instruction width type classification performance when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset. \label{table:combined-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. \label{table:combined-instructionwidthtype-results}
 
 | Architecture |        Simple1d |      Simple1d-E |        Simple2d |      Simple2d-E |        ResNet50 |      ResNet50-E |
 | ------------ | --------------: | --------------: | --------------: | --------------: | --------------: | --------------: |
@@ -622,9 +622,9 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISADetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-combined-cpurec-instructionwidthtype}](./images/results/confusion-combinedall-instructionwidthtype-all-models.svg){ width=300px }
 
