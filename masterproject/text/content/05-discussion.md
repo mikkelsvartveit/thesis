@@ -392,21 +392,17 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 
 ## Limitations
 
+<!--
+TODO:
+- Limitations
+  - Where medium sized models?
+-->
+
 The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.<!-- TODO: expand with what types of classification fits with cnns, and why -->
 
 Our models are exclusively trained and tested on the code sections of the binary file. The rationale behind this is that the non-code sections, partiularly the headers, of a binary file often reveals information about the \ac{ISA}, and we would risk that the model overfits on this. During the initial exploration phase, we did notice that training on the full binary file resulted in higher model performance across the board, supporting our hypothesis that training on full binary files leads to models learning to identify other \ac{ISA}-specific patterns in the non-code sections of the file, rather than fitting to inherent \ac{ISA} features, which is undesirable. However, since we only train on code sections, the reverse engineer would need to identify the code section of an unknown binary before using our models to detect \ac{ISA} features. This can be a difficult task for undocumented file formats and instruction sets, and might limit the practical usability of our models.
 
-The lack of interpretability of neural networks is also a limitation of our work. This is a common issue with deep learning models in general. While other machine learning techniques such as linear regression, nearest neighbor, and decision trees are easy to inspect and interpret, neural networks operate in a way that makes the model weights hard to reason about after training. Because of this, we are not able to make strong claims about why the models predict the way they do in our performance analyses. That said, we still provide insights that we consider likely based on observed model behavior.
-
-<!--
-TODO:
-- Limitations
-  - Limited to ELF-supported architectures
-  - Many archetectures require specific versions of GCC
-  - Dependency on external toolchain (mikpe's GitHub)
-  - --unresolved-symbols=ignore-all _skip
-  - -O0 vs -O3 optimization _skip
-   -->
+The lack of interpretability of neural networks is also a limitation of our work. This is a common issue with deep learning models in general. While other machine learning techniques such as linear regression, nearest neighbor, and decision trees are easy to inspect and interpret, neural networks operate in a way that makes the model weights hard to reason about after training. Because of this, we are not able to make strong claims about why the models predict the way they do in our performance analysis. That said, we still provide insights that we consider likely based on observed model behavior.
 
 For the BuildCross dataset specifically, we have identified several limitations that affect our contributions. The two existing datasets (ISAdetect and CpuRec) face their own challenges related to labeling accuracy, architectural diversity, and training data volume, which we have already previously discussed in \autoref{dataset-quality-assessment}. While our BuildCross dataset addresses some of these limitations, it introduces new constraints of its own. In terms of architectural diversity, we encountered several roadblocks that prevented us from reaching the same level of diversity as CpuRec within the scope of the thesis. The primary challenge was that many older architectures had incomplete GCC toolchains missing C standard library functions, making cross-compiler builds difficult. Additionally, our pipeline relied on ELF header-based tools for feature extraction and code section identification. This meant we could not support targets like PDP-11 and 68HC08 that use different file formats without significant additional development time. We also discovered that cross-compilers for many supported targets required specific legacy versions of GCC. However, pursuing these legacy toolchains presented an unfavorable cost-benefit point of view. Each legacy GCC version required approximately 15GB of storage space and cumbersome manual configuration with long trial-and-error cycles, yet would yield only 1-3 additional architectures. These older architectures often lacked support for the libraries we needed to cross-compile, creating a high risk that the setup effort would not be worth it. Ultimately, we prioritized focusing on architectures supported by the base configuration of the script that could reliably generate the training data needed for our research objectives.
 
