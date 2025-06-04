@@ -4,7 +4,7 @@
 
 <!-- TODO: mention RQs more often -->
 
-This chapter discusses and interprets our results and findings from \autoref{results}. \autoref{overview-of-key-findings} begins by summarizing the main discoveries and their implications. \autoref{model-architecture-performance-analysis} then examines the performance characteristics of the different model architectures, focusing on aspects such as the impact of embedding layers, model complexity, \acs{CNN} dimensionality, and observed performance variance. Then, \autoref{model-generalizability} assesses the ability of our models to generalize to unseen \acsp{ISA}. A comparative analysis with prior research is presented in \autoref{comparison-with-prior-literature-andreassen-and-morrison}. Following this, \autoref{dataset-quality-assessment} critically evaluates the datasets employed, discussing their respective strengths and limitations. We also explore the broader sustainability implications in \autoref{sustainability-implications}, and conclude by acknowledging the limitations of our work in \autoref{limitations}.
+This chapter discusses and interprets our results and findings from \autoref{results}. \autoref{overview-of-key-findings} begins by summarizing the main discoveries and their implications. \autoref{model-architecture-performance-analysis} then examines the performance characteristics of the different model architectures, focusing on aspects such as the impact of embedding layers, model complexity, \acs{CNN} dimensionality, and observed performance variance. Then, \autoref{model-generalizability} assesses the ability of our models to generalize to unseen \acsp{ISA}. A comparative analysis with prior research is presented in \autoref{comparison-with-prior-literature-andreassen-and-morrison}. Following this, \autoref{dataset-quality-assessment} critically evaluates the datasets employed, discussing their respective strengths and limitations. We also explore the broader sustainability implications in \autoref{sustainability-implications-and-ethical-considerations}, and conclude by acknowledging the limitations of our work in \autoref{limitations}.
 
 ## Overview of key findings
 
@@ -396,7 +396,7 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 TODO:
 - Limitations
   - Where medium sized models?
--->
+  -->
 
 The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.<!-- TODO: expand with what types of classification fits with cnns, and why -->
 
