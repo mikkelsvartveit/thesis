@@ -51,7 +51,6 @@ header-includes:
   - \usepackage[section]{placeins}
   - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
   - \usepackage[norwegian,english]{babel}
-  - \renewcommand{\maketitle}{} # Disable cover page
   - \usepackage{listings}
 ---
 
@@ -89,12 +88,14 @@ Våre resultater viser at selv om CNNer kan oppdage sentrale ISA-egenskaper fra 
 \def\subsubsectionautorefname{Section}
 \def\paragraphautorefname{Section}
 
-<!-- Table of contents -->
+<!-- Table of contents, list of figures, list of tables -->
 
 ```{=latex}
 {
   \hypersetup{hidelinks}
   \tableofcontents
+  \listoffigures
+  \listoftables
 }
 ```
 
