@@ -140,31 +140,6 @@ We note that while generalizability for the endianness classification task seems
 
 ## Comparison with prior literature: Andreassen and Morrison
 
-<!--
-TODO (Stian)
-- Prior litterature introduction: andreassen
-  - Same supervisor as us, we got referenced this thesis from him (morrison)
-  - Comment on which test suites are the same, what he did diferently (labling, included architectures)
-  - Endiannes:
-    - LOGO CV ISAdetectCode only:
-      - 92.0% bigram, 91.7% EndiannessSignature. Rand forest
-    - Isadetect code CpuRec:
-      - 86.3% LogisticRegression and RandomForest bigram. 82,4% SVC EndiannessSignature
-  - Fixed vs Variable width
-    - LogoCv CpuRec:
-      - 88.4% RandomForest with autocorrelation
-      - Not comparable since we did not have enough training data to consider this an experimental suite for inclusion
-  - inherent differences in approach
-    - He did feature engineering, we tried to do it with CNNs and automatically extract features
-    - CNNs and deep learning require more data, and we are not able to train on the same amount of data as he did for some of his suites
-    - We have different labling of datasets, and we are not able to compare the results directly
-  - Critique of Andreassen
-    - Reproducton of his results fell outside the scope of this thesis
-    - Doesn’t exclude previously seen architectures when testing on CPURec
-    - Lacking a lot of labels and mislabeling certain things
-    - Does not appear to do multiple runs with different seeds, might be a problem with random initialization, while likely less of a problem for simpler ml models? TODO check this
-    -->
-
 In our search for related work documented in \autoref{related-work}, the thesis "Discovery of ISA features from binary programs from unknown instruction set architectures" by Andreassen & Morrison [@Andreassen_Morrison_2024] stands out as the only other identified research that specifically addresses the problem of detecting individual \ac{ISA} features from unknown binary code. This work was supervised by Donn Morrison, who is also the supervisor of the current thesis and who recommended we review this research. For clarity in the following discussion, we will refer to this paper as "Andreassen's work," acknowledging Morrison's supervisory role in that project. The thesis uses similar evaluation strategies and datasets, but with different feature extraction methods. Andreassen uses explicit feature engineering with classical machine learning classifiers for targeting the different \ac{ISA} features, as opposed to deep learning techniques to automatically extract features from the binary code. In addition to him also targeting endianness and instruction width type detection, he includes the third target feature of detecting instruction width size of fixed-width architectures.
 
 The thesis uses some of the same experimental suites as we do on endianness detection, with the same datasets and evaluation strategies. \ac{LOGO CV} was a key part of all his suites, in addition to training on ISAdetect and testing on CpuRec, \ac{LOGO CV} with CpuRec and training on CpuRec testing on ISAdetect. We will compare the results of our models with the results of Andreassen's models where applicable. However, there are some key differences in the labeling of datasets and the architectures used for training and testing, which makes a completely accurate and direct comparison difficult. In the next subsections, we present our interpretation of a direct performance comparison on endianness and instruction width type classification, before discussing the potentially impactful differences in our approaches and addressing comparison issues.
@@ -177,9 +152,9 @@ There are two experimental suites targeting endianness set up in [@Andreassen_Mo
 
 #### Complexity
 
-Andreassen uses two different feature engineering techniques, bigrams and EndiannessSignatures, and both methods have different advantages in complexity and training data requirements compared to our \ac{CNN} approach. The bigram feature consists of counting up all combinations of two byte-pairs in each program, resulting in a histogram of $256 \cdot 256 = 65,536$ input features. The EndiannessSignature was originally developed by [@Clemens2015] and is a feature vector of the counts of only 4 bigrams, 0xfffe, 0xfeff, 0x0001, and 0x0100. Increment and decrement by one are common operations in computer programs, and these bigrams can capture this difference across the two endianness types<!-- TODO write about in related work, maybe not needed here -->. The bigram feature was limited to 150 binaries per architecture for training due to memory constraints, but is still able to perform well with a much smaller training dataset than what deep learning approaches would require. The 65,536 long feature vector does result in a significant count of learnable parameters depending on the classifier, and scikit-learn's MLPClassifier with the default hidden layer size of 100, assuming that is what Andreassen used, would have 6.56 million weights [@MLPClassifierScikitLearn]. This falls in between our simple CNN models of 150k-217k parameters and ResNet50 of ~25M for reference. The EndiannessSignature feature on the other hand is very simple with an input feature vector of only 4 elements and is able to achieve similar- and often outperform the bigram feature. Andreassen's approaches are able overall to achieve similar performance on paper compared to us with less training data and complexity, especially when looking at the EndiannessSignature feature [@Andreassen_Morrison_2024].
+Andreassen uses two different feature engineering techniques, bigrams and EndiannessSignatures, and both methods have different advantages in complexity and training data requirements compared to our \ac{CNN} approach. The bigram feature consists of counting up all combinations of two byte-pairs in each program, resulting in a histogram of $256 \cdot 256 = 65,536$ input features. The EndiannessSignature feature consists of the counts of only 4 bigrams, 0xfffe, 0xfeff, 0x0001, and 0x0100, and the idea was originally developed by Clemens (see \autoref{feature-engineering-and-feature-extraction}) [@Clemens2015].
 
-<!-- TODO: Compare bigram and embedding? -->
+The bigram feature was limited to 150 binaries per architecture for training due to memory constraints, but is still able to perform well with a much smaller training dataset than what deep learning approaches would require. The 65,536 long feature vector does result in a significant count of learnable parameters depending on the classifier, and scikit-learn's MLPClassifier with the default hidden layer size of 100, assuming that is what Andreassen used, would have 6.56 million weights [@MLPClassifierScikitLearn]. This falls in between our simple CNN models of 150k-217k parameters and ResNet50 of ~25M for reference. The EndiannessSignature feature on the other hand is very simple with an input feature vector of only 4 elements and is able to achieve similar- and often outperform the bigram feature. Andreassen's approaches are able overall to achieve similar performance on paper compared to us with less training data and complexity, especially when looking at the EndiannessSignature feature [@Andreassen_Morrison_2024].
 
 #### Generalizability
 
@@ -218,10 +193,6 @@ In terms of model generalizability across unseen architectures, we find Andreass
 ### Summary
 
 Comparing our deep learning approach with Andreassen's feature engineering methods reveals important insights about both methodologies. Classical machine learning classifiers with engineered features for detecting endianness and instruction width type demonstrate several advantages: they appear to require less training data, offer better interpretability, and can achieve competitive or superior performance. However, differences in testing suites, differences in dataset labeling and architecture inclusion, and limited documentation of hyperparameters and cross-run variation make direct comparisons challenging. Our work contributes additional rigor through multiple runs and statistical analysis, while also exploring more on generalizability through our methodology and newly created dataset. We have shown that the CNN approach may offer advantages compared to Andreassen, like when working with limited binary sections or when expanding to \ac{ISA} features seeking to avoid the extensive domain knowledge required for effective feature engineering. We believe both approaches have their merits, and that future work could benefit from leveraging both the interpretability and efficiency of engineered features and the automatic feature extraction capabilities of deep learning models.
-
-<!--
-### Instruction Set Architecture Detection (not a priority)
- -->
 
 ## Dataset quality assessment
 
@@ -372,13 +343,6 @@ epiphany-unknown-elf-readelf -S zlib_complete_binary | grep -e Name -e .text
 ```
 
 Despite initial concerns about dataset quality, our experiments provided validation of BuildCross's effectiveness. When incorporating BuildCross with ISAdetect into the training set for CpuRec classification, we observed significant performance improvements: an increase of 8.3 \ac{p.p.} in average accuracy for endianness detection and a remarkable 26.9 \ac{p.p.} improvement for instruction width type classification across our best-performing models. These substantial improvements, particularly in instruction width type detection, provide good evidence supporting both the code quality and accuracy of the dataset's labeling. These results suggest that the dataset successfully captures the architectural features necessary for effective classification.
-
-<!-- TODO Probably wont do
-### Inherent labeling challenges
-  - different types of endianness
-  - Diffrent interpretations of instruction width: fixed mixed, fully variable
-  - se notion - discussion https://www.notion.so/misva/Discussion-1aba9989fe0280c39862cdb89d3e4d31?pvs=4
- -->
 
 ## Sustainability implications and ethical considerations
 
