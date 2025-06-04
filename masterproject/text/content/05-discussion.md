@@ -380,9 +380,9 @@ Despite initial concerns about dataset quality, our experiments provided validat
   - se notion - discussion https://www.notion.so/misva/Discussion-1aba9989fe0280c39862cdb89d3e4d31?pvs=4
  -->
 
-## Sustainability implications
+## Sustainability implications and ethical considerations
 
-While this thesis focuses on a specialized technical problem in computer science, our contributions may have potential implications for sustainability. We examine some of these implications and relate them to the \ac{SGD} [@UN2015].
+While this thesis focuses on a specialized technical problem in computer science, our contributions may also have broader implications for sustainability and raise certain ethical concerns. We examine some of these implications and relate them to the \ac{SGD} [@UN2015].
 
 Our work contributes to the field of reverse engineering. Reverse engineering is a crucial part of malware analysis and digital forensics. \ac{SGD} 16 targets peace, justice, and strong institutions. Enhanced capabilities in reverse engineering helps to combat cybersecurity threats, which impacts this goal in a positive way. However, reverse engineering techniques also have potential for misuse by malicious actors. If reverse engineers with malicious intent discover vulnerabilities in the software, they may use this information to perform illegal activities. While we believe better reverse engineering tools provide a net benefit for software security and thus supports \ac{SGD} 16, there are still considerations to make regarding aiding malicious actors.
 
