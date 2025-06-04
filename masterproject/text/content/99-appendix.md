@@ -18,7 +18,7 @@ Median Size per ISA: 2.51 MB -->
 
 The BuildCross dataset contains a total of **119.88 MB** of data, with an average size of **3.00 MB** per ISA and a median size of **2.51 MB** per ISA. The dataset is divided into 40 different ISAs, each with a varying number of files and samples. All files smaller than 1024 bytes are ignored.
 
-Table: The list of labels used in the BuildCross dataset. The labels are based on the elf headers of the generated code and the disassembly of the binaries \label{table:buildcross-labels-full}
+Table: The list of labels used in the BuildCross dataset. The labels are based on the ELF headers of the generated code and the disassembly of the binaries \label{table:buildcross-labels-full}
 
 | ISA          | Endianness | Instruction Width Type | Total Size (MB) | Number of Files | No. 1024 byte sized samples |
 | :----------- | ---------: | ---------------------: | --------------: | --------------: | --------------------------: |
@@ -206,7 +206,7 @@ Table: ISAdetect labeling differences between our research and what was presente
 | sparc64    |            big | big                   |                      fixed | fixed                             |
 | x32        |         little | little                |               **variable** | **unk**                           |
 
-Table: CpuRec labeling differences between our research and what was presented in Andreassen's paper. Differences highlighted in bold. 78k was not in the corpus at the time of us downloading the dataset. \label{table:cpurec-labels-comparison}
+Table: CpuRec labeling differences between our research and what was presented in Andreassen's paper. Differences highlighted in bold. 78k was not in the corpus at the time of downloading the dataset. \label{table:cpurec-labels-comparison}
 
 | ISA         | Our Endianness | Andreassen Endianness | Our instruction width type | Andreassen instruction width type |
 | :---------- | -------------: | :-------------------- | -------------------------: | :-------------------------------- |
@@ -290,21 +290,21 @@ Table: CpuRec labeling differences between our research and what was presented i
 
 ## Pairwise model comparison
 
-Each model in each testing suite is compared to each other using a paried t-test, testing for whether there are statistically significant differences in model performance. The results are shown in the tables below.
+Each model in each evaluation strategy is compared to each other using a paried t-test, testing for whether there are statistically significant differences in model performance. The results are shown in the tables below.
 
 ### Endianness
 
 \label{model-comparison-endianness}
 
-![Significance of compared model performance on the kfold endianness suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.](images/appendix/model-comparison/model-comparison-kfold-all-endianness.svg)
+![Significance of compared model performance on the kfold endianness evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.](images/appendix/model-comparison/model-comparison-kfold-all-endianness.svg)
 
-![Significance of compared model performance on the \ac{LOGO CV} endianness suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found. \label{fig:paired-t-test-logo-endianness}](images/appendix/model-comparison/model-comparison-logo-endianness.svg)
+![Significance of compared model performance on the \ac{LOGO CV} endianness evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found. \label{fig:paired-t-test-logo-endianness}](images/appendix/model-comparison/model-comparison-logo-endianness.svg)
 
-![Significance of compared model performance on the ISAdetect-BuildCross suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found. \label{fig:paired-t-test-isadetect-buildcross-endianness}](images/appendix/model-comparison/model-comparison-buildcross-endianness.svg)
+![Significance of compared model performance on the ISAdetect-BuildCross evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found. \label{fig:paired-t-test-isadetect-buildcross-endianness}](images/appendix/model-comparison/model-comparison-buildcross-endianness.svg)
 
-![Significance of compared model performance on the ISAdetect-CpuRec suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found. \label{fig:paired-t-test-isadetect-cpurec-endianness}](images/appendix/model-comparison/model-comparison-cpurec-endianness.svg)
+![Significance of compared model performance on the ISAdetect-CpuRec evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found. \label{fig:paired-t-test-isadetect-cpurec-endianness}](images/appendix/model-comparison/model-comparison-cpurec-endianness.svg)
 
-![Significance of compared model performance on the Combined-CpuRec suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found. \label{fig:paired-t-test-combined-cpurec-endianness}](images/appendix/model-comparison/model-comparison-combined-endianness.svg)
+![Significance of compared model performance on the Combined-CpuRec evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found. \label{fig:paired-t-test-combined-cpurec-endianness}](images/appendix/model-comparison/model-comparison-combined-endianness.svg)
 
 \FloatBarrier
 
@@ -312,12 +312,12 @@ Each model in each testing suite is compared to each other using a paried t-test
 
 \label{model-comparison-instructionwidthtype}
 
-![Significance of compared model performance on the kfold instruction width type suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.](images/appendix/model-comparison/model-comparison-kfold-all-instructionwidthtype.svg)
+![Significance of compared model performance on the K-fold cross validation instruction width type evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.](images/appendix/model-comparison/model-comparison-kfold-all-instructionwidthtype.svg)
 
-![Significance of compared model performance on the \ac{LOGO CV} instruction width type suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.\label{fig:paired-t-test-logo-instructionwidthtype}](images/appendix/model-comparison/model-comparison-logo-instructionwidthtype.svg)
+![Significance of compared model performance on the \ac{LOGO CV} instruction width type evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.\label{fig:paired-t-test-logo-instructionwidthtype}](images/appendix/model-comparison/model-comparison-logo-instructionwidthtype.svg)
 
-![Significance of compared model performance on the ISAdetect-BuildCross instruction width type suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.\label{fig:paired-t-test-isadetect-buildcross-instructionwidthtype}](images/appendix/model-comparison/model-comparison-buildcross-instructionwidthtype.svg)
+![Significance of compared model performance on the ISAdetect-BuildCross instruction width type evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.\label{fig:paired-t-test-isadetect-buildcross-instructionwidthtype}](images/appendix/model-comparison/model-comparison-buildcross-instructionwidthtype.svg)
 
-![Significance of compared model performance on the ISAdetect-CpuRec instruction width type suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.\label{fig:paired-t-test-isadetect-cpurec-instructionwidthtype}](images/appendix/model-comparison/model-comparison-cpurec-instructionwidthtype.svg)
+![Significance of compared model performance on the ISAdetect-CpuRec instruction width type evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.\label{fig:paired-t-test-isadetect-cpurec-instructionwidthtype}](images/appendix/model-comparison/model-comparison-cpurec-instructionwidthtype.svg)
 
-![Significance of compared model performance on the Combined-CpuRec instruction width type suite. The p-value refer to the probability, given that there is no significant difference between the two models, that we see observe the difference that we have found.\label{fig:paired-t-test-combined-cpurec-instructionwidthtype}](images/appendix/model-comparison/model-comparison-combined-instructionwidthtype.svg)
+![Significance of compared model performance on the Combined-CpuRec instruction width type evaluation. The p-value refers to the probability, given that there is no significant difference between the two models, that we observe the difference that we have found.\label{fig:paired-t-test-combined-cpurec-instructionwidthtype}](images/appendix/model-comparison/model-comparison-combined-instructionwidthtype.svg)
