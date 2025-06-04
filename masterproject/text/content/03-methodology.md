@@ -6,7 +6,7 @@ This chapter describes the methodology used in this thesis. We start by describi
 
 ## Experimental setup
 
-### Datasets
+### Datasets {#methodology-datasets}
 
 This thesis utilizes three primary datasets: BuildCross, ISAdetect, and CpuRec. The BuildCross dataset is a novel contribution developed for this thesis, and its development discussed in \autoref{developing-a-custom-dataset}. ISAdetect and CpuRec datasets are sourced from previous work in software reverse engineering. These datasets contain samples of binary programs from a variety of different \acp{ISA}. Architectures vary in their similarity regarding features such as endianness, word size, and instruction width, and our model development focuses on the ability to reliably detect architectural features independent of the specific \ac{ISA}. The choice of datasets is therefore motivated by architectural diversity, with the goal of reducing potential correlations between groups of \acp{ISA} and the features we aim to detect. Additionally, since binary programs are not human-readable, errors and inconsistencies in the data are difficult to uncover. We rely on accurate labeling of the datasets to ensure reliable results. Based on our search for fitting datasets, we have found that the combination of ISAdetect and CpuRec datasets strikes an optimal balance between the number of architectures represented and the volume of training data available, and they complement each other in a way that aligns with our research objectives.
 
