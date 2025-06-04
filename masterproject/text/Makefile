@@ -19,8 +19,8 @@ pdf: ../../output/master-thesis.pdf
 		--pdf-engine=xelatex \
 		--output=$@; \
 	end_time=$$(date +%s.%N); \
-	duration=$$(echo "$$end_time - $$start_time" | bc); \
-	printf "Finished compiling (took %.2f seconds)\n" $$duration
+	duration=$$(awk "BEGIN {printf \"%.2f\", $$end_time - $$start_time}"); \
+	echo "Finished compiling (took $$duration seconds)"
 
 watch:
 	@make -s pdf
