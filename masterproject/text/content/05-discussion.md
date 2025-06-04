@@ -356,13 +356,9 @@ The environmental impact of modern AI tools is commonly criticized. Deep learnin
 
 ## Limitations
 
-<!--
-TODO:
-- Limitations
-  - Where medium sized models?
-  -->
+The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.
 
-The most significant limitation of our work with regards to our research questions is the that we only consider two target features, endianness and instruction width type. The rationale for this is partly due to time and resource constraints, but also because other \ac{ISA} features such as instruction width in bits (for fixed-width \acp{ISA}), \ac{CISC}/\ac{RISC} type, or number of registers, are generally more ambiguous features, and the labeling of these features would likely not be as clear-cut as the features we chose. However, we do acknowledge that this limits our ability to answer RQ1 in a complete manner.<!-- TODO: expand with what types of classification fits with cnns, and why -->
+Furthermore, RQ2 is concerned with how the model architecture impacts the results. While we experimented with small, custom \ac{CNN} architectures and large, pre-defined architectures like ResNet, we did not explore medium-sized \ac{CNN} models in the range of 1-5 million parameters. Such an exploration might have revealed more insights in performance characteristics and overfitting behavior, potentially identifying model architectures better suited to the task and available data.
 
 Our models are exclusively trained and tested on the code sections of the binary file. The rationale behind this is that the non-code sections, partiularly the headers, of a binary file often reveals information about the \ac{ISA}, and we would risk that the model overfits on this. During the initial exploration phase, we did notice that training on the full binary file resulted in higher model performance across the board, supporting our hypothesis that training on full binary files leads to models learning to identify other \ac{ISA}-specific patterns in the non-code sections of the file, rather than fitting to inherent \ac{ISA} features, which is undesirable. However, since we only train on code sections, the reverse engineer would need to identify the code section of an unknown binary before using our models to detect \ac{ISA} features. This can be a difficult task for undocumented file formats and instruction sets, and might limit the practical usability of our models.
 
