@@ -11,13 +11,16 @@ PANDOC_FLAGS = \
 pdf: ../../output/master-thesis.pdf
 
 ../../output/master-thesis.pdf: content/*.md 
-	@echo "\nCompiling PDF... - $(shell date +"%H:%M:%S")"
-	mkdir -p ../../output
+	@start_time=$$(date +%s.%N); \
+	echo "\nCompiling PDF... - $$(date +"%H:%M:%S")"; \
+	mkdir -p ../../output; \
 	pandoc content/*.md \
 		$(PANDOC_FLAGS) \
 		--pdf-engine=xelatex \
-		--output=$@
-	@echo "Finished compiling PDF."
+		--output=$@; \
+	end_time=$$(date +%s.%N); \
+	duration=$$(echo "$$end_time - $$start_time" | bc); \
+	printf "Finished compiling (took %.2f seconds)\n" $$duration
 
 watch:
 	@make -s pdf
