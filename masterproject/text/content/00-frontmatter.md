@@ -4,7 +4,7 @@ subtitle: |
   \vspace{0.2cm}
   TDT4900 – Master's Thesis\
   \vspace{0.1cm}
-  Fall 2024\
+  Spring 2025\
   \vspace{1cm}
   ![NTNU Logo](./images/ntnu.png){ width=12% }\
   \vspace{0.3cm}
