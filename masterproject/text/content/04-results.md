@@ -18,11 +18,11 @@ In this experiment, we train and evaluate our models using 5-fold cross-validati
 
 ### Leave-one-group-out cross-validation on ISAdetect
 
-In this experiment, we train and evaluate our models using \ac{LOGO CV} as detailed in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}. \autoref{table:logo-endianness-results} shows classification performance for every model/\ac{ISA} combination.
+In this experiment, we train and evaluate our models using \ac{LOGO CV} as detailed in \autoref{leave-one-group-out-cross-validation-on-isadetect-dataset}. \autoref{table:logo-endianness-results} shows classification performance for every model/\acs{ISA} combination.
 
 \small
 
-Table: Endianness classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-endianness-results}
+Table: Endianness classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:logo-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -62,7 +62,7 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAd
 
 \autoref{fig:logo-endianness-by-model} aggregates the results across \acp{ISA}, allowing for comparison of the overall performance of each model. We see that the _Simple1d-E_ model performs the best, with a mean overall accuracy of 90.3%.
 
-\autoref{fig:logo-endianness-by-isa} aggregates results across the different models, painting a picture of which \acp{ISA} are easier to classify. We observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds. Lastly, the _m68k_ binaries are systematically misclassified by every model architecture.
+\autoref{fig:logo-endianness-by-isa} aggregates results across the different models, painting a picture of which \acp{ISA} are easier to classify. We observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds. Lastly, the `m68k` binaries are systematically misclassified by every model architecture.
 
 \autoref{fig:cm-logo-endianness} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. We see that the models are slightly biased towards predicting big-endian.
 
@@ -74,7 +74,7 @@ For this experiment, each model is trained on the ISAdetect dataset and then per
 
 \small
 
-Table: Endianness classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:cpurec-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:cpurec-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -159,7 +159,7 @@ For this experiment, each model is trained on the ISAdetect dataset and then per
 
 \small
 
-Table: Endianness classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:buildcross-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -228,7 +228,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 \small
 
-Table: Endianness classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:combined-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:combined-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -325,7 +325,7 @@ In this experiment, we train and evaluate our models using \ac{LOGO CV} as detai
 
 \small
 
-Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-instructionwidthtype-results}
+Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:logo-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -377,7 +377,7 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 \small
 
-Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:cpurec-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:cpurec-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -479,7 +479,7 @@ For this experiment, each model is trained on the ISAdetect dataset and then per
 
 \small
 
-Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:buildcross-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -548,7 +548,7 @@ Table: Instruction width type classification performance when training on the IS
 
 \small
 
-Table: Instruction width type classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:combined-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, across 20 runs for each model. Each row shows the number of correctly classified files over the total number of classification attempts. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with a 95% confidence interval range around the mean. \label{table:combined-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |

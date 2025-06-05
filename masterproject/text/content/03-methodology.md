@@ -50,88 +50,88 @@ The CpuRec dataset is a collection of code-only sections extracted from binaries
 
 Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec-labels}
 
-| architecture | endianness | wordsize | instruction width |
-| ------------ | ---------- | -------- | ----------------- |
-| X86          | little     | 32       | variable          |
-| X86-64       | little     | 64       | variable          |
-| ARM64        | little     | 64       | 32                |
-| Alpha        | little     | 64       | 32                |
-| ARMel        | little     | 32       | 32                |
-| ARMhf        | little     | 32       | 32                |
-| MIPSeb       | big        | 32       | 32                |
-| MIPSel       | little     | 32       | 32                |
-| PPCeb        | big        | 32       | 32                |
-| PPCel        | little     | 64       | 32                |
-| HP-PA        | big        | 32       | 32                |
-| IA-64        | little     | 64       | variable          |
-| M68k         | big        | 32       | variable          |
-| RISC-V       | little     | 64       | 32                |
-| S-390        | big        | 64       | variable          |
-| SuperH       | little     | 32       | 16                |
-| SPARC        | big        | unknown  | 32                |
-| ARC32el      | little     | 32       | variable          |
-| AxisCris     | little     | 32       | 16                |
-| Epiphany     | little     | 32       | variable          |
-| M88k         | big        | 32       | 32                |
-| MMIX         | big        | 64       | 32                |
-| PDP-11       | middle     | 16       | variable          |
-| Stormy16     | bi         | 32       | variable          |
-| V850         | little     | 32       | variable          |
-| Xtensa       | bi         | 32       | variable          |
-| 6502         | little     | 8        | variable          |
-| ARcompact    | little     | 32       | variable          |
-| Blackfin     | little     | 32       | variable          |
-| FR30         | big        | 32       | 16                |
-| i860         | bi         | 32       | 32                |
-| MCore        | big        | 32       | 16                |
-| MN10300      | little     | 32       | unknown           |
-| PIC10        | n/a        | 8        | 12                |
-| RL78         | little     | unknown  | unknown           |
-| VAX          | little     | 32       | variable          |
-| XtensaEB     | big        | 32       | variable          |
-| 68HC08       | big        | 8        | variable          |
-| Cell-SPU     | bi         | 64       | unknown           |
-| FR-V         | unknown    | 32       | 32                |
-| Mico32       | big        | 32       | 32                |
-| Moxie        | bi         | 32       | variable          |
-| PIC16        | n/a        | 8        | 14                |
-| ROMP         | big        | 32       | variable          |
-| TILEPro      | unknown    | 32       | variable          |
-| Visium       | unknown    | unknown  | unknown           |
-| Z80          | little     | 8        | variable          |
-| 68HC11       | big        | 8        | variable          |
-| ARMeb        | big        | 32       | 32                |
-| CLIPPER      | little     | 32       | variable          |
-| FT32         | unknown    | 32       | unknown           |
-| IQ2000       | big        | 32       | unknown           |
-| MicroBlaze   | big        | 32       | 32                |
-| MSP430       | little     | 16       | variable          |
-| PIC18        | n/a        | 8        | 16                |
-| RX           | little     | 32       | variable          |
-| TLCS-90      | n/a        | 8        | variable          |
-| 8051         | n/a        | 8        | variable          |
-| CompactRISC  | little     | 16       | variable          |
-| H8-300       | n/a        | 8        | variable          |
-| M32C         | little     | 32       | variable          |
-| MIPS16       | bi         | 16       | 16                |
-| NDS32        | little     | 32       | variable          |
-| PIC24        | little     | 16       | 24                |
-| TMS320C2x    | unknown    | 16/32    | variable          |
-| WE32000      | n/a        | 32       | unknown           |
-| Cray         | n/a        | 64       | variable          |
-| H8S          | unknown    | 16       | variable          |
-| M32R         | bi         | 32       | variable          |
-| NIOS-II      | little     | 32       | 32                |
-| TMS320C6x    | bi         | 32       | 32                |
-| ARC32eb      | little     | 32       | variable          |
-| AVR          | n/a        | 8        | variable          |
-| HP-Focus     | n/a        | 32       | variable          |
-| STM8         | n/a        | 8        | variable          |
-| TriMedia     | unknown    | 32       | unknown           |
+| \ac{ISA}    | Endianness | Word size | Instruction width |
+| ----------- | ---------- | --------- | ----------------- |
+| X86         | little     | 32        | variable          |
+| X86-64      | little     | 64        | variable          |
+| ARM64       | little     | 64        | 32                |
+| Alpha       | little     | 64        | 32                |
+| ARMel       | little     | 32        | 32                |
+| ARMhf       | little     | 32        | 32                |
+| MIPSeb      | big        | 32        | 32                |
+| MIPSel      | little     | 32        | 32                |
+| PPCeb       | big        | 32        | 32                |
+| PPCel       | little     | 64        | 32                |
+| HP-PA       | big        | 32        | 32                |
+| IA-64       | little     | 64        | variable          |
+| M68k        | big        | 32        | variable          |
+| RISC-V      | little     | 64        | 32                |
+| S-390       | big        | 64        | variable          |
+| SuperH      | little     | 32        | 16                |
+| SPARC       | big        | unknown   | 32                |
+| ARC32el     | little     | 32        | variable          |
+| AxisCris    | little     | 32        | 16                |
+| Epiphany    | little     | 32        | variable          |
+| M88k        | big        | 32        | 32                |
+| MMIX        | big        | 64        | 32                |
+| PDP-11      | middle     | 16        | variable          |
+| Stormy16    | bi         | 32        | variable          |
+| V850        | little     | 32        | variable          |
+| Xtensa      | bi         | 32        | variable          |
+| 6502        | little     | 8         | variable          |
+| ARcompact   | little     | 32        | variable          |
+| Blackfin    | little     | 32        | variable          |
+| FR30        | big        | 32        | 16                |
+| i860        | bi         | 32        | 32                |
+| MCore       | big        | 32        | 16                |
+| MN10300     | little     | 32        | unknown           |
+| PIC10       | n/a        | 8         | 12                |
+| RL78        | little     | unknown   | unknown           |
+| VAX         | little     | 32        | variable          |
+| XtensaEB    | big        | 32        | variable          |
+| 68HC08      | big        | 8         | variable          |
+| Cell-SPU    | bi         | 64        | unknown           |
+| FR-V        | unknown    | 32        | 32                |
+| Mico32      | big        | 32        | 32                |
+| Moxie       | bi         | 32        | variable          |
+| PIC16       | n/a        | 8         | 14                |
+| ROMP        | big        | 32        | variable          |
+| TILEPro     | unknown    | 32        | variable          |
+| Visium      | unknown    | unknown   | unknown           |
+| Z80         | little     | 8         | variable          |
+| 68HC11      | big        | 8         | variable          |
+| ARMeb       | big        | 32        | 32                |
+| CLIPPER     | little     | 32        | variable          |
+| FT32        | unknown    | 32        | unknown           |
+| IQ2000      | big        | 32        | unknown           |
+| MicroBlaze  | big        | 32        | 32                |
+| MSP430      | little     | 16        | variable          |
+| PIC18       | n/a        | 8         | 16                |
+| RX          | little     | 32        | variable          |
+| TLCS-90     | n/a        | 8         | variable          |
+| 8051        | n/a        | 8         | variable          |
+| CompactRISC | little     | 16        | variable          |
+| H8-300      | n/a        | 8         | variable          |
+| M32C        | little     | 32        | variable          |
+| MIPS16      | bi         | 16        | 16                |
+| NDS32       | little     | 32        | variable          |
+| PIC24       | little     | 16        | 24                |
+| TMS320C2x   | unknown    | 16/32     | variable          |
+| WE32000     | n/a        | 32        | unknown           |
+| Cray        | n/a        | 64        | variable          |
+| H8S         | unknown    | 16        | variable          |
+| M32R        | bi         | 32        | variable          |
+| NIOS-II     | little     | 32        | 32                |
+| TMS320C6x   | bi         | 32        | 32                |
+| ARC32eb     | little     | 32        | variable          |
+| AVR         | n/a        | 8         | variable          |
+| HP-Focus    | n/a        | 32        | variable          |
+| STM8        | n/a        | 8         | variable          |
+| TriMedia    | unknown    | 32        | unknown           |
 
-The cpu_rec tool suite is available on GitHub, and the binaries used in this thesis are available in the cpu_rec_corpus directory within the cpu_rec repository [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like x86, x86_64, m68k, PowerPC, and SPARC are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures such as M88k, HP-Focus, Cray, VAX, and PDP-11. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset only labels the name of the \ac{ISA}, without additional architectural features. To address this gap, we referenced Appendix A in the thesis by Andreassen and Morrison, who used this dataset in their work and provided labels for architectural features including endianness, word size, and instruction width specifications for each architecture in the dataset [@Andreassen_Morrison_2024].
+The cpu_rec tool suite is available on GitHub, and the binaries used in this thesis are available in the cpu_rec_corpus directory within the cpu_rec repository [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like `x86`, `x86_64`, `m68k`, `PowerPC`, and `SPARC` are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures such as `M88k`, `HP-Focus`, `Cray`, `VAX`, and `PDP-11`. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset only labels the name of the \ac{ISA}, without additional architectural features. To address this gap, we referenced Appendix A in the thesis by Andreassen and Morrison, who used this dataset in their work and provided labels for architectural features including endianness, word size, and instruction width specifications for each architecture in the dataset [@Andreassen_Morrison_2024].
 
-However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. While we relied on the labeling work by Andreassen and Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the CSV file used in our source code (/masterproject/code/dataset/cpu_rec-features.csv) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen and Morrison, and a comparison between them can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
+However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. While we relied on the labeling work by Andreassen and Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the CSV file used in our source code (`/masterproject/code/dataset/cpu_rec-features.csv`) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen and Morrison, and a comparison between them can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
 
 ### Technical configuration
 
@@ -179,9 +179,9 @@ This thesis introduces BuildCross, a comprehensive toolset and diverse program b
 
 We have found that large, consistent sources of precompiled binaries for embedded and bare-metal systems are hard to come by, a notion also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compile binary programs for uncommon architectures using cross-compilation with \ac{GCC} and GNU Binutils. We develop a pipeline consisting of three steps:
 
-1. creating containerized workable cross-compiler toolchains for different \acp{ISA}
-2. gathering compilable source code, configuring the toolchains, and compiling binaries
-3. extracting features and relevant data from the compiled libraries.
+1. Creating containerized workable cross-compiler toolchains for different \acp{ISA}.
+2. Gathering compilable source code, configuring the toolchains, and compiling binaries.
+3. Extracting features and relevant data from the compiled libraries.
 
 Given ISAdetect's comprehensive architectural coverage, we focus on \acp{ISA} not included in their dataset. Our pipeline is extendable and can incorporate additional target toolchains and binary sources as needed.
 
@@ -231,8 +231,7 @@ The final dataset spans 40 architectures with approximately 120 MB of binary cod
 The source code for the cross-compiler suite is available under the masterproject/crosscompiler directory on the thesis GitHub page [@thesisgithub]. The dataset itself is published as a GitHub Release and distributed as a tar.gz file with the following structure:
 
 ```{=latex}
-\begin{figure}[h]
-\begin{minipage}{\textwidth}
+\vspace{0.5em}
 \dirtree{%
 .1 \textbf{buildcross\_dataset.tar.gz.}.
 .2 library\_files/ (Full compiled libraries).
@@ -251,8 +250,7 @@ The source code for the cross-compiler suite is available under the masterprojec
 .2 report.csv (Code section file sizes for each library in csv format).
 .2 report.txt (Code section file sizes for each library in text format).
 }
-\end{minipage}
-\end{figure}
+\vspace{0.5em}
 ```
 
 The `labels.csv` file contains architecture metadata including endianness, word size and instruction width for each binary. The report files provide detailed statistics on code section sizes across libraries, with `report.csv` offering machine readable format and `report.txt` providing human-readable summaries. The data from the `labels.csv` file is presented in \autoref{table:buildcross-dataset-labels}.
@@ -346,7 +344,7 @@ The model architectures described below are specifically designed to investigate
 
 #### Simple 1D CNN
 
-The smallest model we developed is a small one-dimensional \ac{CNN}. The first layer is a convolution layer of size 1, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution block and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters and is hereby referred to as _Simple1d_.
+The smallest model we developed is a small one-dimensional \ac{CNN}. The first layer is a 1x1 convolution layer, bringing the filter space dimensionality from 1 to 128 while keeping the spatial dimensions. The rationale for this layer is to align the feature space with the embedding model introduced in \autoref{simple-1d-cnn-with-embedding-layer}. Then, the model consists of three convolutional blocks, each with two convolutional layers and a max pooling layer. After the convolutional blocks comes a global average pooling layer, and a fully-connected block with a single hidden layer for classification. Dropout with a rate of 0.3 is applied after each convolution block and between the two fully-connected layers. The full model specification is shown in \autoref{table:simple-1d-cnn}. The model has a total of 152,282 trainable parameters and is hereby referred to as _Simple1d_.
 
 Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
@@ -383,7 +381,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 #### Simple 1D CNN with embedding layer
 
-Our one-dimensional word-embedding model builds on the _Simple1d_ \ac{CNN} in \autoref{simple-1d-cnn}, and is constructed by placing an embedding layer at the beginning of the model instead of the size 1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters and is hereby referred to as _Simple1d-E_.
+Our one-dimensional word-embedding model builds on the _Simple1d_ \ac{CNN} in \autoref{simple-1d-cnn}, and is constructed by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters and is hereby referred to as _Simple1d-E_.
 
 Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
@@ -523,9 +521,7 @@ As an initial experiment, we use K-fold cross-validation (as described in \autor
 
 ### Leave-one-group-out cross-validation on ISAdetect dataset
 
-The most common way to validate machine learning models is by leaving out a random subset of the data, training the model on the remaining data, and then measuring performance by making predictions on the left-out subset. K-fold cross-validation, as described in \autoref{k-fold-cross-validation-on-isadetect-dataset}, is a more robust variant of the train-test split that repeats this process multiple times with different splits. However, our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}.
-
-To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISAdetect dataset, using the single held-out group as the validation set.
+Our goal is to develop a \ac{CNN} model that is able to discover features from binary executables of unseen \acp{ISA}. To validate whether our model generalizes to \acp{ISA} not present in the training data, we use \acf{LOGO CV}, using the \acp{ISA} as the groups (see \autoref{leave-one-group-out-cross-validation} for a description of \ac{LOGO CV}). In other words, we train models for validation using binaries from 22 out of our 23 \acp{ISA} from the ISAdetect dataset, using the single held-out group as the validation set.
 
 Since \ac{LOGO CV} trains a distinct model for each fold (one for each held-out \ac{ISA}), we initialize each model with the same random seed across all 23 folds. This ensures identical starting weights, allowing us to attribute performance differences across folds to the difficulty in classifying each held-out ISA rather than to variations in initial conditions. We can then average performance metrics across folds to obtain a measure of how well that particular model configuration generalizes to unseen \acp{ISA}.
 
@@ -533,19 +529,19 @@ Since \ac{LOGO CV} trains a distinct model for each fold (one for each held-out 
 
 To conduct further performance evaluation on \acp{ISA} not present in ISAdetect, we use the CpuRec dataset (described in \autoref{cpurec}) as well as BuildCross, the dataset we developed ourselves (described in \autoref{developing-a-custom-dataset}). These evaluation strategies follow a train-test format, where we train the models on designated data from a training dataset, and run inference and test model performance on a testing dataset. Evaluating on additional datasets ensures comprehensive validation of model performance on a more diverse set of \acp{ISA}. Our choice of evaluation strategies is based on these factors:
 
-- The quality of the datasets, in terms of labeling and size
-- Focus on inference on \acp{ISA} not present in the testing set
-- Limit the number of target features, model variations, and evaluation strategies to ensure proper evaluation of the models within the time and resource constraints of this thesis
+- Focus on testing \acp{ISA} not present in the training set
+- Alignment with the size and quality of the available datasets
+- Limiting the number of target features, model variations, and evaluation strategies to ensure proper evaluation of the models within the time and resource constraints of this thesis
 
 \autoref{table:evaluation-strategies} shows the three evaluation strategies in which we use the additional datasets. For ease of reference, these evaluation strategies are hereby named _ISAdetect-CpuRec_, _ISAdetect-BuildCross_, and _Combined-CpuRec_.
 
 Table: Evaluation strategies using multiple datasets \label{table:evaluation-strategies}.
 
-| Reference            | Training dataset       | Evaluation dataset |
-| -------------------- | ---------------------- | ------------------ |
-| ISAdetect-CpuRec     | ISAdetect              | CpuRec             |
-| ISAdetect-BuildCross | ISAdetect              | BuildCross         |
-| Combined-CpuRec      | ISAdetect + BuildCross | CpuRec             |
+| Reference            | Training dataset       | Testing dataset |
+| -------------------- | ---------------------- | --------------- |
+| ISAdetect-CpuRec     | ISAdetect              | CpuRec          |
+| ISAdetect-BuildCross | ISAdetect              | BuildCross      |
+| Combined-CpuRec      | ISAdetect + BuildCross | CpuRec          |
 
 ### Cross-seed validation
 
