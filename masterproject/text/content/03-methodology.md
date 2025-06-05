@@ -8,7 +8,7 @@ This chapter describes the methodology used in this thesis. We start by describi
 
 ### Datasets {#methodology-datasets}
 
-This thesis utilizes three primary datasets: BuildCross, ISAdetect, and CpuRec. The BuildCross dataset is a novel contribution of this thesis, and its development is discussed in \autoref{developing-a-custom-dataset}. ISAdetect and CpuRec datasets are sourced from previous work in software reverse engineering. These datasets contain samples of binary programs from a variety of different \acp{ISA}. Architectures vary in their similarity regarding features such as endianness, word size, and instruction width, and our model development focuses on the ability to reliably detect architectural features independent of the specific \ac{ISA}. The choice of datasets is therefore motivated by architectural diversity, with the goal of reducing potential correlations between groups of \acp{ISA} and the features we aim to detect. Additionally, since binary programs are not human-readable, errors and inconsistencies in the data are difficult to uncover. We depend on accurate labeling of the datasets to ensure reliable results. Based on our search for appropriate datasets, we have found that the combination of the ISAdetect and CpuRec datasets strikes an optimal balance between the number of architectures represented and the volume of training data available, and they complement each other in a way that aligns with our research objectives.
+This thesis utilizes three primary datasets: BuildCross, ISAdetect, and CpuRec. The BuildCross dataset is a novel contribution of this thesis, and its development is discussed in \autoref{developing-a-custom-dataset}. ISAdetect and CpuRec datasets are sourced from previous work in software reverse engineering. These datasets contain samples of binary programs from a variety of different \acp{ISA}. Architectures vary in their similarity regarding features such as endianness, word size, and instruction width, and our model development focuses on the ability to reliably detect architectural features independent of the specific \ac{ISA}. The choice of datasets is therefore motivated by architectural diversity, with the goal of reducing potential correlations between groups of \acp{ISA} and the features we aim to detect. Additionally, since binary programs are not human-readable, errors and inconsistencies in the data are difficult to uncover. We depend on accurate labeling of the datasets to ensure reliable results. Based on our search for appropriate datasets, we have found that the combination of the ISAdetect and CpuRec datasets strikes a balance between the number of architectures represented and the volume of training data available, and they complement each other in a way that aligns with our research objectives.
 
 #### ISAdetect
 
@@ -129,9 +129,9 @@ Table: \acp{ISA} present in CpuRec dataset \label{table:cpurec-labels}
 | STM8        | n/a        | 8         | variable          |
 | TriMedia    | unknown    | 32        | unknown           |
 
-The cpu_rec tool suite is available on GitHub, and the binaries used in this thesis are available in the cpu_rec_corpus directory within the cpu_rec repository [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like `x86`, `x86_64`, `m68k`, `PowerPC`, and `SPARC` are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures such as `M88k`, `HP-Focus`, `Cray`, `VAX`, and `PDP-11`. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset only labels the name of the \ac{ISA}, without additional architectural features. To address this gap, we referenced Appendix A in the thesis by Andreassen and Morrison, who used this dataset in their work and provided labels for architectural features including endianness, word size, and instruction width specifications for each architecture in the dataset [@Andreassen_Morrison_2024].
+The cpu_rec tool suite is available on GitHub, and the binaries used in this thesis are available in the cpu_rec_corpus directory within the cpu_rec repository [@Granboulan_cpu_rec_dataset2024]. The dataset was curated from multiple sources. A significant portion of the binaries were sourced from Debian distributions, where more common architectures like `x86`, `x86_64`, `m68k`, `PowerPC`, and `SPARC` are available. For less common architectures, binaries were collected from the Columbia University Kermit archive, which provided samples for architectures such as `M88k`, `HP-Focus`, `Cray`, `VAX`, and `PDP-11`. The remaining samples were obtained through compilation of open-source projects using \ac{GCC} cross-compilers [@Granboulan_paper2020]. Unlike ISAdetect, the CpuRec dataset only labels the name of the \ac{ISA}, without additional architectural features.
 
-However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. While we relied on the labeling work by Andreassen and Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the CSV file used in our source code (`/masterproject/code/dataset/cpu_rec-features.csv`) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen and Morrison, and a comparison between them can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
+However, the documentation of the CpuRec dataset is not as comprehensive as ISAdetect, and the authors of the CpuRec dataset have not provided detailed information about how the binaries were sourced. To address this gap, we referenced Appendix A in the thesis by Andreassen and Morrison, who used this dataset in their work and provided labels for architectural features including endianness, word size, and instruction width specifications for each architecture in the dataset [@Andreassen_Morrison_2024]. While we relied on the labeling work by Andreassen and Morrison, we also reviewed technical documentation and manuals available online for all the architectures in question to verify our labeling. Sources used and conclusions drawn in this process are documented in the CSV file used in our source code (`/masterproject/code/dataset/cpu_rec-features.csv`) [@thesisgithub]. We provide a more detailed discussion on dataset quality in \autoref{dataset-quality-cpurec}. Our labels differ from those of Andreassen and Morrison, and a comparison between them can be found in \autoref{table:cpurec-labels-comparison} in the appendix.
 
 ### Technical configuration
 
@@ -151,7 +151,7 @@ We use the PyTorch framework for building and training our models. The following
 
 ### Hyperparameters
 
-Unless specified otherwise, we use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.
+Unless specified otherwise, we use the training hyperparameters specified in \autoref{table:hyperparameters} for our experiments.<!-- TODO: Why we hyperparam optim for each model does not make sense  -->
 
 Table: Hyperparameter selection \label{table:hyperparameters}
 
@@ -182,7 +182,7 @@ This thesis introduces BuildCross, a comprehensive toolset and diverse program b
 
 We have found that large, consistent sources of precompiled binaries for embedded and bare-metal systems are hard to come by, a notion also shared by the authors of ISAdetect and CpuRec [@Kairajarvi2020; @Granboulan_paper2020]. To overcome this limitation and produce a well-documented, correctly labeled dataset, we compile binary programs for uncommon architectures using cross-compilation with \ac{GCC} and GNU Binutils. We develop a pipeline consisting of three steps:
 
-1. Creating containerized workable cross-compiler toolchains for different \acp{ISA}.
+1. Creating containerized cross-compiler toolchains for different \acp{ISA}.
 2. Gathering compilable source code, configuring the toolchains, and compiling binaries.
 3. Extracting features and relevant data from the compiled libraries.
 
@@ -217,13 +217,13 @@ The libraries we select for our dataset are widely used and have large codebases
 
 Table: Source libraries used to compile and generate the BuildCross dataset. \label{table:buildcross-dataset-libraries}
 
-The toolchain configuration setup has some flaws, as some of the libraries have dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for the high number of \acp{ISA}. The most common issue we encounter is the lack of libc intrinsic header file definitions for some of the targets. CMake can in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compile most architectures with the linker flags `-Wl` and `--unresolved-symbols=ignore-all`, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produces valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries can be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
+The toolchain configuration setup has some flaws, as some of the libraries have dependencies that are not compatible with the target architecture. This is especially true for libraries that are not actively maintained, and the manual labor of patching libraries for each architecture does not scale well for the high number of \acp{ISA}. The most common issue we encounter is the lack of libc intrinsic header file definitions for some of the targets. CMake can in some cases be used to disable some of the library features with missing dependencies, at the cost of in some cases reducing code size. We also compile most architectures with the linker flag `-Wl,--unresolved-symbols=ignore-all`, creating binaries that most likely would crash at runtime if the missing symbols were used. Ignoring missing symbols and similar shortcuts still produces valid binaries that are useful for our dataset, as the goal is to create a dataset that is representative of the architectures and their features. Despite this, not all libraries can be compiled for all architectures in time for this thesis, which explains the discrepancies in the amount of data between the architectures.
 
 ### Gathering results
 
 The final stage of our pipeline involves extracting and labeling binary data from the compiled libraries. Using CMake's configuring, building, and installing features, we generate install folders containing compiled archive files (.a) for each target architecture. These archive files are collections of compiled binaries (object files) in \ac{ELF} format, providing functions and utilities other programs can link to.
 
-Using the GNU Binutils toolkit from our compiled toolchains, we employ the archiver (ar) to extract individual object files, objcopy to isolate code sections from these objects, and objdump to generate disassembly. This process yields our core dataset of compiled code sections across all target architectures.
+Using the GNU Binutils toolkit from our compiled toolchains, we employ the _archiver_ (ar) to extract individual object files, _objcopy_ to isolate code sections from these objects, and _objdump_ to generate disassembly. This process yields our core dataset of compiled code sections across all target architectures.
 
 For dataset labeling, we extract the endianness and word size metadata directly from each architecture's \ac{ELF} headers. However, determining instruction width proved more challenging due to inconsistent online documentation for uncommon architectures. We establish a method of analyzing instruction patterns in the disassembly, using the hexadecimal mapping between instructions and assembly to infer the size of the instructions. The disassembly output is included in the dataset both for verification of our labeling and as an added utility for the use of BuildCross.
 
@@ -331,7 +331,7 @@ This approach was chosen based on previous literature which successfully detecte
 
 #### Input size and file splitting
 
-Since the size of the files in our datasets varies greatly, we need a way to handle varying file sizes. When training our model, we want each data instance to be of a fixed size. Our goal is to use input sizes as small as possible to create time and energy-efficient models, while still being large enough to capture enough information about the features we aim to detect. In addition, smaller input sizes ensure that most of our files are large enough to fill the entire input vector, increasing the amount of usable data in the dataset.
+Our datasets contain binary files of vastly different sizes, requiring methods to handle this variability. When training our model, we want each data instance to be of a fixed size. Our goal is to use input sizes as small as possible to create time and energy-efficient models, while still being large enough to capture enough information about the features we aim to detect. In addition, smaller input sizes ensure that most of our files are large enough to fill the entire input vector, increasing the amount of usable data in the dataset.
 
 For the one-dimensional models, we pick an input size of 512 bytes. We choose this number based on preliminary testing, which revealed that input sizes larger than 512 bytes did not improve model performance.
 
@@ -343,7 +343,7 @@ For files smaller than the predetermined input size, we choose to exclude them f
 
 In our experiments, we train, evaluate, and compare several model architectures to detect architectural features from binary code. Our approach is inspired by successful applications of \acp{CNN} to binary analysis in previous work, detailed in \autoref{cnn-applications-for-binary-machine-code}. While the scope of this thesis limits the range of model variations we can test, we focus on three factors that have influenced model performance in previous research: input encoding, model size and complexity, and embedding layers.
 
-The model architectures described below are specifically designed to investigate how these factors affect a model's ability to learn target \ac{ISA} features. By systematically varying these aspects across our experiments, we aim to determine how effective they are in determining \ac{ISA} features from binary programs.
+The model architectures described below are specifically designed to investigate how these factors affect a model's ability to learn target \ac{ISA} features in relation to our RQs. By systematically varying these aspects across our experiments, we aim to determine how effective they are in determining \ac{ISA} features from binary programs.
 
 #### Simple 1D CNN
 
@@ -386,7 +386,7 @@ Table: Simple 1D CNN \label{table:simple-1d-cnn}
 
 Our one-dimensional word-embedding model builds on the _Simple1d_ \ac{CNN} in \autoref{simple-1d-cnn}, and is constructed by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple1d_ model. The full model specification is shown in \autoref{table:1d-cnn-with-embedding-layer}. This model has a total of 184,794 trainable parameters and is hereby referred to as _Simple1d-E_.
 
-Table: 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
+Table: Simple 1D CNN with embedding layer \label{table:1d-cnn-with-embedding-layer}
 
 | Layer                | Hyperparameters | Output Shape | Parameters |
 | -------------------- | --------------- | ------------ | ---------- |
@@ -454,7 +454,7 @@ Table: Simple 2D CNN \label{table:simple-2d-cnn}
 
 Our two-dimensional embedding model builds on the simple 2D \ac{CNN} model in \autoref{simple-2d-cnn} by placing an embedding layer at the beginning of the model instead of the 1x1 convolution layer. The embedding layer transforms the byte values into a vector of continuous numbers, allowing the model to learn the characteristics of each byte value and represent it mathematically. After the embedding layer, the model is identical to the _Simple2d_ model. The full model specification is shown in \autoref{table:2d-cnn-with-embedding-layer}. This model has a total of 217,306 trainable parameters and is hereby referred to as _Simple2d-E_.
 
-Table: 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
+Table: Simple 2D CNN with embedding layer \label{table:2d-cnn-with-embedding-layer}
 
 | Layer           | Hyperparameters | Output Shape  | Parameters |
 | --------------- | --------------- | ------------- | ---------- |
