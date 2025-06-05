@@ -2,7 +2,7 @@
 
 # Results
 
-This chapter presents the results of the experiments described in \autoref{methodology}. In \autoref{endianness}, we present the results of applying our proposed model architectures for detecting endianness from a binary file. In \autoref{instruction-width-type}, we present the results of applying the same model architectures for detecting whether a binary file has fixed-length or variable-length instructions (hereby referred to as _instruction width type_).
+This chapter presents the results of the experiments described in \autoref{methodology}. In \autoref{endianness}, we present the results of applying our proposed model architectures for detecting endianness from a binary file. In \autoref{instruction-width-type}, we present the results of applying the same model architectures for detecting whether a binary file has fixed-length or variable-length instructions (hereby referred to as _instruction width type_). <!-- TODO: Should be defined in methodology? -->
 
 ## Endianness
 
@@ -12,7 +12,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-endianness-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Endianness classification performance by model when using K-fold cross-validation on the ISAdetect dataset \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
+![Endianness classification performance by model when using K-fold cross-validation on the ISAdetect dataset. Error bars indicate 95% confidence interval around the mean. \label{fig:kfold-endianness-by-model}](./images/results/kfold-endianness-by-model.svg)
 
 \FloatBarrier
 
@@ -315,7 +315,7 @@ This section evaluates and compares the performance of the proposed \ac{CNN} mod
 
 In this experiment, we train and evaluate our models using 5-fold cross-validation as detailed in \autoref{k-fold-cross-validation-on-isadetect-dataset}. \autoref{fig:kfold-instructionwidthtype-by-model} shows the classification performance for every model. We see that all models achieve an average accuracy of above 99%.
 
-![Instruction width type classification performance by model when using K-fold cross-validation on the ISAdetect dataset \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when using K-fold cross-validation on the ISAdetect dataset. Error bars indicate 95% confidence interval around the mean. \label{fig:kfold-instructionwidthtype-by-model}](./images/results/kfold-instructionwidthtype-by-model.svg)
 
 \FloatBarrier
 
