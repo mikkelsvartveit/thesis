@@ -74,7 +74,7 @@ def model_swarmplot(
         )
 
     plt.legend(loc="lower left")
-    plt.savefig(file_name, dpi=200, bbox_inches="tight")
+    plt.savefig(file_name, dpi=200, bbox_inches="tight", metadata={"Date": None})
 
 
 def plot_model_comparison_table(model_comparisons, title, alpha=0.05, figsize=(15, 7)):
