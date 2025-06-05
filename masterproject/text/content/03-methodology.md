@@ -155,13 +155,14 @@ Unless specified otherwise, we use the training hyperparameters specified in \au
 
 Table: Hyperparameter selection \label{table:hyperparameters}
 
-| Hyperparameter | Value         |
-| :------------- | :------------ |
-| Batch size     | 64            |
-| Loss function  | Cross entropy |
-| Optimizer      | AdamW         |
-| Learning rate  | 0.0001        |
-| Weight decay   | 0.01          |
+| Hyperparameter   | Value         |
+| :--------------- | :------------ |
+| Batch size       | 64            |
+| Loss function    | Cross entropy |
+| Optimizer        | AdamW         |
+| Learning rate    | 0.0001        |
+| Weight decay     | 0.01          |
+| Number of epochs | 2             |
 
 We find that a batch size of 64 represents a good balance between computational efficiency and model performance. It is large enough to enable efficient \ac{GPU} utilization, while small enough to provide a regularization effect through noise in gradient estimation.
 
@@ -172,6 +173,8 @@ The AdamW optimizer is an improved version of Adam that implements weight decay 
 A learning rate of 0.0001 is lower than Pytorch's default of 0.001 for AdamW. We make this conservative choice due to early observations showing that small learning rates still cause the AdamW optimizer to reach convergence rather quickly for our dataset. Considering our vast amounts of computational resources, we want to err on the side of slower training rather than risking convergence issues.
 
 A weight decay of 0.01 provides moderate regularization strength and offers a balance between underfitting and overfitting. It is Pytorch's default for the AdamW optimizer.
+
+We find that \ac{CNN} models trained on our datasets converge after just 2 epochs, and further training does not decrease the training loss nor improve the validation accuracy.
 
 ## Developing a custom dataset
 
