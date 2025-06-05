@@ -286,8 +286,6 @@ Table: CpuRec labeling differences between our research and what was presented i
 
 # Statistical analysis material
 
-## Confidence interval and comparison implementation
-
 ## Pairwise model comparison
 
 Each model in each evaluation strategy is compared to each other using a paried t-test, testing for whether there are statistically significant differences in model performance. The results are shown in the tables below.
