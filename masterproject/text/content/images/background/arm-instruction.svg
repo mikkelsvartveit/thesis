@@ -33,14 +33,14 @@
         <g transform="translate(0,120)">
             <rect x="0" y="0" width="700" height="40" fill="#f8f8f8" stroke="#ddd"/>
             <text x="10" y="25" font-family="Arial" font-size="14">Data Processing (ADD R0, R1, R2)</text>
-            <text x="350" y="25" font-family="Arial" font-size="14">COND | 00I0100 | 0001 | 0000 | 00000010</text>
+            <text x="350" y="25" font-family="Arial" font-size="14">COND | 00001000 | 0001 | 0000 | 000000000010</text>
         </g>
         
         <!-- Memory Access -->
         <g transform="translate(0,170)">
             <rect x="0" y="0" width="700" height="40" fill="#f8f8f8" stroke="#ddd"/>
             <text x="10" y="25" font-family="Arial" font-size="14">Memory Access (LDR R0, [R1])</text>
-            <text x="350" y="25" font-family="Arial" font-size="14">COND | 01000001 | 0001 | 0000 | 000000000</text>
+            <text x="350" y="25" font-family="Arial" font-size="14">COND | 01000001 | 0001 | 0000 | 000000000000</text>
         </g>
         
         <!-- Branch -->
