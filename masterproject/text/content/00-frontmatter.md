@@ -52,6 +52,7 @@ header-includes:
   - \usepackage[font={small},labelfont={bf}, width=0.8\textwidth]{caption}
   - \usepackage[norwegian,english]{babel}
   - \usepackage{listings}
+  - \renewcommand{\maketitle}{} # Disable cover page
 ---
 
 <!-- Abstract in English -->
@@ -99,9 +100,9 @@ Våre resultater viser at selv om CNNer kan oppdage sentrale ISA-egenskaper fra 
 }
 ```
 
-# Acronyms {-}
-
 ```{=latex}
+\chapter*{Acronyms}
+
 \begin{acronym}
 \acro{CISC}[CISC]{Complex Instruction Set Computing}
 \acro{CNN}[CNN]{Convolutional Neural Network}
