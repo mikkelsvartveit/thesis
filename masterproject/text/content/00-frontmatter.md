@@ -1,5 +1,5 @@
 ---
-title: "Unveiling Instruction Set Characteristics from Raw Binary Code using Convolutional Neural Networks"
+title: "Extracting Instruction Set Characteristics from Raw Binary Code using Convolutional Neural Networks"
 subtitle: |
   \vspace{0.2cm}
   TDT4900 – Master's Thesis\
