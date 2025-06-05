@@ -56,7 +56,7 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAd
 
 ![Endianness classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
+![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset. The error bars indicate the standard deviation across runs. \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when using \ac{LOGO CV} on the ISAdetect dataset, aggregated across all models \label{fig:cm-logo-endianness}](./images/results/confusion-logo-endianness-allmodels.svg){ width=300px }
 
@@ -210,7 +210,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 ![Endianness classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
 
-![Endianness classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
+![Endianness classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset. The error bars indicate the standard deviation across runs. \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when training on the ISAdetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-endianness}](./images/results/confusion-buildcrossall-endianness-all-models.svg){ width=300px }
 
@@ -359,7 +359,7 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 ![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset. The error bars indicate the standard deviation across runs. \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when using \ac{LOGO CV} on the ISAdetect dataset, aggregated across all models \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg){ width=300px }
 
@@ -461,7 +461,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect dataset and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-isadetect-cpurec-instructionwidthtype}](./images/results/confusion-cpurecall-instructionwidthtype-all-models.svg){ width=300px }
 
@@ -530,7 +530,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset. The error bars indicate the standard deviation across runs. \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-instructionwidthtype}](./images/results/confusion-buildcrossall-instructionwidthtype-all-models.svg){ width=300px }
 
@@ -632,7 +632,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Instruction width type classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
 
-![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
+![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-combined-cpurec-instructionwidthtype}](./images/results/confusion-combinedall-instructionwidthtype-all-models.svg){ width=300px }
 
