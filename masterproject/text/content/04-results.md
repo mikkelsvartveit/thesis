@@ -54,7 +54,7 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAd
 
 \normalsize
 
-![Endianness classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
+![Endianness classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 10 runs. \label{fig:logo-endianness-by-model}](./images/results/logo-endianness-by-model.svg)
 
 ![Endianness classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset. The error bars indicate the standard deviation across runs. \label{fig:logo-endianness-by-isa}](./images/results/logo-endianness-by-isa.svg)
 
@@ -139,9 +139,9 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:cpurec-endianness-by-model}](./images/results/cpurec-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
+![Endianness classification performance by ISA when training on the ISAdetect dataset and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:cpurec-endianness-by-isa}](./images/results/cpurec-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when training on the ISAdetect dataset and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-isadetect-cpurec-endianness}](./images/results/confusion-cpurecall-endianness-all-models.svg){ width=300px }
 
@@ -208,7 +208,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:buildcross-endianness-by-model}](./images/results/buildcross-endianness-by-model.svg)
 
 ![Endianness classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset. The error bars indicate the standard deviation across runs. \label{fig:buildcross-endianness-by-isa}](./images/results/buildcross-endianness-by-isa.svg)
 
@@ -293,9 +293,9 @@ Table: Endianness classification performance when training on the ISAdetect and 
 
 \normalsize
 
-![Endianness classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.svg)
+![Endianness classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:combined-endianness-by-model}](./images/results/combined-endianness-by-model.svg)
 
-![Endianness classification performance by ISA when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
+![Endianness classification performance by ISA when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:combined-endianness-by-isa}](./images/results/combined-endianness-by-isa.svg)
 
 ![Confusion matrix of endianness classification when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-combined-cpurec-endianness}](./images/results/confusion-combinedall-endianness-all-models.svg){ width=300px }
 
@@ -357,7 +357,7 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 \normalsize
 
-![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when using \ac{LOGO CV} on the ISAdetect dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 10 runs. \label{fig:logo-instructionwidthtype-by-model}](./images/results/logo-instructionwidthtype-by-model.svg)
 
 ![Instruction width type classification performance by \ac{ISA} when using \ac{LOGO CV} on the ISAdetect dataset. The error bars indicate the standard deviation across runs. \label{fig:logo-instructionwidthtype-by-isa}](./images/results/logo-instructionwidthtype-by-isa.svg)
 
@@ -459,7 +459,7 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the CpuRec dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:cpurec-instructionwidthtype-by-model}](./images/results/cpurec-instructionwidthtype-by-model.svg)
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:cpurec-instructionwidthtype-by-isa}](./images/results/cpurec-instructionwidthtype-by-isa.svg)
 
@@ -528,7 +528,7 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect dataset and testing on the BuildCross dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:buildcross-instructionwidthtype-by-model}](./images/results/buildcross-instructionwidthtype-by-model.svg)
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect dataset and testing on the BuildCross dataset. The error bars indicate the standard deviation across runs. \label{fig:buildcross-instructionwidthtype-by-isa}](./images/results/buildcross-instructionwidthtype-by-isa.svg)
 
@@ -630,7 +630,7 @@ Table: Instruction width type classification performance when training on the IS
 
 \normalsize
 
-![Instruction width type classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
+![Instruction width type classification performance by model when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. The data points in the swarm plot represents the model's overall accuracy for each of the 20 runs. \label{fig:combined-instructionwidthtype-by-model}](./images/results/combined-instructionwidthtype-by-model.svg)
 
 ![Instruction width type classification performance by \ac{ISA} when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset. The error bars indicate the standard deviation across runs. \label{fig:combined-instructionwidthtype-by-isa}](./images/results/combined-instructionwidthtype-by-isa.svg)
 
