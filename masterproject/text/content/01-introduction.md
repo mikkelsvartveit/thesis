@@ -30,7 +30,7 @@ We break this down into three sub-questions:
 
 ## Contributions
 
-The main contribution of our work is a comprehensive evaluation of \acp{CNN} for detection of the \ac{ISA} features endianness and fixed/variable instruction width. We train and evaluate six different \ac{CNN} architectures, comparing the behavior of small and large models, as well as evaluating whether including embedding layers improves the classification performance. We implement comprehensive evaluation strategies, including \ac{LOGO CV} and cross-dataset testing, to assess how our models perform on binaries from truly unseen \acp{ISA}. We analyze and compare our results to prior work that relies on feature engineering and traditional machine learning techniques, pointing out trade-offs in terms of accuracy, interpretability, data requirements, and computational resources.
+The main contribution of our work is a comprehensive evaluation of \acp{CNN} for detecting the \ac{ISA} features endianness and fixed/variable instruction width. We train and evaluate six different \ac{CNN} architectures, comparing the behavior of small and large models, as well as evaluating whether including embedding layers improves the classification performance. We implement comprehensive evaluation strategies, including \ac{LOGO CV} and cross-dataset testing, to assess how our models perform on binaries from truly unseen \acp{ISA}. We analyze and compare our results to prior work that relies on feature engineering and traditional machine learning techniques, pointing out trade-offs in terms of accuracy, interpretability, data requirements, and computational resources.
 
 Additionally, we contribute to the field of software reverse engineering by developing the BuildCross dataset and cross-compilation framework. This dataset is developed specifically for thoroughly testing and evaluating our proposed \ac{CNN} models. It contains compiled binary code from 40 different \acp{ISA}, acquired by cross-compiling the source code of 9 widely-used open-source libraries. This results in roughly 120 MB of raw binary code. The dataset and associated cross-compilation framework are available on GitHub under an open-source \acf{GPL} [^1].
 
@@ -44,7 +44,7 @@ The remainder of this thesis is organized as follows.
 
 \autoref{methodology} describes our experiments and their setup. We start by introducing the datasets, as well as the technical configuration and hyperparameters, used for training and testing our models. Then, we describe the development process for BuildCross, our custom dataset. Finally, we define our six \ac{CNN} architectures, along with the evaluation strategies for measuring the performance of each of them.
 
-\autoref{results} presents our findings for both endianness and instruction width type classification, revealing model performance on both seen and unseen architectures.
+\autoref{results} presents our findings for both endianness and fixed/variable instruction width classification, revealing model performance on both seen and unseen architectures.
 
 \autoref{discussion} analyzes our results in depth. We summarize the key findings, dissect the behavior of each model, and assess their generalizability to unseen data. Then, we compare our approach to prior research. Moreover, we provide a quality assessment of the used datasets. Finally, we address some limitations of our approach, as well as briefly discuss the sustainability implications of our work.
 

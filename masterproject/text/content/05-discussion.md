@@ -2,7 +2,7 @@
 
 # Discussion
 
-This chapter discusses and interprets our results and findings from \autoref{results}. \autoref{overview-of-key-findings} starts off this chapter by summarizing the main discoveries and their implications. \autoref{model-architecture-performance-analysis} then examines the performance characteristics of the different model architectures, focusing on aspects such as the impact of embedding layers, model complexity, \acs{CNN} dimensionality, and observed performance variance. Then, \autoref{model-generalizability} assesses the ability of our models to generalize to unseen \acsp{ISA}. A comparative analysis with prior research is presented in \autoref{comparison-with-prior-literature-andreassen-and-morrison}. Following this, \autoref{dataset-quality-assessment} critically evaluates the datasets employed, discussing their respective strengths and limitations. We also explore the broader sustainability implications in \autoref{sustainability-implications-and-ethical-considerations}, and conclude by acknowledging the limitations of our work in \autoref{limitations}.
+This chapter discusses and interprets our results and findings from \autoref{results}. In \autoref{overview-of-key-findings}, we summarize the main discoveries and their implications. \autoref{model-architecture-performance-analysis} then examines the performance characteristics of the different model architectures, focusing on aspects such as the impact of embedding layers, model complexity, \acs{CNN} dimensionality, and observed performance variance. Then, \autoref{model-generalizability} assesses the ability of our models to generalize to unseen \acsp{ISA}. A comparative analysis with prior research is presented in \autoref{comparison-with-prior-literature-andreassen-and-morrison}. Following this, \autoref{dataset-quality-assessment} critically evaluates the datasets employed, discussing their respective strengths and limitations. We also explore the broader sustainability implications in \autoref{sustainability-implications-and-ethical-considerations}, and conclude by acknowledging the limitations of our work in \autoref{limitations}.
 
 ## Overview of key findings
 
@@ -126,7 +126,7 @@ Our findings show that augmenting the training data with BuildCross does not con
 
 #### BuildCross
 
-Using BuildCross, in contrast to the other experiments, we observe that the non-embedding models perform better when evaluated on this dataset. Particularly, the best-performing model for endianness classification is Simple1d, achieving an accuracy of **71.3%**. For instruction width type classification, the best-performing model is Simple2d, achieving an accuracy of **69.6%**.
+When evaluating on BuildCross, in contrast to the other experiments, we observe that the non-embedding models perform better. Particularly, the best-performing model for endianness classification is Simple1d, achieving an accuracy of **71.3%**. For instruction width type classification, the best-performing model is Simple2d, achieving an accuracy of **69.6%**.
 
 An advantage of the BuildCross dataset compared to the CpuRec dataset is that there is little \acp{ISA} overlap with the training dataset (ISAdetect). This reduces the risk of artificially high performance numbers due to the models memorizing specific \acp{ISA} characteristics rather than learning generalizable features.
 
