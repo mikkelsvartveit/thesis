@@ -70,7 +70,7 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAd
 
 ### Training on ISAdetect, testing on CpuRec
 
-For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
+For the ISAdetect-CpuRec experiment, each model is trained on the ISAdetect dataset and then performance-tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
 
 \small
 
@@ -155,7 +155,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 ### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
+For the ISAdetect-BuildCross experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -224,7 +224,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 ### Training on ISAdetect and BuildCross, testing on CpuRec
 
-\autoref{table:combined-endianness-results} shows classification performance for every model/\ac{ISA} combination.
+For the Combined-CpuRec experiment, we train the models on the ISAdetect and BuildCross datasets, and test them on the CpuRec dataset. \autoref{table:combined-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -373,7 +373,7 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 ### Training on ISAdetect, testing on CpuRec
 
-\autoref{table:cpurec-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
+For the ISAdetect-CpuRec experiment, we train the models on the ISAdetect dataset and test them on the CpuRec dataset. \autoref{table:cpurec-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -475,7 +475,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
+For the ISAdetect-BuildCross experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
@@ -544,7 +544,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ### Training on ISAdetect and BuildCross, testing on CpuRec
 
-\autoref{table:combined-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
+For the Combined-CpuRec experiment, we train the models on the ISAdetect and BuildCross datasets, and test them on the CpuRec dataset. \autoref{table:combined-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
