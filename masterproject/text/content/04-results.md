@@ -2,7 +2,7 @@
 
 # Results
 
-This chapter presents the results of the experiments described in \autoref{methodology}. In \autoref{endianness}, we present the results of applying our proposed model architectures to detecting endianness from a binary file. In \autoref{instruction-width-type}, we present the results of applying the same model architectures to detecting whether a binary file has fixed-length or variable-length instructions (hereby referred to as _instruction width type_).
+This chapter presents the results of the experiments described in \autoref{methodology}. In \autoref{endianness}, we present the results of applying our proposed model architectures for detecting endianness from a binary file. In \autoref{instruction-width-type}, we present the results of applying the same model architectures for detecting whether a binary file has fixed-length or variable-length instructions (hereby referred to as _instruction width type_).
 
 ## Endianness
 
@@ -22,7 +22,7 @@ In this experiment, we train and evaluate our models using \ac{LOGO CV} as detai
 
 \small
 
-Table: Endianness classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture is mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-endianness-results}
+Table: Endianness classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -70,7 +70,7 @@ Table: Endianness classification performance when using \ac{LOGO CV} on the ISAd
 
 ### Training on ISAdetect, testing on CpuRec
 
-For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
+For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the CpuRec dataset. \autoref{table:cpurec-endianness-results} shows classification performance for every model/\ac{ISA} combination. For each \ac{ISA} and model combination, we report the number of correct classifications (out of 20 runs) for the single file present in the dataset.
 
 \small
 
@@ -145,7 +145,7 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 ![Confusion matrix of endianness classification when training on the ISAdetect dataset and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-isadetect-cpurec-endianness}](./images/results/confusion-cpurecall-endianness-all-models.svg){ width=300px }
 
-\autoref{fig:cpurec-endianness-by-model} aggregates the results across \acp{ISA}. We observe that the three embedding models perform the best, and the performance differences between the three embedding models are down to margin of error.
+\autoref{fig:cpurec-endianness-by-model} aggregates the results across \acp{ISA}. We observe that the three embedding models perform the best, and the performance differences between the three embedding models are down to the margin of error.
 
 \autoref{fig:cpurec-endianness-by-isa} aggregates results across the different models. Again, we observe that some architectures provide consistent performance across the models, while others exhibit extremely high variance across the different model architectures and seeds. The mean accuracy ranges from close to 0% for `ARC32eb` to 100% for `ARM64`, `PPCel`, and `PPCeb`.
 
@@ -155,11 +155,11 @@ Table: Endianness classification performance when training on the ISAdetect data
 
 ### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
+For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-endianness-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Endianness classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture is mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-endianness-results}
+Table: Endianness classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-endianness-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -325,7 +325,7 @@ In this experiment, we train and evaluate our models using \ac{LOGO CV} as detai
 
 \small
 
-Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture is mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-instructionwidthtype-results}
+Table: Instruction width type classification performance when using \ac{LOGO CV} on the ISAdetect dataset, across 10 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:logo-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -363,7 +363,7 @@ Table: Instruction width type classification performance when using \ac{LOGO CV}
 
 ![Confusion matrix of instruction width type classification when using \ac{LOGO CV} on the ISAdetect dataset, aggregated across all models \label{fig:cm-logo-instructionwidthtype}](./images/results/confusion-logo-instructionwidthtype-allmodels.svg){ width=300px }
 
-\autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. Similar to the performance seen with endianness classification, the performance of the embedding models perform better than the non-embedding counterparts, with the _Simple1d-E_ model performing the best with a mean accuracy of 88.0%.
+\autoref{fig:logo-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. Similar to the performance seen with endianness classification, the embedding models perform better than the non-embedding counterparts, with the _Simple1d-E_ model performing the best with a mean accuracy of 88.0%.
 
 \autoref{fig:logo-instructionwidthtype-by-isa} aggregates results across the different models. Many \acp{ISA} are correctly classified with accuracy well above 90%, while others perform poorly and show large performance variations across runs.
 
@@ -475,11 +475,11 @@ Table: Instruction width type classification performance when training on the IS
 
 ### Training on ISAdetect, testing on BuildCross
 
-For this experiment, each model is trained on the ISAdetect dataset, and then performance tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
+For this experiment, each model is trained on the ISAdetect dataset and then performance-tested using the BuildCross dataset. \autoref{table:buildcross-instructionwidthtype-results} shows classification performance for every model/\ac{ISA} combination.
 
 \small
 
-Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture is mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-instructionwidthtype-results}
+Table: Instruction width type classification performance when training on the ISAdetect dataset and testing on the BuildCross dataset, across 20 runs. The reported performance numbers for each architecture are mean accuracy ± standard deviation. Overall mean accuracy and standard deviation across all runs are reported in bold at the bottom, along with 95% confidence interval ranges around the mean. \label{table:buildcross-instructionwidthtype-results}
 
 | Architecture |         Simple1d |       Simple1d-E |         Simple2d |       Simple2d-E |         ResNet50 |       ResNet50-E |
 | ------------ | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
@@ -534,7 +534,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect dataset and testing on the BuildCross dataset, aggregated across all models \label{fig:cm-isadetect-buildcross-instructionwidthtype}](./images/results/confusion-buildcrossall-instructionwidthtype-all-models.svg){ width=300px }
 
-\autoref{fig:buildcross-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. With instruction width type as the target feature, it is even more prominent that the embedding models do not perform well when evaluating on the BuildCross dataset. The best performing model is the _Simple2d_ model, with a mean accuracy of 69.6%.
+\autoref{fig:buildcross-instructionwidthtype-by-model} aggregates the results across \acp{ISA}. With instruction width type as the target feature, it is even more prominent that the embedding models do not perform well when evaluating on the BuildCross dataset. The best-performing model is the _Simple2d_ model, with a mean accuracy of 69.6%.
 
 \autoref{fig:buildcross-instructionwidthtype-by-isa} aggregates results across the different models. Once again, certain \acp{ISA} are consistently performing well, while others are systematically misclassified.
 
@@ -636,7 +636,7 @@ Table: Instruction width type classification performance when training on the IS
 
 ![Confusion matrix of instruction width type classification when training on the ISAdetect and BuildCross datasets, and testing on the CpuRec dataset, aggregated across all models \label{fig:cm-combined-cpurec-instructionwidthtype}](./images/results/confusion-combinedall-instructionwidthtype-all-models.svg){ width=300px }
 
-\autoref{fig:combined-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, and \autoref{fig:combined-instructionwidthtype-by-isa} aggregates results across the different models. For this target feature, we also see a significant improvement in performance when adding the BuildCross dataset as additional training data. The _Simple2d-E_ model performs the best, with a mean accuracy of 82.9%.
+\autoref{fig:combined-instructionwidthtype-by-model} aggregates the results across \acp{ISA}, and \autoref{fig:combined-instructionwidthtype-by-isa} aggregates results across the different models. For this target feature, we also see a significant performance improvement when adding the BuildCross dataset as additional training data. The _Simple2d-E_ model performs the best, with a mean accuracy of 82.9%.
 
 \autoref{fig:cm-combined-cpurec-instructionwidthtype} aggregates the results across \acp{ISA} and models, and shows the confusion matrix. Notably, adding the BuildCross dataset as additional training data seems to solve the bias issues observed in \autoref{fig:cm-isadetect-cpurec-instructionwidthtype}, and the models are now reasonably balanced in their predictions.
 
